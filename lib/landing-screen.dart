@@ -1,36 +1,35 @@
-import 'package:caterfy/customers/screens/signup-screen.dart';
-import 'package:caterfy/sellers/screens/signup-screen.dart';
+import 'package:caterfy/login-screen.dart';
+import 'package:caterfy/role-selection-screen.dart';
 import 'package:flutter/material.dart';
 
-class RoleSelectionScreen extends StatelessWidget {
-  const RoleSelectionScreen({super.key});
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Choose Role")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: const Text("Sign Up as Customer"),
+              child: const Text("Log In"),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const CustomerSignUpScreen(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
                 );
               },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              child: const Text("Sign Up as Seller"),
+              child: const Text("Sign Up"),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const SellerSignUpScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const RoleSelectionScreen(),
+                  ),
                 );
               },
             ),

@@ -1,4 +1,4 @@
-import 'package:caterfy/sellers/providers/auth_provider.dart';
+import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
 import 'package:caterfy/sellers/screens/home-screen.dart';
 import 'package:caterfy/sellers/widgets/textfields.dart';
 import 'package:flutter/material.dart';
@@ -34,23 +34,37 @@ class SellerSignUpScreen extends StatelessWidget {
 
             CustomTextField(labelText: "Name", onChanged: auth.setName),
             const SizedBox(height: 20),
+
             CustomTextField(
               labelText: "Email",
               keyboardType: TextInputType.emailAddress,
               onChanged: auth.setEmail,
             ),
             const SizedBox(height: 20),
+
             PasswordTextField(onChanged: auth.setPassword),
             const SizedBox(height: 20),
+
             PasswordTextField(
               labelText: "Confirm Password",
               onChanged: auth.setConfirmPassword,
             ),
             const SizedBox(height: 20),
 
-            if (auth.Serror != null)
-              Text(auth.Serror!, style: const TextStyle(color: Colors.red)),
+            if (auth.signUpError != null)
+              Text(
+                auth.signUpError!,
+                style: const TextStyle(color: Colors.red),
+              ),
+
+            if (auth.successMessage != null)
+              Text(
+                auth.successMessage!,
+                style: const TextStyle(color: Colors.green),
+              ),
+
             const SizedBox(height: 20),
+
             auth.isLoading
                 ? const Center(
                     child: SpinKitWanderingCubes(color: Color(0xFF577A80)),

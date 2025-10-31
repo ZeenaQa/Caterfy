@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SellerAuthProvider extends ChangeNotifier {
-  String _email = '';
-  String _password = '';
-  String _confirmPassword = '';
-  String name = '';
-  bool isLoading = false;
-  String? _signUpError;
-  String? _logInError;
-
+class CustomerAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
-  String get email => _email;
-  String get password => _password;
-  String get confirmPassword => _confirmPassword;
-  String? get Serror => _signUpError;
-  String? get Lerror => _logInError;
+  String email = '';
+  String password = '';
+  String confirmPassword = '';
+  String name = '';
+  bool isLoading = false;
 
+  String? signUpError;
+  String? logInError;
+  String? successMessage;
+
+  // ---------------- Setters ----------------
   void setEmail(String value) {
-    _email = value.trim();
+    email = value.trim();
     notifyListeners();
   }
 
   void setPassword(String value) {
-    _password = value.trim();
+    password = value.trim();
     notifyListeners();
   }
 
   void setConfirmPassword(String value) {
-    _confirmPassword = value.trim();
+    confirmPassword = value.trim();
     notifyListeners();
   }
 
@@ -39,17 +36,24 @@ class SellerAuthProvider extends ChangeNotifier {
   }
 
   void setSignUpError(String? value) {
-    _signUpError = value;
+    signUpError = value;
     notifyListeners();
   }
 
   void setLogInError(String? value) {
-    _logInError = value;
+    logInError = value;
     notifyListeners();
   }
 
+  void setSuccessMessage(String? value) {
+    successMessage = value;
+    notifyListeners();
+  }
+
+  // ---------------- Validation ----------------
   bool validateEmail(String email) {
-    return email.contains('@') && email.endsWith('.com');
+    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return regex.hasMatch(email);
   }
 
   bool isValidPassword(String password) {
@@ -57,35 +61,36 @@ class SellerAuthProvider extends ChangeNotifier {
     final hasUppercase = RegExp(r'[A-Z]');
     final hasLowercase = RegExp(r'[a-z]');
     final hasDigit = RegExp(r'\d');
-    if (password.length < minLength) return false;
-    if (!hasUppercase.hasMatch(password)) return false;
-    if (!hasLowercase.hasMatch(password)) return false;
-    if (!hasDigit.hasMatch(password)) return false;
-    return true;
+
+    return password.length >= minLength &&
+        hasUppercase.hasMatch(password) &&
+        hasLowercase.hasMatch(password) &&
+        hasDigit.hasMatch(password);
   }
 
+  // ---------------- Sign Up ----------------
   Future<bool> signUp() async {
     if (name.isEmpty ||
-        _email.isEmpty ||
-        _password.isEmpty ||
-        _confirmPassword.isEmpty) {
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       setSignUpError("Please fill all fields");
       return false;
     }
 
-    if (_password != _confirmPassword) {
+    if (password != confirmPassword) {
       setSignUpError("Passwords do not match");
       return false;
     }
 
-    if (!isValidPassword(_password)) {
+    if (!isValidPassword(password)) {
       setSignUpError(
         "Password must be at least 8 characters, include upper & lower case letters and a number",
       );
       return false;
     }
 
-    if (!validateEmail(_email)) {
+    if (!validateEmail(email)) {
       setSignUpError("Enter a valid email address");
       return false;
     }
@@ -95,31 +100,35 @@ class SellerAuthProvider extends ChangeNotifier {
       notifyListeners();
 
       final response = await supabase.auth.signUp(
-        email: _email,
-        password: _password,
+        email: email,
+        password: password,
+        data: {'display_name': name},
       );
 
       if (response.user != null) {
-        final userId = response.user!.id;
-
-        await supabase.from('sellers').insert({
-          'id': userId,
+        await supabase.from('customers').insert({
+          'id': response.user!.id,
           'name': name,
-          'email': _email,
+          'email': email,
         });
 
+        setSuccessMessage("Please check your email to confirm your account");
         setSignUpError(null);
         return true;
       }
 
       return false;
-    } catch (e) {
-      if (e is AuthApiException && e.code == 'user_already_exists') {
-        setSignUpError("This email is already registered");
+    } on AuthException catch (e) {
+      if (e.code == 'user_already_exists') {
+        setSignUpError(
+          "This email is already registered. Please log in instead.",
+        );
       } else {
-        setSignUpError(e.toString());
-        print(e);
+        setSignUpError(e.message);
       }
+      return false;
+    } catch (e) {
+      setSignUpError(e.toString());
       return false;
     } finally {
       isLoading = false;
@@ -127,14 +136,20 @@ class SellerAuthProvider extends ChangeNotifier {
     }
   }
 
+  // ---------------- Log In ----------------
   Future<bool> logIn() async {
+    if (email.isEmpty || password.isEmpty) {
+      setLogInError("Please enter email and password");
+      return false;
+    }
+
     try {
       isLoading = true;
       notifyListeners();
 
       final response = await supabase.auth.signInWithPassword(
-        email: _email,
-        password: _password,
+        email: email,
+        password: password,
       );
 
       if (response.session == null) {
@@ -145,19 +160,22 @@ class SellerAuthProvider extends ChangeNotifier {
       setLogInError(null);
 
       final data = await supabase
-          .from('sellers')
+          .from('customers')
           .select()
           .eq('id', response.user!.id)
           .maybeSingle();
+
       if (data != null) {
         name = data['name'] ?? '';
-        _email = data['email'] ?? '';
+        email = data['email'] ?? '';
       }
 
       return true;
+    } on AuthApiException {
+      setLogInError("Email or password is incorrect");
+      return false;
     } catch (e) {
       setLogInError(e.toString());
-      print(e);
       return false;
     } finally {
       isLoading = false;

@@ -1,6 +1,6 @@
-import 'package:caterfy/customers/providers/auth_provider.dart';
-import 'package:caterfy/role-selection-screen.dart';
-import 'package:caterfy/sellers/providers/auth_provider.dart';
+import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/landing-screen.dart';
+import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Caterfy',
         theme: ThemeData(primarySwatch: Colors.brown),
-        home: const RoleSelectionScreen(),
+        home: LandingScreen(),
       ),
     );
   }
