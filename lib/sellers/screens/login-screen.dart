@@ -29,7 +29,7 @@ class SellerLoginScreen extends StatelessWidget {
                   child: Text(
                     " Log In",
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: 34,
                       fontWeight: FontWeight.w500,
                       color: Color.fromARGB(255, 164, 188, 192),
                     ),
