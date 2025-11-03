@@ -145,10 +145,6 @@ class SellerAuthProvider extends ChangeNotifier {
           'email': email,
           'phone_number': _phoneNumber,
         });
-
-        // setSuccessMessage("Please check your email to confirm your account");
-        // setSignUpError(null);
-        // return true;
       }
 
       return false;
@@ -210,6 +206,53 @@ class SellerAuthProvider extends ChangeNotifier {
       return false;
     } finally {
       setLoading(false);
+    }
+  }
+
+  // ---------------- Phone ----------------
+  Future<bool> sendPhoneOtp() async {
+    if (_phoneNumber.isEmpty) {
+      setLogInError("Please enter a valid phone number");
+      return false;
+    }
+
+    try {
+      setLoading(true);
+      await supabase.auth.signInWithOtp(phone: _phoneNumber);
+      setLogInError(null);
+      return true;
+    } catch (e) {
+      setLogInError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<String?> checkPhoneExistsSeller() async {
+    if (_phoneNumber.isEmpty) return null;
+
+    try {
+      final seller = await supabase
+          .from('sellers')
+          .select('id')
+          .eq('phone_number', _phoneNumber)
+          .maybeSingle();
+
+      if (seller != null) return 'seller';
+
+      final customer = await supabase
+          .from('customers')
+          .select('id')
+          .eq('phone_number', _phoneNumber)
+          .maybeSingle();
+
+      if (customer != null) return 'customer';
+
+      return null;
+    } catch (e) {
+      setLogInError("Error checking phone: $e");
+      return null;
     }
   }
 }

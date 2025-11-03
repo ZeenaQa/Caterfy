@@ -1,4 +1,4 @@
-import 'package:caterfy/auth-screens/providers/seller_auth_provider.dart';
+import 'package:caterfy/auth/providers/seller_auth_provider.dart';
 import 'package:caterfy/sellers/screens/home-screen.dart';
 
 import 'package:caterfy/shared_widgets.dart/textfields.dart';

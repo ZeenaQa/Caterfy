@@ -1,4 +1,5 @@
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
+import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -10,6 +11,7 @@ class PhoneAuthScreen extends StatelessWidget {
     String phoneNumber = "";
 
     return Scaffold(
+      appBar: LogoAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -25,15 +27,17 @@ class PhoneAuthScreen extends StatelessWidget {
                   borderSide: BorderSide.none,
                 ),
               ),
-              initialCountryCode: 'IN',
+              initialCountryCode: 'JO',
+              showDropdownIcon: false,
+              disableLengthCheck: true,
+
               onChanged: (phone) {
                 phoneNumber = phone.completeNumber;
                 print(phoneNumber);
               },
-              dropdownIcon: const Icon(Icons.arrow_drop_down),
               style: const TextStyle(color: Colors.black),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 20),
             AuthButton(onPressed: () {}, chiild: const Text("Continue")),
           ],
         ),

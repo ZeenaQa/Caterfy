@@ -1,4 +1,4 @@
-import 'package:caterfy/auth-screens/providers/customer_auth_provider.dart';
+import 'package:caterfy/auth/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/home-screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';

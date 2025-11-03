@@ -1,6 +1,8 @@
-import 'package:caterfy/auth-screens/email_auth_screen.dart';
-import 'package:caterfy/auth-screens/phone-auth-screen.dart';
+import 'package:caterfy/auth/auth-screens/email_auth_screen.dart';
+import 'package:caterfy/auth/auth-screens/phone-auth-screen.dart';
+
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
+import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 
 class SelectionScreen extends StatelessWidget {
@@ -9,6 +11,7 @@ class SelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: LogoAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(

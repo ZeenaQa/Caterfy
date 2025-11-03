@@ -1,10 +1,11 @@
-import 'package:caterfy/auth-screens/role-selection-screen.dart';
+import 'package:caterfy/auth/auth-screens/role-selection-screen.dart';
+import 'package:caterfy/auth/providers/customer_auth_provider.dart';
+import 'package:caterfy/auth/providers/seller_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
+import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:caterfy/auth-screens/providers/customer_auth_provider.dart';
-import 'package:caterfy/auth-screens/providers/seller_auth_provider.dart';
 import 'package:caterfy/customers/screens/home-screen.dart';
 import 'package:caterfy/sellers/screens/home-screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
@@ -21,7 +22,7 @@ class EmailAuthScreen extends StatelessWidget {
     String password = '';
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: LogoAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
