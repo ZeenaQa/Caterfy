@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SellerAuthProvider extends ChangeNotifier {
+class CustomerAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   String email = '';
@@ -13,8 +13,14 @@ class SellerAuthProvider extends ChangeNotifier {
   String? signUpError;
   String? logInError;
   String? successMessage;
+  String _phoneNumber = '';
 
   // ---------------- Setters ----------------
+  void setPhoneNumber(String value) {
+    _phoneNumber = value;
+    notifyListeners();
+  }
+
   void setEmail(String value) {
     email = value.trim();
     notifyListeners();
@@ -32,11 +38,6 @@ class SellerAuthProvider extends ChangeNotifier {
 
   void setName(String value) {
     name = value.trim();
-    notifyListeners();
-  }
-
-  void setLoading(bool value) {
-    isLoading = value;
     notifyListeners();
   }
 
@@ -101,7 +102,8 @@ class SellerAuthProvider extends ChangeNotifier {
     }
 
     try {
-      setLoading(true);
+      isLoading = true;
+      notifyListeners();
 
       final response = await supabase.auth.signUp(
         email: email,
@@ -110,15 +112,16 @@ class SellerAuthProvider extends ChangeNotifier {
       );
 
       if (response.user != null) {
-        await supabase.from('sellers').insert({
+        await supabase.from('customers').insert({
           'id': response.user!.id,
           'name': name,
           'email': email,
+          'phone_number': _phoneNumber,
         });
 
-        setSuccessMessage("Please check your email to confirm your account");
-        setSignUpError(null);
-        return true;
+        // setSuccessMessage("Please check your email to confirm your account");
+        // setSignUpError(null);
+        // return true;
       }
 
       return false;
@@ -135,7 +138,8 @@ class SellerAuthProvider extends ChangeNotifier {
       setSignUpError(e.toString());
       return false;
     } finally {
-      setLoading(false);
+      isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -147,10 +151,13 @@ class SellerAuthProvider extends ChangeNotifier {
     }
 
     try {
-      setLoading(true);
+      isLoading = true;
+      notifyListeners();
+
+      final isEmail = email.contains('@');
 
       final response = await supabase.auth.signInWithPassword(
-        email: email,
+        email: isEmail ? email : null,
         password: password,
       );
 
@@ -162,7 +169,7 @@ class SellerAuthProvider extends ChangeNotifier {
       setLogInError(null);
 
       final data = await supabase
-          .from('sellers')
+          .from('customers')
           .select()
           .eq('id', response.user!.id)
           .maybeSingle();
@@ -173,11 +180,15 @@ class SellerAuthProvider extends ChangeNotifier {
       }
 
       return true;
+    } on AuthApiException {
+      setLogInError("Email or password is incorrect");
+      return false;
     } catch (e) {
       setLogInError(e.toString());
       return false;
     } finally {
-      setLoading(false);
+      isLoading = false;
+      notifyListeners();
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class CustomerAuthProvider extends ChangeNotifier {
+class SellerAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   String email = '';
@@ -13,8 +13,26 @@ class CustomerAuthProvider extends ChangeNotifier {
   String? signUpError;
   String? logInError;
   String? successMessage;
+  String _phoneNumber = '';
+  String businessName = '';
+  String businessType = '';
 
   // ---------------- Setters ----------------
+  void setPhoneNumber(String value) {
+    _phoneNumber = value;
+    notifyListeners();
+  }
+
+  void setBusinessName(String name) {
+    businessName = name;
+    notifyListeners();
+  }
+
+  void setBusinessType(String type) {
+    businessType = type;
+    notifyListeners();
+  }
+
   void setEmail(String value) {
     email = value.trim();
     notifyListeners();
@@ -32,6 +50,11 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   void setName(String value) {
     name = value.trim();
+    notifyListeners();
+  }
+
+  void setLoading(bool value) {
+    isLoading = value;
     notifyListeners();
   }
 
@@ -56,6 +79,11 @@ class CustomerAuthProvider extends ChangeNotifier {
     return regex.hasMatch(email);
   }
 
+  bool isValidPhoneNumber(String phoneNumber) {
+    final regex = RegExp(r'^[0-9]{10}$');
+    return regex.hasMatch(phoneNumber);
+  }
+
   bool isValidPassword(String password) {
     final minLength = 8;
     final hasUppercase = RegExp(r'[A-Z]');
@@ -73,7 +101,8 @@ class CustomerAuthProvider extends ChangeNotifier {
     if (name.isEmpty ||
         email.isEmpty ||
         password.isEmpty ||
-        confirmPassword.isEmpty) {
+        confirmPassword.isEmpty ||
+        _phoneNumber.isEmpty) {
       setSignUpError("Please fill all fields");
       return false;
     }
@@ -90,14 +119,18 @@ class CustomerAuthProvider extends ChangeNotifier {
       return false;
     }
 
+    if (!isValidPhoneNumber(_phoneNumber)) {
+      setSignUpError("Enter a valid phone number");
+      return false;
+    }
+
     if (!validateEmail(email)) {
       setSignUpError("Enter a valid email address");
       return false;
     }
 
     try {
-      isLoading = true;
-      notifyListeners();
+      setLoading(true);
 
       final response = await supabase.auth.signUp(
         email: email,
@@ -106,15 +139,16 @@ class CustomerAuthProvider extends ChangeNotifier {
       );
 
       if (response.user != null) {
-        await supabase.from('customers').insert({
+        await supabase.from('sellers').insert({
           'id': response.user!.id,
           'name': name,
           'email': email,
+          'phone_number': _phoneNumber,
         });
 
-        setSuccessMessage("Please check your email to confirm your account");
-        setSignUpError(null);
-        return true;
+        // setSuccessMessage("Please check your email to confirm your account");
+        // setSignUpError(null);
+        // return true;
       }
 
       return false;
@@ -131,36 +165,36 @@ class CustomerAuthProvider extends ChangeNotifier {
       setSignUpError(e.toString());
       return false;
     } finally {
-      isLoading = false;
-      notifyListeners();
+      setLoading(false);
     }
   }
 
   // ---------------- Log In ----------------
   Future<bool> logIn() async {
     if (email.isEmpty || password.isEmpty) {
-      setLogInError("Please enter email and password");
+      setLogInError("Please enter email/phone and password");
       return false;
     }
 
     try {
-      isLoading = true;
-      notifyListeners();
+      setLoading(true);
+
+      final isEmail = email.contains('@');
 
       final response = await supabase.auth.signInWithPassword(
-        email: email,
+        email: isEmail ? email : null,
         password: password,
       );
 
       if (response.session == null) {
-        setLogInError("Email or password is incorrect");
+        setLogInError("Email/Phone or password is incorrect");
         return false;
       }
 
       setLogInError(null);
 
       final data = await supabase
-          .from('customers')
+          .from('sellers')
           .select()
           .eq('id', response.user!.id)
           .maybeSingle();
@@ -171,15 +205,11 @@ class CustomerAuthProvider extends ChangeNotifier {
       }
 
       return true;
-    } on AuthApiException {
-      setLogInError("Email or password is incorrect");
-      return false;
     } catch (e) {
       setLogInError(e.toString());
       return false;
     } finally {
-      isLoading = false;
-      notifyListeners();
+      setLoading(false);
     }
   }
 }

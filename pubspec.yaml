@@ -16,6 +16,7 @@ dependencies:
   supabase_flutter: ^2.10.1
   sign_in_with_apple: ^6.0.0
   flutter_spinkit: ^5.2.2
+  intl_phone_field: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +25,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: DM Sans
+      fonts:
+        - asset: lib/style/fonts/DMSans_36pt-Regular.ttf
+          

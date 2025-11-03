@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/screens/signup-screen.dart';
 import 'package:caterfy/sellers/screens/signup-screen.dart';
+import 'package:caterfy/shared_widgets.dart/button-widget.dart';
 import 'package:flutter/material.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
@@ -13,8 +14,8 @@ class RoleSelectionScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              child: const Text("Sign Up as Customer"),
+            AuthButton(
+              chiild: const Text("Sign Up as Customer"),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -25,8 +26,8 @@ class RoleSelectionScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              child: const Text("Sign Up as Seller"),
+            AuthButton(
+              chiild: const Text("Sign Up as Seller"),
               onPressed: () {
                 Navigator.push(
                   context,

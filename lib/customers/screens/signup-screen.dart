@@ -1,6 +1,6 @@
-import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/auth-screens/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/home-screen.dart';
-import 'package:caterfy/customers/widgets/textfields.dart';
+import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -32,23 +32,25 @@ class CustomerSignUpScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
 
-            CustomTextField(labelText: "Name", onChanged: auth.setName),
+            CustomTextField(onChanged: auth.setName),
             const SizedBox(height: 20),
 
             CustomTextField(
-              labelText: "Email",
               keyboardType: TextInputType.emailAddress,
               onChanged: auth.setEmail,
+            ),
+            const SizedBox(height: 20),
+
+            CustomTextField(
+              keyboardType: TextInputType.phone,
+              onChanged: auth.setPhoneNumber,
             ),
             const SizedBox(height: 20),
 
             PasswordTextField(onChanged: auth.setPassword),
             const SizedBox(height: 20),
 
-            PasswordTextField(
-              labelText: "Confirm Password",
-              onChanged: auth.setConfirmPassword,
-            ),
+            PasswordTextField(onChanged: auth.setConfirmPassword),
             const SizedBox(height: 20),
 
             if (auth.signUpError != null)
