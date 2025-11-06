@@ -1,6 +1,6 @@
 import 'package:caterfy/auth/auth-screens/auth-selection-screen.dart';
-import 'package:caterfy/auth/providers/customer_auth_provider.dart';
-import 'package:caterfy/auth/providers/seller_auth_provider.dart';
+import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
 import 'package:caterfy/style/theme/dark-theme.dart';
 import 'package:caterfy/style/theme/light-theme.dart';
 import 'package:flutter/material.dart';

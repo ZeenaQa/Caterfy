@@ -1,6 +1,6 @@
-import 'package:caterfy/auth/auth-screens/role-selection-screen.dart';
-import 'package:caterfy/auth/providers/customer_auth_provider.dart';
-import 'package:caterfy/auth/providers/seller_auth_provider.dart';
+import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/screens/signup-screen.dart';
+import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
 import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +10,8 @@ import 'package:caterfy/customers/screens/home-screen.dart';
 import 'package:caterfy/sellers/screens/home-screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class EmailAuthScreen extends StatelessWidget {
-  const EmailAuthScreen({super.key});
+class EmailLoginScreen extends StatelessWidget {
+  const EmailLoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -125,9 +125,17 @@ class EmailAuthScreen extends StatelessWidget {
                 const Text("Don't have an account? "),
                 GestureDetector(
                   onTap: () {
+                    final auth = Provider.of<CustomerAuthProvider>(
+                      context,
+                      listen: false,
+                    );
+                    auth.clearErrors();
+
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => RoleSelectionScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const CustomerSignUpScreen(),
+                      ),
                     );
                   },
                   child: Text(

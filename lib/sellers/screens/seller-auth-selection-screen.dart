@@ -1,12 +1,12 @@
-import 'package:caterfy/auth/auth-screens/email_auth_screen.dart';
-import 'package:caterfy/auth/auth-screens/phone-auth-screen.dart';
+import 'package:caterfy/customers/screens/email_login_screen.dart';
+import 'package:caterfy/customers/screens/phone-auth-screen.dart';
 
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
 import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 
-class SelectionScreen extends StatelessWidget {
-  const SelectionScreen({super.key});
+class SellerSelectionScreen extends StatelessWidget {
+  const SellerSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,6 @@ class SelectionScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 15,
             children: [
-              AuthButton(
-                chiild: Text(' Continue with Google'),
-                onPressed: () {},
-              ),
               AuthButton(
                 chiild: Text('Continue with phone number'),
                 onPressed: () {
@@ -40,7 +36,7 @@ class SelectionScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const EmailAuthScreen(),
+                      builder: (context) => const EmailLoginScreen(),
                     ),
                   );
                 },

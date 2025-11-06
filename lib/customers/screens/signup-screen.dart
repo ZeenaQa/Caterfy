@@ -1,4 +1,4 @@
-import 'package:caterfy/auth/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/home-screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
@@ -15,57 +15,54 @@ class CustomerSignUpScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50),
+
         child: Column(
+          spacing: 25,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 60),
-            const Center(
-              child: Text(
-                "Customer Sign Up",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 131, 148, 138),
-                ),
-              ),
+            Text(
+              "Continue with Email",
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 40),
 
-            CustomTextField(onChanged: auth.setName),
-            const SizedBox(height: 20),
+            LabeledTextField(
+              auth: auth,
+              onChanged: auth.setName,
+              hiint: 'First and Last Name',
+              label: 'Name',
+              errorText: auth.nameError,
+            ),
 
-            CustomTextField(
-              keyboardType: TextInputType.emailAddress,
+            LabeledTextField(
+              auth: auth,
               onChanged: auth.setEmail,
+              hiint: 'example@gmail.com',
+              label: 'Email',
+              keyboardType: TextInputType.emailAddress,
+              errorText: auth.emailError,
             ),
-            const SizedBox(height: 20),
 
-            CustomTextField(
-              keyboardType: TextInputType.phone,
-              onChanged: auth.setPhoneNumber,
+            LabeledPasswordField(
+              auth: auth,
+              onChanged: auth.setPassword,
+              hiint: '****************',
+              label: 'Password',
+              errorText: auth.passwordError,
             ),
-            const SizedBox(height: 20),
 
-            PasswordTextField(onChanged: auth.setPassword),
-            const SizedBox(height: 20),
-
-            PasswordTextField(onChanged: auth.setConfirmPassword),
-            const SizedBox(height: 20),
-
-            if (auth.signUpError != null)
-              Text(
-                auth.signUpError!,
-                style: const TextStyle(color: Colors.red),
-              ),
-
+            LabeledPasswordField(
+              auth: auth,
+              onChanged: auth.setConfirmPassword,
+              hiint: '****************',
+              label: 'Confirm Password',
+              errorText: auth.confirmPasswordError,
+            ),
             if (auth.successMessage != null)
               Text(
                 auth.successMessage!,
                 style: const TextStyle(color: Colors.green),
               ),
-
-            const SizedBox(height: 20),
 
             auth.isLoading
                 ? const Center(

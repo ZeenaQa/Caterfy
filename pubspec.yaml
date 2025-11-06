@@ -1,7 +1,7 @@
 name: caterfy
 description: "A new Flutter project."
 
-publish_to: 'none' 
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -28,13 +28,14 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "images/AppIcon.png"
+  image_path: "assets/images/AppIcon.png"
 
 flutter:
   uses-material-design: true
   fonts:
     - family: DM Sans
       fonts:
-        - asset: lib/style/fonts/DMSans_36pt-Regular.ttf
+        - asset: assets/fonts/DMSans_36pt-Regular.ttf
   assets:
-    - images/
+    - assets/images/
+    - assets/fonts/
