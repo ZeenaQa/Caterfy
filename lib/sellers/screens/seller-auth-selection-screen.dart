@@ -5,8 +5,8 @@ import 'package:caterfy/shared_widgets.dart/button-widget.dart';
 import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 
-class SellerSelectionScreen extends StatelessWidget {
-  const SellerSelectionScreen({super.key});
+class VendorSelectionScreen extends StatelessWidget {
+  const VendorSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
