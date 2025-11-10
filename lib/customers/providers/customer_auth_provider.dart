@@ -19,6 +19,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   String? emailError;
   String? passwordError;
   String? confirmPasswordError;
+  String? phoneNumberError;
 
   // ---------------- Setters ----------------
   void setPhoneNumber(String value) {
@@ -71,7 +72,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Validation ----------------
-  String? getEmailError(String email) {
+  String? validateEmail(String email) {
     if (email.isEmpty) {
       return "required";
     }
@@ -81,7 +82,7 @@ class CustomerAuthProvider extends ChangeNotifier {
     return null;
   }
 
-  String? getPasswordError(String password) {
+  String? validatePassword(String password) {
     if (password.isEmpty) {
       return "required";
     }
@@ -101,7 +102,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   Future<bool> signUp() async {
     nameError = name.isEmpty ? "required" : null;
     emailError = await checkEmailAvailability(email);
-    passwordError = getPasswordError(password);
+    passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
         : null;
@@ -243,25 +244,20 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsCustomer() async {
-    if (_phoneNumber.isEmpty) return null;
+  Future<String?> checkPhoneExistsCustomer(int numLength) async {
+    if (_phoneNumber.isEmpty || numLength < 6 || numLength > 10) {
+      phoneNumberError = 'Number must be 6–10 digits.';
+      return null;
+    }
 
     try {
-      final seller = await supabase
-          .from('sellers')
-          .select('id')
-          .eq('phone_number', _phoneNumber)
-          .maybeSingle();
-
-      if (seller != null) return 'seller';
-
-      final customer = await supabase
+      final customerID = await supabase
           .from('customers')
           .select('id')
           .eq('phone_number', _phoneNumber)
           .maybeSingle();
 
-      if (customer != null) return 'customer';
+      if (customerID != null) return customerID.toString();
 
       return null;
     } catch (e) {

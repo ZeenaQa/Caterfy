@@ -11,6 +11,8 @@ import 'package:caterfy/shared_widgets.dart/textfields.dart';
 class SellerEmailLogin extends StatelessWidget {
   const SellerEmailLogin({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
     final sellerAuth = Provider.of<SellerAuthProvider>(context);
