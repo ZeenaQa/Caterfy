@@ -26,36 +26,16 @@ class CustomerEmailLogin extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 5,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Email',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            CustomTextField(
+            LabeledTextField(
               onChanged: (v) => email = v.trim(),
               hint: 'example@gmail.com',
+              label: 'Email',
             ),
             SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'password',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            PasswordTextField(
+            LabeledPasswordField(
               onChanged: (v) => password = v.trim(),
               hint: ('****************'),
+              label: 'Password',
             ),
 
             if (customerAuth.logInError != null)
