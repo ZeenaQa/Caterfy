@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class CustomerSignUpScreen extends StatelessWidget {
-  const CustomerSignUpScreen({super.key});
+class CustomerSignUp extends StatelessWidget {
+  const CustomerSignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class CustomerSignUpScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CustomerHomeScreen(),
+                            builder: (context) => CustomerHomeScreen(),
                           ),
                         );
                       }

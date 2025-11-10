@@ -1,4 +1,4 @@
-import 'auth/auth-selection-screen.dart';
+import 'package:caterfy/auth/auth-selection-screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
 // import 'package:caterfy/style/theme/dark-theme.dart';

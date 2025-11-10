@@ -29,19 +29,19 @@ class CustomTextField extends StatelessWidget {
         hintText: hint,
 
         suffixIcon: suffix,
-        filled: true,
-        fillColor: const Color(0xFFf2f2f2),
+        filled: false,
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.grey, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.black, width: 1),
         ),
       ),
     );
@@ -81,19 +81,19 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       decoration: InputDecoration(
         hintText: widget.hint,
 
-        filled: true,
-        fillColor: const Color(0xFFf2f2f2),
+        filled: false,
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.grey, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.black, width: 1),
         ),
         suffixIcon: IconButton(
           icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),

@@ -1,5 +1,7 @@
-import 'package:caterfy/customers/screens/email_login_screen.dart';
+import 'package:caterfy/customers/screens/login_screen.dart';
 import 'package:caterfy/customers/screens/phone-auth-screen.dart';
+import 'package:caterfy/sellers/screens/login-screen.dart';
+import 'package:caterfy/sellers/screens/phone-auth-screen.dart';
 
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
 import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
@@ -25,7 +27,7 @@ class VendorSelectionScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PhoneAuthScreen(),
+                      builder: (context) => const SellerPhoneAuth(),
                     ),
                   );
                 },
@@ -36,7 +38,7 @@ class VendorSelectionScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const EmailLoginScreen(),
+                      builder: (context) => const SellerEmailLogin(),
                     ),
                   );
                 },

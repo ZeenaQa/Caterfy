@@ -1,22 +1,19 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/signup-screen.dart';
-import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/button-widget.dart';
 import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:caterfy/customers/screens/home-screen.dart';
-import 'package:caterfy/sellers/screens/home-screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class EmailLoginScreen extends StatelessWidget {
-  const EmailLoginScreen({super.key});
+class CustomerEmailLogin extends StatelessWidget {
+  const CustomerEmailLogin({super.key});
 
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
-    final sellerAuth = Provider.of<SellerAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
     String email = '';
     String password = '';
@@ -61,10 +58,9 @@ class EmailLoginScreen extends StatelessWidget {
               hint: ('****************'),
             ),
 
-            if (customerAuth.logInError != null ||
-                sellerAuth.logInError != null)
+            if (customerAuth.logInError != null)
               Text(
-                customerAuth.logInError ?? sellerAuth.logInError!,
+                customerAuth.logInError!,
                 style: TextStyle(
                   color: colors.error,
                   fontWeight: FontWeight.w500,
@@ -81,7 +77,7 @@ class EmailLoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            (customerAuth.isLoading || sellerAuth.isLoading)
+            (customerAuth.isLoading)
                 ? const SpinKitRing(color: Colors.black)
                 : AuthButton(
                     chiild: Text(
@@ -100,21 +96,6 @@ class EmailLoginScreen extends StatelessWidget {
                             builder: (_) => const CustomerHomeScreen(),
                           ),
                         );
-                        return;
-                      }
-
-                      sellerAuth.setEmail(email);
-                      sellerAuth.setPassword(password);
-                      final sSuccess = await sellerAuth.logIn();
-
-                      if (sSuccess && context.mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const SellerHomeScreen(),
-                          ),
-                        );
-                        return;
                       }
                     },
                   ),
@@ -133,9 +114,7 @@ class EmailLoginScreen extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const CustomerSignUpScreen(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const CustomerSignUp()),
                     );
                   },
                   child: Text(

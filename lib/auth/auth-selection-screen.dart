@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/screens/email_login_screen.dart';
+import 'package:caterfy/customers/screens/login_screen.dart';
 import 'package:caterfy/customers/screens/phone-auth-screen.dart';
 import 'package:caterfy/sellers/screens/seller-auth-selection-screen.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +15,12 @@ class SelectionScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => dest == "email"
-              ? EmailLoginScreen()
+              ? CustomerEmailLogin()
               : dest == "phone"
-              ? PhoneAuthScreen()
+              ? CustomerPhoneAuth()
               : dest == "vendor"
               ? VendorSelectionScreen()
-              : EmailLoginScreen(),
+              : CustomerEmailLogin(),
         ),
       );
     }

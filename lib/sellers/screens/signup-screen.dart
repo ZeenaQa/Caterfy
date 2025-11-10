@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class SellerSignUpScreen extends StatelessWidget {
-  const SellerSignUpScreen({super.key});
+class SellerSignUp extends StatelessWidget {
+  const SellerSignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class SellerSignUpScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SellerHomeScreen(),
+                            builder: (context) => SellerHomeScreen(),
                           ),
                         );
                       }

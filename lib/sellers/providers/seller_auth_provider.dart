@@ -16,6 +16,10 @@ class SellerAuthProvider extends ChangeNotifier {
   String _phoneNumber = '';
   String businessName = '';
   String businessType = '';
+  String? nameError;
+  String? emailError;
+  String? passwordError;
+  String? confirmPasswordError;
 
   // ---------------- Setters ----------------
   void setPhoneNumber(String value) {
@@ -74,58 +78,47 @@ class SellerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Validation ----------------
-  bool validateEmail(String email) {
-    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return regex.hasMatch(email);
+  String? getEmailError(String email) {
+    if (email.isEmpty) {
+      return "required";
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      return " is not valid";
+    }
+    return null;
   }
 
-  bool isValidPhoneNumber(String phoneNumber) {
-    final regex = RegExp(r'^[0-9]{10}$');
-    return regex.hasMatch(phoneNumber);
-  }
-
-  bool isValidPassword(String password) {
-    final minLength = 8;
-    final hasUppercase = RegExp(r'[A-Z]');
-    final hasLowercase = RegExp(r'[a-z]');
-    final hasDigit = RegExp(r'\d');
-
-    return password.length >= minLength &&
-        hasUppercase.hasMatch(password) &&
-        hasLowercase.hasMatch(password) &&
-        hasDigit.hasMatch(password);
+  String? getPasswordError(String password) {
+    if (password.isEmpty) {
+      return "required";
+    }
+    if (password.length < 8) {
+      return " must be at least 8 characters long";
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return "must include at least one uppercase letter";
+    }
+    if (!RegExp(r'\d').hasMatch(password)) {
+      return "must include at least one number";
+    }
+    return null;
   }
 
   // ---------------- Sign Up ----------------
   Future<bool> signUp() async {
-    if (name.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty ||
-        _phoneNumber.isEmpty) {
-      setSignUpError("Please fill all fields");
-      return false;
-    }
+    nameError = name.isEmpty ? "required" : null;
+    emailError = await checkEmailAvailability(email);
+    passwordError = getPasswordError(password);
+    confirmPasswordError = password != confirmPassword
+        ? "Passwords do not match"
+        : null;
 
-    if (password != confirmPassword) {
-      setSignUpError("Passwords do not match");
-      return false;
-    }
+    notifyListeners();
 
-    if (!isValidPassword(password)) {
-      setSignUpError(
-        "Password must be at least 8 characters, include upper & lower case letters and a number",
-      );
-      return false;
-    }
-
-    if (!isValidPhoneNumber(_phoneNumber)) {
-      setSignUpError("Enter a valid phone number");
-      return false;
-    }
-
-    if (!validateEmail(email)) {
-      setSignUpError("Enter a valid email address");
+    if (nameError != null ||
+        emailError != null ||
+        passwordError != null ||
+        confirmPasswordError != null) {
       return false;
     }
 
@@ -147,12 +140,11 @@ class SellerAuthProvider extends ChangeNotifier {
         });
       }
 
-      return false;
+      return true;
     } on AuthException catch (e) {
       if (e.code == 'user_already_exists') {
-        setSignUpError(
-          "This email is already registered. Please log in instead.",
-        );
+        emailError = "is already registered.";
+        notifyListeners();
       } else {
         setSignUpError(e.message);
       }
@@ -165,10 +157,36 @@ class SellerAuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<String?> checkEmailAvailability(String email) async {
+    if (email.isEmpty) {
+      return "required";
+    }
+
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      return "is not valid";
+    }
+
+    try {
+      final existing = await supabase
+          .from('sellers')
+          .select('id')
+          .eq('email', email)
+          .maybeSingle();
+
+      if (existing != null) {
+        return "is already registered";
+      }
+    } catch (e) {
+      return "error checking email";
+    }
+
+    return null;
+  }
+
   // ---------------- Log In ----------------
   Future<bool> logIn() async {
     if (email.isEmpty || password.isEmpty) {
-      setLogInError("Please enter email/phone and password");
+      setLogInError("Please enter email and password");
       return false;
     }
 
@@ -183,7 +201,7 @@ class SellerAuthProvider extends ChangeNotifier {
       );
 
       if (response.session == null) {
-        setLogInError("Email/Phone or password is incorrect");
+        setLogInError("Email or password is incorrect");
         return false;
       }
 
@@ -201,6 +219,9 @@ class SellerAuthProvider extends ChangeNotifier {
       }
 
       return true;
+    } on AuthApiException {
+      setLogInError("Email or password is incorrect");
+      return false;
     } catch (e) {
       setLogInError(e.toString());
       return false;
@@ -254,5 +275,15 @@ class SellerAuthProvider extends ChangeNotifier {
       setLogInError("Error checking phone: $e");
       return null;
     }
+  }
+
+  void clearErrors() {
+    nameError = null;
+    emailError = null;
+    passwordError = null;
+    confirmPasswordError = null;
+    signUpError = null;
+    successMessage = null;
+    notifyListeners();
   }
 }

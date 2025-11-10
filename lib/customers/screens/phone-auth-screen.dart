@@ -3,8 +3,8 @@ import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class PhoneAuthScreen extends StatelessWidget {
-  const PhoneAuthScreen({super.key});
+class CustomerPhoneAuth extends StatelessWidget {
+  const CustomerPhoneAuth({super.key});
 
   @override
   Widget build(BuildContext context) {
