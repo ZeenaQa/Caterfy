@@ -1,5 +1,3 @@
-import 'package:caterfy/customers/screens/customer_login_screen.dart';
-import 'package:caterfy/customers/screens/customer_phone_auth_screen.dart';
 import 'package:caterfy/vendors/screens/vendor_login_screen.dart';
 import 'package:caterfy/vendors/screens/vendor_phone_login_screen.dart';
 

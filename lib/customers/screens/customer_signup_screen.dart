@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_home_screen.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,8 +15,9 @@ class CustomerSignUp extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      appBar: LogoAppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
 
         child: Column(
           spacing: 25,

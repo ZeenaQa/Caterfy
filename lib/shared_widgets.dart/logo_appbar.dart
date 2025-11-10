@@ -7,8 +7,8 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 2,
-      title: SvgPicture.asset('assets/icons/logo.svg', height: 40),
+      // elevation: 2,
+      // title: SvgPicture.asset('assets/icons/logo.svg', height: 40),
     );
   }
 

@@ -80,7 +80,7 @@ class VendorAuthProvider extends ChangeNotifier {
   // ---------------- Validation ----------------
   String? validateEmail(String email) {
     if (email.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
       return " is not valid";
@@ -90,7 +90,7 @@ class VendorAuthProvider extends ChangeNotifier {
 
   String? validatePassword(String password) {
     if (password.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
     if (password.length < 8) {
       return " must be at least 8 characters long";
@@ -106,7 +106,7 @@ class VendorAuthProvider extends ChangeNotifier {
 
   // ---------------- Sign Up ----------------
   Future<bool> signUp() async {
-    nameError = name.isEmpty ? "required" : null;
+    nameError = name.isEmpty ? "Field can't be empty" : null;
     emailError = await checkEmailAvailability(email);
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
@@ -159,7 +159,7 @@ class VendorAuthProvider extends ChangeNotifier {
 
   Future<String?> checkEmailAvailability(String email) async {
     if (email.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
 
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
