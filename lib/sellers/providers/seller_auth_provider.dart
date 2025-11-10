@@ -78,7 +78,7 @@ class SellerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Validation ----------------
-  String? getEmailError(String email) {
+  String? validateEmail(String email) {
     if (email.isEmpty) {
       return "required";
     }
@@ -88,7 +88,7 @@ class SellerAuthProvider extends ChangeNotifier {
     return null;
   }
 
-  String? getPasswordError(String password) {
+  String? validatePassword(String password) {
     if (password.isEmpty) {
       return "required";
     }
@@ -108,7 +108,7 @@ class SellerAuthProvider extends ChangeNotifier {
   Future<bool> signUp() async {
     nameError = name.isEmpty ? "required" : null;
     emailError = await checkEmailAvailability(email);
-    passwordError = getPasswordError(password);
+    passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
         : null;
