@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SellerAuthProvider extends ChangeNotifier {
+class VendorAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   String email = '';
@@ -132,7 +132,7 @@ class SellerAuthProvider extends ChangeNotifier {
       );
 
       if (response.user != null) {
-        await supabase.from('sellers').insert({
+        await supabase.from('vendors').insert({
           'id': response.user!.id,
           'name': name,
           'email': email,
@@ -168,7 +168,7 @@ class SellerAuthProvider extends ChangeNotifier {
 
     try {
       final existing = await supabase
-          .from('sellers')
+          .from('vendors')
           .select('id')
           .eq('email', email)
           .maybeSingle();
@@ -208,7 +208,7 @@ class SellerAuthProvider extends ChangeNotifier {
       setLogInError(null);
 
       final data = await supabase
-          .from('sellers')
+          .from('vendors')
           .select()
           .eq('id', response.user!.id)
           .maybeSingle();
@@ -250,17 +250,17 @@ class SellerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsSeller() async {
+  Future<String?> checkPhoneExistsVendor() async {
     if (_phoneNumber.isEmpty) return null;
 
     try {
-      final seller = await supabase
-          .from('sellers')
+      final vendor = await supabase
+          .from('vendors')
           .select('id')
           .eq('phone_number', _phoneNumber)
           .maybeSingle();
 
-      if (seller != null) return 'seller';
+      if (vendor != null) return 'vendor';
 
       final customer = await supabase
           .from('customers')

@@ -1,19 +1,19 @@
-import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/signup-screen.dart';
-import 'package:caterfy/shared_widgets.dart/button-widget.dart';
-import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
+import 'package:caterfy/vendors/screens/vendor_signup_screen.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:caterfy/customers/screens/home-screen.dart';
+import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class CustomerEmailLogin extends StatelessWidget {
-  const CustomerEmailLogin({super.key});
+class VendorEmailLogin extends StatelessWidget {
+  const VendorEmailLogin({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final customerAuth = Provider.of<CustomerAuthProvider>(context);
+    final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
     String email = '';
     String password = '';
@@ -26,41 +26,23 @@ class CustomerEmailLogin extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 5,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Email',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            CustomTextField(
+            LabeledTextField(
               onChanged: (v) => email = v.trim(),
               hint: 'example@gmail.com',
+              label: 'Email',
+              // errorText: auth.nameError,
             ),
             SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'password',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            PasswordTextField(
+
+            LabeledPasswordField(
               onChanged: (v) => password = v.trim(),
               hint: ('****************'),
+              label: 'Passowrd',
             ),
 
-            if (customerAuth.logInError != null)
+            if (vendorAuth.logInError != null)
               Text(
-                customerAuth.logInError!,
+                vendorAuth.logInError!,
                 style: TextStyle(
                   color: colors.error,
                   fontWeight: FontWeight.w500,
@@ -77,7 +59,7 @@ class CustomerEmailLogin extends StatelessWidget {
                 ),
               ),
             ),
-            (customerAuth.isLoading)
+            (vendorAuth.isLoading)
                 ? const SpinKitRing(color: Colors.black)
                 : AuthButton(
                     chiild: Text(
@@ -85,15 +67,15 @@ class CustomerEmailLogin extends StatelessWidget {
                       style: TextStyle(color: colors.onPrimary),
                     ),
                     onPressed: () async {
-                      customerAuth.setEmail(email);
-                      customerAuth.setPassword(password);
-                      final cSuccess = await customerAuth.logIn();
+                      vendorAuth.setEmail(email);
+                      vendorAuth.setPassword(password);
+                      final sSuccess = await vendorAuth.logIn();
 
-                      if (cSuccess && context.mounted) {
+                      if (sSuccess && context.mounted) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const CustomerHomeScreen(),
+                            builder: (_) => const VendorHomeScreen(),
                           ),
                         );
                       }
@@ -106,7 +88,7 @@ class CustomerEmailLogin extends StatelessWidget {
                 const Text("Don't have an account? "),
                 GestureDetector(
                   onTap: () {
-                    final auth = Provider.of<CustomerAuthProvider>(
+                    final auth = Provider.of<VendorAuthProvider>(
                       context,
                       listen: false,
                     );
@@ -114,7 +96,7 @@ class CustomerEmailLogin extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const CustomerSignUp()),
+                      MaterialPageRoute(builder: (_) => const VendorSignUp()),
                     );
                   },
                   child: Text(

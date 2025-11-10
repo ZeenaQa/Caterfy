@@ -1,21 +1,19 @@
-import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
-import 'package:caterfy/sellers/screens/signup-screen.dart';
-import 'package:caterfy/shared_widgets.dart/button-widget.dart';
-import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
+import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/screens/customer_signup_screen.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:caterfy/sellers/screens/home-screen.dart';
+import 'package:caterfy/customers/screens/customer_home_screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class SellerEmailLogin extends StatelessWidget {
-  const SellerEmailLogin({super.key});
-
-  
+class CustomerEmailLogin extends StatelessWidget {
+  const CustomerEmailLogin({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final sellerAuth = Provider.of<SellerAuthProvider>(context);
+    final customerAuth = Provider.of<CustomerAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
     String email = '';
     String password = '';
@@ -60,9 +58,9 @@ class SellerEmailLogin extends StatelessWidget {
               hint: ('****************'),
             ),
 
-            if (sellerAuth.logInError != null)
+            if (customerAuth.logInError != null)
               Text(
-                sellerAuth.logInError!,
+                customerAuth.logInError!,
                 style: TextStyle(
                   color: colors.error,
                   fontWeight: FontWeight.w500,
@@ -79,7 +77,7 @@ class SellerEmailLogin extends StatelessWidget {
                 ),
               ),
             ),
-            (sellerAuth.isLoading)
+            (customerAuth.isLoading)
                 ? const SpinKitRing(color: Colors.black)
                 : AuthButton(
                     chiild: Text(
@@ -87,15 +85,15 @@ class SellerEmailLogin extends StatelessWidget {
                       style: TextStyle(color: colors.onPrimary),
                     ),
                     onPressed: () async {
-                      sellerAuth.setEmail(email);
-                      sellerAuth.setPassword(password);
-                      final sSuccess = await sellerAuth.logIn();
+                      customerAuth.setEmail(email);
+                      customerAuth.setPassword(password);
+                      final cSuccess = await customerAuth.logIn();
 
-                      if (sSuccess && context.mounted) {
+                      if (cSuccess && context.mounted) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const SellerHomeScreen(),
+                            builder: (_) => const CustomerHomeScreen(),
                           ),
                         );
                       }
@@ -108,7 +106,7 @@ class SellerEmailLogin extends StatelessWidget {
                 const Text("Don't have an account? "),
                 GestureDetector(
                   onTap: () {
-                    final auth = Provider.of<SellerAuthProvider>(
+                    final auth = Provider.of<CustomerAuthProvider>(
                       context,
                       listen: false,
                     );
@@ -116,7 +114,7 @@ class SellerEmailLogin extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const SellerSignUp()),
+                      MaterialPageRoute(builder: (_) => const CustomerSignUp()),
                     );
                   },
                   child: Text(
