@@ -1,5 +1,5 @@
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor_signup_screen.dart';
+import 'package:caterfy/vendors/screens/vendor-signup/personal-info.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +96,9 @@ class VendorEmailLogin extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const VendorSignUp()),
+                      MaterialPageRoute(
+                        builder: (_) => const VendorPersonalInfo(),
+                      ),
                     );
                   },
                   child: Text(

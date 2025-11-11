@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class VendorSignUp extends StatelessWidget {
-  const VendorSignUp({super.key});
+class VendorBuisnessInfo extends StatelessWidget {
+  const VendorBuisnessInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +39,6 @@ class VendorSignUp extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 40),
-
-            CustomTextField(onChanged: auth.setName),
-            const SizedBox(height: 20),
 
             CustomTextField(onChanged: auth.setBusinessName),
             const SizedBox(height: 20),
@@ -62,25 +58,6 @@ class VendorSignUp extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 20),
-
-            CustomTextField(
-              keyboardType: TextInputType.emailAddress,
-              onChanged: auth.setEmail,
-            ),
-            const SizedBox(height: 20),
-
-            CustomTextField(
-              keyboardType: TextInputType.phone,
-              onChanged: auth.setPhoneNumber,
-            ),
-            const SizedBox(height: 20),
-
-            PasswordTextField(onChanged: auth.setPassword),
-            const SizedBox(height: 20),
-
-            PasswordTextField(onChanged: auth.setConfirmPassword),
-            const SizedBox(height: 20),
 
             if (auth.signUpError != null)
               Text(
@@ -93,8 +70,6 @@ class VendorSignUp extends StatelessWidget {
                 auth.successMessage!,
                 style: const TextStyle(color: Colors.green),
               ),
-
-            const SizedBox(height: 20),
 
             auth.isLoading
                 ? const Center(

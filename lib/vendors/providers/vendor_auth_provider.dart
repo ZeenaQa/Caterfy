@@ -18,6 +18,7 @@ class VendorAuthProvider extends ChangeNotifier {
   String businessType = '';
   String? nameError;
   String? emailError;
+  String? phoneError;
   String? passwordError;
   String? confirmPasswordError;
 
@@ -112,7 +113,6 @@ class VendorAuthProvider extends ChangeNotifier {
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
         : null;
-
     notifyListeners();
 
     if (nameError != null ||
@@ -280,6 +280,7 @@ class VendorAuthProvider extends ChangeNotifier {
   void clearErrors() {
     nameError = null;
     emailError = null;
+    phoneError = null;
     passwordError = null;
     confirmPasswordError = null;
     signUpError = null;
