@@ -1,17 +1,17 @@
-import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
-import 'package:caterfy/sellers/screens/home-screen.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
+import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class SellerSignUp extends StatelessWidget {
-  const SellerSignUp({super.key});
+class VendorSignUp extends StatelessWidget {
+  const VendorSignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<SellerAuthProvider>(context);
+    final auth = Provider.of<VendorAuthProvider>(context);
 
     final List<String> businessTypes = [
       "Restaurant",
@@ -31,7 +31,7 @@ class SellerSignUp extends StatelessWidget {
             const SizedBox(height: 60),
             const Center(
               child: Text(
-                "Seller Sign Up",
+                "Vendor Sign Up",
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
@@ -107,7 +107,7 @@ class SellerSignUp extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SellerHomeScreen(),
+                            builder: (context) => VendorHomeScreen(),
                           ),
                         );
                       }

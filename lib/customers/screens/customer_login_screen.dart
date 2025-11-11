@@ -1,11 +1,11 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/signup-screen.dart';
-import 'package:caterfy/shared_widgets.dart/button-widget.dart';
-import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
+import 'package:caterfy/customers/screens/customer_signup_screen.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:caterfy/customers/screens/home-screen.dart';
+import 'package:caterfy/customers/screens/customer_home_screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
 class CustomerEmailLogin extends StatelessWidget {
@@ -26,36 +26,16 @@ class CustomerEmailLogin extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 5,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Email',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            CustomTextField(
+            LabeledTextField(
               onChanged: (v) => email = v.trim(),
               hint: 'example@gmail.com',
+              label: 'Email',
             ),
             SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'password',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            PasswordTextField(
+            LabeledPasswordField(
               onChanged: (v) => password = v.trim(),
               hint: ('****************'),
+              label: 'Password',
             ),
 
             if (customerAuth.logInError != null)

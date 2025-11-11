@@ -1,6 +1,6 @@
 import 'package:caterfy/auth/auth-selection-screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/sellers/providers/seller_auth_provider.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 // import 'package:caterfy/style/theme/dark-theme.dart';
 import 'package:caterfy/style/theme/light-theme.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CustomerAuthProvider()),
-        ChangeNotifierProvider(create: (_) => SellerAuthProvider()),
+        ChangeNotifierProvider(create: (_) => VendorAuthProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

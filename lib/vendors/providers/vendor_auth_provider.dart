@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SellerAuthProvider extends ChangeNotifier {
+class VendorAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   String email = '';
@@ -80,7 +80,7 @@ class SellerAuthProvider extends ChangeNotifier {
   // ---------------- Validation ----------------
   String? validateEmail(String email) {
     if (email.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
       return " is not valid";
@@ -90,7 +90,7 @@ class SellerAuthProvider extends ChangeNotifier {
 
   String? validatePassword(String password) {
     if (password.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
     if (password.length < 8) {
       return " must be at least 8 characters long";
@@ -106,7 +106,7 @@ class SellerAuthProvider extends ChangeNotifier {
 
   // ---------------- Sign Up ----------------
   Future<bool> signUp() async {
-    nameError = name.isEmpty ? "required" : null;
+    nameError = name.isEmpty ? "Field can't be empty" : null;
     emailError = await checkEmailAvailability(email);
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
@@ -132,7 +132,7 @@ class SellerAuthProvider extends ChangeNotifier {
       );
 
       if (response.user != null) {
-        await supabase.from('sellers').insert({
+        await supabase.from('vendors').insert({
           'id': response.user!.id,
           'name': name,
           'email': email,
@@ -159,7 +159,7 @@ class SellerAuthProvider extends ChangeNotifier {
 
   Future<String?> checkEmailAvailability(String email) async {
     if (email.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
 
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
@@ -168,7 +168,7 @@ class SellerAuthProvider extends ChangeNotifier {
 
     try {
       final existing = await supabase
-          .from('sellers')
+          .from('vendors')
           .select('id')
           .eq('email', email)
           .maybeSingle();
@@ -208,7 +208,7 @@ class SellerAuthProvider extends ChangeNotifier {
       setLogInError(null);
 
       final data = await supabase
-          .from('sellers')
+          .from('vendors')
           .select()
           .eq('id', response.user!.id)
           .maybeSingle();
@@ -250,17 +250,17 @@ class SellerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsSeller() async {
+  Future<String?> checkPhoneExistsVendor() async {
     if (_phoneNumber.isEmpty) return null;
 
     try {
-      final seller = await supabase
-          .from('sellers')
+      final vendor = await supabase
+          .from('vendors')
           .select('id')
           .eq('phone_number', _phoneNumber)
           .maybeSingle();
 
-      if (seller != null) return 'seller';
+      if (vendor != null) return 'vendor';
 
       final customer = await supabase
           .from('customers')

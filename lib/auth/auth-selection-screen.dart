@@ -1,6 +1,6 @@
-import 'package:caterfy/customers/screens/login_screen.dart';
-import 'package:caterfy/customers/screens/phone-auth-screen.dart';
-import 'package:caterfy/sellers/screens/seller-auth-selection-screen.dart';
+import 'package:caterfy/customers/screens/customer_login_screen.dart';
+import 'package:caterfy/customers/screens/customer_phone_auth_screen.dart';
+import 'package:caterfy/vendors/screens/vendor_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../shared_widgets.dart/outlined_button.dart';

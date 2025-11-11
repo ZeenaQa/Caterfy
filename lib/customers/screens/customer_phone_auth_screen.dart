@@ -1,6 +1,6 @@
-import 'package:caterfy/shared_widgets.dart/button-widget.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/shared_widgets.dart/logo-AppBar.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
