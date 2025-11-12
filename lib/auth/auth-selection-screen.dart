@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/screens/customer_login_screen.dart';
 import 'package:caterfy/customers/screens/customer_phone_auth_screen.dart';
-import 'package:caterfy/vendors/screens/vendor_selection_screen.dart';
+
+import 'package:caterfy/vendors/screens/vendor-signin/vendor_signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../shared_widgets.dart/outlined_button.dart';
@@ -19,7 +20,7 @@ class SelectionScreen extends StatelessWidget {
               : dest == "phone"
               ? CustomerPhoneAuth()
               : dest == "vendor"
-              ? VendorSelectionScreen()
+              ? SignInPage()
               : CustomerEmailLogin(),
         ),
       );

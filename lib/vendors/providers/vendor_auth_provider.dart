@@ -16,6 +16,8 @@ class VendorAuthProvider extends ChangeNotifier {
   String _phoneNumber = '';
   String businessName = '';
   String businessType = '';
+  String? businessNameError = '';
+  String? businessTypeError = '';
   String? nameError;
   String? emailError;
   String? phoneError;
@@ -25,36 +27,43 @@ class VendorAuthProvider extends ChangeNotifier {
   // ---------------- Setters ----------------
   void setPhoneNumber(String value) {
     _phoneNumber = value;
+    passwordError = null;
     notifyListeners();
   }
 
   void setBusinessName(String name) {
-    businessName = name;
+    businessName = name.trim();
+    businessNameError = null;
     notifyListeners();
   }
 
   void setBusinessType(String type) {
     businessType = type;
+    businessTypeError = null;
     notifyListeners();
   }
 
   void setEmail(String value) {
     email = value.trim();
+    emailError = null;
     notifyListeners();
   }
 
   void setPassword(String value) {
     password = value.trim();
+    passwordError = null;
     notifyListeners();
   }
 
   void setConfirmPassword(String value) {
     confirmPassword = value.trim();
+    confirmPasswordError = null;
     notifyListeners();
   }
 
   void setName(String value) {
     name = value.trim();
+    nameError = null;
     notifyListeners();
   }
 
@@ -105,23 +114,58 @@ class VendorAuthProvider extends ChangeNotifier {
     return null;
   }
 
-  // ---------------- Sign Up ----------------
-  Future<bool> signUp() async {
+  // --------------------------------------------------------
+
+  bool validatePersonalInfo() {
     nameError = name.isEmpty ? "Field can't be empty" : null;
-    emailError = await checkEmailAvailability(email);
+
+    if (email.isEmpty) {
+      emailError = "Field can't be empty";
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      emailError = "Invalid email";
+    } else {
+      emailError = null;
+    }
+
+    phoneError = _phoneNumber.isEmpty ? "Field can't be empty" : null;
+
+    notifyListeners();
+
+    return nameError == null && emailError == null && phoneError == null;
+
+    // --------------------------------------------------------
+  }
+
+  bool validateBusinessInfo() {
+    businessNameError = businessName.isEmpty ? "Field can't be empty" : null;
+    businessTypeError = businessType.isEmpty ? "Please select a type" : null;
+
+    notifyListeners();
+
+    return businessNameError == null && businessTypeError == null;
+  }
+
+  // --------------------------------------------------------
+
+  bool validatePasswordInfo() {
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
         : null;
+
     notifyListeners();
 
-    if (nameError != null ||
-        emailError != null ||
-        passwordError != null ||
-        confirmPasswordError != null) {
-      return false;
-    }
+    return passwordError == null && confirmPasswordError == null;
+  }
 
+  // ---------------- Sign Up ----------------
+  Future<bool> signUp({bool onlyPassword = false}) async {
+    if (onlyPassword) {
+      if (!validatePasswordInfo()) return false;
+    } else if (!validatePersonalInfo() ||
+        !validateBusinessInfo() ||
+        !validatePasswordInfo())
+      return false;
     try {
       setLoading(true);
 
@@ -137,6 +181,8 @@ class VendorAuthProvider extends ChangeNotifier {
           'name': name,
           'email': email,
           'phone_number': _phoneNumber,
+          'business_name': businessName,
+          'business_type': businessType,
         });
       }
 
@@ -285,6 +331,8 @@ class VendorAuthProvider extends ChangeNotifier {
     confirmPasswordError = null;
     signUpError = null;
     successMessage = null;
+    businessNameError = null;
+    businessTypeError = null;
     notifyListeners();
   }
 }

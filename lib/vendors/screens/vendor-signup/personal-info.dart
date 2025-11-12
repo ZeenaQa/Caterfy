@@ -22,9 +22,10 @@ class VendorPersonalInfo extends StatelessWidget {
           spacing: 25,
           children: [
             const SizedBox(height: 60),
+
             const Center(
               child: Text(
-                "Vendor Sign Up",
+                "Personal Information",
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
               ),
             ),
@@ -50,18 +51,6 @@ class VendorPersonalInfo extends StatelessWidget {
               errorText: auth.phoneError,
             ),
 
-            // LabeledPasswordField(
-            //   onChanged: auth.setPassword,
-            //   hint: '****************',
-            //   label: 'Password',
-            //   errorText: auth.passwordError,
-            // ),
-            // LabeledPasswordField(
-            //   onChanged: auth.setConfirmPassword,
-            //   hint: '****************',
-            //   label: 'Confirm Password',
-            //   errorText: auth.confirmPasswordError,
-            // ),
             if (auth.signUpError != null)
               Text(
                 auth.signUpError!,
@@ -81,36 +70,39 @@ class VendorPersonalInfo extends StatelessWidget {
                 : Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            transitionDuration: Duration(milliseconds: 300),
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    VendorBuisnessInfo(),
-                            transitionsBuilder:
-                                (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                  child,
-                                ) {
-                                  const begin = Offset(1.0, 0.0);
-                                  const end = Offset.zero;
-                                  final tween = Tween(begin: begin, end: end);
-                                  final offsetAnimation = animation.drive(
-                                    tween,
-                                  );
+                      onPressed: () {
+                        if (auth.validatePersonalInfo()) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 300),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      VendorBuisnessInfo(),
+                              transitionsBuilder:
+                                  (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) {
+                                    const begin = Offset(1.0, 0.0);
+                                    const end = Offset.zero;
+                                    final tween = Tween(begin: begin, end: end);
+                                    final offsetAnimation = animation.drive(
+                                      tween,
+                                    );
 
-                                  return SlideTransition(
-                                    position: offsetAnimation,
-                                    child: child,
-                                  );
-                                },
-                          ),
-                        );
+                                    return SlideTransition(
+                                      position: offsetAnimation,
+                                      child: child,
+                                    );
+                                  },
+                            ),
+                          );
+                        }
                       },
+
                       child: const Text("Next"),
                     ),
                   ),

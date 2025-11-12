@@ -1,7 +1,6 @@
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor-signup/personal-info.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -19,18 +18,15 @@ class VendorEmailLogin extends StatelessWidget {
     String password = '';
 
     return Scaffold(
-      appBar: LogoAppBar(),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           spacing: 5,
           children: [
             LabeledTextField(
               onChanged: (v) => email = v.trim(),
               hint: 'example@gmail.com',
               label: 'Email',
-              // errorText: auth.nameError,
             ),
             SizedBox(height: 20),
 
