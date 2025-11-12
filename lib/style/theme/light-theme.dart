@@ -21,11 +21,13 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      elevation: 0,
       backgroundColor: const Color(0xFF9359FF),
       foregroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      overlayColor: Colors.transparent,
     ),
   ),
   textButtonTheme: TextButtonThemeData(

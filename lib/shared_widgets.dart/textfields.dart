@@ -1,4 +1,3 @@
-import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -37,11 +36,11 @@ class CustomTextField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey, width: 1),
+          borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.black, width: 1),
+          borderSide: BorderSide(color: Color(0xffadadad), width: 1),
         ),
       ),
     );
@@ -89,14 +88,18 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey, width: 1),
+          borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.black, width: 1),
+          borderSide: BorderSide(color: Color(0xffadadad), width: 1),
         ),
         suffixIcon: IconButton(
-          icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+          icon: Icon(
+            _obscure ? Icons.visibility_off : Icons.visibility,
+            color: Color(0xff9c9c9c),
+            size: 22,
+          ),
           onPressed: _toggleVisibility,
         ),
       ),
@@ -107,17 +110,15 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 class LabeledTextField extends StatelessWidget {
   const LabeledTextField({
     super.key,
-    required this.auth,
     required this.onChanged,
-    this.hiint,
+    this.hint,
     this.label,
     this.keyboardType,
     this.errorText,
   });
 
-  final CustomerAuthProvider auth;
   final Function onChanged;
-  final String? hiint;
+  final String? hint;
   final String? label;
   final TextInputType? keyboardType;
   final String? errorText;
@@ -130,22 +131,24 @@ class LabeledTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 15, bottom: 6),
           child: Row(
             children: [
               Text(
                 label ?? "",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: hasError ? Colors.red : Colors.black,
+                  color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
                 ),
               ),
               if (hasError)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    errorText!,
-                    style: TextStyle(color: Colors.red, fontSize: 12),
+                Text(
+                  " - ${errorText ?? ''}",
+                  style: TextStyle(
+                    color: Color(0xfffd7a7a),
+                    fontStyle: FontStyle.italic,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
             ],
@@ -153,7 +156,7 @@ class LabeledTextField extends StatelessWidget {
         ),
         CustomTextField(
           onChanged: (value) => onChanged(value),
-          hint: hiint,
+          hint: hint,
           errorText: errorText,
         ),
       ],
@@ -164,16 +167,15 @@ class LabeledTextField extends StatelessWidget {
 class LabeledPasswordField extends StatelessWidget {
   const LabeledPasswordField({
     super.key,
-    required this.auth,
+
     required this.onChanged,
-    this.hiint,
+    this.hint,
     this.label,
     this.errorText,
   });
 
-  final CustomerAuthProvider auth;
   final Function onChanged;
-  final String? hiint;
+  final String? hint;
   final String? label;
   final String? errorText;
 
@@ -185,22 +187,24 @@ class LabeledPasswordField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 15, bottom: 6),
           child: Row(
             children: [
               Text(
                 label ?? "",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: hasError ? Colors.red : Colors.black,
+                  color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
                 ),
               ),
               if (hasError)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    errorText!,
-                    style: TextStyle(color: Colors.red, fontSize: 12),
+                Text(
+                  " - ${errorText ?? ''}",
+                  style: TextStyle(
+                    color: Color(0xfffd7a7a),
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
             ],
@@ -208,7 +212,7 @@ class LabeledPasswordField extends StatelessWidget {
         ),
         PasswordTextField(
           onChanged: (value) => onChanged(value),
-          hint: hiint,
+          hint: hint,
           errorText: errorText,
         ),
       ],

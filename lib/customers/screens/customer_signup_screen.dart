@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/home-screen.dart';
+import 'package:caterfy/customers/screens/customer_home_screen.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,8 +15,9 @@ class CustomerSignUp extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      appBar: LogoAppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
 
         child: Column(
           spacing: 25,
@@ -27,34 +29,30 @@ class CustomerSignUp extends StatelessWidget {
             ),
 
             LabeledTextField(
-              auth: auth,
               onChanged: auth.setName,
-              hiint: 'First and Last Name',
+              hint: 'First and Last Name',
               label: 'Name',
               errorText: auth.nameError,
             ),
 
             LabeledTextField(
-              auth: auth,
               onChanged: auth.setEmail,
-              hiint: 'example@gmail.com',
+              hint: 'example@gmail.com',
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
               errorText: auth.emailError,
             ),
 
             LabeledPasswordField(
-              auth: auth,
               onChanged: auth.setPassword,
-              hiint: '****************',
+              hint: '****************',
               label: 'Password',
               errorText: auth.passwordError,
             ),
 
             LabeledPasswordField(
-              auth: auth,
               onChanged: auth.setConfirmPassword,
-              hiint: '****************',
+              hint: '****************',
               label: 'Confirm Password',
               errorText: auth.confirmPasswordError,
             ),

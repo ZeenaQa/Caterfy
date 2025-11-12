@@ -52,7 +52,6 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   void setName(String value) {
     name = value.trim();
-    nameError = null;
     notifyListeners();
   }
 
@@ -74,7 +73,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   // ---------------- Validation ----------------
   String? validateEmail(String email) {
     if (email.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
       return " is not valid";
@@ -84,7 +83,7 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   String? validatePassword(String password) {
     if (password.isEmpty) {
-      return "required";
+      return "Field can't be empty";
     }
     if (password.length < 8) {
       return " must be at least 8 characters long";
@@ -100,8 +99,8 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   // ---------------- Sign Up ----------------
   Future<bool> signUp() async {
-    nameError = name.isEmpty ? "required" : null;
-    emailError = await checkEmailAvailability(email);
+    nameError = name.isEmpty ? "Field can't be empty" : null;
+    emailError = validateEmail(email);
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
@@ -119,20 +118,20 @@ class CustomerAuthProvider extends ChangeNotifier {
     try {
       setLoading(true);
 
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
-        data: {'display_name': name},
-      );
+        final response = await supabase.auth.signUp(
+          email: email,
+          password: password,
+          data: {'display_name': name},
+        );
 
-      if (response.user != null) {
-        await supabase.from('customers').insert({
-          'id': response.user!.id,
-          'name': name,
-          'email': email,
-          'phone_number': _phoneNumber,
-        });
-      }
+        if (response.user != null) {
+          await supabase.from('customers').insert({
+            'id': response.user!.id,
+            'name': name,
+            'email': email,
+            'phone_number': _phoneNumber,
+          });
+        }
 
       return true;
     } on AuthException catch (e) {
@@ -152,14 +151,6 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   Future<String?> checkEmailAvailability(String email) async {
-    if (email.isEmpty) {
-      return "required";
-    }
-
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return "is not valid";
-    }
-
     try {
       final existing = await supabase
           .from('customers')
@@ -170,11 +161,10 @@ class CustomerAuthProvider extends ChangeNotifier {
       if (existing != null) {
         return "is already registered";
       }
+      return null;
     } catch (e) {
       return "error checking email";
     }
-
-    return null;
   }
 
   // ---------------- Log In ----------------
