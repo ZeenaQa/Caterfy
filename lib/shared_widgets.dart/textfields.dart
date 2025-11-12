@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
+//------------------- Custom Text Field -------------------
 class CustomTextField extends StatelessWidget {
   final String? hint;
   final bool obscureText;
@@ -26,10 +28,8 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hint,
-
         suffixIcon: suffix,
         filled: false,
-
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -47,6 +47,7 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
+/// ------------------- Password Text Field -------------------
 class PasswordTextField extends StatefulWidget {
   final String? hint;
   final ValueChanged<String>? onChanged;
@@ -79,9 +80,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       onChanged: widget.onChanged,
       decoration: InputDecoration(
         hintText: widget.hint,
-
         filled: false,
-
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -107,6 +106,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   }
 }
 
+/// ------------------- Labeled Text Field -------------------
 class LabeledTextField extends StatelessWidget {
   const LabeledTextField({
     super.key,
@@ -164,10 +164,10 @@ class LabeledTextField extends StatelessWidget {
   }
 }
 
+/// ------------------- Labeled Password Field -------------------
 class LabeledPasswordField extends StatelessWidget {
   const LabeledPasswordField({
     super.key,
-
     required this.onChanged,
     this.hint,
     this.label,
@@ -215,6 +215,100 @@ class LabeledPasswordField extends StatelessWidget {
           hint: hint,
           errorText: errorText,
         ),
+      ],
+    );
+  }
+}
+
+/// ------------------- Custom Phone Field -------------------
+class CustomPhoneField extends StatelessWidget {
+  const CustomPhoneField({
+    super.key,
+    required this.onChanged,
+    this.hintText = "Phone Number",
+  });
+
+  final Function(String) onChanged;
+  final String hintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return IntlPhoneField(
+      decoration: InputDecoration(
+        hintText: hintText,
+        filled: false,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Color(0xffadadad), width: 1),
+        ),
+      ),
+      initialCountryCode: 'JO',
+      disableLengthCheck: false,
+      onChanged: (phone) {
+        onChanged(phone.completeNumber);
+      },
+      style: const TextStyle(color: Colors.black),
+    );
+  }
+}
+
+/// ------------------- Labeled Phone Field -------------------
+class LabeledPhoneField extends StatelessWidget {
+  const LabeledPhoneField({
+    super.key,
+    required this.onChanged,
+    this.label,
+    this.hintText = "Phone Number",
+    this.errorText,
+  });
+
+  final Function(String) onChanged;
+  final String? label;
+  final String hintText;
+  final String? errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasError = errorText != null && errorText!.isNotEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label != null || hasError)
+          Padding(
+            padding: const EdgeInsets.only(left: 15, bottom: 6),
+            child: Row(
+              children: [
+                if (label != null)
+                  Text(
+                    label!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
+                    ),
+                  ),
+                if (hasError)
+                  Text(
+                    " - ${errorText ?? ''}",
+                    style: TextStyle(
+                      color: Color(0xfffd7a7a),
+                      fontStyle: FontStyle.italic,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        CustomPhoneField(hintText: hintText, onChanged: onChanged),
       ],
     );
   }

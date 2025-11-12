@@ -44,9 +44,8 @@ class CustomerPhoneAuth extends StatelessWidget {
                 ),
               ),
               initialCountryCode: 'JO',
-              showDropdownIcon: false,
+
               disableLengthCheck: true,
-              
 
               onChanged: (phone) {
                 phoneNumber = phone.completeNumber;
