@@ -255,7 +255,9 @@ class CustomPhoneField extends StatelessWidget {
       onChanged: (phone) {
         onChanged(phone.completeNumber);
       },
-      style: const TextStyle(color: Colors.black),
+      style: TextStyle(color: Colors.black),
+      flagsButtonMargin: EdgeInsets.only(left: 10),
+      showCountryFlag: false,
     );
   }
 }

@@ -73,7 +73,7 @@ class CustomerSignUp extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CustomerHomeScreen(),
+                            builder: (context) => CustomerHomeSection(),
                           ),
                         );
                       }

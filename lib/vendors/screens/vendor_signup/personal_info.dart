@@ -1,6 +1,6 @@
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor-signup/buisness-info.dart';
+import 'package:caterfy/vendors/screens/vendor_signup/buisness_info.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

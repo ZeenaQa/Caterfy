@@ -52,6 +52,7 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   void setName(String value) {
     name = value.trim();
+    nameError = null;
     notifyListeners();
   }
 
@@ -76,7 +77,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       return "Field can't be empty";
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return " is not valid";
+      return "Invalid email";
     }
     return null;
   }
@@ -86,13 +87,13 @@ class CustomerAuthProvider extends ChangeNotifier {
       return "Field can't be empty";
     }
     if (password.length < 8) {
-      return " must be at least 8 characters long";
+      return "Must be at least 8 characters long";
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return "must include at least one uppercase letter";
+      return "Must include at least one uppercase letter";
     }
     if (!RegExp(r'\d').hasMatch(password)) {
-      return "must include at least one number";
+      return "Must include at least one number";
     }
     return null;
   }
@@ -118,20 +119,20 @@ class CustomerAuthProvider extends ChangeNotifier {
     try {
       setLoading(true);
 
-        final response = await supabase.auth.signUp(
-          email: email,
-          password: password,
-          data: {'display_name': name},
-        );
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: {'display_name': name},
+      );
 
-        if (response.user != null) {
-          await supabase.from('customers').insert({
-            'id': response.user!.id,
-            'name': name,
-            'email': email,
-            'phone_number': _phoneNumber,
-          });
-        }
+      if (response.user != null) {
+        await supabase.from('customers').insert({
+          'id': response.user!.id,
+          'name': name,
+          'email': email,
+          'phone_number': _phoneNumber,
+        });
+      }
 
       return true;
     } on AuthException catch (e) {

@@ -73,7 +73,7 @@ class CustomerEmailLogin extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const CustomerHomeScreen(),
+                            builder: (_) => const CustomerHomeSection(),
                           ),
                         );
                       }

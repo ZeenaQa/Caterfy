@@ -1,11 +1,12 @@
-import 'package:caterfy/auth/auth-selection-screen.dart';
+import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 // import 'package:caterfy/style/theme/dark-theme.dart';
-import 'package:caterfy/style/theme/light-theme.dart';
+import 'package:caterfy/style/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'customer_bottom_navbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +34,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Caterfy',
         theme: lightTheme,
-
-        home: SelectionScreen(),
+        home: MainScreen(),
       ),
     );
   }
