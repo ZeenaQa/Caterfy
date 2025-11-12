@@ -22,7 +22,7 @@ class SettingsButton extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.only(top: 15, bottom: 13),
+        padding: EdgeInsets.only(top: 17, bottom: 15),
         decoration: BoxDecoration(
           border: isLastItem
               ? null
@@ -30,17 +30,13 @@ class SettingsButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              icon ?? Icons.person_outline,
-              color: Color(0xff676767),
-              size: 23,
-            ),
+            Icon(icon, color: Color(0xff676767), size: 21),
             SizedBox(width: 20),
             Text(
               title,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: 13,
                 color: Color(0xff242424),
               ),
             ),
@@ -48,7 +44,12 @@ class SettingsButton extends StatelessWidget {
             if (rightText != null)
               Text(
                 rightText!,
-                style: TextStyle(decoration: TextDecoration.underline),
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff676767),
+                ),
               ),
             if (rightText != null) SizedBox(width: 10),
             Icon(Icons.arrow_forward_ios, color: Color(0xff676767), size: 17),

@@ -1,4 +1,3 @@
-import 'package:caterfy/customer_orders_screen.dart';
 import 'package:caterfy/customer_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -70,32 +69,55 @@ class CustomerAccountSection extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Color.fromARGB(255, 228, 228, 228)),
+                  border: Border.all(color: Color(0xFF9359FF)),
                 ),
                 padding: EdgeInsets.all(20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      "Caterfy pay",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Color(0xFF9359FF),
+                      ),
+                    ),
+                    SizedBox(height: 15),
                     Row(
-                      spacing: 15,
                       children: [
-                        Icon(FontAwesomeIcons.wallet, size: 42),
+                        Icon(
+                          FontAwesomeIcons.wallet,
+                          size: 36,
+                          color: Color(0xFF9359FF),
+                        ),
+                        SizedBox(width: 15),
                         Text(
                           "0.00 JD",
                           style: TextStyle(
-                            color: const Color.fromARGB(255, 110, 110, 110),
+                            color: Color(0xFF9359FF),
                             fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Text(
-                        "View details",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: const Color.fromARGB(255, 110, 110, 110),
+
+                    SizedBox(height: 10),
+
+                    // Make sure Column fills width to allow Align to work properly
+                    SizedBox(
+                      width: double.infinity,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "View details",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Color(0xff676767),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     ),
