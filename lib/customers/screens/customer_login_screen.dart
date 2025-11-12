@@ -1,11 +1,11 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:caterfy/customers/screens/customer_home_screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
 class CustomerEmailLogin extends StatelessWidget {
@@ -73,7 +73,7 @@ class CustomerEmailLogin extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const CustomerHomeScreen(),
+                            builder: (_) => AuthenticatedCustomer(),
                           ),
                         );
                       }

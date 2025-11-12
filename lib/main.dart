@@ -1,7 +1,7 @@
 import 'package:caterfy/auth/auth-selection-screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/session.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-// import 'package:caterfy/style/theme/dark-theme.dart';
 import 'package:caterfy/style/theme/light-theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +16,14 @@ void main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZubmp3Y2VydGdhbXFxbHp5Z3dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NjI4MzIsImV4cCI6MjA3NzAzODgzMn0._wsV1AW3sgCQdYVw3HKOFOPQBPYVKTHv9S949ltbk3E',
   );
 
-  runApp(const MyApp());
+  final entryWidget = await OnBoardingSkip.WidgetIntApp();
+
+  runApp(MyApp(entryWidget: entryWidget));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget entryWidget;
+  const MyApp({super.key, required this.entryWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Caterfy',
         theme: lightTheme,
-
-        home: SelectionScreen(),
+        home: entryWidget,
       ),
     );
   }

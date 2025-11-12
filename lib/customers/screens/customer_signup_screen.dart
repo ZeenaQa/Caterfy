@@ -1,5 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/customer_home_screen.dart';
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ class CustomerSignUp extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CustomerHomeScreen(),
+                            builder: (context) => AuthenticatedCustomer(),
                           ),
                         );
                       }

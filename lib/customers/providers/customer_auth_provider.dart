@@ -52,6 +52,7 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   void setName(String value) {
     name = value.trim();
+    nameError = null;
     notifyListeners();
   }
 
@@ -118,20 +119,20 @@ class CustomerAuthProvider extends ChangeNotifier {
     try {
       setLoading(true);
 
-        final response = await supabase.auth.signUp(
-          email: email,
-          password: password,
-          data: {'display_name': name},
-        );
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: {'display_name': name},
+      );
 
-        if (response.user != null) {
-          await supabase.from('customers').insert({
-            'id': response.user!.id,
-            'name': name,
-            'email': email,
-            'phone_number': _phoneNumber,
-          });
-        }
+      if (response.user != null) {
+        await supabase.from('customers').insert({
+          'id': response.user!.id,
+          'name': name,
+          'email': email,
+          'phone_number': _phoneNumber,
+        });
+      }
 
       return true;
     } on AuthException catch (e) {
@@ -264,5 +265,15 @@ class CustomerAuthProvider extends ChangeNotifier {
     signUpError = null;
     successMessage = null;
     notifyListeners();
+  }
+
+  void notifyLis() {
+    notifyListeners();
+  }
+
+  void clearName() {
+    name = '';
+    email = '';
+    password = '';
   }
 }
