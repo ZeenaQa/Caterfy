@@ -43,6 +43,11 @@ class VendorAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearName() {
+    name = '';
+    notifyListeners();
+  }
+
   void setEmail(String value) {
     email = value.trim();
     emailError = null;

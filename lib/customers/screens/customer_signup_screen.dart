@@ -1,13 +1,23 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/customer_home_screen.dart';
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class CustomerSignUp extends StatelessWidget {
+class CustomerSignUp extends StatefulWidget {
   const CustomerSignUp({super.key});
+
+  @override
+  State<CustomerSignUp> createState() => _CustomerSignUpState();
+}
+
+class _CustomerSignUpState extends State<CustomerSignUp> {
+  String name = '';
+  String email = '';
+  String password = '';
+  String confirmPass = '';
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +39,20 @@ class CustomerSignUp extends StatelessWidget {
             ),
 
             LabeledTextField(
-              onChanged: auth.setName,
+              onChanged: (val) => setState(() {
+                auth.clearNameError();
+                name = val;
+              }),
               hint: 'First and Last Name',
               label: 'Name',
               errorText: auth.nameError,
             ),
 
             LabeledTextField(
-              onChanged: auth.setEmail,
+              onChanged: (val) => setState(() {
+                auth.clearEmailError();
+                email = val;
+              }),
               hint: 'example@gmail.com',
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
@@ -44,14 +60,20 @@ class CustomerSignUp extends StatelessWidget {
             ),
 
             LabeledPasswordField(
-              onChanged: auth.setPassword,
+              onChanged: (val) => setState(() {
+                auth.clearPassError();
+                password = val;
+              }),
               hint: '****************',
               label: 'Password',
               errorText: auth.passwordError,
             ),
 
             LabeledPasswordField(
-              onChanged: auth.setConfirmPassword,
+              onChanged: (val) => setState(() {
+                auth.clearConfirmPassError();
+                confirmPass = val;
+              }),
               hint: '****************',
               label: 'Confirm Password',
               errorText: auth.confirmPasswordError,
@@ -68,12 +90,17 @@ class CustomerSignUp extends StatelessWidget {
                   )
                 : ElevatedButton(
                     onPressed: () async {
-                      final success = await auth.signUp();
+                      final success = await auth.signUp(
+                        name: name,
+                        email: email.trim(),
+                        password: password,
+                        confirmPassword: confirmPass,
+                      );
                       if (success) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CustomerHomeScreen(),
+                            builder: (context) => AuthenticatedCustomer(),
                           ),
                         );
                       }

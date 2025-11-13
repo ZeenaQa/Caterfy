@@ -1,4 +1,4 @@
-import 'package:caterfy/vendors/screens/vendor-signin/vendor_login_screen.dart';
+import 'package:caterfy/vendors/screens/vendor-signin/vendor_email_login_screen.dart';
 import 'package:caterfy/vendors/screens/vendor-signin/vendor_phone_login_screen.dart';
 import 'package:flutter/material.dart';
 

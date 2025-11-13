@@ -1,22 +1,28 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:caterfy/customers/screens/customer_home_screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class CustomerEmailLogin extends StatelessWidget {
+class CustomerEmailLogin extends StatefulWidget {
   const CustomerEmailLogin({super.key});
+
+  @override
+  State<CustomerEmailLogin> createState() => _CustomerEmailLoginState();
+}
+
+class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
+  String email = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
-    String email = '';
-    String password = '';
 
     return Scaffold(
       appBar: LogoAppBar(),
@@ -27,13 +33,17 @@ class CustomerEmailLogin extends StatelessWidget {
           spacing: 5,
           children: [
             LabeledTextField(
-              onChanged: (v) => email = v.trim(),
+              onChanged: (v) => setState(() {
+                email = v.trim();
+              }),
               hint: 'example@gmail.com',
               label: 'Email',
             ),
             SizedBox(height: 20),
             LabeledPasswordField(
-              onChanged: (v) => password = v.trim(),
+              onChanged: (v) => setState(() {
+                password = v.trim();
+              }),
               hint: ('****************'),
               label: 'Password',
             ),
@@ -65,15 +75,16 @@ class CustomerEmailLogin extends StatelessWidget {
                       style: TextStyle(color: colors.onPrimary),
                     ),
                     onPressed: () async {
-                      customerAuth.setEmail(email);
-                      customerAuth.setPassword(password);
-                      final cSuccess = await customerAuth.logIn();
+                      final cSuccess = await customerAuth.logIn(
+                        email: email.trim(),
+                        password: password,
+                      );
 
                       if (cSuccess && context.mounted) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const CustomerHomeScreen(),
+                            builder: (_) => AuthenticatedCustomer(),
                           ),
                         );
                       }
