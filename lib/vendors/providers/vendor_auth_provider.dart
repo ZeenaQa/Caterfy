@@ -4,18 +4,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class VendorAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
-  String email = '';
-  String password = '';
-  String confirmPassword = '';
-  String name = '';
   bool isLoading = false;
 
   String? signUpError;
   String? logInError;
   String? successMessage;
-  String _phoneNumber = '';
-  String businessName = '';
-  String businessType = '';
   String? businessNameError = '';
   String? businessTypeError = '';
   String? nameError;
@@ -25,53 +18,6 @@ class VendorAuthProvider extends ChangeNotifier {
   String? confirmPasswordError;
 
   // ---------------- Setters ----------------
-  void setPhoneNumber(String value) {
-    _phoneNumber = value;
-    passwordError = null;
-    notifyListeners();
-  }
-
-  void setBusinessName(String name) {
-    businessName = name.trim();
-    businessNameError = null;
-    notifyListeners();
-  }
-
-  void setBusinessType(String type) {
-    businessType = type;
-    businessTypeError = null;
-    notifyListeners();
-  }
-
-  void clearName() {
-    name = '';
-    notifyListeners();
-  }
-
-  void setEmail(String value) {
-    email = value.trim();
-    emailError = null;
-    notifyListeners();
-  }
-
-  void setPassword(String value) {
-    password = value.trim();
-    passwordError = null;
-    notifyListeners();
-  }
-
-  void setConfirmPassword(String value) {
-    confirmPassword = value.trim();
-    confirmPasswordError = null;
-    notifyListeners();
-  }
-
-  void setName(String value) {
-    name = value.trim();
-    nameError = null;
-    notifyListeners();
-  }
-
   void setLoading(bool value) {
     isLoading = value;
     notifyListeners();
@@ -121,7 +67,11 @@ class VendorAuthProvider extends ChangeNotifier {
 
   // --------------------------------------------------------
 
-  bool validatePersonalInfo() {
+  bool validatePersonalInfo({
+    required String name,
+    required String email,
+    required String phoneNumber,
+  }) {
     nameError = name.isEmpty ? "Field can't be empty" : null;
 
     if (email.isEmpty) {
@@ -132,7 +82,7 @@ class VendorAuthProvider extends ChangeNotifier {
       emailError = null;
     }
 
-    phoneError = _phoneNumber.isEmpty ? "Field can't be empty" : null;
+    phoneError = phoneNumber.isEmpty ? "Field can't be empty" : null;
 
     notifyListeners();
 
@@ -141,7 +91,10 @@ class VendorAuthProvider extends ChangeNotifier {
     // --------------------------------------------------------
   }
 
-  bool validateBusinessInfo() {
+  bool validateBusinessInfo({
+    required String businessName,
+    required String businessType,
+  }) {
     businessNameError = businessName.isEmpty ? "Field can't be empty" : null;
     businessTypeError = businessType.isEmpty ? "Please select a type" : null;
 
@@ -152,7 +105,10 @@ class VendorAuthProvider extends ChangeNotifier {
 
   // --------------------------------------------------------
 
-  bool validatePasswordInfo() {
+  bool validatePasswordInfo({
+    required String password,
+    required String confirmPassword,
+  }) {
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
@@ -164,13 +120,38 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Sign Up ----------------
-  Future<bool> signUp({bool onlyPassword = false}) async {
+  Future<bool> signUp({
+    bool onlyPassword = false,
+    required String email,
+    required String name,
+    required String password,
+    required String confirmPassword,
+    required String phoneNumber,
+    required String businessName,
+    required String businessType,
+  }) async {
     if (onlyPassword) {
-      if (!validatePasswordInfo()) return false;
-    } else if (!validatePersonalInfo() ||
-        !validateBusinessInfo() ||
-        !validatePasswordInfo())
+      if (!validatePasswordInfo(
+        password: password,
+        confirmPassword: confirmPassword,
+      )) {
+        return false;
+      }
+    } else if (!validatePersonalInfo(
+          email: email,
+          name: name,
+          phoneNumber: phoneNumber,
+        ) ||
+        !validateBusinessInfo(
+          businessName: businessName,
+          businessType: businessType,
+        ) ||
+        !validatePasswordInfo(
+          password: password,
+          confirmPassword: confirmPassword,
+        )) {
       return false;
+    }
     try {
       setLoading(true);
 
@@ -185,7 +166,7 @@ class VendorAuthProvider extends ChangeNotifier {
           'id': response.user!.id,
           'name': name,
           'email': email,
-          'phone_number': _phoneNumber,
+          'phone_number': phoneNumber,
           'business_name': businessName,
           'business_type': businessType,
         });
@@ -235,7 +216,7 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn() async {
+  Future<bool> logIn({required String email, required String password}) async {
     if (email.isEmpty || password.isEmpty) {
       setLogInError("Please enter email and password");
       return false;
@@ -258,16 +239,11 @@ class VendorAuthProvider extends ChangeNotifier {
 
       setLogInError(null);
 
-      final data = await supabase
-          .from('vendors')
-          .select()
-          .eq('id', response.user!.id)
-          .maybeSingle();
-
-      if (data != null) {
-        name = data['name'] ?? '';
-        email = data['email'] ?? '';
-      }
+      // final data = await supabase
+      //     .from('vendors')
+      //     .select()
+      //     .eq('id', response.user!.id)
+      //     .maybeSingle();
 
       return true;
     } on AuthApiException {
@@ -282,15 +258,15 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
-  Future<bool> sendPhoneOtp() async {
-    if (_phoneNumber.isEmpty) {
+  Future<bool> sendPhoneOtp({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) {
       setLogInError("Please enter a valid phone number");
       return false;
     }
 
     try {
       setLoading(true);
-      await supabase.auth.signInWithOtp(phone: _phoneNumber);
+      await supabase.auth.signInWithOtp(phone: phoneNumber);
       setLogInError(null);
       return true;
     } catch (e) {
@@ -301,14 +277,14 @@ class VendorAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsVendor() async {
-    if (_phoneNumber.isEmpty) return null;
+  Future<String?> checkPhoneExistsVendor({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) return null;
 
     try {
       final vendor = await supabase
           .from('vendors')
           .select('id')
-          .eq('phone_number', _phoneNumber)
+          .eq('phone_number', phoneNumber)
           .maybeSingle();
 
       if (vendor != null) return 'vendor';
@@ -316,7 +292,7 @@ class VendorAuthProvider extends ChangeNotifier {
       final customer = await supabase
           .from('customers')
           .select('id')
-          .eq('phone_number', _phoneNumber)
+          .eq('phone_number', phoneNumber)
           .maybeSingle();
 
       if (customer != null) return 'customer';

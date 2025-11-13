@@ -5,8 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class SetPassword extends StatelessWidget {
-  const SetPassword({super.key});
+class SetPassword extends StatefulWidget {
+  const SetPassword({
+    super.key,
+    required this.email,
+    required this.name,
+    required this.phoneNumber,
+    required this.selectedBusiness,
+    required this.businessName,
+  });
+
+  final String name;
+  final String email;
+  final String phoneNumber;
+  final String selectedBusiness;
+  final String businessName;
+
+  @override
+  State<SetPassword> createState() => _SetPasswordState();
+}
+
+class _SetPasswordState extends State<SetPassword> {
+  String password = '';
+  String confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +49,17 @@ class SetPassword extends StatelessWidget {
                 ),
               ),
               LabeledPasswordField(
-                onChanged: auth.setPassword,
+                onChanged: (v) => setState(() {
+                  password = v;
+                }),
                 hint: '****************',
                 label: 'Password',
                 errorText: auth.passwordError,
               ),
               LabeledPasswordField(
-                onChanged: auth.setConfirmPassword,
+                onChanged: (v) => setState(() {
+                  confirmPassword = v;
+                }),
                 hint: '****************',
                 label: 'Confirm Password',
                 errorText: auth.confirmPasswordError,
@@ -45,8 +70,20 @@ class SetPassword extends StatelessWidget {
                     )
                   : ElevatedButton(
                       onPressed: () async {
-                        if (auth.validatePasswordInfo()) {
-                          final success = await auth.signUp(onlyPassword: true);
+                        if (auth.validatePasswordInfo(
+                          password: password,
+                          confirmPassword: confirmPassword,
+                        )) {
+                          final success = await auth.signUp(
+                            onlyPassword: true,
+                            email: widget.email,
+                            name: widget.name,
+                            password: password,
+                            confirmPassword: confirmPassword,
+                            phoneNumber: widget.phoneNumber,
+                            businessName: widget.businessName,
+                            businessType: widget.selectedBusiness,
+                          );
                           if (success) {
                             Navigator.pushReplacement(
                               context,

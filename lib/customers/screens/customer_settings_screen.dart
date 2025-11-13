@@ -1,4 +1,4 @@
-import 'package:caterfy/auth/auth-selection-screen.dart';
+import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';

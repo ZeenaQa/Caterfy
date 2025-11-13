@@ -6,12 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class VendorPhoneAuth extends StatelessWidget {
+class VendorPhoneAuth extends StatefulWidget {
   const VendorPhoneAuth({super.key});
 
   @override
+  State<VendorPhoneAuth> createState() => _VendorPhoneAuthState();
+}
+
+class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
+  String phoneNumber = "";
+  @override
   Widget build(BuildContext context) {
-    String phoneNumber = "";
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
     return SingleChildScrollView(
@@ -34,17 +39,18 @@ class VendorPhoneAuth extends StatelessWidget {
                       style: TextStyle(color: colors.onPrimary),
                     ),
                     onPressed: () async {
-                      // vendorAuth.sendPhoneOtp()
-                      final sSuccess = await vendorAuth.logIn();
+                      //ZEENAA create a different function for phone login forget about the BS below 👍
 
-                      if (sSuccess && context.mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const VendorHomeScreen(),
-                          ),
-                        );
-                      }
+                      // final sSuccess = await vendorAuth.logIn();
+
+                      // if (sSuccess && context.mounted) {
+                      //   Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (_) => const VendorHomeScreen(),
+                      //     ),
+                      //   );
+                      // }
                     },
                   ),
           ],
