@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/screens/customer_orders_screen.dart';
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +8,14 @@ class CustomerAccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = [
-      AccountButton(title: "Your orders", icon: Icons.receipt_outlined),
+      AccountButton(
+        title: "Your orders",
+        icon: Icons.receipt_outlined,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CustomerOrdersScreen(appBarTitle: "Orders")),
+        ),
+      ),
       AccountButton(
         title: "Vouchers",
         icon: Icons.wallet_giftcard_outlined,

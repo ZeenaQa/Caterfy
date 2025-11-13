@@ -5,14 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class CustomerPhoneAuth extends StatelessWidget {
+class CustomerPhoneAuth extends StatefulWidget {
   const CustomerPhoneAuth({super.key});
+
+  @override
+  State<CustomerPhoneAuth> createState() => _CustomerPhoneAuthState();
+}
+
+class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
+  String phoneNumber = "";
+  int numLength = 0;
 
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
-    String phoneNumber = "";
-    int numLength = 0;
 
     return Scaffold(
       appBar: LogoAppBar(),
@@ -47,17 +53,18 @@ class CustomerPhoneAuth extends StatelessWidget {
 
               disableLengthCheck: true,
 
-              onChanged: (phone) {
+              onChanged: (phone) => setState(() {
                 phoneNumber = phone.completeNumber;
                 numLength = phone.number.length;
-              },
+              }),
               style: const TextStyle(color: Colors.black),
             ),
             SizedBox(height: 20),
             AuthButton(
               onPressed: () async {
                 final result = await customerAuth.checkPhoneExistsCustomer(
-                  numLength,
+                  phoneNumber: phoneNumber,
+                  numLength: numLength,
                 );
                 print(result);
               },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import '../customer_sections/customer_home.dart';
 import '../customer_sections/customer_account.dart';
@@ -20,80 +21,83 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _screens),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(66, 226, 226, 226),
-              blurRadius: 6,
-              offset: Offset(0, 0),
-            ),
-          ],
-        ),
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        body: IndexedStack(index: _currentIndex, children: _screens),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(66, 226, 226, 226),
+                blurRadius: 6,
+                offset: Offset(0, 0),
+              ),
+            ],
           ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: TextStyle(fontSize: 12, height: 2),
-            unselectedLabelStyle: TextStyle(fontSize: 12, height: 2),
-            backgroundColor: Colors.white,
-            iconSize: 20,
-            currentIndex: _currentIndex,
-            onTap: (index) => setState(() => _currentIndex = index),
-            items: [
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: const EdgeInsets.only(top: 4, bottom: 1),
-                  child: SvgPicture.asset(
-                    'assets/icons/caterfy_initial.svg',
-                    height: 15,
-                    width: 15,
-                    colorFilter: ColorFilter.mode(
-                      _currentIndex == 0
-                          ? Color(0xFF9359FF)
-                          : Color(0xff757175),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: const EdgeInsets.only(top: 4, bottom: 1),
-                  child: Icon(Icons.receipt_outlined),
-                ),
-                label: 'Orders',
-              ),
-              BottomNavigationBarItem(
-                icon: Padding(
-                  padding: const EdgeInsets.only(top: 4, bottom: 1),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 110),
-                    padding: EdgeInsets.all(1),
-                    decoration: BoxDecoration(
-                      color: _currentIndex == 2
-                          ? Color(0xFF9359FF)
-                          : Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: CircleAvatar(
-                      radius: 11,
-                      backgroundImage: AssetImage(
-                        'assets/images/waseem_pfp.jpg',
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+            ),
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              selectedLabelStyle: TextStyle(fontSize: 12, height: 2),
+              unselectedLabelStyle: TextStyle(fontSize: 12, height: 2),
+              backgroundColor: Colors.white,
+              iconSize: 20,
+              currentIndex: _currentIndex,
+              onTap: (index) => setState(() => _currentIndex = index),
+              items: [
+                BottomNavigationBarItem(
+                  icon: Padding(
+                    padding: const EdgeInsets.only(top: 4, bottom: 1),
+                    child: SvgPicture.asset(
+                      'assets/icons/caterfy_initial.svg',
+                      height: 15,
+                      width: 15,
+                      colorFilter: ColorFilter.mode(
+                        _currentIndex == 0
+                            ? Color(0xFF9359FF)
+                            : Color(0xff757175),
+                        BlendMode.srcIn,
                       ),
                     ),
                   ),
+                  label: 'Home',
                 ),
-                label: 'Account',
-              ),
-            ],
+                BottomNavigationBarItem(
+                  icon: Padding(
+                    padding: const EdgeInsets.only(top: 4, bottom: 1),
+                    child: Icon(Icons.receipt_outlined),
+                  ),
+                  label: 'Orders',
+                ),
+                BottomNavigationBarItem(
+                  icon: Padding(
+                    padding: const EdgeInsets.only(top: 4, bottom: 1),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 110),
+                      padding: EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        color: _currentIndex == 2
+                            ? Color(0xFF9359FF)
+                            : Colors.transparent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: CircleAvatar(
+                        radius: 11,
+                        backgroundImage: AssetImage(
+                          'assets/images/waseem_pfp.jpg',
+                        ),
+                      ),
+                    ),
+                  ),
+                  label: 'Account',
+                ),
+              ],
+            ),
           ),
         ),
       ),

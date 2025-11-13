@@ -8,22 +8,22 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
-        title ?? '',
-        style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-      ),
-      leadingWidth: 65,
-      titleSpacing: 0,
+      title: Text(title ?? '', style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)),
+      leadingWidth: 78,
+      titleSpacing: -7,
       leading: IconButton(
         padding: EdgeInsets.zero,
         icon: Material(
           color: Colors.white,
           shape: CircleBorder(side: BorderSide(color: Color(0xffe2e2e2))),
           clipBehavior: Clip.antiAlias,
-          child: SizedBox(
-            width: 38,
-            height: 38,
-            child: Center(child: BackButtonIcon()),
+          child: IconTheme(
+            data: IconThemeData(size: 22),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: Center(child: BackButtonIcon()),
+            ),
           ),
         ),
         onPressed: () {

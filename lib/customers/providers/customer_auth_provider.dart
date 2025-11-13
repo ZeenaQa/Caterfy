@@ -4,16 +4,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class CustomerAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
-  String email = '';
-  String password = '';
-  String confirmPassword = '';
-  String name = '';
   bool isLoading = false;
 
   String? signUpError;
   String? logInError;
   String? successMessage;
-  String _phoneNumber = '';
 
   String? nameError;
   String? emailError;
@@ -22,37 +17,8 @@ class CustomerAuthProvider extends ChangeNotifier {
   String? phoneNumberError;
 
   // ---------------- Setters ----------------
-  void setPhoneNumber(String value) {
-    _phoneNumber = value;
-    notifyListeners();
-  }
-
-  void setEmail(String value) {
-    email = value.trim();
-    emailError = null;
-    notifyListeners();
-  }
-
   void setLoading(bool value) {
     isLoading = value;
-    notifyListeners();
-  }
-
-  void setPassword(String value) {
-    password = value.trim();
-    passwordError = null;
-    notifyListeners();
-  }
-
-  void setConfirmPassword(String value) {
-    confirmPassword = value.trim();
-    confirmPasswordError = null;
-    notifyListeners();
-  }
-
-  void setName(String value) {
-    name = value.trim();
-    nameError = null;
     notifyListeners();
   }
 
@@ -99,7 +65,12 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Sign Up ----------------
-  Future<bool> signUp() async {
+  Future<bool> signUp({
+    required String name,
+    required String email,
+    required String password,
+    required String confirmPassword,
+  }) async {
     nameError = name.isEmpty ? "Field can't be empty" : null;
     emailError = validateEmail(email);
     passwordError = validatePassword(password);
@@ -130,7 +101,6 @@ class CustomerAuthProvider extends ChangeNotifier {
           'id': response.user!.id,
           'name': name,
           'email': email,
-          'phone_number': _phoneNumber,
         });
       }
 
@@ -169,7 +139,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn() async {
+  Future<bool> logIn({required String email, required String password}) async {
     if (email.isEmpty || password.isEmpty) {
       setLogInError("Please enter email and password");
       return false;
@@ -192,16 +162,11 @@ class CustomerAuthProvider extends ChangeNotifier {
 
       setLogInError(null);
 
-      final data = await supabase
-          .from('customers')
-          .select()
-          .eq('id', response.user!.id)
-          .maybeSingle();
-
-      if (data != null) {
-        name = data['name'] ?? '';
-        email = data['email'] ?? '';
-      }
+      // final data = await supabase
+      //     .from('customers')
+      //     .select()
+      //     .eq('id', response.user!.id)
+      //     .maybeSingle();
 
       return true;
     } on AuthApiException {
@@ -216,15 +181,15 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
-  Future<bool> sendPhoneOtp() async {
-    if (_phoneNumber.isEmpty) {
+  Future<bool> sendPhoneOtp({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) {
       setLogInError("Please enter a valid phone number");
       return false;
     }
 
     try {
       setLoading(true);
-      await supabase.auth.signInWithOtp(phone: _phoneNumber);
+      await supabase.auth.signInWithOtp(phone: phoneNumber);
       setLogInError(null);
       return true;
     } catch (e) {
@@ -235,17 +200,20 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsCustomer(int numLength) async {
-    if (_phoneNumber.isEmpty || numLength < 6 || numLength > 10) {
+  Future<String?> checkPhoneExistsCustomer({
+    required String phoneNumber,
+    required int numLength,
+  }) async {
+    if (phoneNumber.isEmpty || numLength < 6 || numLength > 10) {
       phoneNumberError = 'Number must be 6–10 digits.';
       return null;
     }
 
     try {
       final customerID = await supabase
-          .from('customers')
+          .from('customeString phoneNumberrs')
           .select('id')
-          .eq('phone_number', _phoneNumber)
+          .eq('phone_number', phoneNumber)
           .maybeSingle();
 
       if (customerID != null) return customerID.toString();
@@ -267,13 +235,35 @@ class CustomerAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void notifyLis() {
-    notifyListeners();
+  void clearEmailError() {
+    if (emailError != null) {
+      emailError = null;
+      notifyListeners();
+    }
   }
 
-  void clearName() {
-    name = '';
-    email = '';
-    password = '';
+  void clearNameError() {
+    if (nameError != null) {
+      nameError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearPassError() {
+    if (passwordError != null) {
+      passwordError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearConfirmPassError() {
+    if (confirmPasswordError != null) {
+      confirmPasswordError = null;
+      notifyListeners();
+    }
+  }
+
+  void notifyLis() {
+    notifyListeners();
   }
 }
