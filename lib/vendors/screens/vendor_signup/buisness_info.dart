@@ -85,7 +85,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                       .toList(),
                   onChanged: (value) => setState(() {
                     if (value != null) {
-                      selectedBusiness = selectedBusiness;
+                      selectedBusiness = value;
                     }
                   }),
                   decoration: InputDecoration(
