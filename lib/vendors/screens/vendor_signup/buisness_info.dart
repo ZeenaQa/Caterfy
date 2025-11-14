@@ -1,24 +1,42 @@
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
-import 'package:caterfy/vendors/screens/vendor-signup/set-password.dart';
+import 'package:caterfy/vendors/screens/vendor_signup/set_password.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
-class VendorBuisnessInfo extends StatelessWidget {
-  const VendorBuisnessInfo({super.key});
+class VendorBuisnessInfo extends StatefulWidget {
+  const VendorBuisnessInfo({
+    super.key,
+    required this.email,
+    required this.name,
+    required this.phoneNumber,
+  });
+
+  final String name;
+  final String email;
+  final String phoneNumber;
+
+  @override
+  State<VendorBuisnessInfo> createState() => _VendorBuisnessInfoState();
+}
+
+class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
+  List<String> businessTypes = [
+    "Restaurant",
+    "Cafe",
+    "Bakery",
+    "Grocery",
+    "Other",
+  ];
+
+  String selectedBusiness = 'Restaurant';
+  String businessName = '';
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
-
-    final List<String> businessTypes = [
-      "Restaurant",
-      "Cafe",
-      "Bakery",
-      "Grocery",
-      "Other",
-    ];
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -37,7 +55,9 @@ class VendorBuisnessInfo extends StatelessWidget {
             ),
 
             LabeledTextField(
-              onChanged: auth.setBusinessName,
+              onChanged: (v) => setState(() {
+                businessName = v;
+              }),
               hint: 'Enter your business name',
               label: 'Business Name',
               errorText: auth.businessNameError,
@@ -57,18 +77,18 @@ class VendorBuisnessInfo extends StatelessWidget {
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                  value: auth.businessType.isNotEmpty
-                      ? auth.businessType
-                      : null,
+                  initialValue: selectedBusiness,
                   items: businessTypes
                       .map(
                         (type) =>
                             DropdownMenuItem(value: type, child: Text(type)),
                       )
                       .toList(),
-                  onChanged: (value) {
-                    if (value != null) auth.setBusinessType(value);
-                  },
+                  onChanged: (value) => setState(() {
+                    if (value != null) {
+                      selectedBusiness = value;
+                    }
+                  }),
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -98,21 +118,28 @@ class VendorBuisnessInfo extends StatelessWidget {
               ),
 
             auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
+                ? const Center(child: Spinner())
                 : Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (auth.validateBusinessInfo()) {
+                        if (auth.validateBusinessInfo(
+                          businessName: businessName,
+                          businessType: selectedBusiness,
+                        )) {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 300),
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
-                                      SetPassword(),
+                                      SetPassword(
+                                        email: widget.email,
+                                        name: widget.name,
+                                        phoneNumber: widget.phoneNumber,
+                                        selectedBusiness: selectedBusiness,
+                                        businessName: businessName,
+                                      ),
                               transitionsBuilder:
                                   (
                                     context,

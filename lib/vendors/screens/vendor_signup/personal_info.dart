@@ -1,13 +1,23 @@
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor-signup/buisness-info.dart';
+import 'package:caterfy/vendors/screens/vendor_signup/buisness_info.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
-class VendorPersonalInfo extends StatelessWidget {
+class VendorPersonalInfo extends StatefulWidget {
   const VendorPersonalInfo({super.key});
+
+  @override
+  State<VendorPersonalInfo> createState() => _VendorPersonalInfoState();
+}
+
+class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
+  String name = '';
+  String email = '';
+  String phoneNumber = '';
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +41,32 @@ class VendorPersonalInfo extends StatelessWidget {
             ),
 
             LabeledTextField(
-              onChanged: auth.setName,
+              onChanged: (v) => setState(() {
+                name = v;
+                auth.clearNameError();
+              }),
               hint: 'First and Last Name',
               label: 'Name',
               errorText: auth.nameError,
             ),
 
             LabeledTextField(
-              onChanged: auth.setEmail,
+              onChanged: (v) => setState(() {
+                email = v;
+                auth.clearEmailError();
+              }),
               hint: 'example@gmail.com',
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
               errorText: auth.emailError,
             ),
             LabeledPhoneField(
+              onChanged: (v) => setState(() {
+                phoneNumber = v;
+                auth.clearErrors();
+              }),
               label: "Phone",
               hintText: "Enter your phone",
-              onChanged: auth.setPhoneNumber,
               errorText: auth.phoneError,
             ),
 
@@ -64,21 +83,27 @@ class VendorPersonalInfo extends StatelessWidget {
               ),
 
             auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
+                ? const Center(child: Spinner())
                 : Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (auth.validatePersonalInfo()) {
+                        if (auth.validatePersonalInfo(
+                          email: email.trim(),
+                          name: name.trim(),
+                          phoneNumber: phoneNumber.trim(),
+                        )) {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 300),
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
-                                      VendorBuisnessInfo(),
+                                      VendorBuisnessInfo(
+                                        name: name,
+                                        email: email,
+                                        phoneNumber: phoneNumber,
+                                      ),
                               transitionsBuilder:
                                   (
                                     context,

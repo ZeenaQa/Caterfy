@@ -6,6 +6,8 @@ import '../customer_sections/customer_account.dart';
 import '../customer_sections/customer_orders.dart';
 
 class AuthenticatedCustomer extends StatefulWidget {
+  const AuthenticatedCustomer({super.key});
+
   @override
   State<AuthenticatedCustomer> createState() => AuthenticatedCustomerState();
 }
