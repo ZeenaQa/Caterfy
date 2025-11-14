@@ -33,6 +33,10 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
             LabeledTextField(
               onChanged: (v) => setState(() {
                 email = v;
+<<<<<<< HEAD
+=======
+
+>>>>>>> save-google-signin
                 vendorAuth.clearEmailError();
               }),
               hint: 'example@gmail.com',
@@ -70,11 +74,20 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                 ),
               ),
             ),
+<<<<<<< HEAD
             AuthButton(
               chiild: (vendorAuth.isLoading)
                   ? Spinner()
                   : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
 
+=======
+
+            AuthButton(
+              chiild: (vendorAuth.isLoading)
+                  ? Spinner()
+                  : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
+
+>>>>>>> save-google-signin
               onPressed: () async {
                 final sSuccess = await vendorAuth.logIn(
                   email: email.trim(),

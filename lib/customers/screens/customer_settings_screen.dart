@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 import 'dart:ui';
+=======
+<<<<<<< HEAD
+=======
+import 'dart:ui';
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
+>>>>>>> save-google-signin
 import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';

@@ -1,9 +1,17 @@
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+<<<<<<< HEAD
+=======
+
+>>>>>>> save-google-signin
 import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+
+>>>>>>> save-google-signin
 import 'package:provider/provider.dart';
 
 class VendorPhoneAuth extends StatefulWidget {
@@ -31,6 +39,10 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
               label: 'phone number',
             ),
             SizedBox(height: 123),
+<<<<<<< HEAD
+=======
+
+>>>>>>> save-google-signin
             AuthButton(
               chiild: (vendorAuth.isLoading)
                   ? Spinner()

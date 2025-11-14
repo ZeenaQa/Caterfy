@@ -217,11 +217,22 @@ class VendorAuthProvider extends ChangeNotifier {
 
   // ---------------- Log In ----------------
   Future<bool> logIn({required String email, required String password}) async {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    if (email.isEmpty || password.isEmpty) {
+      setLogInError("Please enter email and password");
+=======
+>>>>>>> save-google-signin
     emailError = email.isEmpty ? "Field can't be empty" : null;
     passwordError = password.isEmpty ? "Field can't be empty" : null;
 
     notifyListeners();
     if (emailError != null || passwordError != null) {
+<<<<<<< HEAD
+=======
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
+>>>>>>> save-google-signin
       return false;
     }
 
@@ -239,6 +250,21 @@ class VendorAuthProvider extends ChangeNotifier {
         notifyListeners();
         return false;
       }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+      setLogInError(null);
+
+      // final data = await supabase
+      //     .from('vendors')
+      //     .select()
+      //     .eq('id', response.user!.id)
+      //     .maybeSingle();
+
+=======
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
+>>>>>>> save-google-signin
       return true;
     } on AuthApiException {
       emailError = "Invalid email or password";

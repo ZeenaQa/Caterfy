@@ -43,7 +43,14 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
             LabeledTextField(
               onChanged: (v) => setState(() {
                 name = v;
+<<<<<<< HEAD
                 auth.clearNameError();
+=======
+<<<<<<< HEAD
+=======
+                auth.clearNameError();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
+>>>>>>> save-google-signin
               }),
               hint: 'First and Last Name',
               label: 'Name',
@@ -53,7 +60,14 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
             LabeledTextField(
               onChanged: (v) => setState(() {
                 email = v;
+<<<<<<< HEAD
                 auth.clearEmailError();
+=======
+<<<<<<< HEAD
+=======
+                auth.clearEmailError();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
+>>>>>>> save-google-signin
               }),
               hint: 'example@gmail.com',
               label: 'Email',
@@ -63,7 +77,14 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
             LabeledPhoneField(
               onChanged: (v) => setState(() {
                 phoneNumber = v;
+<<<<<<< HEAD
                 auth.clearErrors();
+=======
+<<<<<<< HEAD
+=======
+                auth.clearErrors();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
+>>>>>>> save-google-signin
               }),
               label: "Phone",
               hintText: "Enter your phone",
