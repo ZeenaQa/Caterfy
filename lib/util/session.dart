@@ -2,7 +2,7 @@ import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OnBoardingSkip {

@@ -1,8 +1,17 @@
+<<<<<<< HEAD
+=======
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+=======
+
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
 import 'package:provider/provider.dart';
 
 class SetPassword extends StatefulWidget {
@@ -32,6 +41,10 @@ class _SetPasswordState extends State<SetPassword> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
+<<<<<<< HEAD
+=======
+    final colors = Theme.of(context).colorScheme;
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -51,6 +64,10 @@ class _SetPasswordState extends State<SetPassword> {
               LabeledPasswordField(
                 onChanged: (v) => setState(() {
                   password = v;
+<<<<<<< HEAD
+=======
+                  auth.clearPassError();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
                 }),
                 hint: '****************',
                 label: 'Password',
@@ -59,11 +76,16 @@ class _SetPasswordState extends State<SetPassword> {
               LabeledPasswordField(
                 onChanged: (v) => setState(() {
                   confirmPassword = v;
+<<<<<<< HEAD
+=======
+                  auth.clearConfirmPassError();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
                 }),
                 hint: '****************',
                 label: 'Confirm Password',
                 errorText: auth.confirmPasswordError,
               ),
+<<<<<<< HEAD
               auth.isLoading
                   ? const Center(
                       child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
@@ -96,6 +118,41 @@ class _SetPasswordState extends State<SetPassword> {
                       },
                       child: const Text("Sign Up"),
                     ),
+=======
+              AuthButton(
+                chiild: (auth.isLoading)
+                    ? Spinner()
+                    : Text(
+                        "Sign In",
+                        style: TextStyle(color: colors.onPrimary),
+                      ),
+                onPressed: () async {
+                  if (auth.validatePasswordInfo(
+                    password: password,
+                    confirmPassword: confirmPassword,
+                  )) {
+                    final success = await auth.signUp(
+                      onlyPassword: true,
+                      email: widget.email,
+                      name: widget.name,
+                      password: password,
+                      confirmPassword: confirmPassword,
+                      phoneNumber: widget.phoneNumber,
+                      businessName: widget.businessName,
+                      businessType: widget.selectedBusiness,
+                    );
+                    if (success) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VendorHomeScreen(),
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
             ],
           ),
         ),

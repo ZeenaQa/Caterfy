@@ -217,25 +217,34 @@ class VendorAuthProvider extends ChangeNotifier {
 
   // ---------------- Log In ----------------
   Future<bool> logIn({required String email, required String password}) async {
+<<<<<<< HEAD
     if (email.isEmpty || password.isEmpty) {
       setLogInError("Please enter email and password");
+=======
+    emailError = email.isEmpty ? "Field can't be empty" : null;
+    passwordError = password.isEmpty ? "Field can't be empty" : null;
+
+    notifyListeners();
+    if (emailError != null || passwordError != null) {
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
       return false;
     }
 
     try {
       setLoading(true);
 
-      final isEmail = email.contains('@');
-
       final response = await supabase.auth.signInWithPassword(
-        email: isEmail ? email : null,
+        email: email,
         password: password,
       );
 
       if (response.session == null) {
-        setLogInError("Email or password is incorrect");
+        emailError = "Invalid email or password";
+        passwordError = "Invalid email or password";
+        notifyListeners();
         return false;
       }
+<<<<<<< HEAD
 
       setLogInError(null);
 
@@ -245,17 +254,24 @@ class VendorAuthProvider extends ChangeNotifier {
       //     .eq('id', response.user!.id)
       //     .maybeSingle();
 
+=======
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
       return true;
     } on AuthApiException {
-      setLogInError("Email or password is incorrect");
-      return false;
-    } catch (e) {
-      setLogInError(e.toString());
+      emailError = "Invalid email or password";
+      passwordError = "Invalid email or password";
+      notifyListeners();
       return false;
     } finally {
       setLoading(false);
     }
   }
+
+  // final data = await supabase
+  //     .from('vendors')
+  //     .select()
+  //     .eq('id', response.user!.id)
+  //     .maybeSingle();
 
   // ---------------- Phone ----------------
   Future<bool> sendPhoneOtp({required String phoneNumber}) async {
@@ -314,6 +330,38 @@ class VendorAuthProvider extends ChangeNotifier {
     successMessage = null;
     businessNameError = null;
     businessTypeError = null;
+    notifyListeners();
+  }
+
+  void clearEmailError() {
+    if (emailError != null) {
+      emailError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearNameError() {
+    if (nameError != null) {
+      nameError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearPassError() {
+    if (passwordError != null) {
+      passwordError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearConfirmPassError() {
+    if (confirmPasswordError != null) {
+      confirmPasswordError = null;
+      notifyListeners();
+    }
+  }
+
+  void notifyLis() {
     notifyListeners();
   }
 }

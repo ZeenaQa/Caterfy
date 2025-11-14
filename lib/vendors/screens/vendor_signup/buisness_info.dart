@@ -1,8 +1,9 @@
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/set_password.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
 class VendorBuisnessInfo extends StatefulWidget {
@@ -117,9 +118,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
               ),
 
             auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
+                ? const Center(child: Spinner())
                 : Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(

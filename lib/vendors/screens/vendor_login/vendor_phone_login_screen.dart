@@ -1,9 +1,11 @@
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
 class VendorPhoneAuth extends StatefulWidget {
@@ -31,28 +33,26 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
               label: 'phone number',
             ),
             SizedBox(height: 123),
-            (vendorAuth.isLoading)
-                ? const SpinKitRing(color: Colors.black)
-                : AuthButton(
-                    chiild: Text(
-                      "Sign In",
-                      style: TextStyle(color: colors.onPrimary),
-                    ),
-                    onPressed: () async {
-                      //ZEENAA create a different function for phone login forget about the BS below 👍
 
-                      // final sSuccess = await vendorAuth.logIn();
+            AuthButton(
+              chiild: (vendorAuth.isLoading)
+                  ? Spinner()
+                  : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
+              onPressed: () async {
+                //ZEENAA create a different function for phone login forget about the BS below 👍
 
-                      // if (sSuccess && context.mounted) {
-                      //   Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (_) => const VendorHomeScreen(),
-                      //     ),
-                      //   );
-                      // }
-                    },
-                  ),
+                // final sSuccess = await vendorAuth.logIn();
+
+                // if (sSuccess && context.mounted) {
+                //   Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (_) => const VendorHomeScreen(),
+                //     ),
+                //   );
+                // }
+              },
+            ),
           ],
         ),
       ),

@@ -1,9 +1,11 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
 class CustomerSignUp extends StatefulWidget {
@@ -22,7 +24,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
-
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: LogoAppBar(),
@@ -84,29 +86,27 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                 style: const TextStyle(color: Colors.green),
               ),
 
-            auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
-                : ElevatedButton(
-                    onPressed: () async {
-                      final success = await auth.signUp(
-                        name: name,
-                        email: email.trim(),
-                        password: password,
-                        confirmPassword: confirmPass,
-                      );
-                      if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AuthenticatedCustomer(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text("Sign Up"),
-                  ),
+            AuthButton(
+              chiild: (auth.isLoading)
+                  ? Spinner()
+                  : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
+              onPressed: () async {
+                final success = await auth.signUp(
+                  name: name,
+                  email: email.trim(),
+                  password: password,
+                  confirmPassword: confirmPass,
+                );
+                if (success) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AuthenticatedCustomer(),
+                    ),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

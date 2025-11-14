@@ -1,4 +1,6 @@
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerAuthProvider extends ChangeNotifier {
@@ -9,7 +11,6 @@ class CustomerAuthProvider extends ChangeNotifier {
   String? signUpError;
   String? logInError;
   String? successMessage;
-
   String? nameError;
   String? emailError;
   String? passwordError;
@@ -72,6 +73,9 @@ class CustomerAuthProvider extends ChangeNotifier {
     required String confirmPassword,
   }) async {
     nameError = name.isEmpty ? "Field can't be empty" : null;
+    confirmPasswordError = confirmPassword.isEmpty
+        ? "Field can't be empty"
+        : null;
     emailError = validateEmail(email);
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
@@ -140,40 +144,33 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   // ---------------- Log In ----------------
   Future<bool> logIn({required String email, required String password}) async {
-    if (email.isEmpty || password.isEmpty) {
-      setLogInError("Please enter email and password");
+    emailError = email.isEmpty ? "Field can't be empty" : null;
+    passwordError = password.isEmpty ? "Field can't be empty" : null;
+
+    notifyListeners();
+    if (emailError != null || passwordError != null) {
       return false;
     }
 
     try {
       setLoading(true);
 
-      final isEmail = email.contains('@');
-
       final response = await supabase.auth.signInWithPassword(
-        email: isEmail ? email : null,
+        email: email,
         password: password,
       );
 
       if (response.session == null) {
-        setLogInError("Email or password is incorrect");
+        emailError = "or password is incorrect";
+        passwordError = "or Email is incorrect";
+        notifyListeners();
         return false;
       }
-
-      setLogInError(null);
-
-      // final data = await supabase
-      //     .from('customers')
-      //     .select()
-      //     .eq('id', response.user!.id)
-      //     .maybeSingle();
-
       return true;
     } on AuthApiException {
-      setLogInError("Email or password is incorrect");
-      return false;
-    } catch (e) {
-      setLogInError(e.toString());
+      emailError = "or password is incorrect";
+      passwordError = "or Email is incorrect";
+      notifyListeners();
       return false;
     } finally {
       setLoading(false);
@@ -200,15 +197,72 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
+  /// ------------------------- Google Sign-in -------------------------
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      setLoading(true);
+
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId:
+            '27106899976-dpo0vu9f0eamcqv60v28nq8n60r9309a.apps.googleusercontent.com',
+      );
+      await googleSignIn.signOut();
+
+      final GoogleSignInAccount? account = await googleSignIn.signIn();
+      if (account == null) {
+        setLogInError("Google sign-in cancelled");
+        return;
+      }
+
+      final GoogleSignInAuthentication auth = await account.authentication;
+      final String? idToken = auth.idToken;
+      final String? accessToken = auth.accessToken;
+
+      if (idToken == null) {
+        setLogInError("No ID token found");
+        return;
+      }
+
+      final AuthResponse res = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      final user = res.user;
+      if (user == null) {
+        setLogInError("Failed to sign in with Supabase");
+        return;
+      }
+
+      final existing = await supabase
+          .from('customers')
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (existing == null || existing.isEmpty) {
+        await supabase.from('customers').insert({
+          'id': user.id,
+          'email': user.email,
+          'name': user.userMetadata?['full_name'] ?? 'New User',
+        });
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+      );
+    } catch (e) {
+      setLogInError("Google sign-in failed: $e");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   Future<String?> checkPhoneExistsCustomer({
     required String phoneNumber,
-    required int numLength,
   }) async {
-    if (phoneNumber.isEmpty || numLength < 6 || numLength > 10) {
-      phoneNumberError = 'Number must be 6–10 digits.';
-      return null;
-    }
-
     try {
       final customerID = await supabase
           .from('customeString phoneNumberrs')

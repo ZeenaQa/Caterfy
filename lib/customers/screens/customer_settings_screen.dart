@@ -1,7 +1,12 @@
+<<<<<<< HEAD
+=======
+import 'dart:ui';
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
 import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,26 +37,46 @@ class CustomerSettingsScreen extends StatelessWidget {
         icon: Icons.language_outlined,
         rightText: "English",
       ),
-      SettingsButton(
-        title: 'Log out',
-        onTap: () async {
-          customerAuth.isLoading = true;
-          customerAuth.notifyLis();
+      Stack(
+        children: [
+          Column(
+            children: [
+              SettingsButton(
+                title: 'Log out',
+                onTap: () async {
+                  customerAuth.isLoading = true;
+                  customerAuth.notifyListeners();
 
-          try {
-            await Supabase.instance.client.auth.signOut();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const SelectionScreen()),
-              (route) => false,
-            );
-          } finally {
-            customerAuth.isLoading = false;
-            customerAuth.notifyLis();
-          }
-        },
-        icon: Icons.logout_outlined,
-        isLastItem: true,
+                  try {
+                    await Supabase.instance.client.auth.signOut();
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SelectionScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  } finally {
+                    customerAuth.isLoading = false;
+                    customerAuth.notifyListeners();
+                  }
+                },
+                icon: Icons.logout_outlined,
+                isLastItem: true,
+              ),
+            ],
+          ),
+
+          // if (customerAuth.isLoading)
+          //   Positioned.fill(
+          //     child: BackdropFilter(
+          //       filter: ImageFilter.blur(sigmaX:1, sigmaY: 1),
+
+          //       child: const Center(child: Spinner()),
+          //     ),
+          //   ),
+        ],
       ),
     ];
     return Scaffold(

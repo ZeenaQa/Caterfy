@@ -1,9 +1,10 @@
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/buisness_info.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
 class VendorPersonalInfo extends StatefulWidget {
@@ -42,6 +43,10 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
             LabeledTextField(
               onChanged: (v) => setState(() {
                 name = v;
+<<<<<<< HEAD
+=======
+                auth.clearNameError();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
               }),
               hint: 'First and Last Name',
               label: 'Name',
@@ -51,6 +56,10 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
             LabeledTextField(
               onChanged: (v) => setState(() {
                 email = v;
+<<<<<<< HEAD
+=======
+                auth.clearEmailError();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
               }),
               hint: 'example@gmail.com',
               label: 'Email',
@@ -60,6 +69,10 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
             LabeledPhoneField(
               onChanged: (v) => setState(() {
                 phoneNumber = v;
+<<<<<<< HEAD
+=======
+                auth.clearErrors();
+>>>>>>> ab6d47e (Implement Google Sign-In login feature)
               }),
               label: "Phone",
               hintText: "Enter your phone",
@@ -79,9 +92,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
               ),
 
             auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
+                ? const Center(child: Spinner())
                 : Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
