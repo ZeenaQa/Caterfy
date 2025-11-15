@@ -1,4 +1,4 @@
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
+import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
 import 'package:flutter/material.dart';
 
 class FilledBtn extends StatelessWidget {

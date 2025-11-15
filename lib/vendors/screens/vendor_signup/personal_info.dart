@@ -117,7 +117,6 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                 onPressed: () => handleNext(auth),
                 title: "Next",
                 stretch: false,
-                isLoading: auth.isLoading,
               ),
             ),
           ],

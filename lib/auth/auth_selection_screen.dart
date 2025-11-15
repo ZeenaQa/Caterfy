@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/screens/customer_login_screen.dart';
 import 'package:caterfy/customers/screens/customer_phone_auth_screen.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +14,7 @@ class SelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vendorAuth = Provider.of<VendorAuthProvider>(context);
     void handleNavigation(String dest) {
       final customerProvider = Provider.of<CustomerAuthProvider>(
         context,
@@ -114,7 +116,10 @@ class SelectionScreen extends StatelessWidget {
                   ),
                   OutlinedBtn(
                     title: "Continue as vendor",
-                    onPressed: () => handleNavigation("vendor"),
+                    onPressed: () {
+                      vendorAuth.clearErrors();
+                      handleNavigation("vendor");
+                    },
                     topPadding: 28,
                     bottomPadding: 30,
                     icon: Icons.store_outlined,

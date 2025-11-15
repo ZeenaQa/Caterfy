@@ -203,7 +203,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       setLoading(true);
 
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId:
+        serverClientId:
             '27106899976-dpo0vu9f0eamcqv60v28nq8n60r9309a.apps.googleusercontent.com',
       );
       await googleSignIn.signOut();

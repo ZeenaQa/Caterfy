@@ -152,7 +152,6 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                 onPressed: () => handleNext(auth),
                 title: "Next",
                 stretch: false,
-                isLoading: auth.isLoading,
               ),
             ),
           ],
