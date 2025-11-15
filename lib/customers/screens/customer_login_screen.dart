@@ -3,7 +3,6 @@ import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +22,6 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
-    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: LogoAppBar(),
@@ -35,20 +33,20 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
             spacing: 5,
             children: [
               LabeledTextField(
-                onChanged: (v) => setState(() {
+                onChanged: (v) {
                   email = v.trim();
                   customerAuth.clearEmailError();
-                }),
+                },
                 hint: 'example@gmail.com',
                 label: 'Email',
                 errorText: customerAuth.emailError,
               ),
               SizedBox(height: 20),
               LabeledPasswordField(
-                onChanged: (v) => setState(() {
+                onChanged: (v) {
                   password = v.trim();
                   customerAuth.clearPassError();
-                }),
+                },
                 hint: ('****************'),
                 label: 'Password',
                 errorText: customerAuth.passwordError,
@@ -65,20 +63,13 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                   ),
                 ),
               ),
-              AuthButton(
-                chiild: (customerAuth.isLoading)
-                    ? Spinner()
-                    : Text(
-                        "Sign In",
-                        style: TextStyle(color: colors.onPrimary),
-                      ),
+              FilledBtn(
+                title: "Sign In",
                 onPressed: () async {
                   final cSuccess = await customerAuth.logIn(
                     email: email.trim(),
                     password: password,
                   );
-
-                  setState(() {});
 
                   if (cSuccess && context.mounted) {
                     Navigator.pushReplacement(
@@ -89,6 +80,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                     );
                   }
                 },
+                isLoading: customerAuth.isLoading,
               ),
 
               Row(

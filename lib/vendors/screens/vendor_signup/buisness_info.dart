@@ -1,4 +1,4 @@
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/set_password.dart';
@@ -34,6 +34,35 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
   String selectedBusiness = 'Restaurant';
   String businessName = '';
 
+  void handleNext(auth) async {
+    if (auth.validateBusinessInfo(
+      businessName: businessName,
+      businessType: selectedBusiness,
+    )) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionDuration: Duration(milliseconds: 300),
+          pageBuilder: (context, animation, secondaryAnimation) => SetPassword(
+            email: widget.email,
+            name: widget.name,
+            phoneNumber: widget.phoneNumber,
+            selectedBusiness: selectedBusiness,
+            businessName: businessName,
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            final tween = Tween(begin: begin, end: end);
+            final offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
@@ -55,9 +84,9 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
             ),
 
             LabeledTextField(
-              onChanged: (v) => setState(() {
+              onChanged: (v) {
                 businessName = v;
-              }),
+              },
               hint: 'Enter your business name',
               label: 'Business Name',
               errorText: auth.businessNameError,
@@ -84,11 +113,11 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                             DropdownMenuItem(value: type, child: Text(type)),
                       )
                       .toList(),
-                  onChanged: (value) => setState(() {
+                  onChanged: (value) {
                     if (value != null) {
                       selectedBusiness = value;
                     }
-                  }),
+                  },
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -117,55 +146,15 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                 style: const TextStyle(color: Colors.green),
               ),
 
-            auth.isLoading
-                ? const Center(child: Spinner())
-                : Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (auth.validateBusinessInfo(
-                          businessName: businessName,
-                          businessType: selectedBusiness,
-                        )) {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 300),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      SetPassword(
-                                        email: widget.email,
-                                        name: widget.name,
-                                        phoneNumber: widget.phoneNumber,
-                                        selectedBusiness: selectedBusiness,
-                                        businessName: businessName,
-                                      ),
-                              transitionsBuilder:
-                                  (
-                                    context,
-                                    animation,
-                                    secondaryAnimation,
-                                    child,
-                                  ) {
-                                    const begin = Offset(1.0, 0.0);
-                                    const end = Offset.zero;
-                                    final tween = Tween(begin: begin, end: end);
-                                    final offsetAnimation = animation.drive(
-                                      tween,
-                                    );
-
-                                    return SlideTransition(
-                                      position: offsetAnimation,
-                                      child: child,
-                                    );
-                                  },
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text("Next"),
-                    ),
-                  ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledBtn(
+                onPressed: () => handleNext(auth),
+                title: "Next",
+                stretch: false,
+                isLoading: auth.isLoading,
+              ),
+            ),
           ],
         ),
       ),

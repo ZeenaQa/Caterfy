@@ -2,7 +2,6 @@ import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +23,6 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
-    final colors = Theme.of(context).colorScheme;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: LogoAppBar(),
@@ -41,20 +39,20 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
             ),
 
             LabeledTextField(
-              onChanged: (val) => setState(() {
+              onChanged: (val) {
                 auth.clearNameError();
                 name = val;
-              }),
+              },
               hint: 'First and Last Name',
               label: 'Name',
               errorText: auth.nameError,
             ),
 
             LabeledTextField(
-              onChanged: (val) => setState(() {
+              onChanged: (val) {
                 auth.clearEmailError();
                 email = val;
-              }),
+              },
               hint: 'example@gmail.com',
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
@@ -62,20 +60,20 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
             ),
 
             LabeledPasswordField(
-              onChanged: (val) => setState(() {
+              onChanged: (val) {
                 auth.clearPassError();
                 password = val;
-              }),
+              },
               hint: '****************',
               label: 'Password',
               errorText: auth.passwordError,
             ),
 
             LabeledPasswordField(
-              onChanged: (val) => setState(() {
+              onChanged: (val) {
                 auth.clearConfirmPassError();
                 confirmPass = val;
-              }),
+              },
               hint: '****************',
               label: 'Confirm Password',
               errorText: auth.confirmPasswordError,
@@ -85,11 +83,8 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                 auth.successMessage!,
                 style: const TextStyle(color: Colors.green),
               ),
-
-            AuthButton(
-              chiild: (auth.isLoading)
-                  ? Spinner()
-                  : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
+            FilledBtn(
+              title: "Sign In",
               onPressed: () async {
                 final success = await auth.signUp(
                   name: name,
@@ -106,6 +101,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                   );
                 }
               },
+              isLoading: auth.isLoading,
             ),
           ],
         ),

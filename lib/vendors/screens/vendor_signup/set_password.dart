@@ -1,5 +1,4 @@
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
@@ -34,7 +33,6 @@ class _SetPasswordState extends State<SetPassword> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
-    final colors = Theme.of(context).colorScheme;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -52,30 +50,25 @@ class _SetPasswordState extends State<SetPassword> {
                 ),
               ),
               LabeledPasswordField(
-                onChanged: (v) => setState(() {
+                onChanged: (v) {
                   password = v;
                   auth.clearPassError();
-                }),
+                },
                 hint: '****************',
                 label: 'Password',
                 errorText: auth.passwordError,
               ),
               LabeledPasswordField(
-                onChanged: (v) => setState(() {
+                onChanged: (v) {
                   confirmPassword = v;
                   auth.clearConfirmPassError();
-                }),
+                },
                 hint: '****************',
                 label: 'Confirm Password',
                 errorText: auth.confirmPasswordError,
               ),
-              AuthButton(
-                chiild: (auth.isLoading)
-                    ? Spinner()
-                    : Text(
-                        "Sign In",
-                        style: TextStyle(color: colors.onPrimary),
-                      ),
+              FilledBtn(
+                title: "Sign In",
                 onPressed: () async {
                   if (auth.validatePasswordInfo(
                     password: password,
@@ -101,6 +94,7 @@ class _SetPasswordState extends State<SetPassword> {
                     }
                   }
                 },
+                isLoading: auth.isLoading,
               ),
             ],
           ),

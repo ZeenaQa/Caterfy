@@ -2,7 +2,6 @@ import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -41,7 +40,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 title: 'Log out',
                 onTap: () async {
                   customerAuth.isLoading = true;
-                  customerAuth.notifyListeners();
+                  customerAuth.notifyLis();
 
                   try {
                     await Supabase.instance.client.auth.signOut();
@@ -55,7 +54,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                     );
                   } finally {
                     customerAuth.isLoading = false;
-                    customerAuth.notifyListeners();
+                    customerAuth.notifyLis();
                   }
                 },
                 icon: Icons.logout_outlined,

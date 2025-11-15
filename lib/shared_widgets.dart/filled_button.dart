@@ -1,24 +1,55 @@
+import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:flutter/material.dart';
 
-class AuthButton extends StatelessWidget {
-  final Widget chiild;
+class FilledBtn extends StatelessWidget {
   final VoidCallback onPressed;
+  final bool isLoading;
+  final bool stretch;
+  final String title;
+  final double verticalPadding;
+  final double horizontalPadding;
 
-  const AuthButton({super.key, required this.chiild, required this.onPressed});
+  const FilledBtn({
+    super.key,
+    required this.onPressed,
+    required this.title,
+    this.isLoading = false,
+    this.stretch = true,
+    this.verticalPadding = 15,
+    this.horizontalPadding = 25,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return SizedBox(
-      width: double.infinity,
+      width: stretch ? double.infinity : null,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          minimumSize: Size.zero, // remove minimum size constraints
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(
+            vertical: verticalPadding,
+            horizontal: horizontalPadding,
+          ),
         ),
-        child: chiild,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Opacity(
+              opacity: isLoading ? 0.0 : 1.0,
+              child: Text(
+                title,
+                style: TextStyle(color: colors.onPrimary, fontSize: 15),
+              ),
+            ),
+            if (isLoading) Spinner(),
+          ],
+        ),
       ),
     );
   }

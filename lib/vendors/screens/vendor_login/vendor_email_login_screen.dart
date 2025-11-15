@@ -1,4 +1,3 @@
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/personal_info.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -31,11 +30,10 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
           spacing: 5,
           children: [
             LabeledTextField(
-              onChanged: (v) => setState(() {
+              onChanged: (v) {
                 email = v;
-
                 vendorAuth.clearEmailError();
-              }),
+              },
               hint: 'example@gmail.com',
               label: 'Email',
               errorText: vendorAuth.emailError,
@@ -43,10 +41,10 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
             SizedBox(height: 20),
 
             LabeledPasswordField(
-              onChanged: (v) => setState(() {
+              onChanged: (v) {
                 password = v;
                 vendorAuth.clearPassError();
-              }),
+              },
               hint: ('****************'),
               label: 'Passowrd',
               errorText: vendorAuth.passwordError,
@@ -72,11 +70,8 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
               ),
             ),
 
-            AuthButton(
-              chiild: (vendorAuth.isLoading)
-                  ? Spinner()
-                  : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
-
+            FilledBtn(
+              title: "Sign In",
               onPressed: () async {
                 final sSuccess = await vendorAuth.logIn(
                   email: email.trim(),
@@ -90,6 +85,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                   );
                 }
               },
+              isLoading: vendorAuth.isLoading,
             ),
 
             Row(

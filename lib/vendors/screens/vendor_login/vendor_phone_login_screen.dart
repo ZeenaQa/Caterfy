@@ -1,6 +1,4 @@
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
-
-import 'package:caterfy/shared_widgets.dart/spinner.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 
@@ -20,7 +18,6 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
   @override
   Widget build(BuildContext context) {
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
-    final colors = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -34,10 +31,8 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
             ),
             SizedBox(height: 123),
 
-            AuthButton(
-              chiild: (vendorAuth.isLoading)
-                  ? Spinner()
-                  : Text("Sign In", style: TextStyle(color: colors.onPrimary)),
+            FilledBtn(
+              title: "Sign In",
               onPressed: () async {
                 //ZEENAA create a different function for phone login forget about the BS below 👍
 
@@ -52,6 +47,7 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
                 //   );
                 // }
               },
+              isLoading: vendorAuth.isLoading,
             ),
           ],
         ),

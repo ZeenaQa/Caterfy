@@ -33,14 +33,14 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
               label: 'phone number',
             ),
             SizedBox(height: 20),
-            AuthButton(
+            FilledBtn(
+              title: "Continue",
               onPressed: () async {
                 final result = await customerAuth.checkPhoneExistsCustomer(
                   phoneNumber: phoneNumber,
                 );
                 print(result);
               },
-              chiild: const Text("Continue"),
             ),
           ],
         ),
