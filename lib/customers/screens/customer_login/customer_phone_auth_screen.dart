@@ -24,8 +24,6 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 5,
           children: [
             LabeledPhoneField(

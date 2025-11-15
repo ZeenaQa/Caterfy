@@ -33,20 +33,7 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
 
             FilledBtn(
               title: "Sign In",
-              onPressed: () async {
-                //ZEENAA create a different function for phone login forget about the BS below 👍
-
-                // final sSuccess = await vendorAuth.logIn();
-
-                // if (sSuccess && context.mounted) {
-                //   Navigator.pushReplacement(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (_) => const VendorHomeScreen(),
-                //     ),
-                //   );
-                // }
-              },
+              onPressed: () async {},
               isLoading: vendorAuth.isLoading,
             ),
           ],

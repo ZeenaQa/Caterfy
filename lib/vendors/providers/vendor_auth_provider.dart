@@ -189,32 +189,6 @@ class VendorAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkEmailAvailability(String email) async {
-    if (email.isEmpty) {
-      return "Field can't be empty";
-    }
-
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return "is not valid";
-    }
-
-    try {
-      final existing = await supabase
-          .from('vendors')
-          .select('id')
-          .eq('email', email)
-          .maybeSingle();
-
-      if (existing != null) {
-        return "is already registered";
-      }
-    } catch (e) {
-      return "error checking email";
-    }
-
-    return null;
-  }
-
   // ---------------- Log In ----------------
   Future<bool> logIn({required String email, required String password}) async {
     emailError = email.isEmpty ? "Field can't be empty" : null;
@@ -250,12 +224,6 @@ class VendorAuthProvider extends ChangeNotifier {
       setLoading(false);
     }
   }
-
-  // final data = await supabase
-  //     .from('vendors')
-  //     .select()
-  //     .eq('id', response.user!.id)
-  //     .maybeSingle();
 
   // ---------------- Phone ----------------
   Future<bool> sendPhoneOtp({required String phoneNumber}) async {
@@ -301,6 +269,43 @@ class VendorAuthProvider extends ChangeNotifier {
     } catch (e) {
       setLogInError("Error checking phone: $e");
       return null;
+    }
+  }
+
+  Future<void> sendResetPasswordEmail(
+    String email,
+    BuildContext context,
+  ) async {
+    emailError = validateEmail(email);
+    notifyListeners();
+    if (emailError != null) return;
+
+    setLoading(true);
+
+    try {
+      final existing = await supabase
+          .from('vendors')
+          .select('id')
+          .eq('email', email.trim())
+          .maybeSingle();
+
+      if (existing == null) {
+        emailError = "No account found with this email";
+        notifyListeners();
+        setLoading(false);
+        return;
+      }
+      await supabase.auth.resetPasswordForEmail(email.trim());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password reset link sent successfully")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
+    } finally {
+      setLoading(false);
     }
   }
 

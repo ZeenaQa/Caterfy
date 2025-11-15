@@ -125,25 +125,41 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkEmailAvailability(String email) async {
+  Future<String?> checkEmailExists(String email) async {
+    if (email.isEmpty) {
+      emailError = "Field can't be empty";
+      notifyListeners();
+      return emailError;
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      emailError = "Email is not valid";
+      notifyListeners();
+      return emailError;
+    }
+
     try {
-      final existing = await supabase
+      final existing = await Supabase.instance.client
           .from('customers')
           .select('id')
           .eq('email', email)
           .maybeSingle();
 
-      if (existing != null) {
-        return "is already registered";
+      if (existing == null) {
+        emailError = "No account found with this email";
+      } else {
+        emailError = null;
       }
-      return null;
+      notifyListeners();
+      return emailError;
     } catch (e) {
-      return "error checking email";
+      emailError = "Error checking email";
+      notifyListeners();
+      return emailError;
     }
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn({required String email, required String password}) async {
+  Future<bool> logIn({required email, required String password}) async {
     emailError = email.isEmpty ? "Field can't be empty" : null;
     passwordError = password.isEmpty ? "Field can't be empty" : null;
 
@@ -194,6 +210,25 @@ class CustomerAuthProvider extends ChangeNotifier {
       return false;
     } finally {
       setLoading(false);
+    }
+  }
+
+  Future<String?> checkPhoneExistsCustomer({
+    required String phoneNumber,
+  }) async {
+    try {
+      final customerID = await supabase
+          .from('customeString phoneNumberrs')
+          .select('id')
+          .eq('phone_number', phoneNumber)
+          .maybeSingle();
+
+      if (customerID != null) return customerID.toString();
+
+      return null;
+    } catch (e) {
+      setLogInError("Error checking phone: $e");
+      return null;
     }
   }
 
@@ -260,22 +295,41 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsCustomer({
-    required String phoneNumber,
-  }) async {
+  // ---------------- Forgot Password ----------------
+  Future<void> sendResetPasswordEmail(
+    String email,
+    BuildContext context,
+  ) async {
+    emailError = validateEmail(email);
+    notifyListeners();
+    if (emailError != null) return;
+
+    setLoading(true);
+
     try {
-      final customerID = await supabase
-          .from('customeString phoneNumberrs')
+      final existing = await supabase
+          .from('customers')
           .select('id')
-          .eq('phone_number', phoneNumber)
+          .eq('email', email.trim())
           .maybeSingle();
 
-      if (customerID != null) return customerID.toString();
+      if (existing == null) {
+        emailError = "No account found with this email";
+        notifyListeners();
+        setLoading(false);
+        return;
+      }
+      await supabase.auth.resetPasswordForEmail(email.trim());
 
-      return null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password reset link sent successfully")),
+      );
     } catch (e) {
-      setLogInError("Error checking phone: $e");
-      return null;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
+    } finally {
+      setLoading(false);
     }
   }
 

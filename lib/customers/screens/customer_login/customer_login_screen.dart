@@ -1,70 +1,62 @@
+import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_reset_passowrd/customer_forgot_password.dart';
-import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor_login/vendor_forgot_password.dart';
-import 'package:caterfy/vendors/screens/vendor_signup/personal_info.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class VendorEmailLogin extends StatefulWidget {
-  const VendorEmailLogin({super.key});
+class CustomerEmailLogin extends StatefulWidget {
+  const CustomerEmailLogin({super.key});
 
   @override
-  State<VendorEmailLogin> createState() => _VendorEmailLoginState();
+  State<CustomerEmailLogin> createState() => _CustomerEmailLoginState();
 }
 
-class _VendorEmailLoginState extends State<VendorEmailLogin> {
+class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
   String email = '';
   String password = '';
 
   @override
   Widget build(BuildContext context) {
-    final vendorAuth = Provider.of<VendorAuthProvider>(context);
-    final colors = Theme.of(context).colorScheme;
+    final customerAuth = Provider.of<CustomerAuthProvider>(context);
 
     return Scaffold(
+      appBar: LogoAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           spacing: 5,
           children: [
             LabeledTextField(
               onChanged: (v) {
-                email = v;
-                vendorAuth.clearEmailError();
+                email = v.trim();
+                customerAuth.clearEmailError();
               },
               hint: 'example@gmail.com',
               label: 'Email',
-              errorText: vendorAuth.emailError,
+              errorText: customerAuth.emailError,
             ),
             SizedBox(height: 20),
-
             LabeledPasswordField(
               onChanged: (v) {
-                password = v;
-                vendorAuth.clearPassError();
+                password = v.trim();
+                customerAuth.clearPassError();
               },
               hint: ('****************'),
-              label: 'Passowrd',
-              errorText: vendorAuth.passwordError,
+              label: 'Password',
+              errorText: customerAuth.passwordError,
             ),
 
-            if (vendorAuth.logInError != null)
-              Text(
-                vendorAuth.logInError!,
-                style: TextStyle(
-                  color: colors.error,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => VendorForgotPassword()),
+                  MaterialPageRoute(builder: (_) => ForgotPasswordScreen()),
                 );
               },
               child: Align(
@@ -79,23 +71,22 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                 ),
               ),
             ),
-
             FilledBtn(
               title: "Sign In",
               onPressed: () async {
-                final sSuccess = await vendorAuth.logIn(
+                final cSuccess = await customerAuth.logIn(
                   email: email.trim(),
                   password: password,
                 );
 
-                if (sSuccess && context.mounted) {
+                if (cSuccess && context.mounted) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) => const VendorHomeScreen()),
+                    MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
                   );
                 }
               },
-              isLoading: vendorAuth.isLoading,
+              isLoading: customerAuth.isLoading,
             ),
 
             Row(
@@ -104,7 +95,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                 const Text("Don't have an account? "),
                 GestureDetector(
                   onTap: () {
-                    final auth = Provider.of<VendorAuthProvider>(
+                    final auth = Provider.of<CustomerAuthProvider>(
                       context,
                       listen: false,
                     );
@@ -112,9 +103,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const VendorPersonalInfo(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const CustomerSignUp()),
                     );
                   },
                   child: Text(

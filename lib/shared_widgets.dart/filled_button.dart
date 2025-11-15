@@ -47,7 +47,7 @@ class FilledBtn extends StatelessWidget {
                 style: TextStyle(color: colors.onPrimary, fontSize: 15),
               ),
             ),
-            if (isLoading) Spinner(),
+            if (isLoading) ThreeBounce(),
           ],
         ),
       ),

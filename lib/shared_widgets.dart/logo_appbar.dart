@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const LogoAppBar({super.key, this.title});
+  const LogoAppBar({super.key, this.title, PreferredSize? bottom});
 
   final String? title;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title ?? '', style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600)),
+      title: Text(
+        title ?? '',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      ),
       leadingWidth: 78,
       titleSpacing: -7,
       leading: IconButton(
