@@ -5,11 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../shared_widgets.dart/outlined_button.dart';
-<<<<<<< HEAD
-import '../../customers/providers/customer_auth_provider.dart'; // تأكدي من المسار الصحيح
-=======
+
 import '../../customers/providers/customer_auth_provider.dart';
->>>>>>> save-google-signin
 
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});
