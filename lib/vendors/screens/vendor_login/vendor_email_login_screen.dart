@@ -81,7 +81,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
             ),
 
             FilledBtn(
-              title: "Sign In",
+              title: "Log In",
               onPressed: () async {
                 final sSuccess = await vendorAuth.logIn(
                   email: email.trim(),

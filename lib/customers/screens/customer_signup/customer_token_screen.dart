@@ -1,4 +1,3 @@
-import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
@@ -74,21 +73,10 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                     token = value;
                   },
                   onCompleted: (pin) async {
-                    final success = await auth.verifySignupToken(
+                    await auth.verifySignupToken(
                       email: widget.email,
                       token: token,
                     );
-
-                    if (success) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AuthenticatedCustomer(),
-                        ),
-                      );
-                    } else {
-                      print("DAMNNNN IT");
-                    }
                   },
                 ),
                 const SizedBox(height: 40),

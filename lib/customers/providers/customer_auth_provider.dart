@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_token_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -174,7 +175,11 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn({required email, required String password}) async {
+  Future<bool> logIn({
+    required email,
+    required String password,
+    context,
+  }) async {
     emailError = email.isEmpty ? "Field can't be empty" : null;
     passwordError = password.isEmpty ? "Field can't be empty" : null;
 
@@ -192,15 +197,33 @@ class CustomerAuthProvider extends ChangeNotifier {
       );
 
       if (response.session == null) {
-        emailError = "or password is incorrect";
-        passwordError = "or Email is incorrect";
+        emailError = "Invalid email or password";
+        passwordError = "Invalid email or password";
         notifyListeners();
         return false;
       }
       return true;
-    } on AuthApiException {
-      emailError = "or password is incorrect";
-      passwordError = "or Email is incorrect";
+    } on AuthApiException catch (e) {
+      if (e.code == "email_not_confirmed") {
+        clearErrors();
+        final success = await signUp(
+          name: '1',
+          email: email.trim(),
+          password: password,
+          confirmPassword: password,
+        );
+        if (success) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CustomerSignupTokenScreen(email: email),
+            ),
+          );
+        }
+        return false;
+      }
+      emailError = "Invalid email or password";
+      passwordError = "or Invalid email or password";
       notifyListeners();
       return false;
     } finally {
@@ -253,8 +276,8 @@ class CustomerAuthProvider extends ChangeNotifier {
       setLoading(true);
 
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        serverClientId:
-            '27106899976-dpo0vu9f0eamcqv60v28nq8n60r9309a.apps.googleusercontent.com',
+        clientId:
+            '1066228950684-3skki6ts1uct5tg4t3ikhsd971cjddbl.apps.googleusercontent.com',
       );
       await googleSignIn.signOut();
 
@@ -281,7 +304,7 @@ class CustomerAuthProvider extends ChangeNotifier {
 
       final user = res.user;
       if (user == null) {
-        setLogInError("Failed to sign in with Supabase");
+        setLogInError("Failed to log in with Supabase");
         return;
       }
 
@@ -304,6 +327,7 @@ class CustomerAuthProvider extends ChangeNotifier {
         MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
       );
     } catch (e) {
+      print("ERRORRRRRRRRRRRRRRRRR $e");
       setLogInError("Google sign-in failed: $e");
     } finally {
       setLoading(false);

@@ -1,6 +1,5 @@
 import 'package:caterfy/customers/screens/customer_login/customer_login_screen.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_phone_auth_screen.dart';
-import 'package:caterfy/shared_widgets.dart/dialog_box.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_login_screen.dart';
 import 'package:flutter/material.dart';
@@ -69,11 +68,6 @@ class SelectionScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  OutlinedBtn(
-                    onPressed: () =>
-                        showMyDialog(context, title: "f", content: "f"),
-                    title: "fds",
-                  ),
                   Text(
                     "Hey there!",
                     style: TextStyle(

@@ -32,7 +32,7 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
             SizedBox(height: 123),
 
             FilledBtn(
-              title: "Sign In",
+              title: "Log In",
               onPressed: () async {},
               isLoading: vendorAuth.isLoading,
             ),

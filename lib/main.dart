@@ -1,4 +1,6 @@
+import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
+import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/util/session.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
@@ -19,34 +21,57 @@ void main() async {
   );
 
   Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
+    final event = data.event;
     final session = data.session;
     final user = session?.user;
 
-    if (user != null && navigatorKey.currentContext != null) {
-      final existing = await Supabase.instance.client
-          .from('customers')
-          .select()
-          .eq('id', user.id)
-          .maybeSingle();
+    if (event == AuthChangeEvent.signedIn && user != null) {
+      // Check if email is confirmed
+      final emailConfirmedAt = user
+          .emailConfirmedAt; // or user.confirmedAt or user.emailConfirmedAt depending on SDK version
 
-      if (existing == null || existing.isEmpty) {
-        await Supabase.instance.client.from('customers').insert({
-          'id': user.id,
-          'email': user.email,
-          'name': user.userMetadata?['full_name'] ?? 'New User',
-        });
+      if (emailConfirmedAt == null) {
+        // Email NOT verified → show VerifyEmail screen
+        Navigator.pushReplacement(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(builder: (_) => UnauthenticatedCustomer()),
+        );
+      } else {
+        // Email verified → normal flow
+
+        final existing = await Supabase.instance.client
+            .from('customers')
+            .select()
+            .eq('id', user.id)
+            .maybeSingle();
+
+        if (existing == null || existing.isEmpty) {
+          await Supabase.instance.client.from('customers').insert({
+            'id': user.id,
+            'email': user.email,
+            'name': user.userMetadata?['full_name'] ?? 'New User',
+          });
+        }
+
+        Navigator.pushReplacement(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+        );
       }
-
-      Navigator.pushReplacement(
-        navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
-      );
 
       final customerProvider = Provider.of<CustomerAuthProvider>(
         navigatorKey.currentContext!,
         listen: false,
       );
       customerProvider.setLoading(false);
+    }
+
+    // SIGNED OUT
+    if (event == AuthChangeEvent.signedOut) {
+      Navigator.pushReplacement(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (_) => SelectionScreen()),
+      );
     }
   });
 

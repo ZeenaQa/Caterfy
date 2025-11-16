@@ -1,3 +1,4 @@
+import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showMyDialog(
@@ -6,7 +7,8 @@ Future<void> showMyDialog(
   required String content,
   String cancelText = 'Cancel',
   String confirmText = 'OK',
-  VoidCallback? onConfirm,
+  Future<void> Function()? onConfirmAsync,
+  bool popAfterAsync = true,
   VoidCallback? onCancel,
 }) {
   final screenWidth = MediaQuery.of(context).size.width;
@@ -18,48 +20,69 @@ Future<void> showMyDialog(
     barrierColor: Colors.black54,
     transitionDuration: const Duration(milliseconds: 210),
     pageBuilder: (context, animation, secondaryAnimation) {
-      return Center(
-        child: Dialog(
-          insetPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: Container(
-            width: screenWidth * 0.9,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Log out",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                Text(content),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    DialogBtn(
-                      isCancel: true,
-                      function: () {
-                        Navigator.of(context).pop();
-                        if (onCancel != null) onCancel();
-                      },
-                      color: Colors.green,
-                      text: cancelText,
-                    ),
-                    const SizedBox(width: 10),
-                    DialogBtn(
-                      isCancel: false,
-                      function: () {
-                        Navigator.of(context).pop();
-                        if (onConfirm != null) onConfirm();
-                      },
-                      color: Colors.green,
-                      text: confirmText,
-                    ),
-                  ],
-                ),
-              ],
+      bool isLoading = false;
+
+      return StatefulBuilder(
+        builder: (context, setState) => Center(
+          child: Dialog(
+            insetPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Container(
+              width: screenWidth * 0.9,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    content,
+                    style: TextStyle(fontSize: 15, color: Color(0xff656565)),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      DialogBtn(
+                        isCancel: true,
+                        function: () {
+                          if (!isLoading) {
+                            Navigator.of(context).pop();
+                            if (onCancel != null) onCancel();
+                          }
+                        },
+                        color: Colors.green,
+                        text: cancelText,
+                        isLoading: false,
+                      ),
+                      const SizedBox(width: 10),
+                      DialogBtn(
+                        isLoading: isLoading,
+                        isCancel: false,
+                        function: () async {
+                          if (isLoading) return;
+                          setState(() => isLoading = true);
+
+                          await onConfirmAsync!();
+
+                          if (context.mounted && popAfterAsync) {
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        color: Colors.green,
+                        text: confirmText,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -69,11 +92,11 @@ Future<void> showMyDialog(
       final curvedAnimation = Curves.easeInOut.transform(animation.value);
 
       return Transform.translate(
-        offset: Offset(0, (1 - curvedAnimation) * 50), // slide up
+        offset: Offset(0, (1 - curvedAnimation) * 50),
         child: Opacity(
           opacity: animation.value,
           child: Transform.scale(
-            scale: 0.95 + (curvedAnimation * 0.05), // scale 0.95 → 1.0
+            scale: 0.95 + (curvedAnimation * 0.05),
             child: child,
           ),
         ),
@@ -87,12 +110,14 @@ class DialogBtn extends StatelessWidget {
   final Color color;
   final String text;
   final VoidCallback? function;
+  final bool isLoading;
   const DialogBtn({
     super.key,
     required this.color,
     required this.text,
     this.function,
     this.isCancel = false,
+    this.isLoading = false,
   });
 
   @override
@@ -111,9 +136,22 @@ class DialogBtn extends StatelessWidget {
           shadowColor: Colors.transparent,
         ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
         onPressed: function,
-        child: Text(
-          text,
-          style: TextStyle(color: isCancel ? Color(0xff2c2c2c) : null),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Opacity(
+              opacity: isLoading && !isCancel ? 0.0 : 1.0,
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: isCancel ? Color(0xff2c2c2c) : null,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            if (isLoading && !isCancel) ThreeBounce(size: 15),
+          ],
         ),
       ),
     );

@@ -13,7 +13,7 @@ class SignInPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('Sign In', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text('Log In', style: TextStyle(fontWeight: FontWeight.bold)),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),

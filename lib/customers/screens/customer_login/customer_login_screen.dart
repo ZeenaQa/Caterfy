@@ -1,5 +1,4 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_reset_passowrd/customer_forgot_password.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -72,19 +71,13 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
               ),
             ),
             FilledBtn(
-              title: "Sign In",
+              title: "Log In",
               onPressed: () async {
-                final cSuccess = await customerAuth.logIn(
+                await customerAuth.logIn(
                   email: email.trim(),
                   password: password,
+                  context: context,
                 );
-
-                if (cSuccess && context.mounted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
-                  );
-                }
               },
               isLoading: customerAuth.isLoading,
             ),

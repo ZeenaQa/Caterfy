@@ -1,5 +1,6 @@
 import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/shared_widgets.dart/dialog_box.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,19 @@ class CustomerSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
+    Future<void> handleLogout() async {
+      customerAuth.isLoading = true;
+      customerAuth.notifyLis();
+
+      try {
+        await Future.delayed(Duration(milliseconds: 500));
+        await Supabase.instance.client.auth.signOut();
+      } finally {
+        customerAuth.isLoading = false;
+        customerAuth.notifyLis();
+      }
+    }
+
     final List<Widget> items = [
       SizedBox(height: 10),
       SettingsButton(title: 'Account info', icon: Icons.person_outline),
@@ -39,38 +53,20 @@ class CustomerSettingsScreen extends StatelessWidget {
               SettingsButton(
                 title: 'Log out',
                 onTap: () async {
-                  customerAuth.isLoading = true;
-                  customerAuth.notifyLis();
-
-                  try {
-                    await Supabase.instance.client.auth.signOut();
-
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const SelectionScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  } finally {
-                    customerAuth.isLoading = false;
-                    customerAuth.notifyLis();
-                  }
+                  showMyDialog(
+                    context,
+                    title: "Log out",
+                    content: "Are you sure you want to log out?",
+                    confirmText: "Log out",
+                    onConfirmAsync: handleLogout,
+                    popAfterAsync: false,
+                  );
                 },
                 icon: Icons.logout_outlined,
                 isLastItem: true,
               ),
             ],
           ),
-
-          // if (customerAuth.isLoading)
-          //   Positioned.fill(
-          //     child: BackdropFilter(
-          //       filter: ImageFilter.blur(sigmaX:1, sigmaY: 1),
-
-          //       child: const Center(child: Spinner()),
-          //     ),
-          //   ),
         ],
       ),
     ];
