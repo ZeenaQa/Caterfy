@@ -4,18 +4,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class VendorAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
-  String email = '';
-  String password = '';
-  String confirmPassword = '';
-  String name = '';
   bool isLoading = false;
 
   String? signUpError;
   String? logInError;
   String? successMessage;
-  String _phoneNumber = '';
-  String businessName = '';
-  String businessType = '';
+  String? businessNameError = '';
+  String? businessTypeError = '';
   String? nameError;
   String? emailError;
   String? phoneError;
@@ -23,41 +18,6 @@ class VendorAuthProvider extends ChangeNotifier {
   String? confirmPasswordError;
 
   // ---------------- Setters ----------------
-  void setPhoneNumber(String value) {
-    _phoneNumber = value;
-    notifyListeners();
-  }
-
-  void setBusinessName(String name) {
-    businessName = name;
-    notifyListeners();
-  }
-
-  void setBusinessType(String type) {
-    businessType = type;
-    notifyListeners();
-  }
-
-  void setEmail(String value) {
-    email = value.trim();
-    notifyListeners();
-  }
-
-  void setPassword(String value) {
-    password = value.trim();
-    notifyListeners();
-  }
-
-  void setConfirmPassword(String value) {
-    confirmPassword = value.trim();
-    notifyListeners();
-  }
-
-  void setName(String value) {
-    name = value.trim();
-    notifyListeners();
-  }
-
   void setLoading(bool value) {
     isLoading = value;
     notifyListeners();
@@ -105,23 +65,93 @@ class VendorAuthProvider extends ChangeNotifier {
     return null;
   }
 
-  // ---------------- Sign Up ----------------
-  Future<bool> signUp() async {
+  // --------------------------------------------------------
+
+  bool validatePersonalInfo({
+    required String name,
+    required String email,
+    required String phoneNumber,
+  }) {
     nameError = name.isEmpty ? "Field can't be empty" : null;
-    emailError = await checkEmailAvailability(email);
+
+    if (email.isEmpty) {
+      emailError = "Field can't be empty";
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      emailError = "Invalid email";
+    } else {
+      emailError = null;
+    }
+
+    phoneError = phoneNumber.isEmpty ? "Field can't be empty" : null;
+
+    notifyListeners();
+
+    return nameError == null && emailError == null && phoneError == null;
+
+    // --------------------------------------------------------
+  }
+
+  bool validateBusinessInfo({
+    required String businessName,
+    required String businessType,
+  }) {
+    businessNameError = businessName.isEmpty ? "Field can't be empty" : null;
+    businessTypeError = businessType.isEmpty ? "Please select a type" : null;
+
+    notifyListeners();
+
+    return businessNameError == null && businessTypeError == null;
+  }
+
+  // --------------------------------------------------------
+
+  bool validatePasswordInfo({
+    required String password,
+    required String confirmPassword,
+  }) {
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
         ? "Passwords do not match"
         : null;
+
     notifyListeners();
 
-    if (nameError != null ||
-        emailError != null ||
-        passwordError != null ||
-        confirmPasswordError != null) {
+    return passwordError == null && confirmPasswordError == null;
+  }
+
+  // ---------------- Sign Up ----------------
+  Future<bool> signUp({
+    bool onlyPassword = false,
+    required String email,
+    required String name,
+    required String password,
+    required String confirmPassword,
+    required String phoneNumber,
+    required String businessName,
+    required String businessType,
+  }) async {
+    if (onlyPassword) {
+      if (!validatePasswordInfo(
+        password: password,
+        confirmPassword: confirmPassword,
+      )) {
+        return false;
+      }
+    } else if (!validatePersonalInfo(
+          email: email,
+          name: name,
+          phoneNumber: phoneNumber,
+        ) ||
+        !validateBusinessInfo(
+          businessName: businessName,
+          businessType: businessType,
+        ) ||
+        !validatePasswordInfo(
+          password: password,
+          confirmPassword: confirmPassword,
+        )) {
       return false;
     }
-
     try {
       setLoading(true);
 
@@ -136,7 +166,9 @@ class VendorAuthProvider extends ChangeNotifier {
           'id': response.user!.id,
           'name': name,
           'email': email,
-          'phone_number': _phoneNumber,
+          'phone_number': phoneNumber,
+          'business_name': businessName,
+          'business_type': businessType,
         });
       }
 
@@ -157,73 +189,36 @@ class VendorAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkEmailAvailability(String email) async {
-    if (email.isEmpty) {
-      return "Field can't be empty";
-    }
-
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return "is not valid";
-    }
-
-    try {
-      final existing = await supabase
-          .from('vendors')
-          .select('id')
-          .eq('email', email)
-          .maybeSingle();
-
-      if (existing != null) {
-        return "is already registered";
-      }
-    } catch (e) {
-      return "error checking email";
-    }
-
-    return null;
-  }
-
   // ---------------- Log In ----------------
-  Future<bool> logIn() async {
-    if (email.isEmpty || password.isEmpty) {
-      setLogInError("Please enter email and password");
+  Future<bool> logIn({required String email, required String password}) async {
+    emailError = email.isEmpty ? "Field can't be empty" : null;
+    passwordError = password.isEmpty ? "Field can't be empty" : null;
+
+    notifyListeners();
+    if (emailError != null || passwordError != null) {
       return false;
     }
 
     try {
       setLoading(true);
 
-      final isEmail = email.contains('@');
-
       final response = await supabase.auth.signInWithPassword(
-        email: isEmail ? email : null,
+        email: email,
         password: password,
       );
 
       if (response.session == null) {
-        setLogInError("Email or password is incorrect");
+        emailError = "Invalid email or password";
+        passwordError = "Invalid email or password";
+        notifyListeners();
         return false;
-      }
-
-      setLogInError(null);
-
-      final data = await supabase
-          .from('vendors')
-          .select()
-          .eq('id', response.user!.id)
-          .maybeSingle();
-
-      if (data != null) {
-        name = data['name'] ?? '';
-        email = data['email'] ?? '';
       }
 
       return true;
     } on AuthApiException {
-      setLogInError("Email or password is incorrect");
-      return false;
-    } catch (e) {
-      setLogInError(e.toString());
+      emailError = "Invalid email or password";
+      passwordError = "Invalid email or password";
+      notifyListeners();
       return false;
     } finally {
       setLoading(false);
@@ -231,15 +226,15 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
-  Future<bool> sendPhoneOtp() async {
-    if (_phoneNumber.isEmpty) {
+  Future<bool> sendPhoneOtp({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) {
       setLogInError("Please enter a valid phone number");
       return false;
     }
 
     try {
       setLoading(true);
-      await supabase.auth.signInWithOtp(phone: _phoneNumber);
+      await supabase.auth.signInWithOtp(phone: phoneNumber);
       setLogInError(null);
       return true;
     } catch (e) {
@@ -250,14 +245,14 @@ class VendorAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsVendor() async {
-    if (_phoneNumber.isEmpty) return null;
+  Future<String?> checkPhoneExistsVendor({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) return null;
 
     try {
       final vendor = await supabase
           .from('vendors')
           .select('id')
-          .eq('phone_number', _phoneNumber)
+          .eq('phone_number', phoneNumber)
           .maybeSingle();
 
       if (vendor != null) return 'vendor';
@@ -265,7 +260,7 @@ class VendorAuthProvider extends ChangeNotifier {
       final customer = await supabase
           .from('customers')
           .select('id')
-          .eq('phone_number', _phoneNumber)
+          .eq('phone_number', phoneNumber)
           .maybeSingle();
 
       if (customer != null) return 'customer';
@@ -277,6 +272,43 @@ class VendorAuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> sendResetPasswordEmail(
+    String email,
+    BuildContext context,
+  ) async {
+    emailError = validateEmail(email);
+    notifyListeners();
+    if (emailError != null) return;
+
+    setLoading(true);
+
+    try {
+      final existing = await supabase
+          .from('vendors')
+          .select('id')
+          .eq('email', email.trim())
+          .maybeSingle();
+
+      if (existing == null) {
+        emailError = "No account found with this email";
+        notifyListeners();
+        setLoading(false);
+        return;
+      }
+      await supabase.auth.resetPasswordForEmail(email.trim());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password reset link sent successfully")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   void clearErrors() {
     nameError = null;
     emailError = null;
@@ -285,6 +317,40 @@ class VendorAuthProvider extends ChangeNotifier {
     confirmPasswordError = null;
     signUpError = null;
     successMessage = null;
+    businessNameError = null;
+    businessTypeError = null;
+    notifyListeners();
+  }
+
+  void clearEmailError() {
+    if (emailError != null) {
+      emailError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearNameError() {
+    if (nameError != null) {
+      nameError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearPassError() {
+    if (passwordError != null) {
+      passwordError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearConfirmPassError() {
+    if (confirmPasswordError != null) {
+      confirmPasswordError = null;
+      notifyListeners();
+    }
+  }
+
+  void notifyLis() {
     notifyListeners();
   }
 }

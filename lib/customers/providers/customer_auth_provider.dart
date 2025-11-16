@@ -1,20 +1,17 @@
+import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_token_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
-  String email = '';
-  String password = '';
-  String confirmPassword = '';
-  String name = '';
   bool isLoading = false;
 
   String? signUpError;
   String? logInError;
   String? successMessage;
-  String _phoneNumber = '';
-
   String? nameError;
   String? emailError;
   String? passwordError;
@@ -22,37 +19,8 @@ class CustomerAuthProvider extends ChangeNotifier {
   String? phoneNumberError;
 
   // ---------------- Setters ----------------
-  void setPhoneNumber(String value) {
-    _phoneNumber = value;
-    notifyListeners();
-  }
-
-  void setEmail(String value) {
-    email = value.trim();
-    emailError = null;
-    notifyListeners();
-  }
-
   void setLoading(bool value) {
     isLoading = value;
-    notifyListeners();
-  }
-
-  void setPassword(String value) {
-    password = value.trim();
-    passwordError = null;
-    notifyListeners();
-  }
-
-  void setConfirmPassword(String value) {
-    confirmPassword = value.trim();
-    confirmPasswordError = null;
-    notifyListeners();
-  }
-
-  void setName(String value) {
-    name = value.trim();
-    nameError = null;
     notifyListeners();
   }
 
@@ -99,8 +67,16 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Sign Up ----------------
-  Future<bool> signUp() async {
+  Future<bool> signUp({
+    required String name,
+    required String email,
+    required String password,
+    required String confirmPassword,
+  }) async {
     nameError = name.isEmpty ? "Field can't be empty" : null;
+    confirmPasswordError = confirmPassword.isEmpty
+        ? "Field can't be empty"
+        : null;
     emailError = validateEmail(email);
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
@@ -119,20 +95,11 @@ class CustomerAuthProvider extends ChangeNotifier {
     try {
       setLoading(true);
 
-      final response = await supabase.auth.signUp(
+      await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'display_name': name},
+        data: {'name': name},
       );
-
-      if (response.user != null) {
-        await supabase.from('customers').insert({
-          'id': response.user!.id,
-          'name': name,
-          'email': email,
-          'phone_number': _phoneNumber,
-        });
-      }
 
       return true;
     } on AuthException catch (e) {
@@ -142,8 +109,10 @@ class CustomerAuthProvider extends ChangeNotifier {
       } else {
         setSignUpError(e.message);
       }
+      print(e.message);
       return false;
     } catch (e) {
+      print("ERROR ${e.toString()}");
       setSignUpError(e.toString());
       return false;
     } finally {
@@ -151,64 +120,111 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkEmailAvailability(String email) async {
+  Future<bool> verifySignupToken({
+    required String email,
+    required String token,
+  }) async {
     try {
-      final existing = await supabase
+      await supabase.auth.verifyOTP(
+        email: email,
+        token: token,
+        type: OtpType.signup,
+      );
+
+      return true;
+    } on AuthException catch (e) {
+      print("AuthException: $e");
+      return false;
+    } catch (e) {
+      print("Unknown error: $e");
+      return false;
+    }
+  }
+
+  Future<String?> checkEmailExists(String email) async {
+    if (email.isEmpty) {
+      emailError = "Field can't be empty";
+      notifyListeners();
+      return emailError;
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      emailError = "Email is not valid";
+      notifyListeners();
+      return emailError;
+    }
+
+    try {
+      final existing = await Supabase.instance.client
           .from('customers')
           .select('id')
           .eq('email', email)
           .maybeSingle();
 
-      if (existing != null) {
-        return "is already registered";
+      if (existing == null) {
+        emailError = "No account found with this email";
+      } else {
+        emailError = null;
       }
-      return null;
+      notifyListeners();
+      return emailError;
     } catch (e) {
-      return "error checking email";
+      emailError = "Error checking email";
+      notifyListeners();
+      return emailError;
     }
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn() async {
-    if (email.isEmpty || password.isEmpty) {
-      setLogInError("Please enter email and password");
+  Future<bool> logIn({
+    required email,
+    required String password,
+    context,
+  }) async {
+    emailError = email.isEmpty ? "Field can't be empty" : null;
+    passwordError = password.isEmpty ? "Field can't be empty" : null;
+
+    notifyListeners();
+    if (emailError != null || passwordError != null) {
       return false;
     }
 
     try {
       setLoading(true);
 
-      final isEmail = email.contains('@');
-
       final response = await supabase.auth.signInWithPassword(
-        email: isEmail ? email : null,
+        email: email,
         password: password,
       );
 
       if (response.session == null) {
-        setLogInError("Email or password is incorrect");
+        emailError = "Invalid email or password";
+        passwordError = "Invalid email or password";
+        notifyListeners();
         return false;
       }
-
-      setLogInError(null);
-
-      final data = await supabase
-          .from('customers')
-          .select()
-          .eq('id', response.user!.id)
-          .maybeSingle();
-
-      if (data != null) {
-        name = data['name'] ?? '';
-        email = data['email'] ?? '';
-      }
-
       return true;
-    } on AuthApiException {
-      setLogInError("Email or password is incorrect");
-      return false;
-    } catch (e) {
-      setLogInError(e.toString());
+    } on AuthApiException catch (e) {
+      if (e.code == "email_not_confirmed") {
+        clearErrors();
+        final success = await signUp(
+          name: '1',
+          email: email.trim(),
+          password: password,
+          confirmPassword: password,
+        );
+        if (success) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CustomerSignupTokenScreen(email: email),
+            ),
+          );
+        }
+        return false;
+      }
+      emailError = "Invalid email or password";
+      passwordError = "or Invalid email or password";
+      notifyListeners();
       return false;
     } finally {
       setLoading(false);
@@ -216,15 +232,15 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
-  Future<bool> sendPhoneOtp() async {
-    if (_phoneNumber.isEmpty) {
+  Future<bool> sendPhoneOtp({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) {
       setLogInError("Please enter a valid phone number");
       return false;
     }
 
     try {
       setLoading(true);
-      await supabase.auth.signInWithOtp(phone: _phoneNumber);
+      await supabase.auth.signInWithOtp(phone: phoneNumber);
       setLogInError(null);
       return true;
     } catch (e) {
@@ -235,17 +251,14 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkPhoneExistsCustomer(int numLength) async {
-    if (_phoneNumber.isEmpty || numLength < 6 || numLength > 10) {
-      phoneNumberError = 'Number must be 6–10 digits.';
-      return null;
-    }
-
+  Future<String?> checkPhoneExistsCustomer({
+    required String phoneNumber,
+  }) async {
     try {
       final customerID = await supabase
-          .from('customers')
+          .from('customeString phoneNumberrs')
           .select('id')
-          .eq('phone_number', _phoneNumber)
+          .eq('phone_number', phoneNumber)
           .maybeSingle();
 
       if (customerID != null) return customerID.toString();
@@ -257,6 +270,108 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
+  /// ------------------------- Google Sign-in -------------------------
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      setLoading(true);
+
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId:
+            '1066228950684-3skki6ts1uct5tg4t3ikhsd971cjddbl.apps.googleusercontent.com',
+      );
+      await googleSignIn.signOut();
+
+      final GoogleSignInAccount? account = await googleSignIn.signIn();
+      if (account == null) {
+        setLogInError("Google sign-in cancelled");
+        return;
+      }
+
+      final GoogleSignInAuthentication auth = await account.authentication;
+      final String? idToken = auth.idToken;
+      final String? accessToken = auth.accessToken;
+
+      if (idToken == null) {
+        setLogInError("No ID token found");
+        return;
+      }
+
+      final AuthResponse res = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      final user = res.user;
+      if (user == null) {
+        setLogInError("Failed to log in with Supabase");
+        return;
+      }
+
+      final existing = await supabase
+          .from('customers')
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (existing == null || existing.isEmpty) {
+        await supabase.from('customers').insert({
+          'id': user.id,
+          'email': user.email,
+          'name': user.userMetadata?['full_name'] ?? 'New User',
+        });
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+      );
+    } catch (e) {
+      print("ERRORRRRRRRRRRRRRRRRR $e");
+      setLogInError("Google sign-in failed: $e");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ---------------- Forgot Password ----------------
+  Future<void> sendResetPasswordEmail(
+    String email,
+    BuildContext context,
+  ) async {
+    emailError = validateEmail(email);
+    notifyListeners();
+    if (emailError != null) return;
+
+    setLoading(true);
+
+    try {
+      final existing = await supabase
+          .from('customers')
+          .select('id')
+          .eq('email', email.trim())
+          .maybeSingle();
+
+      if (existing == null) {
+        emailError = "No account found with this email";
+        notifyListeners();
+        setLoading(false);
+        return;
+      }
+      await supabase.auth.resetPasswordForEmail(email.trim());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password reset link sent successfully")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   void clearErrors() {
     nameError = null;
     emailError = null;
@@ -264,6 +379,38 @@ class CustomerAuthProvider extends ChangeNotifier {
     confirmPasswordError = null;
     signUpError = null;
     successMessage = null;
+    notifyListeners();
+  }
+
+  void clearEmailError() {
+    if (emailError != null) {
+      emailError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearNameError() {
+    if (nameError != null) {
+      nameError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearPassError() {
+    if (passwordError != null) {
+      passwordError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearConfirmPassError() {
+    if (confirmPasswordError != null) {
+      confirmPasswordError = null;
+      notifyListeners();
+    }
+  }
+
+  void notifyLis() {
     notifyListeners();
   }
 }

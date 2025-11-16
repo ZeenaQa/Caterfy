@@ -27,8 +27,8 @@ ThemeData lightTheme = ThemeData.light().copyWith(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      overlayColor: Colors.transparent,
-    ),
+      shadowColor: Colors.transparent,
+    ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(

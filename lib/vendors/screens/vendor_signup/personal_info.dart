@@ -1,13 +1,52 @@
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/buisness_info.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
-class VendorPersonalInfo extends StatelessWidget {
+class VendorPersonalInfo extends StatefulWidget {
   const VendorPersonalInfo({super.key});
+
+  @override
+  State<VendorPersonalInfo> createState() => _VendorPersonalInfoState();
+}
+
+class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
+  String name = '';
+  String email = '';
+  String phoneNumber = '';
+
+  void handleNext(auth) {
+    if (auth.validatePersonalInfo(
+      email: email.trim(),
+      name: name.trim(),
+      phoneNumber: phoneNumber.trim(),
+    )) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          transitionDuration: Duration(milliseconds: 300),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              VendorBuisnessInfo(
+                name: name,
+                email: email,
+                phoneNumber: phoneNumber,
+              ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            final tween = Tween(begin: begin, end: end);
+            final offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(position: offsetAnimation, child: child);
+          },
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,46 +61,44 @@ class VendorPersonalInfo extends StatelessWidget {
           spacing: 25,
           children: [
             const SizedBox(height: 60),
+
             const Center(
               child: Text(
-                "Vendor Sign Up",
+                "Personal Information",
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
               ),
             ),
 
             LabeledTextField(
-              onChanged: auth.setName,
+              onChanged: (v) {
+                name = v;
+                auth.clearNameError();
+              },
               hint: 'First and Last Name',
               label: 'Name',
               errorText: auth.nameError,
             ),
 
             LabeledTextField(
-              onChanged: auth.setEmail,
+              onChanged: (v) {
+                email = v;
+                auth.clearEmailError();
+              },
               hint: 'example@gmail.com',
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
               errorText: auth.emailError,
             ),
             LabeledPhoneField(
+              onChanged: (v) {
+                phoneNumber = v;
+                auth.clearErrors();
+              },
               label: "Phone",
               hintText: "Enter your phone",
-              onChanged: auth.setPhoneNumber,
               errorText: auth.phoneError,
             ),
 
-            // LabeledPasswordField(
-            //   onChanged: auth.setPassword,
-            //   hint: '****************',
-            //   label: 'Password',
-            //   errorText: auth.passwordError,
-            // ),
-            // LabeledPasswordField(
-            //   onChanged: auth.setConfirmPassword,
-            //   hint: '****************',
-            //   label: 'Confirm Password',
-            //   errorText: auth.confirmPasswordError,
-            // ),
             if (auth.signUpError != null)
               Text(
                 auth.signUpError!,
@@ -74,46 +111,14 @@ class VendorPersonalInfo extends StatelessWidget {
                 style: const TextStyle(color: Colors.green),
               ),
 
-            auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
-                : Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            transitionDuration: Duration(milliseconds: 300),
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    VendorBuisnessInfo(),
-                            transitionsBuilder:
-                                (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                  child,
-                                ) {
-                                  const begin = Offset(1.0, 0.0);
-                                  const end = Offset.zero;
-                                  final tween = Tween(begin: begin, end: end);
-                                  final offsetAnimation = animation.drive(
-                                    tween,
-                                  );
-
-                                  return SlideTransition(
-                                    position: offsetAnimation,
-                                    child: child,
-                                  );
-                                },
-                          ),
-                        );
-                      },
-                      child: const Text("Next"),
-                    ),
-                  ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledBtn(
+                onPressed: () => handleNext(auth),
+                title: "Next",
+                stretch: false,
+              ),
+            ),
           ],
         ),
       ),

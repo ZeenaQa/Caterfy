@@ -40,7 +40,8 @@ class OutlinedBtn extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
           ),
           side: BorderSide(color: Color(0xff7a7a7a), width: 1),
-        ),
+          shadowColor: Colors.transparent,
+        ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
         onPressed: () => onPressed(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

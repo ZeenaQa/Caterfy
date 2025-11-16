@@ -1,28 +1,45 @@
-import 'package:caterfy/customers/screens/customer_login_screen.dart';
-import 'package:caterfy/customers/screens/customer_phone_auth_screen.dart';
-import 'package:caterfy/vendors/screens/vendor_selection_screen.dart';
+import 'package:caterfy/customers/screens/customer_login/customer_login_screen.dart';
+import 'package:caterfy/customers/screens/customer_login/customer_phone_auth_screen.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
+import 'package:caterfy/vendors/screens/vendor_login/vendor_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../shared_widgets.dart/outlined_button.dart';
+
+import '../../customers/providers/customer_auth_provider.dart';
 
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final vendorAuth = Provider.of<VendorAuthProvider>(context);
+    final customerAuth = Provider.of<CustomerAuthProvider>(context);
     void handleNavigation(String dest) {
-      Navigator.push(
+      vendorAuth.clearErrors();
+      customerAuth.clearErrors();
+      final customerProvider = Provider.of<CustomerAuthProvider>(
         context,
-        MaterialPageRoute(
-          builder: (context) => dest == "email"
-              ? CustomerEmailLogin()
-              : dest == "phone"
-              ? CustomerPhoneAuth()
-              : dest == "vendor"
-              ? VendorSelectionScreen()
-              : CustomerEmailLogin(),
-        ),
+        listen: false,
       );
+
+      if (dest == "google") {
+        customerProvider.signInWithGoogle(context);
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => dest == "email"
+                ? CustomerEmailLogin()
+                : dest == "phone"
+                ? CustomerPhoneAuth()
+                : dest == "vendor"
+                ? SignInPage()
+                : CustomerEmailLogin(),
+          ),
+        );
+      }
     }
 
     return Scaffold(

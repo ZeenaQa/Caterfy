@@ -1,18 +1,28 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/customer_home_screen.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_token_screen.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
-class CustomerSignUp extends StatelessWidget {
+class CustomerSignUp extends StatefulWidget {
   const CustomerSignUp({super.key});
+
+  @override
+  State<CustomerSignUp> createState() => _CustomerSignUpState();
+}
+
+class _CustomerSignUpState extends State<CustomerSignUp> {
+  String name = '';
+  String email = '';
+  String password = '';
+  String confirmPass = '';
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: LogoAppBar(),
@@ -29,14 +39,20 @@ class CustomerSignUp extends StatelessWidget {
             ),
 
             LabeledTextField(
-              onChanged: auth.setName,
+              onChanged: (val) {
+                auth.clearNameError();
+                name = val;
+              },
               hint: 'First and Last Name',
               label: 'Name',
               errorText: auth.nameError,
             ),
 
             LabeledTextField(
-              onChanged: auth.setEmail,
+              onChanged: (val) {
+                auth.clearEmailError();
+                email = val;
+              },
               hint: 'example@gmail.com',
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
@@ -44,14 +60,20 @@ class CustomerSignUp extends StatelessWidget {
             ),
 
             LabeledPasswordField(
-              onChanged: auth.setPassword,
+              onChanged: (val) {
+                auth.clearPassError();
+                password = val;
+              },
               hint: '****************',
               label: 'Password',
               errorText: auth.passwordError,
             ),
 
             LabeledPasswordField(
-              onChanged: auth.setConfirmPassword,
+              onChanged: (val) {
+                auth.clearConfirmPassError();
+                confirmPass = val;
+              },
               hint: '****************',
               label: 'Confirm Password',
               errorText: auth.confirmPasswordError,
@@ -61,25 +83,29 @@ class CustomerSignUp extends StatelessWidget {
                 auth.successMessage!,
                 style: const TextStyle(color: Colors.green),
               ),
-
-            auth.isLoading
-                ? const Center(
-                    child: SpinKitWanderingCubes(color: Color(0xFF577A80)),
-                  )
-                : ElevatedButton(
-                    onPressed: () async {
-                      final success = await auth.signUp();
-                      if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CustomerHomeSection(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text("Sign Up"),
-                  ),
+            Text(auth.signUpError.toString()),
+            FilledBtn(
+              title: "Sign Up",
+              onPressed: () async {
+                final tempEmail = email;
+                final success = await auth.signUp(
+                  name: name,
+                  email: email.trim(),
+                  password: password,
+                  confirmPassword: confirmPass,
+                );
+                if (success) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CustomerSignupTokenScreen(email: tempEmail),
+                    ),
+                  );
+                }
+              },
+              isLoading: auth.isLoading,
+            ),
           ],
         ),
       ),
