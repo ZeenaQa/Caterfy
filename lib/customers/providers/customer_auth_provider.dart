@@ -94,19 +94,11 @@ class CustomerAuthProvider extends ChangeNotifier {
     try {
       setLoading(true);
 
-      final response = await supabase.auth.signUp(
+      await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'display_name': name},
+        data: {'name': name},
       );
-
-      if (response.user != null) {
-        await supabase.from('customers').insert({
-          'id': response.user!.id,
-          'name': name,
-          'email': email,
-        });
-      }
 
       return true;
     } on AuthException catch (e) {
@@ -116,12 +108,35 @@ class CustomerAuthProvider extends ChangeNotifier {
       } else {
         setSignUpError(e.message);
       }
+      print(e.message);
       return false;
     } catch (e) {
+      print("ERROR ${e.toString()}");
       setSignUpError(e.toString());
       return false;
     } finally {
       setLoading(false);
+    }
+  }
+
+  Future<bool> verifySignupToken({
+    required String email,
+    required String token,
+  }) async {
+    try {
+      await supabase.auth.verifyOTP(
+        email: email,
+        token: token,
+        type: OtpType.signup,
+      );
+
+      return true;
+    } on AuthException catch (e) {
+      print("AuthException: $e");
+      return false;
+    } catch (e) {
+      print("Unknown error: $e");
+      return false;
     }
   }
 

@@ -52,6 +52,8 @@ void main() async {
 
   final entryWidget = await OnBoardingSkip.WidgetIntApp();
 
+  // session?.user.emailConfirmedAt != null
+
   runApp(MyApp(entryWidget: entryWidget));
 }
 

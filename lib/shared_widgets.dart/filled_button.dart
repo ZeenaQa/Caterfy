@@ -27,7 +27,7 @@ class FilledBtn extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          minimumSize: Size.zero, // remove minimum size constraints
+          minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -36,7 +36,8 @@ class FilledBtn extends StatelessWidget {
             vertical: verticalPadding,
             horizontal: horizontalPadding,
           ),
-        ),
+          shadowColor: Colors.transparent,
+        ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
         child: Stack(
           alignment: Alignment.center,
           children: [
