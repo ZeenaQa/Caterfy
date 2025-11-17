@@ -1,4 +1,3 @@
-import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/dialog_box.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
