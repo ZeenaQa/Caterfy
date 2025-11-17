@@ -26,19 +26,14 @@ void main() async {
     final user = session?.user;
 
     if (event == AuthChangeEvent.signedIn && user != null) {
-      // Check if email is confirmed
-      final emailConfirmedAt = user
-          .emailConfirmedAt; // or user.confirmedAt or user.emailConfirmedAt depending on SDK version
+      final emailConfirmedAt = user.emailConfirmedAt;
 
       if (emailConfirmedAt == null) {
-        // Email NOT verified → show VerifyEmail screen
         Navigator.pushReplacement(
           navigatorKey.currentContext!,
           MaterialPageRoute(builder: (_) => UnauthenticatedCustomer()),
         );
       } else {
-        // Email verified → normal flow
-
         final existing = await Supabase.instance.client
             .from('customers')
             .select()
@@ -66,7 +61,6 @@ void main() async {
       customerProvider.setLoading(false);
     }
 
-    // SIGNED OUT
     if (event == AuthChangeEvent.signedOut) {
       Navigator.pushReplacement(
         navigatorKey.currentContext!,
@@ -76,8 +70,6 @@ void main() async {
   });
 
   final entryWidget = await OnBoardingSkip.WidgetIntApp();
-
-  // session?.user.emailConfirmedAt != null
 
   runApp(MyApp(entryWidget: entryWidget));
 }

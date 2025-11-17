@@ -2,7 +2,7 @@ import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_reset_passowrd/customer_forgot_password.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
 
     return Scaffold(
-      appBar: LogoAppBar(),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(

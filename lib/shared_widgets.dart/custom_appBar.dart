@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const LogoAppBar({
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({
     super.key,
     this.title,
     PreferredSize? bottom,
@@ -40,7 +40,7 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed!();
             return;
           }
-          Navigator.of(context).pop();
+          Navigator.of(context).maybePop();
         },
       ),
     );

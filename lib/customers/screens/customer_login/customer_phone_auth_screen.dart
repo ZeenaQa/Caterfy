@@ -1,6 +1,6 @@
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
 
     return Scaffold(
-      appBar: LogoAppBar(),
+      appBar: CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

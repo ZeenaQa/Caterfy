@@ -1,4 +1,3 @@
-import 'package:caterfy/customers/screens/customer_login/customer_reset_passowrd/customer_forgot_password.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_forgot_password.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/personal_info.dart';

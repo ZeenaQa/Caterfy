@@ -1,8 +1,7 @@
-import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/shared_widgets.dart/dialog_box.dart';
+import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -53,7 +52,7 @@ class CustomerSettingsScreen extends StatelessWidget {
               SettingsButton(
                 title: 'Log out',
                 onTap: () async {
-                  showMyDialog(
+                  showCustomDialog(
                     context,
                     title: "Log out",
                     content: "Are you sure you want to log out?",
@@ -71,7 +70,7 @@ class CustomerSettingsScreen extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      appBar: LogoAppBar(title: title),
+      appBar: CustomAppBar(title: title),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 19),
         physics: NeverScrollableScrollPhysics(),

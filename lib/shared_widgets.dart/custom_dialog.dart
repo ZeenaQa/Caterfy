@@ -1,7 +1,7 @@
 import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showMyDialog(
+Future<bool?> showCustomDialog(
   BuildContext context, {
   required String title,
   required String content,
@@ -54,7 +54,7 @@ Future<void> showMyDialog(
                         isCancel: true,
                         function: () {
                           if (!isLoading) {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(false);
                             if (onCancel != null) onCancel();
                           }
                         },
@@ -73,7 +73,7 @@ Future<void> showMyDialog(
                           await onConfirmAsync!();
 
                           if (context.mounted && popAfterAsync) {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(true);
                           }
                         },
                         color: Colors.green,

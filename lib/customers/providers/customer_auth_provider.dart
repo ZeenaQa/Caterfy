@@ -8,6 +8,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   bool isLoading = false;
+  bool tokenIsLoading = false;
 
   String? signUpError;
   String? logInError;
@@ -66,6 +67,15 @@ class CustomerAuthProvider extends ChangeNotifier {
     return null;
   }
 
+  int? extractIntFromString(String message) {
+    final regex = RegExp(r'\d+');
+    final match = regex.firstMatch(message);
+    if (match != null) {
+      return int.tryParse(match.group(0)!);
+    }
+    return null;
+  }
+
   // ---------------- Sign Up ----------------
   Future<bool> signUp({
     required String name,
@@ -106,10 +116,13 @@ class CustomerAuthProvider extends ChangeNotifier {
       if (e.code == 'user_already_exists') {
         emailError = " is already registered.";
         notifyListeners();
+      } else if (e.code == "over_email_send_rate_limit") {
+        final int? seconds = extractIntFromString(e.message);
+        final errMsg = "Please try again in $seconds seconds.";
+        emailError = errMsg;
       } else {
         setSignUpError(e.message);
       }
-      print(e.message);
       return false;
     } catch (e) {
       print("ERROR ${e.toString()}");
@@ -125,6 +138,8 @@ class CustomerAuthProvider extends ChangeNotifier {
     required String token,
   }) async {
     try {
+      tokenIsLoading = true;
+      notifyListeners();
       await supabase.auth.verifyOTP(
         email: email,
         token: token,
@@ -132,12 +147,13 @@ class CustomerAuthProvider extends ChangeNotifier {
       );
 
       return true;
-    } on AuthException catch (e) {
-      print("AuthException: $e");
+    } on AuthException {
       return false;
     } catch (e) {
-      print("Unknown error: $e");
       return false;
+    } finally {
+      tokenIsLoading = false;
+      notifyListeners();
     }
   }
 
@@ -178,7 +194,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   Future<bool> logIn({
     required email,
     required String password,
-    context,
+    BuildContext? context,
   }) async {
     emailError = email.isEmpty ? "Field can't be empty" : null;
     passwordError = password.isEmpty ? "Field can't be empty" : null;
@@ -212,11 +228,12 @@ class CustomerAuthProvider extends ChangeNotifier {
           password: password,
           confirmPassword: password,
         );
-        if (success) {
+        if (success && context!.mounted) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CustomerSignupTokenScreen(email: email),
+              builder: (context) =>
+                  CustomerSignupTokenScreen(email: email, password: password),
             ),
           );
         }

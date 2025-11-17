@@ -1,7 +1,7 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_token_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +25,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
     final auth = Provider.of<CustomerAuthProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: LogoAppBar(),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
 
@@ -88,6 +88,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
               title: "Sign Up",
               onPressed: () async {
                 final tempEmail = email;
+                final tempPass = password;
                 final success = await auth.signUp(
                   name: name,
                   email: email.trim(),
@@ -98,8 +99,10 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          CustomerSignupTokenScreen(email: tempEmail),
+                      builder: (context) => CustomerSignupTokenScreen(
+                        email: tempEmail,
+                        password: tempPass,
+                      ),
                     ),
                   );
                 }
