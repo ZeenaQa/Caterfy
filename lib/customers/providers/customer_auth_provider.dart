@@ -1,5 +1,5 @@
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
-import 'package:caterfy/customers/screens/customer_signup/customer_token_screen.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_email_token_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,6 +25,11 @@ class CustomerAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTokenIsLoading(bool val) {
+    tokenIsLoading = val;
+    notifyListeners();
+  }
+
   void setSignUpError(String? value) {
     signUpError = value;
     notifyListeners();
@@ -46,7 +51,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       return "Field can't be empty";
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return " is not valid";
+      return "Invalid email";
     }
     return null;
   }
@@ -56,13 +61,13 @@ class CustomerAuthProvider extends ChangeNotifier {
       return "Field can't be empty";
     }
     if (password.length < 8) {
-      return " must be at least 8 characters long";
+      return "Must be at least 8 characters long";
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return "must include at least one uppercase letter";
+      return "Must include at least one uppercase letter";
     }
     if (!RegExp(r'\d').hasMatch(password)) {
-      return "must include at least one number";
+      return "Must include at least one number";
     }
     return null;
   }
@@ -77,7 +82,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Sign Up ----------------
-  Future<bool> signUp({
+  Future<dynamic> signUp({
     required String name,
     required String email,
     required String password,
@@ -111,23 +116,30 @@ class CustomerAuthProvider extends ChangeNotifier {
         data: {'name': name},
       );
 
-      return true;
+      return {
+        'success': true,
+        'message': "A verification code has been sent to your email",
+      };
     } on AuthException catch (e) {
       if (e.code == 'user_already_exists') {
         emailError = " is already registered.";
         notifyListeners();
+        return {'success': false, 'message': "Email is already registered"};
       } else if (e.code == "over_email_send_rate_limit") {
         final int? seconds = extractIntFromString(e.message);
         final errMsg = "Please try again in $seconds seconds.";
         emailError = errMsg;
+        return {
+          'success': false,
+          'message': "Please try again in $seconds seconds.",
+        };
       } else {
         setSignUpError(e.message);
       }
-      return false;
+      return {'success': false, 'message': "Something went wrong"};
     } catch (e) {
-      print("ERROR ${e.toString()}");
       setSignUpError(e.toString());
-      return false;
+      return {'success': false, 'message': "Something went wrong"};
     } finally {
       setLoading(false);
     }
@@ -196,7 +208,7 @@ class CustomerAuthProvider extends ChangeNotifier {
     required String password,
     BuildContext? context,
   }) async {
-    emailError = email.isEmpty ? "Field can't be empty" : null;
+    emailError = validateEmail(email);
     passwordError = password.isEmpty ? "Field can't be empty" : null;
 
     notifyListeners();
@@ -222,13 +234,13 @@ class CustomerAuthProvider extends ChangeNotifier {
     } on AuthApiException catch (e) {
       if (e.code == "email_not_confirmed") {
         clearErrors();
-        final success = await signUp(
+        final res = await signUp(
           name: '1',
           email: email.trim(),
           password: password,
           confirmPassword: password,
         );
-        if (success && context!.mounted) {
+        if (res['success'] && context!.mounted) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -245,6 +257,84 @@ class CustomerAuthProvider extends ChangeNotifier {
       return false;
     } finally {
       setLoading(false);
+    }
+  }
+
+  Future<dynamic> sendForgotPasswordPassEmail({required String email}) async {
+    try {
+      final emailRes = validateEmail(email);
+      if (emailRes != null) {
+        emailError = emailRes;
+        notifyListeners();
+        return {'success': false, 'message': emailRes};
+      }
+
+      await supabase.auth.resetPasswordForEmail(email.trim());
+      return {'success': true, 'message': "Email sent successfully"};
+    } on AuthApiException catch (e) {
+      if (e.code == "over_email_send_rate_limit") {
+        final int? seconds = extractIntFromString(e.message);
+        final errMsg = "Please try again in $seconds seconds.";
+        emailError = errMsg;
+        return {
+          'success': false,
+          'message': "Please try again in $seconds seconds.",
+        };
+      }
+    } catch (e) {
+      emailError = 'Something went wrong $e';
+      notifyListeners();
+      return {'success': false, 'message': "Something went wrong"};
+    }
+  }
+
+  Future<dynamic> verifyResetPassEmail({
+    required String token,
+    required String email,
+  }) async {
+    try {
+      tokenIsLoading = true;
+      notifyListeners();
+      await supabase.auth.verifyOTP(
+        type: OtpType.recovery,
+        token: token,
+        email: email,
+      );
+      return true;
+    } on AuthException {
+      return false;
+    } catch (e) {
+      return false;
+    } finally {
+      tokenIsLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> resetPassword({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    try {
+      passwordError = validatePassword(password);
+      confirmPasswordError = confirmPassword.isEmpty
+          ? "Field can't be empty"
+          : null;
+      confirmPasswordError = password != confirmPassword
+          ? "Passwords do not match"
+          : null;
+
+      isLoading = true;
+      notifyListeners();
+      await supabase.auth.updateUser(UserAttributes(password: password));
+      return true;
+    } on AuthApiException {
+      return false;
+    } catch (e) {
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 

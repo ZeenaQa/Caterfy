@@ -25,6 +25,8 @@ void main() async {
     final session = data.session;
     final user = session?.user;
 
+    print(user);
+
     if (event == AuthChangeEvent.signedIn && user != null) {
       final emailConfirmedAt = user.emailConfirmedAt;
 

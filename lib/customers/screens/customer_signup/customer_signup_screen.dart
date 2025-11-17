@@ -1,5 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/customer_signup/customer_token_screen.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_email_token_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
@@ -89,13 +89,13 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
               onPressed: () async {
                 final tempEmail = email;
                 final tempPass = password;
-                final success = await auth.signUp(
+                final res = await auth.signUp(
                   name: name,
                   email: email.trim(),
                   password: password,
                   confirmPassword: confirmPass,
                 );
-                if (success) {
+                if (res['success'] && context.mounted) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -1,5 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/customer_login/customer_reset_passowrd/customer_forgot_password.dart';
+import 'package:caterfy/customers/screens/customer_signup/customer_pass_token_screen.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_signup_screen.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -52,11 +52,20 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
             ),
 
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ForgotPasswordScreen()),
+              onTap: () async {
+                final tempEmail = email;
+                final res = await customerAuth.sendForgotPasswordPassEmail(
+                  email: email,
                 );
+                if (res['success']) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CustomerPassTokenScreen(email: tempEmail),
+                    ),
+                  );
+                }
               },
               child: Align(
                 alignment: Alignment.centerRight,
