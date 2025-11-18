@@ -68,7 +68,7 @@ class _SetPasswordState extends State<SetPassword> {
                 errorText: auth.confirmPasswordError,
               ),
               FilledBtn(
-                title: "Log In",
+                title: "Sign Up",
                 onPressed: () async {
                   if (auth.validatePasswordInfo(
                     password: password,

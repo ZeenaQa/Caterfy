@@ -16,6 +16,7 @@ class VendorAuthProvider extends ChangeNotifier {
   String? phoneError;
   String? passwordError;
   String? confirmPasswordError;
+  bool forgotPassLoading = false;
 
   // ---------------- Setters ----------------
   void setLoading(bool value) {
@@ -190,7 +191,11 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn({required String email, required String password}) async {
+  Future<bool> logIn({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     emailError = email.isEmpty ? "Field can't be empty" : null;
     passwordError = password.isEmpty ? "Field can't be empty" : null;
 
@@ -306,6 +311,48 @@ class VendorAuthProvider extends ChangeNotifier {
       ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
     } finally {
       setLoading(false);
+    }
+  }
+
+  int? extractIntFromString(String message) {
+    final regex = RegExp(r'\d+');
+    final match = regex.firstMatch(message);
+    if (match != null) {
+      return int.tryParse(match.group(0)!);
+    }
+    return null;
+  }
+
+  Future<dynamic> sendForgotPasswordPassEmail({required String email}) async {
+    try {
+      final emailRes = validateEmail(email);
+      if (emailRes != null) {
+        emailError = emailRes;
+        notifyListeners();
+        return {'success': false, 'message': emailRes};
+      }
+
+      forgotPassLoading = true;
+      notifyListeners();
+      await supabase.auth.resetPasswordForEmail(email.trim());
+      return {'success': true, 'message': "Email sent successfully"};
+    } on AuthApiException catch (e) {
+      if (e.code == "over_email_send_rate_limit") {
+        final int? seconds = extractIntFromString(e.message);
+        final errMsg = "Please try again in $seconds seconds.";
+        emailError = errMsg;
+        return {
+          'success': false,
+          'message': "Please try again in $seconds seconds.",
+        };
+      }
+    } catch (e) {
+      emailError = 'Something went wrong $e';
+      notifyListeners();
+      return {'success': false, 'message': "Something went wrong"};
+    } finally {
+      forgotPassLoading = false;
+      notifyListeners();
     }
   }
 
