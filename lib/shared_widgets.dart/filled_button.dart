@@ -30,7 +30,7 @@ class FilledBtn extends StatelessWidget {
           minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(50),
           ),
           padding: EdgeInsets.symmetric(
             vertical: verticalPadding,

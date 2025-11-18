@@ -9,6 +9,8 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   bool isLoading = false;
   bool tokenIsLoading = false;
+  bool forgotPassLoading = false;
+  bool isGoogleLoading = false;
 
   String? signUpError;
   String? logInError;
@@ -22,6 +24,11 @@ class CustomerAuthProvider extends ChangeNotifier {
   // ---------------- Setters ----------------
   void setLoading(bool value) {
     isLoading = value;
+    notifyListeners();
+  }
+
+  void setGoogleLoading(bool val) {
+    isGoogleLoading = val;
     notifyListeners();
   }
 
@@ -104,7 +111,7 @@ class CustomerAuthProvider extends ChangeNotifier {
         emailError != null ||
         passwordError != null ||
         confirmPasswordError != null) {
-      return false;
+      return {'success': false, 'message': "One or more fields are invalid"};
     }
 
     try {
@@ -269,6 +276,8 @@ class CustomerAuthProvider extends ChangeNotifier {
         return {'success': false, 'message': emailRes};
       }
 
+      forgotPassLoading = true;
+      notifyListeners();
       await supabase.auth.resetPasswordForEmail(email.trim());
       return {'success': true, 'message': "Email sent successfully"};
     } on AuthApiException catch (e) {
@@ -285,6 +294,9 @@ class CustomerAuthProvider extends ChangeNotifier {
       emailError = 'Something went wrong $e';
       notifyListeners();
       return {'success': false, 'message': "Something went wrong"};
+    } finally {
+      forgotPassLoading = false;
+      notifyListeners();
     }
   }
 
@@ -311,7 +323,7 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> resetPassword({
+  Future<dynamic> resetPassword({
     required String password,
     required String confirmPassword,
   }) async {
@@ -324,14 +336,18 @@ class CustomerAuthProvider extends ChangeNotifier {
           ? "Passwords do not match"
           : null;
 
+      if (passwordError != null || confirmPasswordError != null) {
+        return {'success': false, 'message': 'mismatch'};
+      }
+
       isLoading = true;
       notifyListeners();
       await supabase.auth.updateUser(UserAttributes(password: password));
-      return true;
+      return {'success': true, 'message': 'Password reset successfully.'};
     } on AuthApiException {
-      return false;
+      return {'success': false, 'message': 'Something went wrong.'};
     } catch (e) {
-      return false;
+      return {'success': false, 'message': 'Something went wrong.'};
     } finally {
       isLoading = false;
       notifyListeners();
@@ -380,21 +396,21 @@ class CustomerAuthProvider extends ChangeNotifier {
   /// ------------------------- Google Sign-in -------------------------
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      setLoading(true);
-
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId:
             '1066228950684-3skki6ts1uct5tg4t3ikhsd971cjddbl.apps.googleusercontent.com',
       );
       await googleSignIn.signOut();
-
+      setGoogleLoading(true);
       final GoogleSignInAccount? account = await googleSignIn.signIn();
       if (account == null) {
         setLogInError("Google sign-in cancelled");
+        setGoogleLoading(false);
         return;
       }
 
       final GoogleSignInAuthentication auth = await account.authentication;
+
       final String? idToken = auth.idToken;
       final String? accessToken = auth.accessToken;
 
@@ -429,15 +445,17 @@ class CustomerAuthProvider extends ChangeNotifier {
         });
       }
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
-      );
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+        );
+      }
     } catch (e) {
-      print("ERRORRRRRRRRRRRRRRRRR $e");
       setLogInError("Google sign-in failed: $e");
-    } finally {
-      setLoading(false);
+    }
+    finally {
+      setGoogleLoading(false);
     }
   }
 

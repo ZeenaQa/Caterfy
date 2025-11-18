@@ -23,10 +23,12 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: TextStyle(fontSize: 15),
       obscureText: obscureText,
       keyboardType: keyboardType,
       onChanged: onChanged,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
         hintText: hint,
         suffixIcon: suffix,
         filled: false,
@@ -76,9 +78,11 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: TextStyle(fontSize: 15),
       obscureText: _obscure,
       onChanged: widget.onChanged,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
         hintText: widget.hint,
         filled: false,
         border: OutlineInputBorder(
@@ -93,13 +97,17 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Color(0xffadadad), width: 1),
         ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _obscure ? Icons.visibility_off : Icons.visibility,
-            color: Color(0xff9c9c9c),
-            size: 22,
+        suffixIconConstraints: BoxConstraints(maxWidth: 60),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(
+              _obscure ? Icons.visibility_off : Icons.visibility,
+              color: Color(0xff9c9c9c),
+              size: 20,
+            ),
+            onPressed: _toggleVisibility,
           ),
-          onPressed: _toggleVisibility,
         ),
       ),
     );
@@ -137,6 +145,7 @@ class LabeledTextField extends StatelessWidget {
               Text(
                 label ?? "",
                 style: TextStyle(
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
                 ),
@@ -193,6 +202,7 @@ class LabeledPasswordField extends StatelessWidget {
               Text(
                 label ?? "",
                 style: TextStyle(
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
                 ),

@@ -4,11 +4,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     this.title,
+    this.titleSize = 20,
     PreferredSize? bottom,
     this.onPressed,
   });
 
   final String? title;
+  final double titleSize;
   final VoidCallback? onPressed;
 
   @override
@@ -16,10 +18,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title ?? '',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: titleSize, fontWeight: FontWeight.w600),
       ),
-      leadingWidth: 78,
-      titleSpacing: -7,
+      leadingWidth: 74,
+      titleSpacing: -3,
       leading: IconButton(
         padding: EdgeInsets.zero,
         icon: Material(

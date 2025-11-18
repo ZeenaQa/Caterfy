@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/screens/customer_login/customer_login_screen.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_phone_auth_screen.dart';
+import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_login_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class SelectionScreen extends StatelessWidget {
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
     void handleNavigation(String dest) {
+      if (customerAuth.isGoogleLoading) return;
       vendorAuth.clearErrors();
       customerAuth.clearErrors();
       final customerProvider = Provider.of<CustomerAuthProvider>(
@@ -81,26 +83,32 @@ class SelectionScreen extends StatelessWidget {
                     "Log in or sign up to start ordering with Caterfy!",
                     style: TextStyle(color: Color(0xff7a7a7a), fontSize: 12),
                   ),
-                  SizedBox(height: 20),
-                  OutlinedBtn(
-                    title: "Continue with Google",
-                    onPressed: () => handleNavigation("google"),
-                    bottomPadding: 18,
-                    customSvgIcon: SvgPicture.asset(
-                      'assets/icons/google_colored.svg',
-                      height: 18,
+                  SizedBox(height: 30),
+                  if (customerAuth.isGoogleLoading)
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 3),
+                      child: CustomThreeLineSpinner(),
                     ),
-                  ),
+                  if (!customerAuth.isGoogleLoading)
+                    OutlinedBtn(
+                      title: "Continue with Google",
+                      onPressed: () => handleNavigation("google"),
+                      bottomPadding: 8,
+                      customSvgIcon: SvgPicture.asset(
+                        'assets/icons/google_colored.svg',
+                        height: 18,
+                      ),
+                    ),
                   OutlinedBtn(
                     title: "Continue with email",
                     onPressed: () => handleNavigation("email"),
-                    bottomPadding: 18,
+                    bottomPadding: 8,
                     icon: Icons.email_outlined,
                   ),
                   OutlinedBtn(
                     title: "Continue with phone number",
                     onPressed: () => handleNavigation("phone"),
-                    bottomPadding: 28,
+                    bottomPadding: 20,
                     icon: Icons.phone_outlined,
                   ),
                   Row(
@@ -120,8 +128,8 @@ class SelectionScreen extends StatelessWidget {
                   OutlinedBtn(
                     title: "Continue as vendor",
                     onPressed: () => handleNavigation("vendor"),
-                    topPadding: 28,
-                    bottomPadding: 30,
+                    topPadding: 18,
+                    bottomPadding: 20,
                     icon: Icons.store_outlined,
                   ),
                 ],

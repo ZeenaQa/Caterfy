@@ -44,7 +44,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
         await showCustomDialog(
           context,
           title: "Cancel verification",
-          content: "This will cancel the verification process",
+          content: "are you sure you want to cancel the verification process",
           confirmText: "Cancel",
           cancelText: "Stay",
           onConfirmAsync: () async => Navigator.of(context).pop(),
