@@ -15,6 +15,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return AppBar(
       title: Text(
         title ?? '',
@@ -25,8 +27,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         padding: EdgeInsets.zero,
         icon: Material(
-          color: Colors.white,
-          shape: CircleBorder(side: BorderSide(color: Color(0xffe2e2e2))),
+          color: colors.surface,
+          shape: CircleBorder(side: BorderSide(color: colors.tertiary)),
           clipBehavior: Clip.antiAlias,
           child: IconTheme(
             data: IconThemeData(size: 22),

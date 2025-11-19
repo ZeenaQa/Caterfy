@@ -259,7 +259,7 @@ class CustomerAuthProvider extends ChangeNotifier {
         return false;
       }
       emailError = "Invalid email or password";
-      passwordError = "or Invalid email or password";
+      passwordError = "Invalid email or password";
       notifyListeners();
       return false;
     } finally {
@@ -269,6 +269,7 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   Future<dynamic> sendForgotPasswordPassEmail({required String email}) async {
     try {
+      // Validate email format
       final emailRes = validateEmail(email);
       if (emailRes != null) {
         emailError = emailRes;
@@ -276,19 +277,34 @@ class CustomerAuthProvider extends ChangeNotifier {
         return {'success': false, 'message': emailRes};
       }
 
+      // Check if email exists in customers table
+      final response = await supabase
+          .from('customers')
+          .select('id')
+          .eq('email', email.trim())
+          .maybeSingle();
+
+      if (response == null) {
+        emailError = "No account found with this email";
+        notifyListeners();
+        return {
+          'success': false,
+          'message': "No account found with this email",
+        };
+      }
+
       forgotPassLoading = true;
       notifyListeners();
+
       await supabase.auth.resetPasswordForEmail(email.trim());
+
       return {'success': true, 'message': "Email sent successfully"};
     } on AuthApiException catch (e) {
       if (e.code == "over_email_send_rate_limit") {
         final int? seconds = extractIntFromString(e.message);
         final errMsg = "Please try again in $seconds seconds.";
         emailError = errMsg;
-        return {
-          'success': false,
-          'message': "Please try again in $seconds seconds.",
-        };
+        return {'success': false, 'message': errMsg};
       }
     } catch (e) {
       emailError = 'Something went wrong $e';
@@ -355,6 +371,26 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
+  Future<bool> signUpWithPhone({required String phoneNumber}) async {
+    if (phoneNumber.isEmpty) {
+      setLogInError("Please enter a valid phone number");
+      return false;
+    }
+
+    try {
+      setLoading(true);
+
+      await supabase.auth.signUp(phone: phoneNumber, password: '');
+      setLogInError(null);
+      return true;
+    } catch (e) {
+      setLogInError(e.toString());
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   Future<bool> sendPhoneOtp({required String phoneNumber}) async {
     if (phoneNumber.isEmpty) {
       setLogInError("Please enter a valid phone number");
@@ -453,8 +489,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       }
     } catch (e) {
       setLogInError("Google sign-in failed: $e");
-    }
-    finally {
+    } finally {
       setGoogleLoading(false);
     }
   }

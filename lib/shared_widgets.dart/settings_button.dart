@@ -18,6 +18,7 @@ class SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
@@ -26,18 +27,18 @@ class SettingsButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: isLastItem
               ? null
-              : Border(bottom: BorderSide(color: Color(0xffe2e2e2))),
+              : Border(bottom: BorderSide(color: colors.tertiary)),
         ),
         child: Row(
           children: [
-            Icon(icon, color: Color(0xff676767), size: 21),
+            Icon(icon, color: colors.onSurfaceVariant, size: 21),
             SizedBox(width: 20),
             Text(
               title,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                color: Color(0xff242424),
+                color: colors.onSurface,
               ),
             ),
             Spacer(),
@@ -48,11 +49,15 @@ class SettingsButton extends StatelessWidget {
                   decoration: TextDecoration.underline,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff676767),
+                  color: colors.onSurfaceVariant,
                 ),
               ),
             if (rightText != null) SizedBox(width: 10),
-            Icon(Icons.arrow_forward_ios, color: Color(0xff676767), size: 17),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: colors.onSurfaceVariant,
+              size: 17,
+            ),
           ],
         ),
       ),

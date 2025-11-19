@@ -3,15 +3,14 @@ import 'dart:math' as math;
 
 class CustomThreeLineSpinner extends StatefulWidget {
   final double size;
-  final Color color;
+
   final double strokeWidth;
 
   const CustomThreeLineSpinner({
-    Key? key,
+    super.key,
     this.size = 50.0,
-    this.color = const Color(0xFF9359FF),
     this.strokeWidth = 3.0,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomThreeLineSpinner> createState() => _CustomThreeLineSpinnerState();
@@ -38,6 +37,7 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return SizedBox(
       width: widget.size,
       height: widget.size,
@@ -47,7 +47,7 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
           return CustomPaint(
             painter: _ThreeLineSpinnerPainter(
               progress: _controller.value,
-              color: widget.color,
+              color: colors.primary,
               strokeWidth: widget.strokeWidth,
             ),
           );

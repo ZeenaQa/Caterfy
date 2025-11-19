@@ -37,7 +37,22 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
                 final result = await customerAuth.checkPhoneExistsCustomer(
                   phoneNumber: phoneNumber,
                 );
-                print(result);
+
+                if (result != null) {
+                  final loginRes = await customerAuth.sendPhoneOtp(
+                    phoneNumber: phoneNumber,
+                  );
+                  if (loginRes) {
+                    print("Login OTP sent to $phoneNumber");
+                  }
+                } else {
+                  final signupRes = await customerAuth.signUpWithPhone(
+                    phoneNumber: phoneNumber,
+                  );
+                  if (signupRes) {
+                    print("Signup OTP sent to $phoneNumber");
+                  }
+                }
               },
             ),
           ],

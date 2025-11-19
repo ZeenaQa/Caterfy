@@ -15,6 +15,7 @@ class SelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
     void handleNavigation(String dest) {
@@ -72,16 +73,15 @@ class SelectionScreen extends StatelessWidget {
                 children: [
                   Text(
                     "Hey there!",
-                    style: TextStyle(
-                      color: Color(0xff2c2c2c),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
                   Text(
                     "Log in or sign up to start ordering with Caterfy!",
-                    style: TextStyle(color: Color(0xff7a7a7a), fontSize: 12),
+                    style: TextStyle(
+                      color: colors.onSurfaceVariant,
+                      fontSize: 12,
+                    ),
                   ),
                   SizedBox(height: 30),
                   if (customerAuth.isGoogleLoading)
@@ -114,11 +114,17 @@ class SelectionScreen extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: Divider(color: Colors.grey, thickness: 1),
+                        child: Divider(
+                          color: colors.onSurfaceVariant,
+                          thickness: 1,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text('OR', style: TextStyle(color: Colors.grey)),
+                        child: Text(
+                          'OR',
+                          style: TextStyle(color: colors.onSurfaceVariant),
+                        ),
                       ),
                       Expanded(
                         child: Divider(color: Colors.grey, thickness: 1),

@@ -12,12 +12,12 @@ Future<bool?> showCustomDialog(
   VoidCallback? onCancel,
 }) {
   final screenWidth = MediaQuery.of(context).size.width;
-
+  final colors = Theme.of(context).colorScheme;
   return showGeneralDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: colors.onSurface,
     transitionDuration: const Duration(milliseconds: 210),
     pageBuilder: (context, animation, secondaryAnimation) {
       bool isLoading = false;
@@ -122,16 +122,18 @@ class DialogBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Expanded(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
           minimumSize: Size.zero,
           padding: EdgeInsets.symmetric(vertical: 10),
-          backgroundColor: isCancel ? Colors.transparent : Color(0xFF9359FF),
+          backgroundColor: isCancel ? Colors.transparent : colors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
-            side: BorderSide(color: Color(0xffe3e3e3), width: isCancel ? 1 : 0),
+            side: BorderSide(color: colors.tertiary, width: isCancel ? 1 : 0),
           ),
           shadowColor: Colors.transparent,
         ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
@@ -144,7 +146,7 @@ class DialogBtn extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  color: isCancel ? Color(0xff2c2c2c) : null,
+                  color: isCancel ? colors.onSecondary : colors.onPrimary,
                   fontWeight: FontWeight.w500,
                   fontSize: 15,
                 ),
