@@ -7,13 +7,16 @@ class CustomerAccountSection extends StatelessWidget {
   const CustomerAccountSection({super.key});
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final List<Widget> items = [
       AccountButton(
         title: "Your orders",
         icon: Icons.receipt_outlined,
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const CustomerOrdersScreen(appBarTitle: "Orders")),
+          MaterialPageRoute(
+            builder: (_) => const CustomerOrdersScreen(appBarTitle: "Orders"),
+          ),
         ),
       ),
       AccountButton(
@@ -59,7 +62,7 @@ class CustomerAccountSection extends StatelessWidget {
                       child: Icon(
                         Icons.settings_outlined,
                         size: 22,
-                        color: Color(0xff242424),
+                        color: colors.onSurface,
                       ),
                     ),
                   ),
@@ -77,7 +80,7 @@ class CustomerAccountSection extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Color(0xFF9359FF)),
+                  border: Border.all(color: colors.primary),
                 ),
                 padding: EdgeInsets.all(20),
                 child: Column(
@@ -88,7 +91,7 @@ class CustomerAccountSection extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
-                        color: Color(0xFF9359FF),
+                        color: colors.primary,
                       ),
                     ),
                     SizedBox(height: 15),
@@ -97,13 +100,13 @@ class CustomerAccountSection extends StatelessWidget {
                         Icon(
                           FontAwesomeIcons.wallet,
                           size: 36,
-                          color: Color(0xFF9359FF),
+                          color: colors.primary,
                         ),
                         SizedBox(width: 15),
                         Text(
                           "0.00 JD",
                           style: TextStyle(
-                            color: Color(0xFF9359FF),
+                            color: colors.primary,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -122,7 +125,7 @@ class CustomerAccountSection extends StatelessWidget {
                           "View details",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            color: Color(0xff676767),
+                            color: colors.onSurfaceVariant,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -165,6 +168,8 @@ class AccountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap ?? () {},
@@ -173,7 +178,7 @@ class AccountButton extends StatelessWidget {
         child: Row(
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 18, color: Color(0xff242424)),
+              Icon(icon, size: 18, color: colors.onSurface),
               SizedBox(width: 15),
             ],
             Text(
@@ -181,7 +186,7 @@ class AccountButton extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                color: Color(0xff242424),
+                color: colors.onSurface,
               ),
             ),
             Expanded(
@@ -190,7 +195,7 @@ class AccountButton extends StatelessWidget {
                 child: rightText != null
                     ? Text(
                         rightText!,
-                        style: TextStyle(color: Color(0xff242424)),
+                        style: TextStyle(color: colors.onSurface),
                       )
                     : SizedBox.shrink(),
               ),

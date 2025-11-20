@@ -36,14 +36,6 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xffadadad), width: 1),
-        ),
       ),
     );
   }
@@ -77,6 +69,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return TextField(
       style: TextStyle(fontSize: 15),
       obscureText: _obscure,
@@ -89,21 +82,13 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xffadadad), width: 1),
-        ),
         suffixIconConstraints: BoxConstraints(maxWidth: 60),
         suffixIcon: Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: IconButton(
             icon: Icon(
               _obscure ? Icons.visibility_off : Icons.visibility,
-              color: Color(0xff9c9c9c),
+              color: colors.onSurfaceVariant,
               size: 20,
             ),
             onPressed: _toggleVisibility,
@@ -133,6 +118,7 @@ class LabeledTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final hasError = errorText != null && errorText!.isNotEmpty;
 
     return Column(
@@ -147,14 +133,14 @@ class LabeledTextField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
+                  color: hasError ? colors.error : colors.onSurface,
                 ),
               ),
               if (hasError)
                 Text(
                   " - ${errorText ?? ''}",
                   style: TextStyle(
-                    color: Color(0xfffd7a7a),
+                    color: colors.error,
                     fontStyle: FontStyle.italic,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -191,7 +177,7 @@ class LabeledPasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasError = errorText != null && errorText!.isNotEmpty;
-
+    final colors = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,14 +190,14 @@ class LabeledPasswordField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
+                  color: hasError ? colors.error : colors.onSurface,
                 ),
               ),
               if (hasError)
                 Text(
                   " - ${errorText ?? ''}",
                   style: TextStyle(
-                    color: Color(0xfffd7a7a),
+                    color: colors.error,
                     fontSize: 12,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w600,
@@ -243,29 +229,26 @@ class CustomPhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+
     return IntlPhoneField(
       decoration: InputDecoration(
         hintText: hintText,
         filled: false,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0xffadadad), width: 1),
-        ),
+        errorStyle: const TextStyle(height: 0, fontSize: 0),
+
+        errorBorder: theme.inputDecorationTheme.enabledBorder,
+        focusedErrorBorder: theme.inputDecorationTheme.focusedBorder,
       ),
-      initialCountryCode: 'JO',
+
       disableLengthCheck: false,
+
+      initialCountryCode: 'JO',
       onChanged: (phone) {
         onChanged(phone.completeNumber);
       },
-      style: const TextStyle(color: Colors.black),
+      style: TextStyle(color: colors.onSecondary),
     );
   }
 }
@@ -287,6 +270,7 @@ class LabeledPhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final hasError = errorText != null && errorText!.isNotEmpty;
 
     return Column(
@@ -302,14 +286,14 @@ class LabeledPhoneField extends StatelessWidget {
                     label!,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: hasError ? Color(0xfffd7a7a) : Color(0xff333333),
+                      color: hasError ? colors.error : colors.onSurface,
                     ),
                   ),
                 if (hasError)
                   Text(
                     " - ${errorText ?? ''}",
                     style: TextStyle(
-                      color: Color(0xfffd7a7a),
+                      color: colors.error,
                       fontStyle: FontStyle.italic,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

@@ -6,6 +6,8 @@ class CustomerNoOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Expanded(
       child: Center(
         child: Column(
@@ -21,11 +23,15 @@ class CustomerNoOrders extends StatelessWidget {
             SizedBox(height: 15),
             Text(
               "No orders yet",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: colors.onSurface,
+              ),
             ),
             Text(
               "When you place your first order, it will appear here.",
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12),
             ),
           ],
         ),

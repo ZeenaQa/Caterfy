@@ -147,7 +147,7 @@ class DialogBtn extends StatelessWidget {
                 text,
                 style: TextStyle(
                   color: isCancel ? colors.onSecondary : colors.onPrimary,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
               ),

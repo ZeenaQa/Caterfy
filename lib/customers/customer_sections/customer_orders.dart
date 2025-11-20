@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class CustomerOrdersSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 20),
@@ -13,7 +15,7 @@ class CustomerOrdersSection extends StatelessWidget {
             Text(
               "Orders",
               style: TextStyle(
-                color: Colors.black,
+                color: colors.onSurface,
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
               ),

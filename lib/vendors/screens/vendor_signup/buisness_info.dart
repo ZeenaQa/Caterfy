@@ -66,6 +66,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -76,10 +77,14 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 60),
-            const Center(
+            Center(
               child: Text(
                 "Vendor Sign Up",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  color: colors.onSurface,
+                ),
               ),
             ),
 
@@ -100,8 +105,9 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                   child: Text(
                     "Business Type",
                     style: TextStyle(
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff333333),
+                      color: colors.onSurface,
                     ),
                   ),
                 ),
@@ -118,34 +124,11 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                       selectedBusiness = value;
                     }
                   },
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xffe2e2e2)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xffadadad)),
-                    ),
-                    filled: false,
-                  ),
-                  dropdownColor: Colors.white,
+                  decoration: InputDecoration(filled: false),
+                  dropdownColor: colors.surface,
                 ),
               ],
             ),
-
-            if (auth.signUpError != null)
-              Text(
-                auth.signUpError!,
-                style: const TextStyle(color: Colors.red),
-              ),
-
-            if (auth.successMessage != null)
-              Text(
-                auth.successMessage!,
-                style: const TextStyle(color: Colors.green),
-              ),
-
             Align(
               alignment: Alignment.centerRight,
               child: FilledBtn(

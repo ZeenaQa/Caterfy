@@ -73,7 +73,11 @@ class SelectionScreen extends StatelessWidget {
                 children: [
                   Text(
                     "Hey there!",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: colors.onSurface,
+                    ),
                   ),
                   SizedBox(height: 4),
                   Text(

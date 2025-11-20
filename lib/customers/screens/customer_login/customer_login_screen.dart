@@ -125,7 +125,6 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
               FilledBtn(
                 title: "Log In",
                 onPressed: () async {

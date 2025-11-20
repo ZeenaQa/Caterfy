@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -24,35 +25,41 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          spacing: 5,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             LabeledPhoneField(
-              onChanged: (phoneNumber) {},
-              label: 'phone number',
+              label: 'Phone number',
+              hintText: 'Enter your phone number',
+              onChanged: (value) {
+                phoneNumber = value.trim();
+                customerAuth.phoneNumberError = null;
+              },
+              errorText: customerAuth.phoneNumberError,
             ),
+
             SizedBox(height: 20),
+
             FilledBtn(
               title: "Continue",
+              isLoading: customerAuth.isLoading,
               onPressed: () async {
-                final result = await customerAuth.checkPhoneExistsCustomer(
+                final auth = Provider.of<CustomerAuthProvider>(
+                  context,
+                  listen: false,
+                );
+
+                final success = await auth.signUpOrSignInWithPhone(
                   phoneNumber: phoneNumber,
                 );
 
-                if (result != null) {
-                  final loginRes = await customerAuth.sendPhoneOtp(
-                    phoneNumber: phoneNumber,
-                  );
-                  if (loginRes) {
-                    print("Login OTP sent to $phoneNumber");
-                  }
-                } else {
-                  final signupRes = await customerAuth.signUpWithPhone(
-                    phoneNumber: phoneNumber,
-                  );
-                  if (signupRes) {
-                    print("Signup OTP sent to $phoneNumber");
-                  }
-                }
+                if (!success) return;
+
+                print("Phone login/signup successful for $phoneNumber");
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => UnauthenticatedCustomer()),
+                );
               },
             ),
           ],

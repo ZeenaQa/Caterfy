@@ -8,14 +8,18 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     foregroundColor: Colors.white,
     elevation: 0,
   ),
-  iconTheme: const IconThemeData(color: Colors.white70),
   inputDecorationTheme: InputDecorationTheme(
-    filled: true,
-    fillColor: Colors.grey.shade900,
-    hintStyle: const TextStyle(color: Colors.white54),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Color(0xffadadad), width: 1),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Color(0xffadadad), width: 1),
     ),
   ),
   colorScheme: const ColorScheme(
@@ -26,9 +30,9 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     onSecondary: Color(0xff2c2c2c),
     tertiary: Color(0xffe4e4e4),
     surface: Colors.white,
-    onSurface: Color(0xFF414141),
-    onSurfaceVariant: Color(0xff7a7a7a),
-    error: Color(0xFFD32F2F),
+    onSurface: Color(0xff333333),
+    onSurfaceVariant: Color.fromARGB(255, 139, 139, 139),
+    error: Color(0xfffd7a7a),
     onError: Colors.white,
   ),
 );

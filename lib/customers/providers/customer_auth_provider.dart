@@ -371,61 +371,59 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
-  Future<bool> signUpWithPhone({required String phoneNumber}) async {
+
+  Future<bool> signUpOrSignInWithPhone({required String phoneNumber}) async {
     if (phoneNumber.isEmpty) {
-      setLogInError("Please enter a valid phone number");
+      phoneNumberError = "Field can't be empty";
+      notifyListeners();
       return false;
     }
 
     try {
       setLoading(true);
-
-      await supabase.auth.signUp(phone: phoneNumber, password: '');
-      setLogInError(null);
+      await supabase.auth.signUp(phone: phoneNumber, password: "12345678");
+      phoneNumberError = null;
+      notifyListeners();
       return true;
-    } catch (e) {
-      setLogInError(e.toString());
+    } on AuthApiException catch (e) {
+      if (e.code == "phone_already_registered") {
+        try {
+          await supabase.auth.signInWithOtp(phone: phoneNumber);
+          phoneNumberError = null;
+          notifyListeners();
+          return true;
+        } catch (_) {
+          phoneNumberError = "Something went wrong";
+          notifyListeners();
+          return false;
+        }
+      }
+
+      phoneNumberError = "Something went wrong";
+      notifyListeners();
+      return false;
+    } catch (_) {
+      phoneNumberError = "Something went wrong";
+      notifyListeners();
       return false;
     } finally {
       setLoading(false);
     }
   }
 
-  Future<bool> sendPhoneOtp({required String phoneNumber}) async {
-    if (phoneNumber.isEmpty) {
-      setLogInError("Please enter a valid phone number");
-      return false;
-    }
-
+  Future<bool> checkPhoneExistsCustomer({required String phoneNumber}) async {
     try {
-      setLoading(true);
-      await supabase.auth.signInWithOtp(phone: phoneNumber);
-      setLogInError(null);
-      return true;
-    } catch (e) {
-      setLogInError(e.toString());
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  Future<String?> checkPhoneExistsCustomer({
-    required String phoneNumber,
-  }) async {
-    try {
-      final customerID = await supabase
-          .from('customeString phoneNumberrs')
+      final customer = await supabase
+          .from('customers')
           .select('id')
           .eq('phone_number', phoneNumber)
           .maybeSingle();
 
-      if (customerID != null) return customerID.toString();
-
-      return null;
-    } catch (e) {
-      setLogInError("Error checking phone: $e");
-      return null;
+      return customer != null;
+    } catch (_) {
+      phoneNumberError = "There was an error with this phone number";
+      notifyListeners();
+      return false;
     }
   }
 
@@ -539,6 +537,7 @@ class CustomerAuthProvider extends ChangeNotifier {
     confirmPasswordError = null;
     signUpError = null;
     successMessage = null;
+    phoneNumberError = null;
     notifyListeners();
   }
 

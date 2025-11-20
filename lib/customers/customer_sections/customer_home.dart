@@ -5,10 +5,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class CustomerHomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 130,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: colors.primary,
         elevation: 0,
         automaticallyImplyLeading: false,
         shape: WavyShapeBorder(waveHeight: 4),
@@ -30,13 +32,13 @@ class CustomerHomeSection extends StatelessWidget {
                     Icon(
                       FontAwesomeIcons.locationDot,
                       size: 16,
-                      color: Colors.white,
+                      color: colors.surface,
                     ),
                     RichText(
                       text: TextSpan(
                         text: 'Deliver to ',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: colors.surface,
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
                         ),
@@ -53,7 +55,7 @@ class CustomerHomeSection extends StatelessWidget {
                 SizedBox(height: 17),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surface,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
