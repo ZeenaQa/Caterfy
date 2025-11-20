@@ -74,6 +74,7 @@ class _SetPasswordState extends State<SetPassword> {
                     password: password,
                     confirmPassword: confirmPassword,
                   )) {
+                    print("nice");
                     final success = await auth.signUp(
                       onlyPassword: true,
                       email: widget.email,

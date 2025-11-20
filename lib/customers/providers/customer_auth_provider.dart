@@ -120,7 +120,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'name': name},
+        data: {'name': name, 'role': 'customer'},
       );
 
       return {
@@ -129,7 +129,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       };
     } on AuthException catch (e) {
       if (e.code == 'user_already_exists') {
-        emailError = " is already registered.";
+        emailError = "Email is already registered.";
         notifyListeners();
         return {'success': false, 'message': "Email is already registered"};
       } else if (e.code == "over_email_send_rate_limit") {
@@ -381,18 +381,22 @@ class CustomerAuthProvider extends ChangeNotifier {
 
     try {
       setLoading(true);
-      await supabase.auth.signUp(phone: phoneNumber, password: "12345678");
+      await supabase.auth.signUp(
+        phone: phoneNumber,
+        password: "12345678",
+        data: {'role': 'customer'},
+      );
       phoneNumberError = null;
       notifyListeners();
       return true;
     } on AuthApiException catch (e) {
-      if (e.code == "phone_already_registered") {
+      if (e.code == "user_already_exists") {
         try {
           await supabase.auth.signInWithOtp(phone: phoneNumber);
           phoneNumberError = null;
           notifyListeners();
           return true;
-        } catch (_) {
+        } catch (e) {
           phoneNumberError = "Something went wrong";
           notifyListeners();
           return false;
@@ -402,7 +406,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       phoneNumberError = "Something went wrong";
       notifyListeners();
       return false;
-    } catch (_) {
+    } catch (e) {
       phoneNumberError = "Something went wrong";
       notifyListeners();
       return false;
@@ -416,7 +420,7 @@ class CustomerAuthProvider extends ChangeNotifier {
       final customer = await supabase
           .from('customers')
           .select('id')
-          .eq('phone_number', phoneNumber)
+          .eq('phone', phoneNumber)
           .maybeSingle();
 
       return customer != null;
