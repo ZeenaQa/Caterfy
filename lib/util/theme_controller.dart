@@ -15,7 +15,6 @@ class ThemeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Set to DARK
   Future<void> setDark() async {
     themeMode = ThemeMode.dark;
     final prefs = await SharedPreferences.getInstance();

@@ -56,15 +56,11 @@ class CustomerAccountSection extends StatelessWidget {
                     "Waseem Alamad",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(
-                        Icons.settings_outlined,
-                        size: 22,
-                        color: colors.onSurface,
-                      ),
-                    ),
+                  Spacer(),
+                  Icon(
+                    Icons.settings_outlined,
+                    size: 22,
+                    color: colors.onSurface,
                   ),
                 ],
               ),

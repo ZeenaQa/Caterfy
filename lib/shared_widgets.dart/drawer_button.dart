@@ -5,12 +5,14 @@ class DrawerBtn extends StatelessWidget {
   final ColorScheme colors;
   final VoidCallback onPressed;
   final IconData? icon;
+  final bool isSelected;
   const DrawerBtn({
     super.key,
     required this.colors,
     required this.title,
     required this.onPressed,
     this.icon,
+    this.isSelected = false,
   });
 
   @override
@@ -41,6 +43,15 @@ class DrawerBtn extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                Spacer(),
+                if (isSelected) ...[
+                  Icon(
+                    Icons.check,
+                    color: colors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  SizedBox(width: 0),
+                ],
               ],
             ),
           ),

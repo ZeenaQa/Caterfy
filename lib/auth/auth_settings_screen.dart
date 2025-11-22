@@ -26,6 +26,7 @@ class AuthSettingsScreen extends StatelessWidget {
             child: Column(
               children: [
                 DrawerBtn(
+                  isSelected: locale.languageCode == "ar",
                   colors: colors,
                   title: "العربية",
                   onPressed: () {
@@ -34,6 +35,7 @@ class AuthSettingsScreen extends StatelessWidget {
                   },
                 ),
                 DrawerBtn(
+                  isSelected: locale.languageCode == "en",
                   colors: colors,
                   title: "English",
                   onPressed: () {
@@ -56,6 +58,7 @@ class AuthSettingsScreen extends StatelessWidget {
             child: Column(
               children: [
                 DrawerBtn(
+                  isSelected: !isDark,
                   colors: colors,
                   title: l10n.lightTheme,
                   icon: Icons.wb_sunny_outlined,
@@ -65,6 +68,7 @@ class AuthSettingsScreen extends StatelessWidget {
                   ).setLight(),
                 ),
                 DrawerBtn(
+                  isSelected: isDark,
                   colors: colors,
                   title: l10n.darkTheme,
                   icon: Icons.dark_mode_outlined,
@@ -79,7 +83,7 @@ class AuthSettingsScreen extends StatelessWidget {
         },
         title: l10n.theme,
         icon: Icons.wb_sunny_outlined,
-        rightText: isDark ? l10n.dark: l10n.light,
+        rightText: isDark ? l10n.dark : l10n.light,
         isLastItem: true,
       ),
     ];

@@ -125,9 +125,10 @@ class LabeledTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 15, bottom: 6),
+          padding: const EdgeInsets.only(bottom: 6),
           child: Row(
             children: [
+              SizedBox(width: 15),
               Text(
                 label ?? "",
                 style: TextStyle(
@@ -182,9 +183,10 @@ class LabeledPasswordField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 15, bottom: 6),
+          padding: const EdgeInsets.only(bottom: 6),
           child: Row(
             children: [
+              SizedBox(width: 15),
               Text(
                 label ?? "",
                 style: TextStyle(
@@ -248,13 +250,7 @@ class CustomPhoneField extends StatelessWidget {
       onChanged: (phone) {
         onChanged(phone.completeNumber);
       },
-<<<<<<< HEAD
-      style: TextStyle(color: Colors.black),
-      flagsButtonMargin: EdgeInsets.only(left: 10),
-      showCountryFlag: false,
-=======
       style: TextStyle(color: colors.onSecondary),
->>>>>>> main
     );
   }
 }
@@ -284,9 +280,10 @@ class LabeledPhoneField extends StatelessWidget {
       children: [
         if (label != null || hasError)
           Padding(
-            padding: const EdgeInsets.only(left: 15, bottom: 6),
+            padding: const EdgeInsets.only(bottom: 6),
             child: Row(
               children: [
+                SizedBox(width: 15),
                 if (label != null)
                   Text(
                     label!,

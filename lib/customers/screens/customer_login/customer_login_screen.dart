@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_pass_token_screen.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_signup_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -23,6 +24,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: CustomAppBar(),
@@ -37,7 +39,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Continue with email',
+                        l10n.continueWithEmail,
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,

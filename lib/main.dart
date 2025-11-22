@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeController = Provider.of<ThemeController>(context);
-    
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
@@ -110,7 +110,7 @@ class MyApp extends StatelessWidget {
             title: 'Caterfy',
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
-            
+
             // Localization configuration
             locale: localeProvider.locale,
             localizationsDelegates: const [
@@ -123,12 +123,12 @@ class MyApp extends StatelessWidget {
               Locale('en'), // English
               Locale('ar'), // Arabic
             ],
-            
+
             // Theme configuration
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: themeController.themeMode,
-            
+
             home: entryWidget,
           );
         },
