@@ -1,5 +1,5 @@
 import 'package:caterfy/settings_button.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 
 class CustomerSettingsScreen extends StatelessWidget {
@@ -35,7 +35,7 @@ class CustomerSettingsScreen extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      appBar: LogoAppBar(title: title),
+      appBar: CustomAppBar(title: title),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 19),
         physics: NeverScrollableScrollPhysics(),

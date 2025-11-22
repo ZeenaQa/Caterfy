@@ -2,10 +2,15 @@ import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/providers/locale_provider.dart';
+import 'package:caterfy/style/theme/dark_theme.dart';
 import 'package:caterfy/util/session.dart';
+import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/style/theme/light_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -25,20 +30,17 @@ void main() async {
     final session = data.session;
     final user = session?.user;
 
+    print(user);
+
     if (event == AuthChangeEvent.signedIn && user != null) {
-      // Check if email is confirmed
-      final emailConfirmedAt = user
-          .emailConfirmedAt; // or user.confirmedAt or user.emailConfirmedAt depending on SDK version
+      final emailConfirmedAt = user.emailConfirmedAt;
 
       if (emailConfirmedAt == null) {
-        // Email NOT verified → show VerifyEmail screen
         Navigator.pushReplacement(
           navigatorKey.currentContext!,
           MaterialPageRoute(builder: (_) => UnauthenticatedCustomer()),
         );
       } else {
-        // Email verified → normal flow
-
         final existing = await Supabase.instance.client
             .from('customers')
             .select()
@@ -59,14 +61,17 @@ void main() async {
         );
       }
 
-      final customerProvider = Provider.of<CustomerAuthProvider>(
-        navigatorKey.currentContext!,
-        listen: false,
-      );
-      customerProvider.setLoading(false);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = navigatorKey.currentContext;
+        if (ctx != null) {
+          Provider.of<CustomerAuthProvider>(
+            ctx,
+            listen: false,
+          ).setLoading(false);
+        }
+      });
     }
 
-    // SIGNED OUT
     if (event == AuthChangeEvent.signedOut) {
       Navigator.pushReplacement(
         navigatorKey.currentContext!,
@@ -77,9 +82,12 @@ void main() async {
 
   final entryWidget = await OnBoardingSkip.WidgetIntApp();
 
-  // session?.user.emailConfirmedAt != null
-
-  runApp(MyApp(entryWidget: entryWidget));
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeController(),
+      child: MyApp(entryWidget: entryWidget),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -88,17 +96,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Provider.of<ThemeController>(context);
+    
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => CustomerAuthProvider()),
         ChangeNotifierProvider(create: (_) => VendorAuthProvider()),
       ],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        title: 'Caterfy',
-        theme: lightTheme,
-        home: entryWidget,
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp(
+            title: 'Caterfy',
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            
+            // Localization configuration
+            locale: localeProvider.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'), // English
+              Locale('ar'), // Arabic
+            ],
+            
+            // Theme configuration
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeController.themeMode,
+            
+            home: entryWidget,
+          );
+        },
       ),
     );
   }

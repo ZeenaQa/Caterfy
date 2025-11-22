@@ -1,7 +1,7 @@
 import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showMyDialog(
+Future<bool?> showCustomDialog(
   BuildContext context, {
   required String title,
   required String content,
@@ -12,12 +12,10 @@ Future<void> showMyDialog(
   VoidCallback? onCancel,
 }) {
   final screenWidth = MediaQuery.of(context).size.width;
-
   return showGeneralDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
     transitionDuration: const Duration(milliseconds: 210),
     pageBuilder: (context, animation, secondaryAnimation) {
       bool isLoading = false;
@@ -54,7 +52,7 @@ Future<void> showMyDialog(
                         isCancel: true,
                         function: () {
                           if (!isLoading) {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(false);
                             if (onCancel != null) onCancel();
                           }
                         },
@@ -73,7 +71,7 @@ Future<void> showMyDialog(
                           await onConfirmAsync!();
 
                           if (context.mounted && popAfterAsync) {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(true);
                           }
                         },
                         color: Colors.green,
@@ -122,16 +120,18 @@ class DialogBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Expanded(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
           minimumSize: Size.zero,
           padding: EdgeInsets.symmetric(vertical: 10),
-          backgroundColor: isCancel ? Colors.transparent : Color(0xFF9359FF),
+          backgroundColor: isCancel ? Colors.transparent : colors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
-            side: BorderSide(color: Color(0xffe3e3e3), width: isCancel ? 1 : 0),
+            side: BorderSide(color: colors.outline, width: isCancel ? 1 : 0),
           ),
           shadowColor: Colors.transparent,
         ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
@@ -144,8 +144,8 @@ class DialogBtn extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  color: isCancel ? Color(0xff2c2c2c) : null,
-                  fontWeight: FontWeight.w500,
+                  color: isCancel ? colors.onSecondary : colors.onPrimary,
+                  fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
               ),

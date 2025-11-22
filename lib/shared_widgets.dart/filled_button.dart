@@ -27,10 +27,12 @@ class FilledBtn extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          backgroundColor: colors.primary,
+
           minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(50),
           ),
           padding: EdgeInsets.symmetric(
             vertical: verticalPadding,
@@ -45,7 +47,11 @@ class FilledBtn extends StatelessWidget {
               opacity: isLoading ? 0.0 : 1.0,
               child: Text(
                 title,
-                style: TextStyle(color: colors.onPrimary, fontSize: 15),
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: colors.onPrimary,
+                  fontSize: 16,
+                ),
               ),
             ),
             if (isLoading) ThreeBounce(),

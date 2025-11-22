@@ -1,5 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/shared_widgets.dart/logo_appbar.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pinput/pinput.dart';
@@ -31,7 +31,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
     );
 
     return Scaffold(
-      appBar: LogoAppBar(),
+      appBar: CustomAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 90.0, left: 35, right: 35),

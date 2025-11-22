@@ -51,6 +51,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -62,10 +63,14 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
           children: [
             const SizedBox(height: 60),
 
-            const Center(
+            Center(
               child: Text(
                 "Personal Information",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  color: colors.onSurface,
+                ),
               ),
             ),
 
@@ -98,18 +103,6 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
               hintText: "Enter your phone",
               errorText: auth.phoneError,
             ),
-
-            if (auth.signUpError != null)
-              Text(
-                auth.signUpError!,
-                style: const TextStyle(color: Colors.red),
-              ),
-
-            if (auth.successMessage != null)
-              Text(
-                auth.successMessage!,
-                style: const TextStyle(color: Colors.green),
-              ),
 
             Align(
               alignment: Alignment.centerRight,

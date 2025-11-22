@@ -23,6 +23,8 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
@@ -47,7 +49,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
               type: BottomNavigationBarType.fixed,
               selectedLabelStyle: TextStyle(fontSize: 12, height: 2),
               unselectedLabelStyle: TextStyle(fontSize: 12, height: 2),
-              backgroundColor: Colors.white,
+              backgroundColor: colors.surface,
               iconSize: 20,
               currentIndex: _currentIndex,
               onTap: (index) => setState(() => _currentIndex = index),
@@ -61,8 +63,8 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                       width: 15,
                       colorFilter: ColorFilter.mode(
                         _currentIndex == 0
-                            ? Color(0xFF9359FF)
-                            : Color(0xff757175),
+                            ? colors.primary
+                            : colors.onSurfaceVariant,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -84,7 +86,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                       padding: EdgeInsets.all(1),
                       decoration: BoxDecoration(
                         color: _currentIndex == 2
-                            ? Color(0xFF9359FF)
+                            ? colors.primary
                             : Colors.transparent,
                         shape: BoxShape.circle,
                       ),

@@ -16,6 +16,7 @@ class VendorAuthProvider extends ChangeNotifier {
   String? phoneError;
   String? passwordError;
   String? confirmPasswordError;
+  bool forgotPassLoading = false;
 
   // ---------------- Setters ----------------
   void setLoading(bool value) {
@@ -130,50 +131,56 @@ class VendorAuthProvider extends ChangeNotifier {
     required String businessName,
     required String businessType,
   }) async {
-    if (onlyPassword) {
-      if (!validatePasswordInfo(
+    try {
+      final isPasswordValid = validatePasswordInfo(
         password: password,
         confirmPassword: confirmPassword,
-      )) {
+      );
+
+      final isPersonalInfoValid = validatePersonalInfo(
+        email: email,
+        name: name,
+        phoneNumber: phoneNumber,
+      );
+
+      final isBusinessInfoValid = validateBusinessInfo(
+        businessName: businessName,
+        businessType: businessType,
+      );
+
+      if (onlyPassword) {
+        if (!isPasswordValid) {
+          return false;
+        }
+      } else if (!isPersonalInfoValid ||
+          !isBusinessInfoValid ||
+          !isPasswordValid) {
         return false;
       }
-    } else if (!validatePersonalInfo(
-          email: email,
-          name: name,
-          phoneNumber: phoneNumber,
-        ) ||
-        !validateBusinessInfo(
-          businessName: businessName,
-          businessType: businessType,
-        ) ||
-        !validatePasswordInfo(
-          password: password,
-          confirmPassword: confirmPassword,
-        )) {
-      return false;
-    }
-    try {
       setLoading(true);
-
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'display_name': name},
-      );
-
-      if (response.user != null) {
-        await supabase.from('vendors').insert({
-          'id': response.user!.id,
+        data: {
           'name': name,
-          'email': email,
-          'phone_number': phoneNumber,
+          'role': 'vendor',
           'business_name': businessName,
           'business_type': businessType,
-        });
+        },
+      );
+
+      final userID = response.user?.id;
+
+      if (userID != null) {
+        await supabase
+            .from('vendors')
+            .update({'phone': phoneNumber})
+            .eq('id', userID);
       }
 
       return true;
     } on AuthException catch (e) {
+      print('errrrrrorrrrrrrrrrrr $e');
       if (e.code == 'user_already_exists') {
         emailError = "is already registered.";
         notifyListeners();
@@ -182,6 +189,7 @@ class VendorAuthProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
+      print('errrrrrorrrrrrrrrrrr $e');
       setSignUpError(e.toString());
       return false;
     } finally {
@@ -190,7 +198,11 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Log In ----------------
-  Future<bool> logIn({required String email, required String password}) async {
+  Future<bool> logIn({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     emailError = email.isEmpty ? "Field can't be empty" : null;
     passwordError = password.isEmpty ? "Field can't be empty" : null;
 
@@ -252,7 +264,7 @@ class VendorAuthProvider extends ChangeNotifier {
       final vendor = await supabase
           .from('vendors')
           .select('id')
-          .eq('phone_number', phoneNumber)
+          .eq('phone', phoneNumber)
           .maybeSingle();
 
       if (vendor != null) return 'vendor';
@@ -260,7 +272,7 @@ class VendorAuthProvider extends ChangeNotifier {
       final customer = await supabase
           .from('customers')
           .select('id')
-          .eq('phone_number', phoneNumber)
+          .eq('phone', phoneNumber)
           .maybeSingle();
 
       if (customer != null) return 'customer';
@@ -306,6 +318,48 @@ class VendorAuthProvider extends ChangeNotifier {
       ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
     } finally {
       setLoading(false);
+    }
+  }
+
+  int? extractIntFromString(String message) {
+    final regex = RegExp(r'\d+');
+    final match = regex.firstMatch(message);
+    if (match != null) {
+      return int.tryParse(match.group(0)!);
+    }
+    return null;
+  }
+
+  Future<dynamic> sendForgotPasswordPassEmail({required String email}) async {
+    try {
+      final emailRes = validateEmail(email);
+      if (emailRes != null) {
+        emailError = emailRes;
+        notifyListeners();
+        return {'success': false, 'message': emailRes};
+      }
+
+      forgotPassLoading = true;
+      notifyListeners();
+      await supabase.auth.resetPasswordForEmail(email.trim());
+      return {'success': true, 'message': "Email sent successfully"};
+    } on AuthApiException catch (e) {
+      if (e.code == "over_email_send_rate_limit") {
+        final int? seconds = extractIntFromString(e.message);
+        final errMsg = "Please try again in $seconds seconds.";
+        emailError = errMsg;
+        return {
+          'success': false,
+          'message': "Please try again in $seconds seconds.",
+        };
+      }
+    } catch (e) {
+      emailError = 'Something went wrong $e';
+      notifyListeners();
+      return {'success': false, 'message': "Something went wrong"};
+    } finally {
+      forgotPassLoading = false;
+      notifyListeners();
     }
   }
 

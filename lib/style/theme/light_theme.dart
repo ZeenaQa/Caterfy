@@ -8,46 +8,36 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     foregroundColor: Colors.black87,
     elevation: 0,
   ),
-  iconTheme: const IconThemeData(color: Colors.black54),
-  inputDecorationTheme: InputDecorationTheme(
-    filled: true,
-    fillColor: Colors.grey.shade100,
-    hintStyle: const TextStyle(color: Colors.black45),
 
+  inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide.none,
+      borderSide: BorderSide(color: Color(0xffadadad), width: 1),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Color(0xffadadad), width: 1),
     ),
   ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      elevation: 0,
-      backgroundColor: const Color(0xFF9359FF),
-      foregroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-      textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      shadowColor: Colors.transparent,
-    ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
-  ),
-  textButtonTheme: TextButtonThemeData(
-    style: TextButton.styleFrom(
-      foregroundColor: const Color(0xFF9359FF),
-      textStyle: const TextStyle(decoration: TextDecoration.underline),
-    ),
-  ),
+
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
     primary: Color(0xFF9359FF),
-    primaryContainer: Color(0xFFEDE0FF),
-    secondary: Color(0xFF78909C),
-    secondaryContainer: Color(0xFFCFD8DC),
-    surface: Colors.white,
-    background: Colors.white,
-    error: Color(0xFFD32F2F),
+    onPrimaryFixedVariant: Color(0xfffff1ff),
     onPrimary: Colors.white,
-    onSecondary: Colors.black87,
-    onSurface: Color(0xFF414141),
+    secondary: Color(0xFF414141),
+    onSecondary: Color(0xff2c2c2c),
+    tertiary: Color(0xff00005f),
+    outline: Color(0xffe4e4e4),
+    onInverseSurface: Colors.white,
+    surface: Colors.white,
+    onSurface: Color(0xff333333),
+    onSurfaceVariant: Color.fromARGB(255, 139, 139, 139),
+    error: Color(0xfffd7a7a),
     onError: Colors.white,
   ),
 );
