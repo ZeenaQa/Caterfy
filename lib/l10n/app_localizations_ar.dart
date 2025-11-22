@@ -46,7 +46,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get continueWithPhoneNumber => 'الإستمرار باستخدام رقم الهاتف';
 
   @override
-  String get continueWithEmail => 'إستمرار عبر الإيميل';
+  String get continueWithEmail => 'إستمرار عبر البريد الإلكتروني';
 
   @override
   String get continueAsVendor => 'إستمرار كتاجر';
@@ -77,4 +77,50 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dark => 'داكن';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور';
+
+  @override
+  String get createAccount => 'إنشاء حساب';
+
+  @override
+  String get enterCodeSent => 'أدخل الرمز المرسل إلى بريدك الإلكتروني';
+
+  @override
+  String get didntReceiveCode => 'لم تستلم الرمز؟';
+
+  @override
+  String get resend => 'إعادة إرسال';
+
+  @override
+  String get verification => 'التحقق';
+
+  @override
+  String get cancelVerificationQuestion =>
+      'هل أنت متأكد أنك تريد إلغاء عملية التحقق؟';
+
+  @override
+  String get confirmCancel => 'إلغاء';
+
+  @override
+  String get stay => 'البقاء';
+  @override
+  String get name => 'الاسم';
+  @override
+  String get joinCaterfy => 'تسجيل مستخدم جديد';
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+  @override
+  String get passwordRequirementTitle =>
+      'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وتشمل:';
+
+  @override
+  String get passwordRequirementUppercase => '• حرف كبير واحد (A-Z)';
+
+  @override
+  String get passwordRequirementLowercase => '• حرف صغير واحد (a-z)';
+
+  @override
+  String get passwordRequirementNumber => '• رقم واحد (0-9)';
 }

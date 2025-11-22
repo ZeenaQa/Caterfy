@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_reset_pass_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
@@ -25,6 +26,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
     final pinController = TextEditingController();
+    final l10n = AppLocalizations.of(context);
 
     final defaultPinTheme = PinTheme(
       width: 55,
@@ -43,10 +45,10 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
 
         await showCustomDialog(
           context,
-          title: "Cancel verification",
-          content: "are you sure you want to cancel the verification process",
-          confirmText: "Cancel",
-          cancelText: "Stay",
+          title: l10n.verification,
+          content: l10n.cancelVerificationQuestion,
+          confirmText: l10n.cancel,
+          cancelText: l10n.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
@@ -64,7 +66,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Verification",
+                      l10n.verification,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 27,
@@ -73,7 +75,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      "Enter the code sent to your email",
+                      l10n.enterCodeSent,
                       style: TextStyle(fontSize: 18, color: Color(0xff96a4b2)),
                       textAlign: TextAlign.center,
                     ),
@@ -123,7 +125,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                     const SizedBox(height: 40),
                     if (!auth.tokenIsLoading) ...[
                       Text(
-                        "Didn't receive code?",
+                        l10n.didntReceiveCode,
                         style: TextStyle(
                           fontSize: 16,
                           color: Color(0xff8a50f6),
@@ -152,7 +154,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text("Resend", selectionColor: Colors.red),
+                        child: Text(l10n.resend, selectionColor: Colors.red),
                       ),
                     ] else
                       CustomThreeLineSpinner(),

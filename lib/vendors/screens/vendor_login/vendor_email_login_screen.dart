@@ -1,5 +1,3 @@
-import 'package:caterfy/customers/screens/customer_signup/customer_pass_token_screen.dart';
-
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';

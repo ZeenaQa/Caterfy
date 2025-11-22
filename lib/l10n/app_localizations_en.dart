@@ -77,4 +77,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dark => 'Dark';
+
+  @override
+  String get forgotPassword => 'Forgot Password';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get enterCodeSent => 'Enter the code sent to your email';
+
+  @override
+  String get didntReceiveCode => 'Didn’t receive code?';
+
+  @override
+  String get resend => 'Resend';
+
+  @override
+  String get verification => 'Verification';
+
+  @override
+  String get cancelVerificationQuestion =>
+      'Are you sure you want to cancel the verification process?';
+
+  @override
+  String get confirmCancel => 'Cancel';
+
+  @override
+  String get stay => 'Stay';
+
+  @override
+  String get name => 'Name';
+  @override
+  String get joinCaterfy => 'Join Caterfy';
+  @override
+  String get confirmPassword => 'Confirm Password';
+  @override
+  String get passwordRequirementTitle =>
+      'Password must be at least 8 characters and should include:';
+
+  @override
+  String get passwordRequirementUppercase => '• 1 uppercase letter (A-Z)';
+
+  @override
+  String get passwordRequirementLowercase => '• 1 lowercase letter (a-z)';
+
+  @override
+  String get passwordRequirementNumber => '• 1 number (0-9)';
 }

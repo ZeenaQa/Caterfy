@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
@@ -29,6 +30,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
     final pinController = TextEditingController();
+    final l10n = AppLocalizations.of(context);
 
     final defaultPinTheme = PinTheme(
       width: 55,

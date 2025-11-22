@@ -53,7 +53,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                           customerAuth.clearEmailError();
                         },
                         hint: 'example@gmail.com',
-                        label: 'Email',
+                        label: l10n.email,
                         errorText: customerAuth.emailError,
                       ),
                       SizedBox(height: 15),
@@ -64,7 +64,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                           customerAuth.clearPassError();
                         },
                         hint: ('****************'),
-                        label: 'Password',
+                        label: l10n.password,
                         errorText: customerAuth.passwordError,
                       ),
 
@@ -96,7 +96,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                                   );
                                 }
                               },
-                              title: "Forgot password",
+                              title: l10n.forgotPassword,
                               titleSize: 13,
                               lighterBorder: true,
                             ),
@@ -117,7 +117,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                                 ),
                               );
                             },
-                            title: "Create account",
+                            title: l10n.createAccount,
                             titleSize: 13,
                             lighterBorder: true,
                           ),
@@ -128,7 +128,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                 ),
               ),
               FilledBtn(
-                title: "Log In",
+                title: l10n.login,
                 onPressed: () async {
                   await customerAuth.logIn(
                     email: email.trim(),

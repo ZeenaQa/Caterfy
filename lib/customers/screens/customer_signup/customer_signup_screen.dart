@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_email_token_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
@@ -23,8 +24,9 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: CustomAppBar(title: "Welcome to Caterfy", titleSize: 14),
+      appBar: CustomAppBar(titleSize: 14),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -36,7 +38,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Continue with email',
+                        l10n.joinCaterfy,
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -50,7 +52,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                           name = val;
                         },
                         hint: 'First and Last Name',
-                        label: 'Name',
+                        label: l10n.name,
                         errorText: auth.nameError,
                       ),
                       SizedBox(height: 15),
@@ -61,7 +63,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                           email = val;
                         },
                         hint: 'example@gmail.com',
-                        label: 'Email',
+                        label: l10n.email,
                         keyboardType: TextInputType.emailAddress,
                         errorText: auth.emailError,
                       ),
@@ -73,7 +75,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                           password = val;
                         },
                         hint: '****************',
-                        label: 'Password',
+                        label: l10n.password,
                         errorText: auth.passwordError,
                       ),
                       SizedBox(height: 15),
@@ -84,7 +86,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                           confirmPass = val;
                         },
                         hint: '****************',
-                        label: 'Confirm Password',
+                        label: l10n.confirmPassword,
                         errorText: auth.confirmPasswordError,
                       ),
                       SizedBox(height: 10),
@@ -95,7 +97,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Password must be at least 8 characters and should include:',
+                              l10n.passwordRequirementTitle,
                               style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 11,
@@ -103,21 +105,21 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                             ),
                             SizedBox(height: 15),
                             Text(
-                              '• 1 uppercase letter (A-Z)',
+                              l10n.passwordRequirementUppercase,
                               style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 11,
                               ),
                             ),
                             Text(
-                              '• 1 lowercase letter (a-z)',
+                              l10n.passwordRequirementLowercase,
                               style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 11,
                               ),
                             ),
                             Text(
-                              '• 1 number (0-9)',
+                              l10n.passwordRequirementNumber,
                               style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 11,
@@ -132,7 +134,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
               ),
               SizedBox(height: 15),
               FilledBtn(
-                title: "Sign Up",
+                title: l10n.signup,
                 onPressed: () async {
                   final tempEmail = email;
                   final tempPass = password;

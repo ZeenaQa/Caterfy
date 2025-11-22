@@ -2,7 +2,7 @@
   "@@locale": "ar",
   "appTitle": "كاترفاي",
   "welcome": "مرحبا بك في كاترفاي",
-  "heyThere" : "مرحباً!",
+  "heyThere": "مرحباً!",
   "welcomeInstruction": "قم بتسجيل الدخول او الاشتراك لبدء استخدام كاترفاي!",
   "or": "أو",
   "login": "تسجيل الدخول",
@@ -12,7 +12,7 @@
   "phoneNumber": "رقم الهاتف",
   "continueWithGoogle": "إستمرار عبر جوجل",
   "continueWithPhoneNumber": "الإستمرار باستخدام رقم الهاتف",
-  "continueWithEmail": "إستمرار عبر الإيميل",
+  "continueWithEmail": "إستمرار عبر البريد الإلكتروني",
   "continueAsVendor": "إستمرار كتاجر",
   "settings": "الإعدادات",
   "language": "اللغة",
@@ -22,5 +22,25 @@
   "lightTheme": "المظهر الفاتح",
   "darkTheme": "المظهر الداكن",
   "light": "فاتح",
-  "dark": "داكن"
+  "dark": "داكن",
+  "forgotPassword": "نسيت كلمة المرور",
+  "createAccount": "إنشاء حساب",
+  "enterCodeSent": "أدخل الرمز المرسل إلى بريدك الإلكتروني",
+  "didntReceiveCode": "لم تستلم الرمز؟",
+  "resend": "إعادة إرسال",
+  "verification": "التحقق",
+  "cancelVerificationQuestion": "هل أنت متأكد أنك تريد إلغاء عملية التحقق؟",
+  "confirmCancel": "إلغاء",
+  "stay": "البقاء",
+  "name": 'الإسم',
+  "joinCaterfy": "تسجيل مستخدم جديد",
+  "confirmPassword" :'تأكيد كلمة المرور',
+  "passwordRequirementTitle": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وتشمل:",
+  "passwordRequirementUppercase": "• حرف كبير واحد (A-Z)",
+  "passwordRequirementLowercase": "• حرف صغير واحد (a-z)",
+  "passwordRequirementNumber": "• رقم واحد (0-9)",
+
+
+
+
 }

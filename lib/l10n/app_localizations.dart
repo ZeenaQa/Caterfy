@@ -235,6 +235,69 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark'**
   String get dark;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgotPassword;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @enterCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code sent to your email'**
+  String get enterCodeSent;
+
+  /// No description provided for @didntReceiveCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn’t receive code?'**
+  String get didntReceiveCode;
+
+  /// No description provided for @resend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get resend;
+
+  /// No description provided for @verification.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get verification;
+
+  /// No description provided for @cancelVerificationQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel the verification process?'**
+  String get cancelVerificationQuestion;
+
+  /// No description provided for @confirmCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get confirmCancel;
+
+  /// No description provided for @stay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get stay;
+
+  String get name;
+  String get joinCaterfy;
+
+  String get confirmPassword;
+  String get passwordRequirementTitle;
+  String get passwordRequirementUppercase;
+  String get passwordRequirementLowercase;
+  String get passwordRequirementNumber;
 }
 
 class _AppLocalizationsDelegate
