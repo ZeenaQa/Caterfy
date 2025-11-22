@@ -32,13 +32,13 @@ class CustomerHomeSection extends StatelessWidget {
                     Icon(
                       FontAwesomeIcons.locationDot,
                       size: 16,
-                      color: colors.surface,
+                      color: colors.onPrimary,
                     ),
                     RichText(
                       text: TextSpan(
                         text: 'Deliver to ',
                         style: TextStyle(
-                          color: colors.surface,
+                          color: colors.onPrimary,
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
                         ),

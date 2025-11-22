@@ -2,7 +2,9 @@ import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/style/theme/dark_theme.dart';
 import 'package:caterfy/util/session.dart';
+import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/style/theme/light_theme.dart';
 import 'package:flutter/material.dart';
@@ -56,11 +58,15 @@ void main() async {
         );
       }
 
-      final customerProvider = Provider.of<CustomerAuthProvider>(
-        navigatorKey.currentContext!,
-        listen: false,
-      );
-      customerProvider.setLoading(false);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = navigatorKey.currentContext;
+        if (ctx != null) {
+          Provider.of<CustomerAuthProvider>(
+            ctx,
+            listen: false,
+          ).setLoading(false);
+        }
+      });
     }
 
     if (event == AuthChangeEvent.signedOut) {
@@ -73,7 +79,12 @@ void main() async {
 
   final entryWidget = await OnBoardingSkip.WidgetIntApp();
 
-  runApp(MyApp(entryWidget: entryWidget));
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeController(),
+      child: MyApp(entryWidget: entryWidget),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -82,6 +93,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Provider.of<ThemeController>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CustomerAuthProvider()),
@@ -92,6 +104,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Caterfy',
         theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: themeController.themeMode,
         home: entryWidget,
       ),
     );

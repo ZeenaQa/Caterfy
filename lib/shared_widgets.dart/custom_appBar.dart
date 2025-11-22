@@ -7,11 +7,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleSize = 20,
     PreferredSize? bottom,
     this.onPressed,
+    this.noBackButton = false,
   });
 
   final String? title;
   final double titleSize;
   final VoidCallback? onPressed;
+  final bool noBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +26,31 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leadingWidth: 74,
       titleSpacing: -3,
-      leading: IconButton(
-        padding: EdgeInsets.zero,
-        icon: Material(
-          color: colors.surface,
-          shape: CircleBorder(side: BorderSide(color: colors.tertiary)),
-          clipBehavior: Clip.antiAlias,
-          child: IconTheme(
-            data: IconThemeData(size: 22),
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: Center(child: BackButtonIcon()),
+      leading: noBackButton
+          ? null
+          : IconButton(
+              padding: EdgeInsets.zero,
+              icon: Material(
+                color: colors.onInverseSurface,
+                shape: CircleBorder(side: BorderSide(color: colors.outline)),
+                clipBehavior: Clip.antiAlias,
+                child: IconTheme(
+                  data: IconThemeData(size: 22, color: colors.onSurface),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Center(child: BackButtonIcon()),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                if (onPressed != null) {
+                  onPressed!();
+                  return;
+                }
+                Navigator.of(context).maybePop();
+              },
             ),
-          ),
-        ),
-        onPressed: () {
-          if (onPressed != null) {
-            onPressed!();
-            return;
-          }
-          Navigator.of(context).maybePop();
-        },
-      ),
     );
   }
 

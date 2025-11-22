@@ -1,6 +1,8 @@
 import 'package:caterfy/customers/screens/customer_login/customer_login_screen.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_phone_auth_screen.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
+import 'package:caterfy/util/theme_controller.dart';
+import 'package:caterfy/util/wavy_border_shape.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_login_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ class SelectionScreen extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
+
     void handleNavigation(String dest) {
       if (customerAuth.isGoogleLoading) return;
       vendorAuth.clearErrors();
@@ -45,31 +48,41 @@ class SelectionScreen extends StatelessWidget {
       }
     }
 
+    final topPadding = MediaQuery.of(context).padding.top + 50;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  SvgPicture.asset('assets/icons/rounded_logo.svg', height: 80),
-                  SizedBox(height: 20),
-                  Text(
-                    "Welcome\nto Caterfy",
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.w900,
-                      color: Color(0xff00005f),
-                      height: 1.2,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.only(top: topPadding),
+              height: 320 + topPadding,
+              width: double.infinity,
+              decoration: ShapeDecoration(
+                color: Color(0xfffff1ff),
+                shape: WavyShapeBorder(waveHeight: 15),
               ),
-              Column(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SvgPicture.asset(
+                  'assets/icons/auth_header_art.svg',
+                  height: 250,
+                ),
+              ),
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 40 + bottomPadding),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     "Hey there!",
@@ -79,7 +92,7 @@ class SelectionScreen extends StatelessWidget {
                       color: colors.onSurface,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     "Log in or sign up to start ordering with Caterfy!",
                     style: TextStyle(
@@ -87,9 +100,9 @@ class SelectionScreen extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   if (customerAuth.isGoogleLoading)
-                    Container(
+                    const Padding(
                       padding: EdgeInsets.symmetric(vertical: 3),
                       child: CustomThreeLineSpinner(),
                     ),
@@ -130,7 +143,7 @@ class SelectionScreen extends StatelessWidget {
                           style: TextStyle(color: colors.onSurfaceVariant),
                         ),
                       ),
-                      Expanded(
+                      const Expanded(
                         child: Divider(color: Colors.grey, thickness: 1),
                       ),
                     ],
@@ -144,9 +157,9 @@ class SelectionScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

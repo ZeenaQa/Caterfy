@@ -48,7 +48,7 @@ class OutlinedBtn extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
           ),
           side: BorderSide(
-            color: lighterBorder ? colors.tertiary : colors.onSurfaceVariant,
+            color: lighterBorder ? colors.outline : colors.onSurfaceVariant,
             width: 1,
           ),
         ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),

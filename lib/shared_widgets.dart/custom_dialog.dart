@@ -133,7 +133,7 @@ class DialogBtn extends StatelessWidget {
           backgroundColor: isCancel ? Colors.transparent : colors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
-            side: BorderSide(color: colors.tertiary, width: isCancel ? 1 : 0),
+            side: BorderSide(color: colors.outline, width: isCancel ? 1 : 0),
           ),
           shadowColor: Colors.transparent,
         ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),

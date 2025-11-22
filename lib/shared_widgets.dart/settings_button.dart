@@ -27,7 +27,7 @@ class SettingsButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: isLastItem
               ? null
-              : Border(bottom: BorderSide(color: colors.tertiary)),
+              : Border(bottom: BorderSide(color: colors.outline)),
         ),
         child: Row(
           children: [

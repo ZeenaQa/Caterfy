@@ -5,34 +5,38 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: const Color(0xFF121212),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFF121212),
-    foregroundColor: Colors.white,
+    foregroundColor: Color(0xFFE1E1E1),
     elevation: 0,
   ),
+
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: Color(0xffadadad), width: 1),
+      borderSide: const BorderSide(color: Color(0xFF404040), width: 1),
     ),
-    enabledBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
-      borderSide: BorderSide(color: Color(0xffe2e2e2), width: 1),
+      borderSide: BorderSide(color: Color(0xFF2C2C2C), width: 1),
     ),
-    focusedBorder: OutlineInputBorder(
+    focusedBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
-      borderSide: BorderSide(color: Color(0xffadadad), width: 1),
+      borderSide: BorderSide(color: Color(0xFF606060), width: 1),
     ),
   ),
+
   colorScheme: const ColorScheme(
     brightness: Brightness.dark,
-    primary: Color(0xFF9359FF),
-    onPrimary: Colors.white,
-    secondary: Color(0xFF414141),
-    onSecondary: Color(0xff2c2c2c),
-    tertiary: Color(0xffe4e4e4),
-    surface: Colors.white,
-    onSurface: Color(0xff333333),
-    onSurfaceVariant: Color.fromARGB(255, 139, 139, 139),
-    error: Color(0xfffd7a7a),
-    onError: Colors.white,
+    primary: Color(0xFF7944DB),
+    onPrimary: Color.fromARGB(255, 236, 236, 236),
+    secondary: Color(0xFFB8B8B8),
+    onSecondary: Color(0xFFE1E1E1),
+    tertiary: Color(0xFFd4c1ff),
+    outline: Color(0xFF2C2C2C),
+    onInverseSurface: Color(0xFF121212),
+    surface: Color(0xFF1E1E1E),
+    onSurface: Color(0xFFE1E1E1),
+    onSurfaceVariant: Color(0xFF9E9E9E),
+    error: Color(0xFFCF6679),
+    onError: Color(0xFF1E1E1E),
   ),
 );
