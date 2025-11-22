@@ -1,0 +1,95 @@
+import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/locale_provider.dart';
+import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
+import 'package:caterfy/shared_widgets.dart/drawer_button.dart';
+import 'package:caterfy/shared_widgets.dart/settings_button.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
+import 'package:caterfy/util/theme_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class AuthSettingsScreen extends StatelessWidget {
+  const AuthSettingsScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final locale = Provider.of<LocaleProvider>(context).locale;
+    final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
+    final List<Widget> items = [
+      SizedBox(height: 10),
+      SettingsButton(
+        onTap: () {
+          openDrawer(
+            context,
+            child: Column(
+              children: [
+                DrawerBtn(
+                  colors: colors,
+                  title: "العربية",
+                  onPressed: () {
+                    context.read<LocaleProvider>().setLocale(Locale('en'));
+                    context.read<LocaleProvider>().toggleLocale();
+                  },
+                ),
+                DrawerBtn(
+                  colors: colors,
+                  title: "English",
+                  onPressed: () {
+                    context.read<LocaleProvider>().setLocale(Locale('ar'));
+                    context.read<LocaleProvider>().toggleLocale();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        title: l10n.language,
+        icon: Icons.language_outlined,
+        rightText: locale.languageCode == "en" ? "English" : "العربية",,
+      ),
+      SettingsButton(
+        onTap: () {
+          openDrawer(
+            context,
+            child: Column(
+              children: [
+                DrawerBtn(
+                  colors: colors,
+                  title: "Light theme",
+                  icon: Icons.wb_sunny_outlined,
+                  onPressed: () => Provider.of<ThemeController>(
+                    context,
+                    listen: false,
+                  ).setLight(),
+                ),
+                DrawerBtn(
+                  colors: colors,
+                  title: "Dark theme",
+                  icon: Icons.dark_mode_outlined,
+                  onPressed: () => Provider.of<ThemeController>(
+                    context,
+                    listen: false,
+                  ).setDark(),
+                ),
+              ],
+            ),
+          );
+        },
+        title: 'Theme',
+        icon: Icons.wb_sunny_outlined,
+        rightText: "Light",
+        isLastItem: true,
+      ),
+    ];
+    return Scaffold(
+      appBar: CustomAppBar(title: "Settings"),
+      body: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 19),
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) => items[index],
+      ),
+    );
+  }
+}

@@ -2,12 +2,15 @@ import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/style/theme/dark_theme.dart';
 import 'package:caterfy/util/session.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/style/theme/light_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -94,19 +97,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeController = Provider.of<ThemeController>(context);
+    
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => CustomerAuthProvider()),
         ChangeNotifierProvider(create: (_) => VendorAuthProvider()),
       ],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        title: 'Caterfy',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: themeController.themeMode,
-        home: entryWidget,
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp(
+            title: 'Caterfy',
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            
+            // Localization configuration
+            locale: localeProvider.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'), // English
+              Locale('ar'), // Arabic
+            ],
+            
+            // Theme configuration
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeController.themeMode,
+            
+            home: entryWidget,
+          );
+        },
       ),
     );
   }

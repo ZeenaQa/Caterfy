@@ -8,9 +8,23 @@ class ThemeController extends ChangeNotifier {
     _loadTheme();
   }
 
+  Future<void> setLight() async {
+    themeMode = ThemeMode.light;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isDark', false);
+    notifyListeners();
+  }
+
+  /// Set to DARK
+  Future<void> setDark() async {
+    themeMode = ThemeMode.dark;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isDark', true);
+    notifyListeners();
+  }
+
   void toggleTheme() async {
-    themeMode =
-        themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    themeMode = themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isDark', themeMode == ThemeMode.dark);

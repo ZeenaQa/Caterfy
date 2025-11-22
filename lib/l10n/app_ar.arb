@@ -1,0 +1,22 @@
+{
+  "@@locale": "ar",
+  "appTitle": "كاترفاي",
+  "welcome": "مرحبا بك في كاترفاي",
+  "heyThere" : "مرحباً!",
+  "welcomeInstruction": "قم بتسجيل الدخول او الاشتراك لبدء استخدام كاترفاي!",
+  "or": "أو",
+  "login": "تسجيل الدخول",
+  "signup": "إنشاء حساب",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "phoneNumber": "رقم الهاتف",
+  "continueWithGoogle": "إستمرار عبر جوجل",
+  "continueWithPhoneNumber": "الإستمرار باستخدام رقم الهاتف",
+  "continueWithEmail": "إستمرار عبر الإيميل",
+  "continueAsVendor": "إستمرار كتاجر",
+
+  "settings": "الإعدادات",
+  "language": "اللغة",
+  "cancel": "إلغاء",
+  "confirm": "التأكيد"
+}
