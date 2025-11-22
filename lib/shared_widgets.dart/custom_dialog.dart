@@ -12,12 +12,10 @@ Future<bool?> showCustomDialog(
   VoidCallback? onCancel,
 }) {
   final screenWidth = MediaQuery.of(context).size.width;
-  final colors = Theme.of(context).colorScheme;
   return showGeneralDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: colors.onSurface,
     transitionDuration: const Duration(milliseconds: 210),
     pageBuilder: (context, animation, secondaryAnimation) {
       bool isLoading = false;

@@ -14,9 +14,13 @@
   "continueWithPhoneNumber": "الإستمرار باستخدام رقم الهاتف",
   "continueWithEmail": "إستمرار عبر الإيميل",
   "continueAsVendor": "إستمرار كتاجر",
-
   "settings": "الإعدادات",
   "language": "اللغة",
   "cancel": "إلغاء",
-  "confirm": "التأكيد"
+  "confirm": "التأكيد",
+  "theme": "المظهر",
+  "lightTheme": "المظهر الفاتح",
+  "darkTheme": "المظهر الداكن",
+  "light": "فاتح",
+  "dark": "داكن"
 }

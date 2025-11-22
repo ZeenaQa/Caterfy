@@ -17,5 +17,10 @@
   "settings": "Settings",
   "language": "Language",
   "cancel": "Cancel",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "theme": "Theme",
+  "lightTheme": "Light theme",
+  "darkTheme": "Dark theme",
+  "light": "Light",
+  "dark": "Dark"
 }

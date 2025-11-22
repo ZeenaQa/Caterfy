@@ -12,7 +12,6 @@ Future<T?> openDrawer<T>(
 }) {
   return showModalBottomSheet<T>(
     context: context,
-    barrierColor: const Color.fromARGB(101, 0, 0, 0),
     isDismissible: isDismissible,
     enableDrag: enableDrag,
     isScrollControlled: true,

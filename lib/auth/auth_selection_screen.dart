@@ -3,6 +3,7 @@ import 'package:caterfy/customers/screens/customer_login/customer_login_screen.d
 import 'package:caterfy/customers/screens/customer_login/customer_phone_auth_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
+import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/util/wavy_border_shape.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_login_screen.dart';
@@ -18,6 +19,8 @@ class SelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = context.watch<ThemeController>();
+    final isDark = themeController.themeMode == ThemeMode.dark;
     final colors = Theme.of(context).colorScheme;
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
@@ -54,7 +57,6 @@ class SelectionScreen extends StatelessWidget {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Positioned(
@@ -68,7 +70,7 @@ class SelectionScreen extends StatelessWidget {
                   height: 320 + topPadding,
                   width: double.infinity,
                   decoration: ShapeDecoration(
-                    color: Color(0xfffff1ff),
+                    color: colors.onPrimaryFixedVariant,
                     shape: WavyShapeBorder(waveHeight: 15),
                   ),
                   child: Align(
@@ -76,7 +78,7 @@ class SelectionScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         SvgPicture.asset(
-                          'assets/icons/auth_header_art.svg',
+                          'assets/icons/${isDark ? 'auth_header_art_dark.svg' : 'auth_header_art.svg'}',
                           height: 250,
                         ),
                       ],
@@ -97,10 +99,7 @@ class SelectionScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              AuthSettingsScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => AuthSettingsScreen()),
                       );
                     },
                     child: Icon(Icons.settings_outlined, size: 23),

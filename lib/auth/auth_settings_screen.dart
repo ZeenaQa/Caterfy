@@ -13,6 +13,8 @@ class AuthSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = Provider.of<LocaleProvider>(context).locale;
+    final themeController = context.watch<ThemeController>();
+    final isDark = themeController.themeMode == ThemeMode.dark;
     final colors = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
     final List<Widget> items = [
@@ -45,7 +47,7 @@ class AuthSettingsScreen extends StatelessWidget {
         },
         title: l10n.language,
         icon: Icons.language_outlined,
-        rightText: locale.languageCode == "en" ? "English" : "العربية",,
+        rightText: locale.languageCode == "en" ? "English" : "العربية",
       ),
       SettingsButton(
         onTap: () {
@@ -55,7 +57,7 @@ class AuthSettingsScreen extends StatelessWidget {
               children: [
                 DrawerBtn(
                   colors: colors,
-                  title: "Light theme",
+                  title: l10n.lightTheme,
                   icon: Icons.wb_sunny_outlined,
                   onPressed: () => Provider.of<ThemeController>(
                     context,
@@ -64,7 +66,7 @@ class AuthSettingsScreen extends StatelessWidget {
                 ),
                 DrawerBtn(
                   colors: colors,
-                  title: "Dark theme",
+                  title: l10n.darkTheme,
                   icon: Icons.dark_mode_outlined,
                   onPressed: () => Provider.of<ThemeController>(
                     context,
@@ -75,14 +77,14 @@ class AuthSettingsScreen extends StatelessWidget {
             ),
           );
         },
-        title: 'Theme',
+        title: l10n.theme,
         icon: Icons.wb_sunny_outlined,
-        rightText: "Light",
+        rightText: isDark ? l10n.dark: l10n.light,
         isLastItem: true,
       ),
     ];
     return Scaffold(
-      appBar: CustomAppBar(title: "Settings"),
+      appBar: CustomAppBar(title: l10n.settings),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 19),
         physics: NeverScrollableScrollPhysics(),
