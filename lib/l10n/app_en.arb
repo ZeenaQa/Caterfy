@@ -10,6 +10,7 @@
   "email": "Email",
   "password": "Password",
   "phoneNumber": "Phone Number",
+  "enterPhoneNumber": "Enter phone number",
   "continueWithGoogle": "Continue with Google",
   "continueWithPhoneNumber": "Continue with phone number",
   "continueWithEmail": "Continue with email",
@@ -71,9 +72,16 @@
   "logOut": "Log out",
   "logOutConfirmation": "Are you sure you want to log out?",
   "yourOrders": "Your orders",
+  "orders": "Orders",
   "vouchers": "Vouchers",
   "getHelp": "Get help",
   "aboutApp": "About app",
   "caterfyPay": "Caterfy pay",
-  "viewDetails": "View details"
+  "viewDetails": "View details",
+  "firstLastName" : "First and last name",
+  "jd" : "jd",
+  "account": "Account",
+  "home" : "Home",
+  "noOrdersYet": "No orders yet",
+  "noOrdersTip" : "When you place your first order, it will appear here."
 }

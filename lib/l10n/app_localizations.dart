@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'Phone Number'**
   String get phoneNumber;
 
+  /// No description provided for @enterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
+  String get enterPhoneNumber;
+
   /// No description provided for @continueWithGoogle.
   ///
   /// In en, this message translates to:
@@ -524,6 +530,12 @@ abstract class AppLocalizations {
   /// **'Your orders'**
   String get yourOrders;
 
+  /// No description provided for @orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get orders;
+
   /// No description provided for @vouchers.
   ///
   /// In en, this message translates to:
@@ -553,6 +565,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View details'**
   String get viewDetails;
+
+  /// No description provided for @firstLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'First and last name'**
+  String get firstLastName;
+
+  /// No description provided for @jd.
+  ///
+  /// In en, this message translates to:
+  /// **'jd'**
+  String get jd;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @noOrdersYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders yet'**
+  String get noOrdersYet;
+
+  /// No description provided for @noOrdersTip.
+  ///
+  /// In en, this message translates to:
+  /// **'When you place your first order, it will appear here.'**
+  String get noOrdersTip;
 }
 
 class _AppLocalizationsDelegate

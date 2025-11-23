@@ -102,7 +102,7 @@ class CustomerAccountSection extends StatelessWidget {
                         ),
                         SizedBox(width: 15),
                         Text(
-                          "0.00 JD",
+                          "0.00 ${l10n.jd}",
                           style: TextStyle(
                             color: colors.primary,
                             fontSize: 18,

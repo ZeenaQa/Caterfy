@@ -52,7 +52,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                           auth.clearNameError();
                           name = val;
                         },
-                        hint: 'First and Last Name',
+                        hint: l10n.firstLastName,
                         label: l10n.name,
                         errorText: auth.nameError,
                       ),

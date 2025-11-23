@@ -1,3 +1,4 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -7,6 +8,7 @@ class CustomerNoOrders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Expanded(
       child: Center(
@@ -22,7 +24,7 @@ class CustomerNoOrders extends StatelessWidget {
             ),
             SizedBox(height: 15),
             Text(
-              "No orders yet",
+              l10n.noOrdersYet,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -30,7 +32,7 @@ class CustomerNoOrders extends StatelessWidget {
               ),
             ),
             Text(
-              "When you place your first order, it will appear here.",
+              l10n.noOrdersTip,
               style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12),
             ),
           ],

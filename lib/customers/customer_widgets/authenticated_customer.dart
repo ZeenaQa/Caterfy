@@ -1,3 +1,4 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,6 +25,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.dark,
@@ -69,14 +71,14 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                       ),
                     ),
                   ),
-                  label: 'Home',
+                  label: l10n.home,
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 1),
                     child: Icon(Icons.receipt_outlined),
                   ),
-                  label: 'Orders',
+                  label: l10n.orders,
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
@@ -98,7 +100,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                       ),
                     ),
                   ),
-                  label: 'Account',
+                  label: l10n.account,
                 ),
               ],
             ),

@@ -40,6 +40,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get phoneNumber => 'رقم الهاتف';
 
   @override
+  String get enterPhoneNumber => 'أدخل رقم الهاتف';
+
+  @override
   String get continueWithGoogle => 'إستمرار عبر جوجل';
 
   @override
@@ -221,13 +224,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get logOut => 'تسجيل الخروج';
 
   @override
-  String get logOutConfirmation => 'هل أنت متأكد أنك تريد تسجيل الخروج؟';
+  String get logOutConfirmation => 'هل أنت متأكد من أنك تريد تسجيل الخروج؟';
 
   @override
-  String get yourOrders => 'طلباتي';
+  String get yourOrders => 'طلباتي السابقة';
 
   @override
-  String get vouchers => 'قسائم';
+  String get orders => 'طلباتك';
+
+  @override
+  String get vouchers => 'القسائم';
 
   @override
   String get getHelp => 'الحصول على المساعدة';
@@ -236,8 +242,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutApp => 'عن التطبيق';
 
   @override
-  String get caterfyPay => 'كاش كاترفاي';
+  String get caterfyPay => 'محفظة Caterfy';
 
   @override
   String get viewDetails => 'عرض التفاصيل';
+
+  @override
+  String get firstLastName => 'الإسم الأول والأخير';
+
+  @override
+  String get jd => 'د.أ';
+
+  @override
+  String get account => 'الحساب';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get noOrdersYet => 'لا توجد طلبات';
+
+  @override
+  String get noOrdersTip => 'عندما تقوم بالطلب سيظهر طلبك هنا.';
 }

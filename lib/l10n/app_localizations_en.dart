@@ -40,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get phoneNumber => 'Phone Number';
 
   @override
+  String get enterPhoneNumber => 'Enter phone number';
+
+  @override
   String get continueWithGoogle => 'Continue with Google';
 
   @override
@@ -228,6 +231,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourOrders => 'Your orders';
 
   @override
+  String get orders => 'Orders';
+
+  @override
   String get vouchers => 'Vouchers';
 
   @override
@@ -241,4 +247,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewDetails => 'View details';
+
+  @override
+  String get firstLastName => 'First and last name';
+
+  @override
+  String get jd => 'jd';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get noOrdersYet => 'No orders yet';
+
+  @override
+  String get noOrdersTip =>
+      'When you place your first order, it will appear here.';
 }

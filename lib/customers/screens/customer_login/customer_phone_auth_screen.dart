@@ -31,7 +31,6 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
           children: [
             LabeledPhoneField(
               label: l10n.phoneNumber,
-              hintText: 'Enter your phone number',
               onChanged: (value) {
                 phoneNumber = value.trim();
                 customerAuth.phoneNumberError = null;

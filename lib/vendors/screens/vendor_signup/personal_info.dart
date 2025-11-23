@@ -87,7 +87,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                   name = v;
                   auth.clearNameError();
                 },
-                hint: 'First and Last Name',
+                hint: l10n.firstLastName,
                 label: l10n.name,
                 errorText: auth.nameError,
               ),
