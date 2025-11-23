@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @didntReceiveCode.
   ///
   /// In en, this message translates to:
-  /// **'Didn’t receive code?'**
+  /// **'Didn\'t receive code?'**
   String get didntReceiveCode;
 
   /// No description provided for @resend.
@@ -290,14 +290,269 @@ abstract class AppLocalizations {
   /// **'Stay'**
   String get stay;
 
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
   String get name;
+
+  /// No description provided for @joinCaterfy.
+  ///
+  /// In en, this message translates to:
+  /// **'Join Caterfy'**
   String get joinCaterfy;
 
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
   String get confirmPassword;
+
+  /// No description provided for @passwordRequirementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters and should include:'**
   String get passwordRequirementTitle;
+
+  /// No description provided for @passwordRequirementUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'• 1 uppercase letter (A-Z)'**
   String get passwordRequirementUppercase;
+
+  /// No description provided for @passwordRequirementLowercase.
+  ///
+  /// In en, this message translates to:
+  /// **'• 1 lowercase letter (a-z)'**
   String get passwordRequirementLowercase;
+
+  /// No description provided for @passwordRequirementNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'• 1 number (0-9)'**
   String get passwordRequirementNumber;
+
+  /// No description provided for @invalidOrExpiredCode.
+  ///
+  /// In en, this message translates to:
+  /// **'The verification code is invalid or has expired'**
+  String get invalidOrExpiredCode;
+
+  /// No description provided for @emailVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verified successfully'**
+  String get emailVerified;
+
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPassword;
+
+  /// No description provided for @passwordResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset, sign in with the new password!'**
+  String get passwordResetSuccess;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong.'**
+  String get somethingWentWrong;
+
+  /// No description provided for @cancelPasswordResetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel password reset'**
+  String get cancelPasswordResetTitle;
+
+  /// No description provided for @cancelPasswordResetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will cancel the password reset process'**
+  String get cancelPasswordResetMessage;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @personalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Information'**
+  String get personalInformation;
+
+  /// No description provided for @businessInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Information'**
+  String get businessInformation;
+
+  /// No description provided for @businessName.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Name'**
+  String get businessName;
+
+  /// No description provided for @enterBusinessName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your business name'**
+  String get enterBusinessName;
+
+  /// No description provided for @businessType.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Type'**
+  String get businessType;
+
+  /// No description provided for @setYourPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Your Password'**
+  String get setYourPassword;
+
+  /// No description provided for @restaurant.
+  ///
+  /// In en, this message translates to:
+  /// **'Restaurant'**
+  String get restaurant;
+
+  /// No description provided for @cafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Cafe'**
+  String get cafe;
+
+  /// No description provided for @bakery.
+  ///
+  /// In en, this message translates to:
+  /// **'Bakery'**
+  String get bakery;
+
+  /// No description provided for @grocery.
+  ///
+  /// In en, this message translates to:
+  /// **'Grocery'**
+  String get grocery;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @continueBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueBtn;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Caterfy'**
+  String get search;
+
+  /// No description provided for @deliverTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver to'**
+  String get deliverTo;
+
+  /// No description provided for @accountInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Account info'**
+  String get accountInfo;
+
+  /// No description provided for @savedAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved addresses'**
+  String get savedAddresses;
+
+  /// No description provided for @changeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get changeEmail;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePassword;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logOut;
+
+  /// No description provided for @logOutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logOutConfirmation;
+
+  /// No description provided for @yourOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Your orders'**
+  String get yourOrders;
+
+  /// No description provided for @vouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Vouchers'**
+  String get vouchers;
+
+  /// No description provided for @getHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get help'**
+  String get getHelp;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'About app'**
+  String get aboutApp;
+
+  /// No description provided for @caterfyPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Caterfy pay'**
+  String get caterfyPay;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get viewDetails;
 }
 
 class _AppLocalizationsDelegate

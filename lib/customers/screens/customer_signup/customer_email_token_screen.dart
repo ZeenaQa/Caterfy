@@ -31,13 +31,19 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
     final auth = Provider.of<CustomerAuthProvider>(context);
     final pinController = TextEditingController();
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final colors = Theme.of(context).colorScheme;
 
     final defaultPinTheme = PinTheme(
       width: 55,
       height: 55,
-      textStyle: TextStyle(fontSize: 20, color: Colors.black),
+      textStyle: TextStyle(
+        fontSize: 20,
+        color: isDark ? Colors.white : Colors.black,
+      ),
       decoration: BoxDecoration(
-        color: Color(0xfff3f4f7),
+        color: isDark ? const Color(0xFF1E2124) : const Color(0xfff3f4f7),
         borderRadius: BorderRadius.circular(18),
       ),
     );
@@ -49,10 +55,10 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
 
         await showCustomDialog(
           context,
-          title: "Cancel verification",
-          content: "This will cancel the verification process",
-          confirmText: "Cancel",
-          cancelText: "Stay",
+          title: l10n.verification,
+          content: l10n.cancelVerificationQuestion,
+          confirmText: l10n.confirmCancel,
+          cancelText: l10n.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
@@ -70,17 +76,20 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Verification",
+                      l10n.verification,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 27,
-                        color: Color(0xff212121),
+                        color: colors.onSurface,
                       ),
                     ),
                     SizedBox(height: 20),
                     Text(
-                      "Enter the code sent to your email",
-                      style: TextStyle(fontSize: 18, color: Color(0xff96a4b2)),
+                      l10n.enterCodeSent,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: colors.onSurfaceVariant,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 15),
@@ -111,8 +120,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                           showCustomToast(
                             context: context,
                             type: ToastificationType.error,
-                            message:
-                                "The verification code is invalid or has expired",
+                            message: l10n.invalidOrExpiredCode,
                           );
                           pinController.clear();
                         } else {
@@ -120,7 +128,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                           showCustomToast(
                             context: context,
                             type: ToastificationType.success,
-                            message: "Email verified successfully",
+                            message: l10n.emailVerified,
                           );
                         }
                       },
@@ -128,11 +136,8 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                     const SizedBox(height: 40),
                     if (!auth.tokenIsLoading) ...[
                       Text(
-                        "Didn't receive code?",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff8a50f6),
-                        ),
+                        l10n.didntReceiveCode,
+                        style: TextStyle(fontSize: 16, color: colors.primary),
                       ),
                       SizedBox(height: 10),
                       OutlinedButton(
@@ -154,13 +159,16 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                           }
                         },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Color(0xff8a50f6),
-                          side: BorderSide(color: Colors.grey.shade300),
+                          foregroundColor: colors.primary,
+                          side: BorderSide(color: colors.outline),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text("Resend", selectionColor: Colors.red),
+                        child: Text(
+                          l10n.resend,
+                          selectionColor: colors.primary,
+                        ),
                       ),
                     ] else
                       CustomThreeLineSpinner(),

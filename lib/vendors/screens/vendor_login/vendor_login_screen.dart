@@ -1,3 +1,4 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_email_login_screen.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_phone_login_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,16 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('Log In', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(
+            l10n.login,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
@@ -23,8 +28,8 @@ class SignInPage extends StatelessWidget {
               labelStyle: TextStyle(fontWeight: FontWeight.w600),
               unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
               tabs: [
-                Tab(child: Text('Email')),
-                Tab(child: Text('Phone')),
+                Tab(child: Text(l10n.email)),
+                Tab(child: Text(l10n.phoneNumber)),
               ],
             ),
           ),

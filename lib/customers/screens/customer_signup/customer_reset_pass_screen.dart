@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
@@ -23,6 +24,9 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
@@ -30,15 +34,15 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
 
         await showCustomDialog(
           context,
-          title: "Cancel password reset",
-          content: "This will cancel the password reset process",
-          confirmText: "Cancel",
-          cancelText: "Stay",
+          title: l10n.cancelPasswordResetTitle,
+          content: l10n.cancelPasswordResetMessage,
+          confirmText: l10n.confirmCancel,
+          cancelText: l10n.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
       child: Scaffold(
-        appBar: CustomAppBar(title: "Forgotten password", titleSize: 15,),
+        appBar: CustomAppBar(title: l10n.forgotPassword, titleSize: 15),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -55,21 +59,19 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             password = val;
                           },
                           hint: '****************',
-                          label: 'Password',
+                          label: l10n.password,
                           errorText: auth.passwordError,
                         ),
                         SizedBox(height: 15),
-
                         LabeledPasswordField(
                           onChanged: (val) {
                             auth.clearConfirmPassError();
                             confirmPass = val;
                           },
                           hint: '****************',
-                          label: 'Confirm Password',
+                          label: l10n.confirmPassword,
                           errorText: auth.confirmPasswordError,
                         ),
-
                         SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
@@ -77,31 +79,31 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Password must be at least 8 characters and should include:',
+                                l10n.passwordRequirementTitle,
                                 style: TextStyle(
-                                  color: Color(0xff868686),
+                                  color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               SizedBox(height: 15),
                               Text(
-                                '• 1 uppercase letter (A-Z)',
+                                l10n.passwordRequirementUppercase,
                                 style: TextStyle(
-                                  color: Color(0xff868686),
+                                  color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
-                                '• 1 lowercase letter (a-z)',
+                                l10n.passwordRequirementLowercase,
                                 style: TextStyle(
-                                  color: Color(0xff868686),
+                                  color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
-                                '• 1 number (0-9)',
+                                l10n.passwordRequirementNumber,
                                 style: TextStyle(
-                                  color: Color(0xff868686),
+                                  color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
@@ -124,14 +126,13 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                         showCustomToast(
                           context: context,
                           type: ToastificationType.success,
-                          message:
-                              "Password reset, sign in with the new password!",
+                          message: l10n.passwordResetSuccess,
                         );
                       } else {
                         showCustomToast(
                           context: context,
                           type: ToastificationType.error,
-                          message: "Something went wrong.",
+                          message: l10n.somethingWentWrong,
                         );
                       }
                       Navigator.of(context)
@@ -139,7 +140,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                         ..pop();
                     }
                   },
-                  title: "Reset password",
+                  title: l10n.resetPassword,
                   isLoading: auth.isLoading,
                 ),
               ],

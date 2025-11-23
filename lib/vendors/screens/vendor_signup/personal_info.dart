@@ -1,3 +1,4 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
@@ -52,67 +53,75 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 25,
-          children: [
-            const SizedBox(height: 60),
+    return WillPopScope(
+      onWillPop: () async {
+        final auth = Provider.of<VendorAuthProvider>(context, listen: false);
+        auth.clearErrors();
+        return true;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 25,
+            children: [
+              const SizedBox(height: 60),
 
-            Center(
-              child: Text(
-                "Personal Information",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
-                  color: colors.onSurface,
+              Center(
+                child: Text(
+                  l10n.personalInformation,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w600,
+                    color: colors.onSurface,
+                  ),
                 ),
               ),
-            ),
 
-            LabeledTextField(
-              onChanged: (v) {
-                name = v;
-                auth.clearNameError();
-              },
-              hint: 'First and Last Name',
-              label: 'Name',
-              errorText: auth.nameError,
-            ),
-
-            LabeledTextField(
-              onChanged: (v) {
-                email = v;
-                auth.clearEmailError();
-              },
-              hint: 'example@gmail.com',
-              label: 'Email',
-              keyboardType: TextInputType.emailAddress,
-              errorText: auth.emailError,
-            ),
-            LabeledPhoneField(
-              onChanged: (v) {
-                phoneNumber = v;
-                auth.clearErrors();
-              },
-              label: "Phone",
-              hintText: "Enter your phone",
-              errorText: auth.phoneError,
-            ),
-
-            Align(
-              alignment: Alignment.centerRight,
-              child: FilledBtn(
-                onPressed: () => handleNext(auth),
-                title: "Next",
-                stretch: false,
+              LabeledTextField(
+                onChanged: (v) {
+                  name = v;
+                  auth.clearNameError();
+                },
+                hint: 'First and Last Name',
+                label: l10n.name,
+                errorText: auth.nameError,
               ),
-            ),
-          ],
+
+              LabeledTextField(
+                onChanged: (v) {
+                  email = v;
+                  auth.clearEmailError();
+                },
+                hint: 'example@gmail.com',
+                label: l10n.email,
+                keyboardType: TextInputType.emailAddress,
+                errorText: auth.emailError,
+              ),
+              LabeledPhoneField(
+                onChanged: (v) {
+                  phoneNumber = v;
+                  auth.clearErrors();
+                },
+                label: l10n.phoneNumber,
+                hintText: "Enter your phone",
+                errorText: auth.phoneError,
+              ),
+
+              Align(
+                alignment: Alignment.centerRight,
+                child: FilledBtn(
+                  onPressed: () => handleNext(auth),
+                  title: l10n.next,
+                  stretch: false,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

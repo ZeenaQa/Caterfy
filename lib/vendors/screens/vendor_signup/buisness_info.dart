@@ -1,9 +1,9 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/set_password.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 
 class VendorBuisnessInfo extends StatefulWidget {
@@ -23,16 +23,28 @@ class VendorBuisnessInfo extends StatefulWidget {
 }
 
 class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
-  List<String> businessTypes = [
-    "Restaurant",
-    "Cafe",
-    "Bakery",
-    "Grocery",
-    "Other",
-  ];
-
-  String selectedBusiness = 'Restaurant';
+  List<String> businessTypes = [];
+  String selectedBusiness = '';
   String businessName = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final l10n = AppLocalizations.of(context);
+      setState(() {
+        businessTypes = [
+          l10n.restaurant,
+          l10n.cafe,
+          l10n.bakery,
+          l10n.grocery,
+          l10n.other,
+        ];
+        selectedBusiness = businessTypes[0];
+      });
+    });
+  }
 
   void handleNext(auth) async {
     if (auth.validateBusinessInfo(
@@ -42,7 +54,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          transitionDuration: Duration(milliseconds: 300),
+          transitionDuration: const Duration(milliseconds: 300),
           pageBuilder: (context, animation, secondaryAnimation) => SetPassword(
             email: widget.email,
             name: widget.name,
@@ -55,7 +67,6 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
             const end = Offset.zero;
             final tween = Tween(begin: begin, end: end);
             final offsetAnimation = animation.drive(tween);
-
             return SlideTransition(position: offsetAnimation, child: child);
           },
         ),
@@ -67,19 +78,19 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          spacing: 25,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 60),
             Center(
               child: Text(
-                "Vendor Sign Up",
+                l10n.businessInformation,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
@@ -87,23 +98,23 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                 ),
               ),
             ),
-
+            const SizedBox(height: 20),
             LabeledTextField(
               onChanged: (v) {
                 businessName = v;
               },
-              hint: 'Enter your business name',
-              label: 'Business Name',
+              hint: l10n.enterBusinessName,
+              label: l10n.businessName,
               errorText: auth.businessNameError,
             ),
-
+            const SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 15, bottom: 6),
                   child: Text(
-                    "Business Type",
+                    l10n.businessType,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -112,7 +123,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                  initialValue: selectedBusiness,
+                  value: selectedBusiness.isEmpty ? null : selectedBusiness,
                   items: businessTypes
                       .map(
                         (type) =>
@@ -121,19 +132,22 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
-                      selectedBusiness = value;
+                      setState(() {
+                        selectedBusiness = value;
+                      });
                     }
                   },
-                  decoration: InputDecoration(filled: false),
+                  decoration: const InputDecoration(filled: false),
                   dropdownColor: colors.surface,
                 ),
               ],
             ),
+            const SizedBox(height: 30),
             Align(
               alignment: Alignment.centerRight,
               child: FilledBtn(
                 onPressed: () => handleNext(auth),
-                title: "Next",
+                title: l10n.next,
                 stretch: false,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -19,6 +20,7 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: CustomAppBar(),
@@ -28,7 +30,7 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             LabeledPhoneField(
-              label: 'Phone number',
+              label: l10n.phoneNumber,
               hintText: 'Enter your phone number',
               onChanged: (value) {
                 phoneNumber = value.trim();
@@ -38,9 +40,9 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
             ),
 
             SizedBox(height: 20),
-
+            Spacer(),
             FilledBtn(
-              title: "Continue",
+              title: l10n.continueBtn,
               isLoading: customerAuth.isLoading,
               onPressed: () async {
                 final auth = Provider.of<CustomerAuthProvider>(

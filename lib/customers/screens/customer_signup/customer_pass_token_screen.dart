@@ -27,17 +27,22 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
     final auth = Provider.of<CustomerAuthProvider>(context);
     final pinController = TextEditingController();
     final l10n = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     final defaultPinTheme = PinTheme(
       width: 55,
       height: 55,
-      textStyle: TextStyle(fontSize: 20, color: Colors.black),
+      textStyle: TextStyle(
+        fontSize: 20,
+        color: isDark ? Colors.white : Colors.black,
+      ),
       decoration: BoxDecoration(
-        color: Color(0xfff3f4f7),
+        color: isDark ? const Color(0xFF1E2124) : const Color(0xfff3f4f7),
         borderRadius: BorderRadius.circular(18),
       ),
     );
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
@@ -70,13 +75,16 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 27,
-                        color: Color(0xff212121),
+                        color: colors.onSurface,
                       ),
                     ),
                     SizedBox(height: 20),
                     Text(
                       l10n.enterCodeSent,
-                      style: TextStyle(fontSize: 18, color: Color(0xff96a4b2)),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: colors.onSurfaceVariant,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 15),
@@ -107,8 +115,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                           showCustomToast(
                             context: context,
                             type: ToastificationType.error,
-                            message:
-                                "The verification code is invalid or has expired",
+                            message: l10n.invalidOrExpiredCode,
                           );
                           pinController.clear();
                         } else {
@@ -126,10 +133,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                     if (!auth.tokenIsLoading) ...[
                       Text(
                         l10n.didntReceiveCode,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff8a50f6),
-                        ),
+                        style: TextStyle(fontSize: 16, color: colors.primary),
                       ),
                       SizedBox(height: 10),
                       OutlinedButton(
@@ -148,13 +152,13 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                           }
                         },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Color(0xff8a50f6),
-                          side: BorderSide(color: Colors.grey.shade300),
+                          foregroundColor: colors.primary,
+                          side: BorderSide(color: colors.outline),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text(l10n.resend, selectionColor: Colors.red),
+                        child: Text(l10n.resend, selectionColor: colors.error),
                       ),
                     ] else
                       CustomThreeLineSpinner(),

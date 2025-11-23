@@ -25,6 +25,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
     final l10n = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: CustomAppBar(titleSize: 14),
       body: SafeArea(
@@ -99,7 +100,7 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                             Text(
                               l10n.passwordRequirementTitle,
                               style: TextStyle(
-                                color: Color(0xff868686),
+                                color: colors.onSurfaceVariant,
                                 fontSize: 11,
                               ),
                             ),
@@ -107,21 +108,21 @@ class _CustomerSignUpState extends State<CustomerSignUp> {
                             Text(
                               l10n.passwordRequirementUppercase,
                               style: TextStyle(
-                                color: Color(0xff868686),
+                                color: colors.onSurfaceVariant,
                                 fontSize: 11,
                               ),
                             ),
                             Text(
                               l10n.passwordRequirementLowercase,
                               style: TextStyle(
-                                color: Color(0xff868686),
+                                color: colors.onSurfaceVariant,
                                 fontSize: 11,
                               ),
                             ),
                             Text(
                               l10n.passwordRequirementNumber,
                               style: TextStyle(
-                                color: Color(0xff868686),
+                                color: colors.onSurfaceVariant,
                                 fontSize: 11,
                               ),
                             ),

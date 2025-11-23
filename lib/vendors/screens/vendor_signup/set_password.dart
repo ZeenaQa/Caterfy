@@ -1,3 +1,4 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
@@ -33,6 +34,7 @@ class _SetPasswordState extends State<SetPassword> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -43,10 +45,13 @@ class _SetPasswordState extends State<SetPassword> {
             children: [
               const SizedBox(height: 60),
 
-              const Center(
+              Center(
                 child: Text(
-                  "Set your Password",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                  l10n.setYourPassword,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               LabeledPasswordField(
@@ -55,7 +60,7 @@ class _SetPasswordState extends State<SetPassword> {
                   auth.clearPassError();
                 },
                 hint: '****************',
-                label: 'Password',
+                label: l10n.password,
                 errorText: auth.passwordError,
               ),
               LabeledPasswordField(
@@ -64,11 +69,11 @@ class _SetPasswordState extends State<SetPassword> {
                   auth.clearConfirmPassError();
                 },
                 hint: '****************',
-                label: 'Confirm Password',
+                label: l10n.confirmPassword,
                 errorText: auth.confirmPasswordError,
               ),
               FilledBtn(
-                title: "Sign Up",
+                title: l10n.signup,
                 onPressed: () async {
                   if (auth.validatePasswordInfo(
                     password: password,

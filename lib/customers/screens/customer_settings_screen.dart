@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -13,6 +14,7 @@ class CustomerSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
     Future<void> handleLogout() async {
       customerAuth.isLoading = true;
       customerAuth.notifyLis();
@@ -28,35 +30,35 @@ class CustomerSettingsScreen extends StatelessWidget {
 
     final List<Widget> items = [
       SizedBox(height: 10),
-      SettingsButton(title: 'Account info', icon: Icons.person_outline),
+      SettingsButton(title: l10n.accountInfo, icon: Icons.person_outline),
       SettingsButton(
-        title: 'Saved addresses',
+        title: l10n.savedAddresses,
         icon: Icons.location_on_outlined,
       ),
-      SettingsButton(title: 'Change email', icon: Icons.email_outlined),
-      SettingsButton(title: 'Change password', icon: Icons.key_outlined),
+      SettingsButton(title: l10n.changeEmail, icon: Icons.email_outlined),
+      SettingsButton(title: l10n.changePassword, icon: Icons.key_outlined),
       SettingsButton(
-        title: 'Notifications',
+        title: l10n.notifications,
         icon: Icons.notifications_outlined,
-        rightText: 'Enabled',
+        rightText: l10n.enabled,
       ),
       SettingsButton(
-        title: 'Language',
+        title: l10n.language,
         icon: Icons.language_outlined,
-        rightText: "English",
+        rightText: l10n.english,
       ),
       Stack(
         children: [
           Column(
             children: [
               SettingsButton(
-                title: 'Log out',
+                title: l10n.logOut,
                 onTap: () async {
                   showCustomDialog(
                     context,
-                    title: "Log out",
-                    content: "Are you sure you want to log out?",
-                    confirmText: "Log out",
+                    title: l10n.logOut,
+                    content: l10n.logOutConfirmation,
+                    confirmText: l10n.logOut,
                     onConfirmAsync: handleLogout,
                     popAfterAsync: false,
                   );

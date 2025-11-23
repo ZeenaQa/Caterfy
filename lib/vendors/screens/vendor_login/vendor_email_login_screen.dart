@@ -1,3 +1,4 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
@@ -21,6 +22,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
   @override
   Widget build(BuildContext context) {
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -34,7 +36,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Continue with email',
+                        l10n.continueWithEmail,
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -48,7 +50,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                           vendorAuth.clearEmailError();
                         },
                         hint: 'example@gmail.com',
-                        label: 'Email',
+                        label: l10n.email,
                         errorText: vendorAuth.emailError,
                       ),
                       SizedBox(height: 15),
@@ -59,7 +61,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                           vendorAuth.clearPassError();
                         },
                         hint: ('****************'),
-                        label: 'Password',
+                        label: l10n.password,
                         errorText: vendorAuth.passwordError,
                       ),
 
@@ -76,7 +78,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                           if (!vendorAuth.forgotPassLoading)
                             OutlinedBtn(
                               onPressed: () {},
-                              title: "Forgot password",
+                              title: l10n.forgotPassword,
                               titleSize: 13,
                               lighterBorder: true,
                             ),
@@ -93,7 +95,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                                 ),
                               );
                             },
-                            title: "Create account",
+                            title: l10n.createAccount,
                             titleSize: 13,
                             lighterBorder: true,
                           ),
@@ -106,7 +108,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
               SizedBox(height: 10),
 
               FilledBtn(
-                title: "Log In",
+                title: l10n.login,
                 onPressed: () async {
                   await vendorAuth.logIn(
                     email: email.trim(),

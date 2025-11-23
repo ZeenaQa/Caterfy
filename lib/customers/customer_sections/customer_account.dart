@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/screens/customer_orders_screen.dart';
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -8,24 +9,25 @@ class CustomerAccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     final List<Widget> items = [
       AccountButton(
-        title: "Your orders",
+        title: l10n.yourOrders,
         icon: Icons.receipt_outlined,
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => const CustomerOrdersScreen(appBarTitle: "Orders"),
+            builder: (_) => CustomerOrdersScreen(appBarTitle: l10n.yourOrders),
           ),
         ),
       ),
       AccountButton(
-        title: "Vouchers",
+        title: l10n.vouchers,
         icon: Icons.wallet_giftcard_outlined,
-        rightText: '0',
+        // rightText: '0',
       ),
-      AccountButton(title: "Get  help", icon: Icons.help_outline),
-      AccountButton(title: "About app", icon: Icons.info_outline),
+      AccountButton(title: l10n.getHelp, icon: Icons.help_outline),
+      AccountButton(title: l10n.aboutApp, icon: Icons.info_outline),
     ];
     return SafeArea(
       child: Column(
@@ -35,7 +37,7 @@ class CustomerAccountSection extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => CustomerSettingsScreen(title: 'Settings'),
+                builder: (_) => CustomerSettingsScreen(title: l10n.settings),
               ),
             ),
             child: Padding(
@@ -118,7 +120,7 @@ class CustomerAccountSection extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          "View details",
+                          l10n.viewDetails,
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             color: colors.onSurfaceVariant,

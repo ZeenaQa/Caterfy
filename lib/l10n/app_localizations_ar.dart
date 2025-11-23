@@ -46,10 +46,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get continueWithPhoneNumber => 'الإستمرار باستخدام رقم الهاتف';
 
   @override
-  String get continueWithEmail => 'إستمرار عبر البريد الإلكتروني';
+  String get continueWithEmail => 'استمرار عبر البريد الإلكتروني';
 
   @override
-  String get continueAsVendor => 'إستمرار كتاجر';
+  String get continueAsVendor => 'استمرار كتاجر';
 
   @override
   String get settings => 'الإعدادات';
@@ -105,12 +105,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get stay => 'البقاء';
+
   @override
-  String get name => 'الاسم';
+  String get name => 'الإسم';
+
   @override
   String get joinCaterfy => 'تسجيل مستخدم جديد';
+
   @override
   String get confirmPassword => 'تأكيد كلمة المرور';
+
   @override
   String get passwordRequirementTitle =>
       'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وتشمل:';
@@ -123,4 +127,117 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordRequirementNumber => '• رقم واحد (0-9)';
+
+  @override
+  String get invalidOrExpiredCode => 'رمز التحقق غير صالح أو منتهي الصلاحية';
+
+  @override
+  String get emailVerified => 'تم التحقق من البريد الإلكتروني بنجاح';
+
+  @override
+  String get resetPassword => 'إعادة تعيين كلمة المرور';
+
+  @override
+  String get passwordResetSuccess =>
+      'تم إعادة تعيين كلمة المرور، سجل الدخول باستخدام كلمة المرور الجديدة!';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما.';
+
+  @override
+  String get cancelPasswordResetTitle => 'إلغاء إعادة تعيين كلمة المرور';
+
+  @override
+  String get cancelPasswordResetMessage =>
+      'سيؤدي هذا إلى إلغاء عملية إعادة تعيين كلمة المرور';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get personalInformation => 'المعلومات الشخصية';
+
+  @override
+  String get businessInformation => 'معلومات المتجر';
+
+  @override
+  String get businessName => 'اسم المتجر';
+
+  @override
+  String get enterBusinessName => 'أدخل اسم المتجر';
+
+  @override
+  String get businessType => 'نوع المتجر';
+
+  @override
+  String get setYourPassword => 'تعيين كلمة المرور';
+
+  @override
+  String get restaurant => 'مطعم';
+
+  @override
+  String get cafe => 'مقهى';
+
+  @override
+  String get bakery => 'مخبز';
+
+  @override
+  String get grocery => 'بقالة';
+
+  @override
+  String get other => 'آخر';
+
+  @override
+  String get continueBtn => 'إستمرار';
+
+  @override
+  String get search => 'إبحث';
+
+  @override
+  String get deliverTo => 'التوصيل إلى';
+
+  @override
+  String get accountInfo => 'معلومات الحساب';
+
+  @override
+  String get savedAddresses => 'العناوين المحفوظة';
+
+  @override
+  String get changeEmail => 'تغيير البريد الإلكتروني';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get notifications => 'الإشعارات';
+
+  @override
+  String get enabled => 'مفعل';
+
+  @override
+  String get english => 'الإنجليزية';
+
+  @override
+  String get logOut => 'تسجيل الخروج';
+
+  @override
+  String get logOutConfirmation => 'هل أنت متأكد أنك تريد تسجيل الخروج؟';
+
+  @override
+  String get yourOrders => 'طلباتي';
+
+  @override
+  String get vouchers => 'قسائم';
+
+  @override
+  String get getHelp => 'الحصول على المساعدة';
+
+  @override
+  String get aboutApp => 'عن التطبيق';
+
+  @override
+  String get caterfyPay => 'كاش كاترفاي';
+
+  @override
+  String get viewDetails => 'عرض التفاصيل';
 }

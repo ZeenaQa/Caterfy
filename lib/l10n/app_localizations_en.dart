@@ -88,7 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterCodeSent => 'Enter the code sent to your email';
 
   @override
-  String get didntReceiveCode => 'Didn’t receive code?';
+  String get didntReceiveCode => 'Didn\'t receive code?';
 
   @override
   String get resend => 'Resend';
@@ -108,10 +108,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get name => 'Name';
+
   @override
   String get joinCaterfy => 'Join Caterfy';
+
   @override
   String get confirmPassword => 'Confirm Password';
+
   @override
   String get passwordRequirementTitle =>
       'Password must be at least 8 characters and should include:';
@@ -124,4 +127,118 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordRequirementNumber => '• 1 number (0-9)';
+
+  @override
+  String get invalidOrExpiredCode =>
+      'The verification code is invalid or has expired';
+
+  @override
+  String get emailVerified => 'Email verified successfully';
+
+  @override
+  String get resetPassword => 'Reset password';
+
+  @override
+  String get passwordResetSuccess =>
+      'Password reset, sign in with the new password!';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get cancelPasswordResetTitle => 'Cancel password reset';
+
+  @override
+  String get cancelPasswordResetMessage =>
+      'This will cancel the password reset process';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get personalInformation => 'Personal Information';
+
+  @override
+  String get businessInformation => 'Business Information';
+
+  @override
+  String get businessName => 'Business Name';
+
+  @override
+  String get enterBusinessName => 'Enter your business name';
+
+  @override
+  String get businessType => 'Business Type';
+
+  @override
+  String get setYourPassword => 'Set Your Password';
+
+  @override
+  String get restaurant => 'Restaurant';
+
+  @override
+  String get cafe => 'Cafe';
+
+  @override
+  String get bakery => 'Bakery';
+
+  @override
+  String get grocery => 'Grocery';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get continueBtn => 'Continue';
+
+  @override
+  String get search => 'Search Caterfy';
+
+  @override
+  String get deliverTo => 'Deliver to';
+
+  @override
+  String get accountInfo => 'Account info';
+
+  @override
+  String get savedAddresses => 'Saved addresses';
+
+  @override
+  String get changeEmail => 'Change email';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get enabled => 'Enabled';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get logOut => 'Log out';
+
+  @override
+  String get logOutConfirmation => 'Are you sure you want to log out?';
+
+  @override
+  String get yourOrders => 'Your orders';
+
+  @override
+  String get vouchers => 'Vouchers';
+
+  @override
+  String get getHelp => 'Get help';
+
+  @override
+  String get aboutApp => 'About app';
+
+  @override
+  String get caterfyPay => 'Caterfy pay';
+
+  @override
+  String get viewDetails => 'View details';
 }
