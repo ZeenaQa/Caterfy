@@ -84,16 +84,18 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           borderSide: BorderSide.none,
         ),
         suffixIconConstraints: BoxConstraints(maxWidth: 60),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: IconButton(
-            icon: Icon(
-              _obscure ? Icons.visibility_off : Icons.visibility,
-              color: colors.onSurfaceVariant,
-              size: 20,
+        suffixIcon: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(
+                _obscure ? Icons.visibility_off : Icons.visibility,
+                color: colors.onSurfaceVariant,
+                size: 20,
+              ),
+              onPressed: _toggleVisibility,
             ),
-            onPressed: _toggleVisibility,
-          ),
+          ],
         ),
       ),
     );

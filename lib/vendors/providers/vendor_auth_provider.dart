@@ -1,3 +1,4 @@
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -42,26 +43,26 @@ class VendorAuthProvider extends ChangeNotifier {
   // ---------------- Validation ----------------
   String? validateEmail(String email) {
     if (email.isEmpty) {
-      return "Field can't be empty";
+      return L10n.t.emptyField;
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return " is not valid";
+      return L10n.t.invalidEmail;
     }
     return null;
   }
 
   String? validatePassword(String password) {
     if (password.isEmpty) {
-      return "Field can't be empty";
+      return L10n.t.emptyField;
     }
     if (password.length < 8) {
-      return " must be at least 8 characters long";
+      return L10n.t.shortPassword;
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return "must include at least one uppercase letter";
+      return L10n.t.oneUppercase;
     }
     if (!RegExp(r'\d').hasMatch(password)) {
-      return "must include at least one number";
+      return L10n.t.oneNumber;
     }
     return null;
   }
@@ -73,17 +74,17 @@ class VendorAuthProvider extends ChangeNotifier {
     required String email,
     required String phoneNumber,
   }) {
-    nameError = name.isEmpty ? "Field can't be empty" : null;
+    nameError = name.isEmpty ? L10n.t.emptyField : null;
 
     if (email.isEmpty) {
-      emailError = "Field can't be empty";
+      emailError = L10n.t.emptyField;
     } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      emailError = "Invalid email";
+      emailError = L10n.t.invalidEmail;
     } else {
       emailError = null;
     }
 
-    phoneError = phoneNumber.isEmpty ? "Field can't be empty" : null;
+    phoneError = phoneNumber.isEmpty ? L10n.t.emptyField : null;
 
     notifyListeners();
 
@@ -96,8 +97,8 @@ class VendorAuthProvider extends ChangeNotifier {
     required String businessName,
     required String businessType,
   }) {
-    businessNameError = businessName.isEmpty ? "Field can't be empty" : null;
-    businessTypeError = businessType.isEmpty ? "Please select a type" : null;
+    businessNameError = businessName.isEmpty ? L10n.t.emptyField : null;
+    businessTypeError = businessType.isEmpty ? L10n.t.selectType : null;
 
     notifyListeners();
 
@@ -112,7 +113,7 @@ class VendorAuthProvider extends ChangeNotifier {
   }) {
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
-        ? "Passwords do not match"
+        ? L10n.t.passwordsNoMatch
         : null;
 
     notifyListeners();
@@ -182,7 +183,7 @@ class VendorAuthProvider extends ChangeNotifier {
     } on AuthException catch (e) {
       print('errrrrrorrrrrrrrrrrr $e');
       if (e.code == 'user_already_exists') {
-        emailError = "is already registered.";
+        emailError = L10n.t.emailInUse;
         notifyListeners();
       } else {
         setSignUpError(e.message);
@@ -203,8 +204,8 @@ class VendorAuthProvider extends ChangeNotifier {
     required String password,
     required BuildContext context,
   }) async {
-    emailError = email.isEmpty ? "Field can't be empty" : null;
-    passwordError = password.isEmpty ? "Field can't be empty" : null;
+    emailError = email.isEmpty ? L10n.t.emptyField : null;
+    passwordError = password.isEmpty ? L10n.t.emptyField : null;
 
     notifyListeners();
     if (emailError != null || passwordError != null) {
@@ -220,16 +221,16 @@ class VendorAuthProvider extends ChangeNotifier {
       );
 
       if (response.session == null) {
-        emailError = "Invalid email or password";
-        passwordError = "Invalid email or password";
+        emailError = L10n.t.invalidEmailOrPassword;
+        passwordError = L10n.t.invalidEmailOrPassword;
         notifyListeners();
         return false;
       }
 
       return true;
     } on AuthApiException {
-      emailError = "Invalid email or password";
-      passwordError = "Invalid email or password";
+      emailError = L10n.t.invalidEmailOrPassword;
+      passwordError = L10n.t.invalidEmailOrPassword;
       notifyListeners();
       return false;
     } finally {
@@ -238,89 +239,6 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Phone ----------------
-  Future<bool> sendPhoneOtp({required String phoneNumber}) async {
-    if (phoneNumber.isEmpty) {
-      setLogInError("Please enter a valid phone number");
-      return false;
-    }
-
-    try {
-      setLoading(true);
-      await supabase.auth.signInWithOtp(phone: phoneNumber);
-      setLogInError(null);
-      return true;
-    } catch (e) {
-      setLogInError(e.toString());
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  Future<String?> checkPhoneExistsVendor({required String phoneNumber}) async {
-    if (phoneNumber.isEmpty) return null;
-
-    try {
-      final vendor = await supabase
-          .from('vendors')
-          .select('id')
-          .eq('phone', phoneNumber)
-          .maybeSingle();
-
-      if (vendor != null) return 'vendor';
-
-      final customer = await supabase
-          .from('customers')
-          .select('id')
-          .eq('phone', phoneNumber)
-          .maybeSingle();
-
-      if (customer != null) return 'customer';
-
-      return null;
-    } catch (e) {
-      setLogInError("Error checking phone: $e");
-      return null;
-    }
-  }
-
-  Future<void> sendResetPasswordEmail(
-    String email,
-    BuildContext context,
-  ) async {
-    emailError = validateEmail(email);
-    notifyListeners();
-    if (emailError != null) return;
-
-    setLoading(true);
-
-    try {
-      final existing = await supabase
-          .from('vendors')
-          .select('id')
-          .eq('email', email.trim())
-          .maybeSingle();
-
-      if (existing == null) {
-        emailError = "No account found with this email";
-        notifyListeners();
-        setLoading(false);
-        return;
-      }
-      await supabase.auth.resetPasswordForEmail(email.trim());
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password reset link sent successfully")),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
-    } finally {
-      setLoading(false);
-    }
-  }
-
   int? extractIntFromString(String message) {
     final regex = RegExp(r'\d+');
     final match = regex.firstMatch(message);
@@ -328,39 +246,6 @@ class VendorAuthProvider extends ChangeNotifier {
       return int.tryParse(match.group(0)!);
     }
     return null;
-  }
-
-  Future<dynamic> sendForgotPasswordPassEmail({required String email}) async {
-    try {
-      final emailRes = validateEmail(email);
-      if (emailRes != null) {
-        emailError = emailRes;
-        notifyListeners();
-        return {'success': false, 'message': emailRes};
-      }
-
-      forgotPassLoading = true;
-      notifyListeners();
-      await supabase.auth.resetPasswordForEmail(email.trim());
-      return {'success': true, 'message': "Email sent successfully"};
-    } on AuthApiException catch (e) {
-      if (e.code == "over_email_send_rate_limit") {
-        final int? seconds = extractIntFromString(e.message);
-        final errMsg = "Please try again in $seconds seconds.";
-        emailError = errMsg;
-        return {
-          'success': false,
-          'message': "Please try again in $seconds seconds.",
-        };
-      }
-    } catch (e) {
-      emailError = 'Something went wrong $e';
-      notifyListeners();
-      return {'success': false, 'message': "Something went wrong"};
-    } finally {
-      forgotPassLoading = false;
-      notifyListeners();
-    }
   }
 
   void clearErrors() {

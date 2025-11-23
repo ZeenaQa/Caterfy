@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_email_token_screen.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -55,26 +56,26 @@ class CustomerAuthProvider extends ChangeNotifier {
   // ---------------- Validation ----------------
   String? validateEmail(String email) {
     if (email.isEmpty) {
-      return "Field can't be empty";
+      return L10n.t.emptyField;
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return "Invalid email";
+      return L10n.t.invalidEmail;
     }
     return null;
   }
 
   String? validatePassword(String password) {
     if (password.isEmpty) {
-      return "Field can't be empty";
+      return L10n.t.emptyField;
     }
     if (password.length < 8) {
-      return "Must be at least 8 characters long";
+      return L10n.t.shortPassword;
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return "Must include at least one uppercase letter";
+      return L10n.t.oneUppercase;
     }
     if (!RegExp(r'\d').hasMatch(password)) {
-      return "Must include at least one number";
+      return L10n.t.oneNumber;
     }
     return null;
   }
@@ -95,14 +96,12 @@ class CustomerAuthProvider extends ChangeNotifier {
     required String password,
     required String confirmPassword,
   }) async {
-    nameError = name.isEmpty ? "Field can't be empty" : null;
-    confirmPasswordError = confirmPassword.isEmpty
-        ? "Field can't be empty"
-        : null;
+    nameError = name.isEmpty ? L10n.t.emptyField : null;
+    confirmPasswordError = confirmPassword.isEmpty ? L10n.t.emptyField : null;
     emailError = validateEmail(email);
     passwordError = validatePassword(password);
     confirmPasswordError = password != confirmPassword
-        ? "Passwords do not match"
+        ? L10n.t.passwordsNoMatch
         : null;
 
     notifyListeners();
@@ -111,7 +110,7 @@ class CustomerAuthProvider extends ChangeNotifier {
         emailError != null ||
         passwordError != null ||
         confirmPasswordError != null) {
-      return {'success': false, 'message': "One or more fields are invalid"};
+      return {'success': false, 'message': L10n.t.invalidFields};
     }
 
     try {
@@ -123,30 +122,27 @@ class CustomerAuthProvider extends ChangeNotifier {
         data: {'name': name, 'role': 'customer'},
       );
 
-      return {
-        'success': true,
-        'message': "A verification code has been sent to your email",
-      };
+      return {'success': true, 'message': L10n.t.verifCodeSent};
     } on AuthException catch (e) {
       if (e.code == 'user_already_exists') {
-        emailError = "Email is already registered.";
+        emailError = '${L10n.t.emailInUse}.';
         notifyListeners();
-        return {'success': false, 'message': "Email is already registered"};
+        return {'success': false, 'message': '${L10n.t.emailInUse}.'};
       } else if (e.code == "over_email_send_rate_limit") {
         final int? seconds = extractIntFromString(e.message);
-        final errMsg = "Please try again in $seconds seconds.";
+        final errMsg = '${L10n.t.tryAgainIn} $seconds ${L10n.t.seconds}.';
         emailError = errMsg;
         return {
           'success': false,
-          'message': "Please try again in $seconds seconds.",
+          'message': '${L10n.t.tryAgainIn} $seconds ${L10n.t.seconds}.',
         };
       } else {
         setSignUpError(e.message);
       }
-      return {'success': false, 'message': "Something went wrong"};
+      return {'success': false, 'message': L10n.t.somethingWentWrong};
     } catch (e) {
       setSignUpError(e.toString());
-      return {'success': false, 'message': "Something went wrong"};
+      return {'success': false, 'message': L10n.t.somethingWentWrong};
     } finally {
       setLoading(false);
     }
@@ -176,39 +172,6 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> checkEmailExists(String email) async {
-    if (email.isEmpty) {
-      emailError = "Field can't be empty";
-      notifyListeners();
-      return emailError;
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      emailError = "Email is not valid";
-      notifyListeners();
-      return emailError;
-    }
-
-    try {
-      final existing = await Supabase.instance.client
-          .from('customers')
-          .select('id')
-          .eq('email', email)
-          .maybeSingle();
-
-      if (existing == null) {
-        emailError = "No account found with this email";
-      } else {
-        emailError = null;
-      }
-      notifyListeners();
-      return emailError;
-    } catch (e) {
-      emailError = "Error checking email";
-      notifyListeners();
-      return emailError;
-    }
-  }
-
   // ---------------- Log In ----------------
   Future<bool> logIn({
     required email,
@@ -216,7 +179,7 @@ class CustomerAuthProvider extends ChangeNotifier {
     BuildContext? context,
   }) async {
     emailError = validateEmail(email);
-    passwordError = password.isEmpty ? "Field can't be empty" : null;
+    passwordError = password.isEmpty ? L10n.t.emptyField : null;
 
     notifyListeners();
     if (emailError != null || passwordError != null) {
@@ -232,8 +195,8 @@ class CustomerAuthProvider extends ChangeNotifier {
       );
 
       if (response.session == null) {
-        emailError = "Invalid email or password";
-        passwordError = "Invalid email or password";
+        emailError = L10n.t.invalidEmailOrPassword;
+        passwordError = L10n.t.invalidEmailOrPassword;
         notifyListeners();
         return false;
       }
@@ -258,8 +221,8 @@ class CustomerAuthProvider extends ChangeNotifier {
         }
         return false;
       }
-      emailError = "Invalid email or password";
-      passwordError = "Invalid email or password";
+      emailError = L10n.t.invalidEmailOrPassword;
+      passwordError = L10n.t.invalidEmailOrPassword;
       notifyListeners();
       return false;
     } finally {
@@ -285,11 +248,11 @@ class CustomerAuthProvider extends ChangeNotifier {
           .maybeSingle();
 
       if (response == null) {
-        emailError = "No account found with this email";
+        emailError = L10n.t.emailNotFound;
         notifyListeners();
         return {
           'success': false,
-          'message': "No account found with this email",
+          'message': L10n.t.emailNotFound,
         };
       }
 
@@ -302,14 +265,14 @@ class CustomerAuthProvider extends ChangeNotifier {
     } on AuthApiException catch (e) {
       if (e.code == "over_email_send_rate_limit") {
         final int? seconds = extractIntFromString(e.message);
-        final errMsg = "Please try again in $seconds seconds.";
+        final errMsg = '${L10n.t.tryAgainIn} $seconds ${L10n.t.seconds}.';
         emailError = errMsg;
         return {'success': false, 'message': errMsg};
       }
     } catch (e) {
-      emailError = 'Something went wrong $e';
+      emailError = '${L10n.t.somethingWentWrong} $e';
       notifyListeners();
-      return {'success': false, 'message': "Something went wrong"};
+      return {'success': false, 'message': L10n.t.somethingWentWrong};
     } finally {
       forgotPassLoading = false;
       notifyListeners();
@@ -345,11 +308,9 @@ class CustomerAuthProvider extends ChangeNotifier {
   }) async {
     try {
       passwordError = validatePassword(password);
-      confirmPasswordError = confirmPassword.isEmpty
-          ? "Field can't be empty"
-          : null;
+      confirmPasswordError = confirmPassword.isEmpty ? L10n.t.emptyField : null;
       confirmPasswordError = password != confirmPassword
-          ? "Passwords do not match"
+          ? L10n.t.passwordsNoMatch
           : null;
 
       if (passwordError != null || confirmPasswordError != null) {
@@ -361,9 +322,9 @@ class CustomerAuthProvider extends ChangeNotifier {
       await supabase.auth.updateUser(UserAttributes(password: password));
       return {'success': true, 'message': 'Password reset successfully.'};
     } on AuthApiException {
-      return {'success': false, 'message': 'Something went wrong.'};
+      return {'success': false, 'message': L10n.t.somethingWentWrong};
     } catch (e) {
-      return {'success': false, 'message': 'Something went wrong.'};
+      return {'success': false, 'message': L10n.t.somethingWentWrong};
     } finally {
       isLoading = false;
       notifyListeners();
@@ -374,7 +335,7 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   Future<bool> signUpOrSignInWithPhone({required String phoneNumber}) async {
     if (phoneNumber.isEmpty) {
-      phoneNumberError = "Field can't be empty";
+      phoneNumberError = L10n.t.emptyField;
       notifyListeners();
       return false;
     }
@@ -397,37 +358,21 @@ class CustomerAuthProvider extends ChangeNotifier {
           notifyListeners();
           return true;
         } catch (e) {
-          phoneNumberError = "Something went wrong";
+          phoneNumberError = L10n.t.somethingWentWrong;
           notifyListeners();
           return false;
         }
       }
 
-      phoneNumberError = "Something went wrong";
+      phoneNumberError = L10n.t.somethingWentWrong;
       notifyListeners();
       return false;
     } catch (e) {
-      phoneNumberError = "Something went wrong";
+      phoneNumberError = L10n.t.somethingWentWrong;
       notifyListeners();
       return false;
     } finally {
       setLoading(false);
-    }
-  }
-
-  Future<bool> checkPhoneExistsCustomer({required String phoneNumber}) async {
-    try {
-      final customer = await supabase
-          .from('customers')
-          .select('id')
-          .eq('phone', phoneNumber)
-          .maybeSingle();
-
-      return customer != null;
-    } catch (_) {
-      phoneNumberError = "There was an error with this phone number";
-      notifyListeners();
-      return false;
     }
   }
 
@@ -493,44 +438,6 @@ class CustomerAuthProvider extends ChangeNotifier {
       setLogInError("Google sign-in failed: $e");
     } finally {
       setGoogleLoading(false);
-    }
-  }
-
-  // ---------------- Forgot Password ----------------
-  Future<void> sendResetPasswordEmail(
-    String email,
-    BuildContext context,
-  ) async {
-    emailError = validateEmail(email);
-    notifyListeners();
-    if (emailError != null) return;
-
-    setLoading(true);
-
-    try {
-      final existing = await supabase
-          .from('customers')
-          .select('id')
-          .eq('email', email.trim())
-          .maybeSingle();
-
-      if (existing == null) {
-        emailError = "No account found with this email";
-        notifyListeners();
-        setLoading(false);
-        return;
-      }
-      await supabase.auth.resetPasswordForEmail(email.trim());
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password reset link sent successfully")),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("An error occurred: $e")));
-    } finally {
-      setLoading(false);
     }
   }
 

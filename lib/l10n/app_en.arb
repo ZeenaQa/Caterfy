@@ -26,6 +26,7 @@
   "dark": "Dark",
   "forgotPassword": "Forgot Password",
   "createAccount": "Create Account",
+  "becomeVendor" : "Become a vendor",
   "enterCodeSent": "Enter the code sent to your email",
   "didntReceiveCode": "Didn't receive code?",
   "resend": "Resend",
@@ -83,5 +84,19 @@
   "account": "Account",
   "home" : "Home",
   "noOrdersYet": "No orders yet",
-  "noOrdersTip" : "When you place your first order, it will appear here."
+  "noOrdersTip" : "When you place your first order, it will appear here.",
+  "invalidEmail": "Invalid email",
+  "invalidEmailOrPassword": "Invalid email or password",
+  "emptyField" : "Field can't be empty",
+  "shortPassword" : "Must be at least 8 characters long",
+  "oneUppercase" : "Must include at least one uppercase letter",
+  "oneNumber" : "Must include at least one number",
+  "passwordsNoMatch" : "Passwords do not match",
+  "invalidFields": "One or more fields are invalid",
+  "verifCodeSent" : "A verification code has been sent to your email",
+  "emailInUse": "Email is already registered",
+  "seconds": "seconds",
+  "tryAgainIn": "Please try again in",
+  "emailNotFound" : "No account found with this email",
+  "selectType": "Please select a type"
 }

@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'Create Account'**
   String get createAccount;
 
+  /// No description provided for @becomeVendor.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a vendor'**
+  String get becomeVendor;
+
   /// No description provided for @enterCodeSent.
   ///
   /// In en, this message translates to:
@@ -601,6 +607,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'When you place your first order, it will appear here.'**
   String get noOrdersTip;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email'**
+  String get invalidEmail;
+
+  /// No description provided for @invalidEmailOrPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get invalidEmailOrPassword;
+
+  /// No description provided for @emptyField.
+  ///
+  /// In en, this message translates to:
+  /// **'Field can\'t be empty'**
+  String get emptyField;
+
+  /// No description provided for @shortPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be at least 8 characters long'**
+  String get shortPassword;
+
+  /// No description provided for @oneUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Must include at least one uppercase letter'**
+  String get oneUppercase;
+
+  /// No description provided for @oneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Must include at least one number'**
+  String get oneNumber;
+
+  /// No description provided for @passwordsNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsNoMatch;
+
+  /// No description provided for @invalidFields.
+  ///
+  /// In en, this message translates to:
+  /// **'One or more fields are invalid'**
+  String get invalidFields;
+
+  /// No description provided for @verifCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'A verification code has been sent to your email'**
+  String get verifCodeSent;
+
+  /// No description provided for @emailInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is already registered'**
+  String get emailInUse;
+
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'seconds'**
+  String get seconds;
+
+  /// No description provided for @tryAgainIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again in'**
+  String get tryAgainIn;
+
+  /// No description provided for @emailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this email'**
+  String get emailNotFound;
+
+  /// No description provided for @selectType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a type'**
+  String get selectType;
 }
 
 class _AppLocalizationsDelegate

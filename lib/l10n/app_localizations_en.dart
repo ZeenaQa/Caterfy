@@ -88,6 +88,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
+  String get becomeVendor => 'Become a vendor';
+
+  @override
   String get enterCodeSent => 'Enter the code sent to your email';
 
   @override
@@ -266,4 +269,46 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noOrdersTip =>
       'When you place your first order, it will appear here.';
+
+  @override
+  String get invalidEmail => 'Invalid email';
+
+  @override
+  String get invalidEmailOrPassword => 'Invalid email or password';
+
+  @override
+  String get emptyField => 'Field can\'t be empty';
+
+  @override
+  String get shortPassword => 'Must be at least 8 characters long';
+
+  @override
+  String get oneUppercase => 'Must include at least one uppercase letter';
+
+  @override
+  String get oneNumber => 'Must include at least one number';
+
+  @override
+  String get passwordsNoMatch => 'Passwords do not match';
+
+  @override
+  String get invalidFields => 'One or more fields are invalid';
+
+  @override
+  String get verifCodeSent => 'A verification code has been sent to your email';
+
+  @override
+  String get emailInUse => 'Email is already registered';
+
+  @override
+  String get seconds => 'seconds';
+
+  @override
+  String get tryAgainIn => 'Please try again in';
+
+  @override
+  String get emailNotFound => 'No account found with this email';
+
+  @override
+  String get selectType => 'Please select a type';
 }

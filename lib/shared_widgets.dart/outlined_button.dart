@@ -6,7 +6,7 @@ class OutlinedBtn extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.title,
-    this.titleSize = 15,
+    this.titleSize = 14,
     this.topPadding,
     this.bottomPadding,
     this.leftPadding,

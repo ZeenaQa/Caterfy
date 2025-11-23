@@ -1,6 +1,8 @@
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/buisness_info.dart';
 
@@ -52,75 +54,72 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
-    final colors = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        final auth = Provider.of<VendorAuthProvider>(context, listen: false);
-        auth.clearErrors();
-        return true;
+    return PopScope(
+      canPop: true, // allow popping
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (didPop) {
+          final auth = Provider.of<VendorAuthProvider>(context, listen: false);
+          auth.clearErrors();
+        }
       },
       child: Scaffold(
+        appBar: CustomAppBar(title: L10n.t.becomeVendor),
         resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 25,
-            children: [
-              const SizedBox(height: 60),
-
-              Center(
-                child: Text(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
                   l10n.personalInformation,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w600,
-                    color: colors.onSurface,
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 23),
+
+                LabeledTextField(
+                  onChanged: (v) {
+                    name = v;
+                    auth.clearNameError();
+                  },
+                  hint: l10n.firstLastName,
+                  label: l10n.name,
+                  errorText: auth.nameError,
+                ),
+                SizedBox(height: 15),
+                LabeledTextField(
+                  onChanged: (v) {
+                    email = v;
+                    auth.clearEmailError();
+                  },
+                  hint: 'example@gmail.com',
+                  label: l10n.email,
+                  keyboardType: TextInputType.emailAddress,
+                  errorText: auth.emailError,
+                ),
+                SizedBox(height: 15),
+                LabeledPhoneField(
+                  onChanged: (v) {
+                    phoneNumber = v;
+                    auth.clearErrors();
+                  },
+                  label: l10n.phoneNumber,
+                  hintText: "Enter your phone",
+                  errorText: auth.phoneError,
+                ),
+                SizedBox(height: 11),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: FilledBtn(
+                    onPressed: () => handleNext(auth),
+                    title: l10n.next,
+                    stretch: false,
                   ),
                 ),
-              ),
-
-              LabeledTextField(
-                onChanged: (v) {
-                  name = v;
-                  auth.clearNameError();
-                },
-                hint: l10n.firstLastName,
-                label: l10n.name,
-                errorText: auth.nameError,
-              ),
-
-              LabeledTextField(
-                onChanged: (v) {
-                  email = v;
-                  auth.clearEmailError();
-                },
-                hint: 'example@gmail.com',
-                label: l10n.email,
-                keyboardType: TextInputType.emailAddress,
-                errorText: auth.emailError,
-              ),
-              LabeledPhoneField(
-                onChanged: (v) {
-                  phoneNumber = v;
-                  auth.clearErrors();
-                },
-                label: l10n.phoneNumber,
-                hintText: "Enter your phone",
-                errorText: auth.phoneError,
-              ),
-
-              Align(
-                alignment: Alignment.centerRight,
-                child: FilledBtn(
-                  onPressed: () => handleNext(auth),
-                  title: l10n.next,
-                  stretch: false,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

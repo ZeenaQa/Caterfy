@@ -28,7 +28,7 @@ Future<bool?> showCustomDialog(
             insetPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Container(
               width: screenWidth * 0.9,
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 19),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -129,7 +129,7 @@ class DialogBtn extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           minimumSize: Size.zero,
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 12),
           backgroundColor: isCancel ? Colors.transparent : colors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
@@ -148,11 +148,11 @@ class DialogBtn extends StatelessWidget {
                 style: TextStyle(
                   color: isCancel ? colors.onSecondary : colors.onPrimary,
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 13,
                 ),
               ),
             ),
-            if (isLoading && !isCancel) ThreeBounce(size: 15),
+            if (isLoading && !isCancel) ThreeBounce(size: 13),
           ],
         ),
       ),

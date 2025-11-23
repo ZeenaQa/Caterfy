@@ -2,6 +2,7 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/personal_info.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                                 ),
                               );
                             },
-                            title: l10n.createAccount,
+                            title: L10n.t.becomeVendor,
                             titleSize: 13,
                             lighterBorder: true,
                           ),

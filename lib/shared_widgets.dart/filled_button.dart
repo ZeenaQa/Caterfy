@@ -50,7 +50,7 @@ class FilledBtn extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   color: colors.onPrimary,
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               ),
             ),

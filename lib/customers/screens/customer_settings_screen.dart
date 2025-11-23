@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerSettingsScreen extends StatelessWidget {
-  CustomerSettingsScreen({super.key, this.title});
+  const CustomerSettingsScreen({super.key, this.title});
   final String? title;
 
   @override

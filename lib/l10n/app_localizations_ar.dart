@@ -88,6 +88,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get createAccount => 'إنشاء حساب';
 
   @override
+  String get becomeVendor => 'انضم كبائع';
+
+  @override
   String get enterCodeSent => 'أدخل الرمز المرسل إلى بريدك الإلكتروني';
 
   @override
@@ -264,4 +267,47 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noOrdersTip => 'عندما تقوم بالطلب سيظهر طلبك هنا.';
+
+  @override
+  String get invalidEmail => 'البريد الإلكتروني غير صالح';
+
+  @override
+  String get invalidEmailOrPassword =>
+      'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+
+  @override
+  String get emptyField => 'إجباري';
+
+  @override
+  String get shortPassword => 'يجب أن لا تقل عن 8 احرف';
+
+  @override
+  String get oneUppercase => 'يجب ان تشمل الحروف الكبيرة والصفيرة';
+
+  @override
+  String get oneNumber => 'يجب ان تشمل أرقام';
+
+  @override
+  String get passwordsNoMatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get invalidFields => 'حقل واحد أو أكثر غير صالح';
+
+  @override
+  String get verifCodeSent => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني';
+
+  @override
+  String get emailInUse => 'البريد الإلكتروني مسجل مسبقًا';
+
+  @override
+  String get seconds => 'ثانية';
+
+  @override
+  String get tryAgainIn => 'يرجى المحاولة مرة أخرى خلال';
+
+  @override
+  String get emailNotFound => 'لم يتم العثور على حساب بهذا البريد الإلكتروني';
+
+  @override
+  String get selectType => 'الرجاء اختيار النوع';
 }
