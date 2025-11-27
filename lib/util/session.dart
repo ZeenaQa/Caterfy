@@ -1,20 +1,16 @@
 import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
+import 'package:caterfy/main.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OnBoardingSkip {
   static Future<Widget> WidgetIntApp() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final seenWelcome = prefs.getBool("boarding") ?? false;
     final supabase = Supabase.instance.client;
     final session = supabase.auth.currentSession;
-
-    // if (!seenWelcome) {
-    //   return const WelcomeScreen();
-    // }
 
     if (session == null) {
       return const SelectionScreen();
@@ -22,30 +18,49 @@ class OnBoardingSkip {
 
     try {
       final userId = session.user.id;
+      final role = session.user.userMetadata?['role'];
 
-      final customer = await supabase
-          .from('customers')
-          .select('id')
-          .eq('id', userId)
-          .maybeSingle();
+      dynamic fetchedUser;
 
-      if (customer != null) {
-        return AuthenticatedCustomer();
+      if (role == "customer") {
+        fetchedUser = await supabase
+            .from('customers')
+            .select()
+            .eq('id', userId)
+            .maybeSingle();
+
+        if (fetchedUser == null) return const SelectionScreen();
+      } else if (role == "vendor") {
+        fetchedUser = await supabase
+            .from('vendors')
+            .select()
+            .eq('id', userId)
+            .maybeSingle();
+
+        if (fetchedUser == null) return const SelectionScreen();
+      } else {
+        return const SelectionScreen();
       }
 
-      final vendor = await supabase
-          .from('vendors')
-          .select('id')
-          .eq('id', userId)
-          .maybeSingle();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = navigatorKey.currentContext;
 
-      if (vendor != null) {
+        if (ctx != null) {
+          final globalProvider = Provider.of<GlobalProvider>(
+            ctx,
+            listen: false,
+          );
+
+          globalProvider.setUser(fetchedUser);
+        }
+      });
+
+      if (role == "customer") {
+        return AuthenticatedCustomer();
+      } else {
         return VendorHomeScreen();
       }
-
-      return const SelectionScreen();
     } catch (e) {
-      print("Error checking user type: $e");
       return const SelectionScreen();
     }
   }

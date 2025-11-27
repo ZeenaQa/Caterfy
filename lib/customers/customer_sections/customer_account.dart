@@ -1,15 +1,24 @@
 import 'package:caterfy/customers/screens/customer_orders_screen.dart';
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CustomerAccountSection extends StatelessWidget {
   const CustomerAccountSection({super.key});
+
+  String getInitial(String name) {
+    if (name.isEmpty) return '';
+    return name[0].toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
+    final user = Provider.of<GlobalProvider>(context).user;
     final List<Widget> items = [
       AccountButton(
         title: l10n.yourOrders,
@@ -30,122 +39,135 @@ class CustomerAccountSection extends StatelessWidget {
       AccountButton(title: l10n.aboutApp, icon: Icons.info_outline),
     ];
     return SafeArea(
-      child: Column(
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CustomerSettingsScreen(title: l10n.settings),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
-                bottom: 3,
-                left: 20,
-                right: 20,
-              ),
-              child: Row(
-                spacing: 15,
-                children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage('assets/images/waseem_pfp.jpg'),
-                  ),
-                  Text(
-                    "Waseem Alamad",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.settings_outlined,
-                    size: 22,
-                    color: colors.onSurface,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () => (),
-              child: Container(
-                // height: 190,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: colors.primary),
-                ),
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Caterfy pay",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: colors.primary,
-                      ),
+      child: (user == null)
+          ? Text("LOADING", style: TextStyle(fontWeight: FontWeight.bold),)
+          : Column(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          CustomerSettingsScreen(title: l10n.settings),
                     ),
-                    SizedBox(height: 15),
-                    Row(
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 3,
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: Row(
+                      spacing: 15,
                       children: [
-                        Icon(
-                          FontAwesomeIcons.wallet,
-                          size: 36,
-                          color: colors.primary,
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: colors.onPrimaryContainer,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Center(
+                            child: Text(getInitial(user?['name'] ?? ''), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          ),
                         ),
-                        SizedBox(width: 15),
                         Text(
-                          "0.00 ${l10n.jd}",
+                          user?['name'] ?? '',
                           style: TextStyle(
-                            color: colors.primary,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        Spacer(),
+                        Icon(
+                          Icons.settings_outlined,
+                          size: 22,
+                          color: colors.onSurface,
                         ),
                       ],
                     ),
-
-                    SizedBox(height: 10),
-
-                    // Make sure Column fills width to allow Align to work properly
-                    SizedBox(
+                  ),
+                ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GestureDetector(
+                    onTap: () => (),
+                    child: Container(
+                      // height: 190,
                       width: double.infinity,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          l10n.viewDetails,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: colors.onSurfaceVariant,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: colors.primary),
+                      ),
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Caterfy pay",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: colors.primary,
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.wallet,
+                                size: 36,
+                                color: colors.primary,
+                              ),
+                              SizedBox(width: 15),
+                              Text(
+                                "0.00 ${l10n.jd}",
+                                style: TextStyle(
+                                  color: colors.primary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 10),
+
+                          // Make sure Column fills width to allow Align to work properly
+                          SizedBox(
+                            width: double.infinity,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                l10n.viewDetails,
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: colors.onSurfaceVariant,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(height: 18),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: items,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 18),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 25),
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              children: items,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

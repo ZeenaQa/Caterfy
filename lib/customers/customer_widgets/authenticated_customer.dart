@@ -83,22 +83,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 1),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 110),
-                      padding: EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        color: _currentIndex == 2
-                            ? colors.primary
-                            : Colors.transparent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: CircleAvatar(
-                        radius: 11,
-                        backgroundImage: AssetImage(
-                          'assets/images/waseem_pfp.jpg',
-                        ),
-                      ),
-                    ),
+                    child: Icon(Icons.account_circle_outlined),
                   ),
                   label: l10n.account,
                 ),

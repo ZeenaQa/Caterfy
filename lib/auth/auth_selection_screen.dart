@@ -24,7 +24,7 @@ class _SelectionScreenState extends State<SelectionScreen>
     with TickerProviderStateMixin {
   late final AnimationController svgController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 450),
+    duration: const Duration(milliseconds: 580),
   );
 
   late final AnimationController buttonsController = AnimationController(
@@ -95,8 +95,8 @@ class _SelectionScreenState extends State<SelectionScreen>
 
     void handleNavigation(String dest) {
       if (customerAuth.isGoogleLoading) return;
-      // vendorAuth.clearErrors();
-      // customerAuth.clearErrors();
+      vendorAuth.clearErrors();
+      customerAuth.clearErrors();
       final customerProvider = Provider.of<CustomerAuthProvider>(
         context,
         listen: false,

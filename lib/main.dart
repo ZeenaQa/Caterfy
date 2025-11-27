@@ -1,13 +1,14 @@
 import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
-import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/style/theme/dark_theme.dart';
 import 'package:caterfy/util/session.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/style/theme/light_theme.dart';
+import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -30,35 +31,58 @@ void main() async {
     final session = data.session;
     final user = session?.user;
 
-    print(user);
-
     if (event == AuthChangeEvent.signedIn && user != null) {
       final emailConfirmedAt = user.emailConfirmedAt;
 
-      if (emailConfirmedAt == null) {
-        Navigator.pushReplacement(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(builder: (_) => UnauthenticatedCustomer()),
-        );
-      } else {
-        final existing = await Supabase.instance.client
-            .from('customers')
-            .select()
-            .eq('id', user.id)
-            .maybeSingle();
+      if (emailConfirmedAt != null) {
+        final supabase = Supabase.instance.client;
+        final userId = session?.user.id;
+        final role = session?.user.userMetadata?['role'];
 
-        if (existing == null || existing.isEmpty) {
-          await Supabase.instance.client.from('customers').insert({
-            'id': user.id,
-            'email': user.email,
-            'name': user.userMetadata?['full_name'] ?? 'New User',
-          });
+        dynamic fetchedUser;
+
+        if (userId == null) {
+          return;
         }
 
-        Navigator.pushReplacement(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
-        );
+        if (role == "customer") {
+          fetchedUser = await supabase
+              .from('customers')
+              .select()
+              .eq('id', userId)
+              .maybeSingle();
+        } else if (role == "vendor") {
+          fetchedUser = await supabase
+              .from('vendors')
+              .select()
+              .eq('id', userId)
+              .maybeSingle();
+        }
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final ctx = navigatorKey.currentContext;
+
+          if (ctx != null) {
+            final globalProvider = Provider.of<GlobalProvider>(
+              ctx,
+              listen: false,
+            );
+
+            globalProvider.setUser(fetchedUser);
+          }
+        });
+
+        if (role == "customer") {
+          Navigator.pushReplacement(
+            navigatorKey.currentContext!,
+            MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            navigatorKey.currentContext!,
+            MaterialPageRoute(builder: (_) => VendorHomeScreen()),
+          );
+        }
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -103,6 +127,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => CustomerAuthProvider()),
         ChangeNotifierProvider(create: (_) => VendorAuthProvider()),
+        ChangeNotifierProvider(create: (_) => GlobalProvider()),
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {

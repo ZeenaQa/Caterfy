@@ -24,11 +24,18 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     ),
   ),
 
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    enableFeedback: false,
+    selectedItemColor: Color(0xFF8D4FFF),
+    unselectedItemColor: Color(0xFF9E9E9E),
+  ),
+
   colorScheme: const ColorScheme(
     brightness: Brightness.dark,
     primary: Color(0xFF7944DB),
     onPrimary: Color.fromARGB(255, 236, 236, 236),
     onPrimaryFixedVariant: Color(0xff3D1A3D),
+    onPrimaryContainer: Color(0xff4d2550),
     secondary: Color(0xFFB8B8B8),
     onSecondary: Color(0xFFE1E1E1),
     tertiary: Color(0xFFd4c1ff),

@@ -8,6 +8,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     foregroundColor: Colors.black87,
     elevation: 0,
   ),
+  
 
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
@@ -24,10 +25,17 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     ),
   ),
 
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    enableFeedback: false,
+    selectedItemColor: Color(0xFF9359FF),
+    unselectedItemColor: Color(0xFF8B8B8B),
+  ),
+
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
     primary: Color(0xFF9359FF),
     onPrimaryFixedVariant: Color(0xfffff1ff),
+    onPrimaryContainer: Color(0xfffbc1ff),
     onPrimary: Colors.white,
     secondary: Color(0xFF414141),
     onSecondary: Color(0xff2c2c2c),
@@ -36,7 +44,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     onInverseSurface: Colors.white,
     surface: Colors.white,
     onSurface: Color(0xff333333),
-    onSurfaceVariant: Color.fromARGB(255, 139, 139, 139),
+    onSurfaceVariant: Color(0xFF8B8B8B),
     error: Color(0xfffd7a7a),
     onError: Colors.white,
   ),

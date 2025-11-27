@@ -1,4 +1,3 @@
-import 'package:caterfy/customers/customer_widgets/unauthenticated_customer.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
@@ -54,13 +53,6 @@ class _CustomerPhoneAuthState extends State<CustomerPhoneAuth> {
                 );
 
                 if (!success) return;
-
-                print("Phone login/signup successful for $phoneNumber");
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => UnauthenticatedCustomer()),
-                );
               },
             ),
           ],
