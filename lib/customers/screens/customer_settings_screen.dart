@@ -1,11 +1,11 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/drawer_button.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class CustomerSettingsScreen extends StatelessWidget {
     final locale = Provider.of<LocaleProvider>(context).locale;
     final themeController = context.watch<ThemeController>();
     final isDark = themeController.themeMode == ThemeMode.dark;
-    final l10n = AppLocalizations.of(context);
+    
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
 
     Future<void> handleLogout() async {
@@ -39,17 +39,17 @@ class CustomerSettingsScreen extends StatelessWidget {
 
     final List<Widget> items = [
       SizedBox(height: 10),
-      SettingsButton(title: l10n.accountInfo, icon: Icons.person_outline),
+      SettingsButton(title: L10n.t.accountInfo, icon: Icons.person_outline),
       SettingsButton(
-        title: l10n.savedAddresses,
+        title: L10n.t.savedAddresses,
         icon: Icons.location_on_outlined,
       ),
-      SettingsButton(title: l10n.changeEmail, icon: Icons.email_outlined),
-      SettingsButton(title: l10n.changePassword, icon: Icons.key_outlined),
+      SettingsButton(title: L10n.t.changeEmail, icon: Icons.email_outlined),
+      SettingsButton(title: L10n.t.changePassword, icon: Icons.key_outlined),
       SettingsButton(
-        title: l10n.notifications,
+        title: L10n.t.notifications,
         icon: Icons.notifications_outlined,
-        rightText: l10n.enabled,
+        rightText: L10n.t.enabled,
       ),
       SettingsButton(
         onTap: () {
@@ -79,7 +79,7 @@ class CustomerSettingsScreen extends StatelessWidget {
             ),
           );
         },
-        title: l10n.language,
+        title: L10n.t.language,
         icon: Icons.language_outlined,
         rightText: locale.languageCode == "en" ? "English" : "العربية",
       ),
@@ -92,7 +92,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: !isDark,
                   colors: colors,
-                  title: l10n.lightTheme,
+                  title: L10n.t.lightTheme,
                   icon: Icons.wb_sunny_outlined,
                   onPressed: () => Provider.of<ThemeController>(
                     context,
@@ -102,7 +102,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: isDark,
                   colors: colors,
-                  title: l10n.darkTheme,
+                  title: L10n.t.darkTheme,
                   icon: Icons.dark_mode_outlined,
                   onPressed: () => Provider.of<ThemeController>(
                     context,
@@ -113,9 +113,9 @@ class CustomerSettingsScreen extends StatelessWidget {
             ),
           );
         },
-        title: l10n.theme,
+        title: L10n.t.theme,
         icon: Icons.wb_sunny_outlined,
-        rightText: isDark ? l10n.dark : l10n.light,
+        rightText: isDark ? L10n.t.dark : L10n.t.light,
         isLastItem: true,
       ),
       Stack(
@@ -123,13 +123,13 @@ class CustomerSettingsScreen extends StatelessWidget {
           Column(
             children: [
               SettingsButton(
-                title: l10n.logOut,
+                title: L10n.t.logOut,
                 onTap: () async {
                   showCustomDialog(
                     context,
-                    title: l10n.logOut,
-                    content: l10n.logOutConfirmation,
-                    confirmText: l10n.logOut,
+                    title: L10n.t.logOut,
+                    content: L10n.t.logOutConfirmation,
+                    confirmText: L10n.t.logOut,
                     onConfirmAsync: handleLogout,
                     popAfterAsync: false,
                   );

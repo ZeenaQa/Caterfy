@@ -1,8 +1,8 @@
 import 'package:caterfy/auth/auth_settings_screen.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_login_screen.dart';
 import 'package:caterfy/customers/screens/customer_login/customer_phone_auth_screen.dart';
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/util/wavy_border_shape.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
@@ -91,7 +91,7 @@ class _SelectionScreenState extends State<SelectionScreen>
     final colors = Theme.of(context).colorScheme;
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
-    final l10n = AppLocalizations.of(context);
+    
 
     void handleNavigation(String dest) {
       if (customerAuth.isGoogleLoading) return;
@@ -103,7 +103,7 @@ class _SelectionScreenState extends State<SelectionScreen>
       );
 
       if (dest == "google") {
-        customerProvider.signInWithGoogle(context);
+        customerProvider.signInWithGoogle();
       } else {
         Navigator.push(
           context,
@@ -131,7 +131,7 @@ class _SelectionScreenState extends State<SelectionScreen>
         )
       else
         OutlinedBtn(
-          title: l10n.continueWithGoogle,
+          title: L10n.t.continueWithGoogle,
           onPressed: () => handleNavigation("google"),
           bottomPadding: 8,
           customSvgIcon: SvgPicture.asset(
@@ -140,13 +140,13 @@ class _SelectionScreenState extends State<SelectionScreen>
           ),
         ),
       OutlinedBtn(
-        title: l10n.continueWithEmail,
+        title: L10n.t.continueWithEmail,
         onPressed: () => handleNavigation("email"),
         bottomPadding: 8,
         icon: Icons.email_outlined,
       ),
       OutlinedBtn(
-        title: l10n.continueWithPhoneNumber,
+        title: L10n.t.continueWithPhoneNumber,
         onPressed: () => handleNavigation("phone"),
         bottomPadding: 20,
         icon: Icons.phone_outlined,
@@ -161,7 +161,7 @@ class _SelectionScreenState extends State<SelectionScreen>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  l10n.or,
+                  L10n.t.or,
                   style: TextStyle(color: colors.onSurfaceVariant),
                 ),
               ),
@@ -169,7 +169,7 @@ class _SelectionScreenState extends State<SelectionScreen>
             ],
           ),
           OutlinedBtn(
-            title: l10n.continueAsVendor,
+            title: L10n.t.continueAsVendor,
             onPressed: () => handleNavigation("vendor"),
             topPadding: 18,
             bottomPadding: 20,
@@ -243,7 +243,7 @@ class _SelectionScreenState extends State<SelectionScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    l10n.heyThere,
+                    L10n.t.heyThere,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -252,7 +252,7 @@ class _SelectionScreenState extends State<SelectionScreen>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    l10n.welcomeInstruction,
+                    L10n.t.welcomeInstruction,
                     style: TextStyle(
                       color: colors.onSurfaceVariant,
                       fontSize: 12,

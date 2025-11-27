@@ -1,4 +1,3 @@
-import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_email_token_screen.dart';
 import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
@@ -377,7 +376,7 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   /// ------------------------- Google Sign-in -------------------------
-  Future<void> signInWithGoogle(BuildContext context) async {
+  Future<void> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId:
@@ -426,13 +425,6 @@ class CustomerAuthProvider extends ChangeNotifier {
           'email': user.email,
           'name': user.userMetadata?['full_name'] ?? 'New User',
         });
-      }
-
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
-        );
       }
     } catch (e) {
       setLogInError("Google sign-in failed: $e");

@@ -1,10 +1,10 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_reset_pass_screen.dart';
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pinput/pinput.dart';
@@ -26,7 +26,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
     final pinController = TextEditingController();
-    final l10n = AppLocalizations.of(context);
+    
     final colors = Theme.of(context).colorScheme;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -50,10 +50,10 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
 
         await showCustomDialog(
           context,
-          title: l10n.verification,
-          content: l10n.cancelVerificationQuestion,
-          confirmText: l10n.cancel,
-          cancelText: l10n.stay,
+          title: L10n.t.verification,
+          content: L10n.t.cancelVerificationQuestion,
+          confirmText: L10n.t.cancel,
+          cancelText: L10n.t.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
@@ -71,7 +71,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      l10n.verification,
+                      L10n.t.verification,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 27,
@@ -80,7 +80,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      l10n.enterCodeSent,
+                      L10n.t.enterCodeSent,
                       style: TextStyle(
                         fontSize: 18,
                         color: colors.onSurfaceVariant,
@@ -115,7 +115,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                           showCustomToast(
                             context: context,
                             type: ToastificationType.error,
-                            message: l10n.invalidOrExpiredCode,
+                            message: L10n.t.invalidOrExpiredCode,
                           );
                           pinController.clear();
                         } else {
@@ -132,7 +132,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                     const SizedBox(height: 40),
                     if (!auth.tokenIsLoading) ...[
                       Text(
-                        l10n.didntReceiveCode,
+                        L10n.t.didntReceiveCode,
                         style: TextStyle(fontSize: 16, color: colors.primary),
                       ),
                       SizedBox(height: 10),
@@ -158,7 +158,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text(l10n.resend, selectionColor: colors.error),
+                        child: Text(L10n.t.resend, selectionColor: colors.error),
                       ),
                     ] else
                       CustomThreeLineSpinner(),

@@ -1,4 +1,4 @@
-import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/util/wavy_border_shape.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +7,7 @@ class CustomerHomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context);
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +68,7 @@ class CustomerHomeSection extends StatelessWidget {
                     children: [
                       Icon(Icons.search, color: Color(0xff9d9d9d), size: 21),
                       Text(
-                        l10n.search,
+                        L10n.t.search,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,

@@ -1,6 +1,6 @@
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _SetPasswordState extends State<SetPassword> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
-    final l10n = AppLocalizations.of(context);
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -47,7 +47,7 @@ class _SetPasswordState extends State<SetPassword> {
 
               Center(
                 child: Text(
-                  l10n.setYourPassword,
+                  L10n.t.setYourPassword,
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w600,
@@ -60,7 +60,7 @@ class _SetPasswordState extends State<SetPassword> {
                   auth.clearPassError();
                 },
                 hint: '****************',
-                label: l10n.password,
+                label: L10n.t.password,
                 errorText: auth.passwordError,
               ),
               LabeledPasswordField(
@@ -69,11 +69,11 @@ class _SetPasswordState extends State<SetPassword> {
                   auth.clearConfirmPassError();
                 },
                 hint: '****************',
-                label: l10n.confirmPassword,
+                label: L10n.t.confirmPassword,
                 errorText: auth.confirmPasswordError,
               ),
               FilledBtn(
-                title: l10n.signup,
+                title: L10n.t.signup,
                 onPressed: () async {
                   if (auth.validatePasswordInfo(
                     password: password,

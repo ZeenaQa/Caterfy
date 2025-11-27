@@ -1,10 +1,10 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
@@ -24,7 +24,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
-    final l10n = AppLocalizations.of(context);
+    
     final colors = Theme.of(context).colorScheme;
 
     return PopScope(
@@ -34,15 +34,15 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
 
         await showCustomDialog(
           context,
-          title: l10n.cancelPasswordResetTitle,
-          content: l10n.cancelPasswordResetMessage,
-          confirmText: l10n.confirmCancel,
-          cancelText: l10n.stay,
+          title: L10n.t.cancelPasswordResetTitle,
+          content: L10n.t.cancelPasswordResetMessage,
+          confirmText: L10n.t.confirmCancel,
+          cancelText: L10n.t.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
       child: Scaffold(
-        appBar: CustomAppBar(title: l10n.forgotPassword, titleSize: 15),
+        appBar: CustomAppBar(title: L10n.t.forgotPassword, titleSize: 15),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -59,7 +59,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             password = val;
                           },
                           hint: '****************',
-                          label: l10n.password,
+                          label: L10n.t.password,
                           errorText: auth.passwordError,
                         ),
                         SizedBox(height: 15),
@@ -69,7 +69,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             confirmPass = val;
                           },
                           hint: '****************',
-                          label: l10n.confirmPassword,
+                          label: L10n.t.confirmPassword,
                           errorText: auth.confirmPasswordError,
                         ),
                         SizedBox(height: 10),
@@ -79,7 +79,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                l10n.passwordRequirementTitle,
+                                L10n.t.passwordRequirementTitle,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
@@ -87,21 +87,21 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                               ),
                               SizedBox(height: 15),
                               Text(
-                                l10n.passwordRequirementUppercase,
+                                L10n.t.passwordRequirementUppercase,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
-                                l10n.passwordRequirementLowercase,
+                                L10n.t.passwordRequirementLowercase,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
-                                l10n.passwordRequirementNumber,
+                                L10n.t.passwordRequirementNumber,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
@@ -126,13 +126,13 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                         showCustomToast(
                           context: context,
                           type: ToastificationType.success,
-                          message: l10n.passwordResetSuccess,
+                          message: L10n.t.passwordResetSuccess,
                         );
                       } else {
                         showCustomToast(
                           context: context,
                           type: ToastificationType.error,
-                          message: l10n.somethingWentWrong,
+                          message: L10n.t.somethingWentWrong,
                         );
                       }
                       Navigator.of(context)
@@ -140,7 +140,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                         ..pop();
                     }
                   },
-                  title: l10n.resetPassword,
+                  title: L10n.t.resetPassword,
                   isLoading: auth.isLoading,
                 ),
               ],

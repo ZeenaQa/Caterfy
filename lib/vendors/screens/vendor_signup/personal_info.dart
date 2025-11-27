@@ -1,4 +1,3 @@
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
@@ -54,7 +53,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
-    final l10n = AppLocalizations.of(context);
+    
 
     return PopScope(
       canPop: true, // allow popping
@@ -74,7 +73,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  l10n.personalInformation,
+                  L10n.t.personalInformation,
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 23),
@@ -84,8 +83,8 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                     name = v;
                     auth.clearNameError();
                   },
-                  hint: l10n.firstLastName,
-                  label: l10n.name,
+                  hint: L10n.t.firstLastName,
+                  label: L10n.t.name,
                   errorText: auth.nameError,
                 ),
                 SizedBox(height: 15),
@@ -95,7 +94,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                     auth.clearEmailError();
                   },
                   hint: 'example@gmail.com',
-                  label: l10n.email,
+                  label: L10n.t.email,
                   keyboardType: TextInputType.emailAddress,
                   errorText: auth.emailError,
                 ),
@@ -105,7 +104,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                     phoneNumber = v;
                     auth.clearErrors();
                   },
-                  label: l10n.phoneNumber,
+                  label: L10n.t.phoneNumber,
                   hintText: "Enter your phone",
                   errorText: auth.phoneError,
                 ),
@@ -114,7 +113,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                   alignment: Alignment.centerRight,
                   child: FilledBtn(
                     onPressed: () => handleNext(auth),
-                    title: l10n.next,
+                    title: L10n.t.next,
                     stretch: false,
                   ),
                 ),

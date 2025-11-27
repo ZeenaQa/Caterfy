@@ -1,7 +1,9 @@
-import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/util/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import '../customer_sections/customer_home.dart';
 import '../customer_sections/customer_account.dart';
 import '../customer_sections/customer_orders.dart';
@@ -25,10 +27,11 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context);
+    final themeController = context.watch<ThemeController>();
+    final isDark = themeController.themeMode == ThemeMode.dark;
 
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.dark,
+      value: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       child: Scaffold(
         body: IndexedStack(index: _currentIndex, children: _screens),
         bottomNavigationBar: Container(
@@ -71,21 +74,21 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                       ),
                     ),
                   ),
-                  label: l10n.home,
+                  label: L10n.t.home,
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 1),
                     child: Icon(Icons.receipt_outlined),
                   ),
-                  label: l10n.orders,
+                  label: L10n.t.orders,
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 1),
                     child: Icon(Icons.account_circle_outlined),
                   ),
-                  label: l10n.account,
+                  label: L10n.t.account,
                 ),
               ],
             ),

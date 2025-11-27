@@ -1,5 +1,5 @@
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/set_password.dart';
@@ -32,14 +32,14 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final l10n = AppLocalizations.of(context);
+      
       setState(() {
         businessTypes = [
-          l10n.restaurant,
-          l10n.cafe,
-          l10n.bakery,
-          l10n.grocery,
-          l10n.other,
+          L10n.t.restaurant,
+          L10n.t.cafe,
+          L10n.t.bakery,
+          L10n.t.grocery,
+          L10n.t.other,
         ];
         selectedBusiness = businessTypes[0];
       });
@@ -78,7 +78,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
   Widget build(BuildContext context) {
     final auth = Provider.of<VendorAuthProvider>(context);
     final colors = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context);
+    
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -90,7 +90,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
             const SizedBox(height: 60),
             Center(
               child: Text(
-                l10n.businessInformation,
+                L10n.t.businessInformation,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
@@ -103,8 +103,8 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
               onChanged: (v) {
                 businessName = v;
               },
-              hint: l10n.enterBusinessName,
-              label: l10n.businessName,
+              hint: L10n.t.enterBusinessName,
+              label: L10n.t.businessName,
               errorText: auth.businessNameError,
             ),
             const SizedBox(height: 20),
@@ -114,7 +114,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15, bottom: 6),
                   child: Text(
-                    l10n.businessType,
+                    L10n.t.businessType,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -147,7 +147,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
               alignment: Alignment.centerRight,
               child: FilledBtn(
                 onPressed: () => handleNext(auth),
-                title: l10n.next,
+                title: L10n.t.next,
                 stretch: false,
               ),
             ),

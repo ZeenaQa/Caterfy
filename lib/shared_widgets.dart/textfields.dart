@@ -1,4 +1,4 @@
-import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -279,7 +279,7 @@ class LabeledPhoneField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context);
+    
     final hasError = errorText != null && errorText!.isNotEmpty;
 
     return Column(
@@ -312,7 +312,7 @@ class LabeledPhoneField extends StatelessWidget {
               ],
             ),
           ),
-        CustomPhoneField(hintText: hintText ?? l10n.enterPhoneNumber, onChanged: onChanged),
+        CustomPhoneField(hintText: hintText ?? L10n.t.enterPhoneNumber, onChanged: onChanged),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:caterfy/customers/screens/customer_orders_screen.dart';
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,26 +17,26 @@ class CustomerAccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context);
+    
     final user = Provider.of<GlobalProvider>(context).user;
     final List<Widget> items = [
       AccountButton(
-        title: l10n.yourOrders,
+        title: L10n.t.yourOrders,
         icon: Icons.receipt_outlined,
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => CustomerOrdersScreen(appBarTitle: l10n.yourOrders),
+            builder: (_) => CustomerOrdersScreen(appBarTitle: L10n.t.yourOrders),
           ),
         ),
       ),
       AccountButton(
-        title: l10n.vouchers,
+        title: L10n.t.vouchers,
         icon: Icons.wallet_giftcard_outlined,
         // rightText: '0',
       ),
-      AccountButton(title: l10n.getHelp, icon: Icons.help_outline),
-      AccountButton(title: l10n.aboutApp, icon: Icons.info_outline),
+      AccountButton(title: L10n.t.getHelp, icon: Icons.help_outline),
+      AccountButton(title: L10n.t.aboutApp, icon: Icons.info_outline),
     ];
     return SafeArea(
       child: (user == null)
@@ -49,7 +49,7 @@ class CustomerAccountSection extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          CustomerSettingsScreen(title: l10n.settings),
+                          CustomerSettingsScreen(title: L10n.t.settings),
                     ),
                   ),
                   child: Padding(
@@ -124,7 +124,7 @@ class CustomerAccountSection extends StatelessWidget {
                               ),
                               SizedBox(width: 15),
                               Text(
-                                "0.00 ${l10n.jd}",
+                                "0.00 ${L10n.t.jd}",
                                 style: TextStyle(
                                   color: colors.primary,
                                   fontSize: 18,
@@ -142,7 +142,7 @@ class CustomerAccountSection extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                l10n.viewDetails,
+                                L10n.t.viewDetails,
                                 style: TextStyle(
                                   decoration: TextDecoration.underline,
                                   color: colors.onSurfaceVariant,

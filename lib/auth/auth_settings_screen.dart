@@ -1,9 +1,9 @@
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/drawer_button.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
+import 'package:caterfy/util/l10n_helper.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ class AuthSettingsScreen extends StatelessWidget {
     final themeController = context.watch<ThemeController>();
     final isDark = themeController.themeMode == ThemeMode.dark;
     final colors = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context);
+    
     final List<Widget> items = [
       SizedBox(height: 10),
       SettingsButton(
@@ -47,7 +47,7 @@ class AuthSettingsScreen extends StatelessWidget {
             ),
           );
         },
-        title: l10n.language,
+        title: L10n.t.language,
         icon: Icons.language_outlined,
         rightText: locale.languageCode == "en" ? "English" : "العربية",
       ),
@@ -60,7 +60,7 @@ class AuthSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: !isDark,
                   colors: colors,
-                  title: l10n.lightTheme,
+                  title: L10n.t.lightTheme,
                   icon: Icons.wb_sunny_outlined,
                   onPressed: () => Provider.of<ThemeController>(
                     context,
@@ -70,7 +70,7 @@ class AuthSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: isDark,
                   colors: colors,
-                  title: l10n.darkTheme,
+                  title: L10n.t.darkTheme,
                   icon: Icons.dark_mode_outlined,
                   onPressed: () => Provider.of<ThemeController>(
                     context,
@@ -81,14 +81,14 @@ class AuthSettingsScreen extends StatelessWidget {
             ),
           );
         },
-        title: l10n.theme,
+        title: L10n.t.theme,
         icon: Icons.wb_sunny_outlined,
-        rightText: isDark ? l10n.dark : l10n.light,
+        rightText: isDark ? L10n.t.dark : L10n.t.light,
         isLastItem: true,
       ),
     ];
     return Scaffold(
-      appBar: CustomAppBar(title: l10n.settings),
+      appBar: CustomAppBar(title: L10n.t.settings),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 19),
         physics: NeverScrollableScrollPhysics(),
