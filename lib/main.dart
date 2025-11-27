@@ -107,8 +107,13 @@ void main() async {
   final entryWidget = await OnBoardingSkip.WidgetIntApp();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeController(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeController()),
+        ChangeNotifierProvider(
+          create: (_) => GlobalProvider()..fetchCurrentLocation(),
+        ),
+      ],
       child: MyApp(entryWidget: entryWidget),
     ),
   );

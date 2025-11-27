@@ -42,7 +42,7 @@ class OnBoardingSkip {
         return const SelectionScreen();
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         final ctx = navigatorKey.currentContext;
 
         if (ctx != null) {
@@ -52,6 +52,8 @@ class OnBoardingSkip {
           );
 
           globalProvider.setUser(fetchedUser);
+
+          await globalProvider.fetchCurrentLocation();
         }
       });
 
