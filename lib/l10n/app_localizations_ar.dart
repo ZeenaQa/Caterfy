@@ -310,4 +310,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectType => 'الرجاء اختيار النوع';
+
+  @override
+  String get food => 'المطاعم';
+
+  @override
+  String get ceemart => 'سيمارت';
+
+  @override
+  String get groceries => 'البقالة';
+
+  @override
+  String get electronics => 'الإلكترونيات';
+
+  @override
+  String get pharmacy => 'الصيدليات';
+
+  @override
+  String get toysAndKids => 'الألعاب والأطفال';
+
+  @override
+  String get healthAndBeauty => 'الجمال والصحة';
+
+  @override
+  String get pets => 'الحيوانات الأليفة';
 }

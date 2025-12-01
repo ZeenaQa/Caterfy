@@ -691,6 +691,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select a type'**
   String get selectType;
+
+  /// No description provided for @food.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get food;
+
+  /// No description provided for @ceemart.
+  ///
+  /// In en, this message translates to:
+  /// **'Ceemart'**
+  String get ceemart;
+
+  /// No description provided for @groceries.
+  ///
+  /// In en, this message translates to:
+  /// **'Groceries'**
+  String get groceries;
+
+  /// No description provided for @electronics.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronics'**
+  String get electronics;
+
+  /// No description provided for @pharmacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Pharmacy'**
+  String get pharmacy;
+
+  /// No description provided for @toysAndKids.
+  ///
+  /// In en, this message translates to:
+  /// **'Toys & Kids'**
+  String get toysAndKids;
+
+  /// No description provided for @healthAndBeauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Health & Beauty'**
+  String get healthAndBeauty;
+
+  /// No description provided for @pets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get pets;
 }
 
 class _AppLocalizationsDelegate

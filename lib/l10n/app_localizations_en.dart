@@ -311,4 +311,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectType => 'Please select a type';
+
+  @override
+  String get food => 'Food';
+
+  @override
+  String get ceemart => 'Ceemart';
+
+  @override
+  String get groceries => 'Groceries';
+
+  @override
+  String get electronics => 'Electronics';
+
+  @override
+  String get pharmacy => 'Pharmacy';
+
+  @override
+  String get toysAndKids => 'Toys & Kids';
+
+  @override
+  String get healthAndBeauty => 'Health & Beauty';
+
+  @override
+  String get pets => 'Pets';
 }

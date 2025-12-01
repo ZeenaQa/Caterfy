@@ -98,5 +98,13 @@
   "seconds": "seconds",
   "tryAgainIn": "Please try again in",
   "emailNotFound" : "No account found with this email",
-  "selectType": "Please select a type"
+  "selectType": "Please select a type",
+  "food": "Food",
+  "ceemart": "Ceemart",
+  "groceries": "Groceries",
+  "electronics": "Electronics",
+  "pharmacy": "Pharmacy",
+  "toysAndKids": "Toys & Kids",
+  "healthAndBeauty": "Health & Beauty",
+  "pets": "Pets"
 }
