@@ -3,6 +3,8 @@ import 'package:caterfy/util/l10n_helper.dart';
 import 'package:flutter/material.dart';
 
 class CustomerOrdersSection extends StatelessWidget {
+  const CustomerOrdersSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;

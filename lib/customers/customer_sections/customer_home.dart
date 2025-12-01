@@ -4,6 +4,8 @@ import 'package:caterfy/util/wavy_clipper.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomeSection extends StatefulWidget {
+  const CustomerHomeSection({super.key});
+
   @override
   _ScrollHideHeaderPageState createState() => _ScrollHideHeaderPageState();
 }
@@ -29,8 +31,9 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
       currentHeaderOffset -= delta;
 
       if (currentHeaderOffset > 0) currentHeaderOffset = 0;
-      if (currentHeaderOffset < -headerHeight)
+      if (currentHeaderOffset < -headerHeight) {
         currentHeaderOffset = -headerHeight;
+      }
 
       lastOffset = offset;
 
