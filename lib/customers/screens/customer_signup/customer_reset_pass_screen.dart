@@ -24,7 +24,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
-    
+
     final colors = Theme.of(context).colorScheme;
 
     return PopScope(

@@ -49,7 +49,10 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
     return Scaffold(
       body: Stack(
         children: [
-          CustomerHomeCategories(topMargin: headerHeight),
+          ListView(
+            padding: EdgeInsets.only(top: headerHeight),
+            children: [CustomerHomeCategories(topMargin: 0)],
+          ),
           Transform.translate(
             offset: Offset(0, currentHeaderOffset),
             child: PhysicalShape(

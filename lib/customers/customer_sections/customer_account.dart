@@ -17,7 +17,7 @@ class CustomerAccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    
+
     final user = Provider.of<GlobalProvider>(context).user;
     final List<Widget> items = [
       AccountButton(
@@ -25,9 +25,7 @@ class CustomerAccountSection extends StatelessWidget {
         icon: Icons.receipt_outlined,
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => CustomerOrdersScreen(appBarTitle: L10n.t.yourOrders),
-          ),
+          MaterialPageRoute(builder: (_) => CustomerOrdersScreen()),
         ),
       ),
       AccountButton(
@@ -40,17 +38,14 @@ class CustomerAccountSection extends StatelessWidget {
     ];
     return SafeArea(
       child: (user == null)
-          ? Text("LOADING", style: TextStyle(fontWeight: FontWeight.bold),)
+          ? Text("LOADING", style: TextStyle(fontWeight: FontWeight.bold))
           : Column(
               children: [
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          CustomerSettingsScreen(title: L10n.t.settings),
-                    ),
+                    MaterialPageRoute(builder: (_) => CustomerSettingsScreen()),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -70,7 +65,13 @@ class CustomerAccountSection extends StatelessWidget {
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Center(
-                            child: Text(getInitial(user?['name'] ?? ''), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                            child: Text(
+                              getInitial(user?['name'] ?? ''),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                         Text(

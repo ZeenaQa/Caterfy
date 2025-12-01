@@ -1,4 +1,6 @@
+import 'package:caterfy/customers/customer_categories/customer_food_category.dart';
 import 'package:caterfy/util/l10n_helper.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomeCategories extends StatelessWidget {
@@ -10,7 +12,7 @@ class CustomerHomeCategories extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: topMargin + 30),
       child: Align(
-        alignment: Alignment.topCenter, // horizontally centered only
+        alignment: Alignment.topCenter,
         child: Wrap(
           spacing: 10,
           runSpacing: 15,
@@ -18,6 +20,10 @@ class CustomerHomeCategories extends StatelessWidget {
             CategoryBox(
               title: L10n.t.food,
               image: 'assets/images/burger_icon.png',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => CustomerFoodCategory()),
+              ),
             ),
             CategoryBox(
               title: L10n.t.ceemart,
@@ -57,10 +63,16 @@ class CustomerHomeCategories extends StatelessWidget {
 }
 
 class CategoryBox extends StatelessWidget {
-  const CategoryBox({super.key, required this.title, this.image = ''});
+  const CategoryBox({
+    super.key,
+    required this.title,
+    this.image = '',
+    this.onTap,
+  });
 
   final String title;
   final String image;
+  final GestureCancelCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +80,18 @@ class CategoryBox extends StatelessWidget {
     return Column(
       spacing: 7,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: colors.surfaceContainer,
-            borderRadius: BorderRadius.circular(13),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              color: colors.surfaceContainer,
+              borderRadius: BorderRadius.circular(13),
+            ),
+            width: 85,
+            height: 85,
+            padding: EdgeInsets.all(20),
+            child: image.isNotEmpty ? Image.asset(image) : null,
           ),
-          width: 85,
-          height: 85,
-          padding: EdgeInsets.all(20),
-          child: image.isNotEmpty ? Image.asset(image) : null,
         ),
         Text(
           title,

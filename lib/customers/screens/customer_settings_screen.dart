@@ -12,8 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerSettingsScreen extends StatelessWidget {
-  const CustomerSettingsScreen({super.key, this.title});
-  final String? title;
+  const CustomerSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class CustomerSettingsScreen extends StatelessWidget {
     final locale = Provider.of<LocaleProvider>(context).locale;
     final themeController = context.watch<ThemeController>();
     final isDark = themeController.themeMode == ThemeMode.dark;
-    
+
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
 
     Future<void> handleLogout() async {
@@ -143,7 +142,7 @@ class CustomerSettingsScreen extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      appBar: CustomAppBar(title: title),
+      appBar: CustomAppBar(title: L10n.t.settings),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 19),
         physics: NeverScrollableScrollPhysics(),
