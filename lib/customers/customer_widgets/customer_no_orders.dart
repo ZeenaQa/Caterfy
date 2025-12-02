@@ -1,4 +1,4 @@
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +9,7 @@ class CustomerNoOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final themeController = context.watch<ThemeController>();
     final isDark = themeController.themeMode == ThemeMode.dark;
     final colors = Theme.of(context).colorScheme;
@@ -27,7 +28,7 @@ class CustomerNoOrders extends StatelessWidget {
             ),
             SizedBox(height: 15),
             Text(
-              L10n.t.noOrdersYet,
+              l10.noOrdersYet,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -35,7 +36,7 @@ class CustomerNoOrders extends StatelessWidget {
               ),
             ),
             Text(
-              L10n.t.noOrdersTip,
+              l10.noOrdersTip,
               style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12),
             ),
           ],

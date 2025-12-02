@@ -1,7 +1,8 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/personal_info.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
-    
 
     return Scaffold(
       body: SafeArea(
@@ -36,7 +37,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        L10n.t.continueWithEmail,
+                        l10.continueWithEmail,
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -50,7 +51,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                           vendorAuth.clearEmailError();
                         },
                         hint: 'example@gmail.com',
-                        label: L10n.t.email,
+                        label: l10.email,
                         errorText: vendorAuth.emailError,
                       ),
                       SizedBox(height: 15),
@@ -61,7 +62,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                           vendorAuth.clearPassError();
                         },
                         hint: ('****************'),
-                        label: L10n.t.password,
+                        label: l10.password,
                         errorText: vendorAuth.passwordError,
                       ),
 
@@ -78,7 +79,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                           if (!vendorAuth.forgotPassLoading)
                             OutlinedBtn(
                               onPressed: () {},
-                              title: L10n.t.forgotPassword,
+                              title: l10.forgotPassword,
                               titleSize: 13,
                               lighterBorder: true,
                             ),
@@ -95,7 +96,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                                 ),
                               );
                             },
-                            title: L10n.t.becomeVendor,
+                            title: l10.becomeVendor,
                             titleSize: 13,
                             lighterBorder: true,
                           ),
@@ -108,7 +109,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
               SizedBox(height: 10),
 
               FilledBtn(
-                title: L10n.t.login,
+                title: l10.login,
                 onPressed: () async {
                   await vendorAuth.logIn(
                     email: email.trim(),

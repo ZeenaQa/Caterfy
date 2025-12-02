@@ -1,10 +1,11 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
@@ -23,6 +24,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final auth = Provider.of<CustomerAuthProvider>(context);
 
     final colors = Theme.of(context).colorScheme;
@@ -34,15 +36,15 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
 
         await showCustomDialog(
           context,
-          title: L10n.t.cancelPasswordResetTitle,
-          content: L10n.t.cancelPasswordResetMessage,
-          confirmText: L10n.t.confirmCancel,
-          cancelText: L10n.t.stay,
+          title: l10.cancelPasswordResetTitle,
+          content: l10.cancelPasswordResetMessage,
+          confirmText: l10.confirmCancel,
+          cancelText: l10.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
       child: Scaffold(
-        appBar: CustomAppBar(title: L10n.t.forgotPassword, titleSize: 15),
+        appBar: CustomAppBar(title: l10.forgotPassword, titleSize: 15),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -59,7 +61,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             password = val;
                           },
                           hint: '****************',
-                          label: L10n.t.password,
+                          label: l10.password,
                           errorText: auth.passwordError,
                         ),
                         SizedBox(height: 15),
@@ -69,7 +71,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             confirmPass = val;
                           },
                           hint: '****************',
-                          label: L10n.t.confirmPassword,
+                          label: l10.confirmPassword,
                           errorText: auth.confirmPasswordError,
                         ),
                         SizedBox(height: 10),
@@ -79,7 +81,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                L10n.t.passwordRequirementTitle,
+                                l10.passwordRequirementTitle,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
@@ -87,21 +89,21 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                               ),
                               SizedBox(height: 15),
                               Text(
-                                L10n.t.passwordRequirementUppercase,
+                                l10.passwordRequirementUppercase,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
-                                L10n.t.passwordRequirementLowercase,
+                                l10.passwordRequirementLowercase,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
                                 ),
                               ),
                               Text(
-                                L10n.t.passwordRequirementNumber,
+                                l10.passwordRequirementNumber,
                                 style: TextStyle(
                                   color: colors.onSurfaceVariant,
                                   fontSize: 11,
@@ -120,19 +122,20 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                     final res = await auth.resetPassword(
                       password: password,
                       confirmPassword: confirmPass,
+                      context: context,
                     );
                     if (context.mounted && res['message'] != 'mismatch') {
                       if (res['success']) {
                         showCustomToast(
                           context: context,
                           type: ToastificationType.success,
-                          message: L10n.t.passwordResetSuccess,
+                          message: l10.passwordResetSuccess,
                         );
                       } else {
                         showCustomToast(
                           context: context,
                           type: ToastificationType.error,
-                          message: L10n.t.somethingWentWrong,
+                          message: l10.somethingWentWrong,
                         );
                       }
                       Navigator.of(context)
@@ -140,7 +143,7 @@ class _CustomerResetPassScreenState extends State<CustomerResetPassScreen> {
                         ..pop();
                     }
                   },
-                  title: L10n.t.resetPassword,
+                  title: l10.resetPassword,
                   isLoading: auth.isLoading,
                 ),
               ],

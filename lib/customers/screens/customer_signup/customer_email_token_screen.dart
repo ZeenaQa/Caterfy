@@ -1,9 +1,10 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pinput/pinput.dart';
@@ -28,9 +29,10 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final auth = Provider.of<CustomerAuthProvider>(context);
     final pinController = TextEditingController();
-    
+
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final colors = Theme.of(context).colorScheme;
@@ -55,10 +57,10 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
 
         await showCustomDialog(
           context,
-          title: L10n.t.verification,
-          content: L10n.t.cancelVerificationQuestion,
-          confirmText: L10n.t.confirmCancel,
-          cancelText: L10n.t.stay,
+          title: l10.verification,
+          content: l10.cancelVerificationQuestion,
+          confirmText: l10.confirmCancel,
+          cancelText: l10.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );
       },
@@ -76,7 +78,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      L10n.t.verification,
+                      l10.verification,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 27,
@@ -85,7 +87,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      L10n.t.enterCodeSent,
+                      l10.enterCodeSent,
                       style: TextStyle(
                         fontSize: 18,
                         color: colors.onSurfaceVariant,
@@ -120,7 +122,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                           showCustomToast(
                             context: context,
                             type: ToastificationType.error,
-                            message: L10n.t.invalidOrExpiredCode,
+                            message: l10.invalidOrExpiredCode,
                           );
                           pinController.clear();
                         } else {
@@ -128,7 +130,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                           showCustomToast(
                             context: context,
                             type: ToastificationType.success,
-                            message: L10n.t.emailVerified,
+                            message: l10.emailVerified,
                           );
                         }
                       },
@@ -136,7 +138,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                     const SizedBox(height: 40),
                     if (!auth.tokenIsLoading) ...[
                       Text(
-                        L10n.t.didntReceiveCode,
+                        l10.didntReceiveCode,
                         style: TextStyle(fontSize: 16, color: colors.primary),
                       ),
                       SizedBox(height: 10),
@@ -148,6 +150,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                             email: widget.email.trim(),
                             password: widget.password,
                             confirmPassword: widget.password,
+                            context: context,
                           );
                           auth.setTokenIsLoading(false);
                           if (context.mounted) {
@@ -165,10 +168,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text(
-                          L10n.t.resend,
-                          selectionColor: colors.primary,
-                        ),
+                        child: Text(l10.resend, selectionColor: colors.primary),
                       ),
                     ] else
                       CustomThreeLineSpinner(),

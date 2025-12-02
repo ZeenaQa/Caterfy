@@ -1,4 +1,4 @@
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_email_login_screen.dart';
 import 'package:caterfy/vendors/screens/vendor_login/vendor_phone_login_screen.dart';
@@ -10,8 +10,9 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
-    
+
     return PopScope(
       canPop: true, // allow popping
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
@@ -26,7 +27,7 @@ class SignInPage extends StatelessWidget {
           appBar: AppBar(
             elevation: 0,
             title: Text(
-              L10n.t.login,
+              l10.login,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
@@ -38,8 +39,8 @@ class SignInPage extends StatelessWidget {
                 labelStyle: TextStyle(fontWeight: FontWeight.w600),
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
                 tabs: [
-                  Tab(child: Text(L10n.t.email)),
-                  Tab(child: Text(L10n.t.phoneNumber)),
+                  Tab(child: Text(l10.email)),
+                  Tab(child: Text(l10.phoneNumber)),
                 ],
               ),
             ),

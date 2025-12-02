@@ -1,12 +1,13 @@
 import 'package:caterfy/customers/customer_widgets/customer_no_orders.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomerOrdersSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
-    
 
     return SafeArea(
       child: Padding(
@@ -15,7 +16,7 @@ class CustomerOrdersSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              L10n.t.orders,
+              l10.orders,
               style: TextStyle(
                 color: colors.onSurface,
                 fontWeight: FontWeight.w600,

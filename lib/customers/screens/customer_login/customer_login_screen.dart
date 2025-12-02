@@ -1,11 +1,12 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_pass_token_screen.dart';
 import 'package:caterfy/customers/screens/customer_signup/customer_signup_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
@@ -23,8 +24,8 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final customerAuth = Provider.of<CustomerAuthProvider>(context);
-    
 
     return Scaffold(
       appBar: CustomAppBar(),
@@ -39,7 +40,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        L10n.t.continueWithEmail,
+                        l10.continueWithEmail,
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -53,7 +54,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                           customerAuth.clearEmailError();
                         },
                         hint: 'example@gmail.com',
-                        label: L10n.t.email,
+                        label: l10.email,
                         errorText: customerAuth.emailError,
                       ),
                       SizedBox(height: 15),
@@ -64,7 +65,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                           customerAuth.clearPassError();
                         },
                         hint: ('****************'),
-                        label: L10n.t.password,
+                        label: l10.password,
                         errorText: customerAuth.passwordError,
                       ),
 
@@ -82,7 +83,10 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                               onPressed: () async {
                                 final tempEmail = email;
                                 final res = await customerAuth
-                                    .sendForgotPasswordPassEmail(email: email);
+                                    .sendForgotPasswordPassEmail(
+                                      email: email,
+                                      context: context,
+                                    );
 
                                 if (res['success'] && context.mounted) {
                                   Navigator.push(
@@ -96,7 +100,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                                   );
                                 }
                               },
-                              title: L10n.t.forgotPassword,
+                              title: l10.forgotPassword,
                               titleSize: 13,
                               lighterBorder: true,
                             ),
@@ -117,7 +121,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                                 ),
                               );
                             },
-                            title: L10n.t.createAccount,
+                            title: l10.createAccount,
                             titleSize: 13,
                             lighterBorder: true,
                           ),
@@ -128,7 +132,7 @@ class _CustomerEmailLoginState extends State<CustomerEmailLogin> {
                 ),
               ),
               FilledBtn(
-                title: L10n.t.login,
+                title: l10.login,
                 onPressed: () async {
                   await customerAuth.logIn(
                     email: email.trim(),

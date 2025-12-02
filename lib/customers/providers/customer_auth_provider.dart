@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/screens/customer_signup/customer_email_token_screen.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -53,28 +54,28 @@ class CustomerAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Validation ----------------
-  String? validateEmail(String email) {
+  String? validateEmail(String email, AppLocalizations l10) {
     if (email.isEmpty) {
-      return L10n.t.emptyField;
+      return l10.emptyField;
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return L10n.t.invalidEmail;
+      return l10.invalidEmail;
     }
     return null;
   }
 
-  String? validatePassword(String password) {
+  String? validatePassword(String password, AppLocalizations l10) {
     if (password.isEmpty) {
-      return L10n.t.emptyField;
+      return l10.emptyField;
     }
     if (password.length < 8) {
-      return L10n.t.shortPassword;
+      return l10.shortPassword;
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return L10n.t.oneUppercase;
+      return l10.oneUppercase;
     }
     if (!RegExp(r'\d').hasMatch(password)) {
-      return L10n.t.oneNumber;
+      return l10.oneNumber;
     }
     return null;
   }
@@ -94,13 +95,15 @@ class CustomerAuthProvider extends ChangeNotifier {
     required String email,
     required String password,
     required String confirmPassword,
+    required BuildContext context,
   }) async {
-    nameError = name.isEmpty ? L10n.t.emptyField : null;
-    confirmPasswordError = confirmPassword.isEmpty ? L10n.t.emptyField : null;
-    emailError = validateEmail(email);
-    passwordError = validatePassword(password);
+    final l10 = AppLocalizations.of(context);
+    nameError = name.isEmpty ? l10.emptyField : null;
+    confirmPasswordError = confirmPassword.isEmpty ? l10.emptyField : null;
+    emailError = validateEmail(email, l10);
+    passwordError = validatePassword(password, l10);
     confirmPasswordError = password != confirmPassword
-        ? L10n.t.passwordsNoMatch
+        ? l10.passwordsNoMatch
         : null;
 
     notifyListeners();
@@ -109,7 +112,7 @@ class CustomerAuthProvider extends ChangeNotifier {
         emailError != null ||
         passwordError != null ||
         confirmPasswordError != null) {
-      return {'success': false, 'message': L10n.t.invalidFields};
+      return {'success': false, 'message': l10.invalidFields};
     }
 
     try {
@@ -121,27 +124,27 @@ class CustomerAuthProvider extends ChangeNotifier {
         data: {'name': name, 'role': 'customer'},
       );
 
-      return {'success': true, 'message': L10n.t.verifCodeSent};
+      return {'success': true, 'message': l10.verifCodeSent};
     } on AuthException catch (e) {
       if (e.code == 'user_already_exists') {
-        emailError = '${L10n.t.emailInUse}.';
+        emailError = '${l10.emailInUse}.';
         notifyListeners();
-        return {'success': false, 'message': '${L10n.t.emailInUse}.'};
+        return {'success': false, 'message': '${l10.emailInUse}.'};
       } else if (e.code == "over_email_send_rate_limit") {
         final int? seconds = extractIntFromString(e.message);
-        final errMsg = '${L10n.t.tryAgainIn} $seconds ${L10n.t.seconds}.';
+        final errMsg = '${l10.tryAgainIn} $seconds ${l10.seconds}.';
         emailError = errMsg;
         return {
           'success': false,
-          'message': '${L10n.t.tryAgainIn} $seconds ${L10n.t.seconds}.',
+          'message': '${l10.tryAgainIn} $seconds ${l10.seconds}.',
         };
       } else {
         setSignUpError(e.message);
       }
-      return {'success': false, 'message': L10n.t.somethingWentWrong};
+      return {'success': false, 'message': l10.somethingWentWrong};
     } catch (e) {
       setSignUpError(e.toString());
-      return {'success': false, 'message': L10n.t.somethingWentWrong};
+      return {'success': false, 'message': l10.somethingWentWrong};
     } finally {
       setLoading(false);
     }
@@ -175,10 +178,11 @@ class CustomerAuthProvider extends ChangeNotifier {
   Future<bool> logIn({
     required email,
     required String password,
-    BuildContext? context,
+    required BuildContext context,
   }) async {
-    emailError = validateEmail(email);
-    passwordError = password.isEmpty ? L10n.t.emptyField : null;
+    final l10 = AppLocalizations.of(context);
+    emailError = validateEmail(email, l10);
+    passwordError = password.isEmpty ? l10.emptyField : null;
 
     notifyListeners();
     if (emailError != null || passwordError != null) {
@@ -194,8 +198,8 @@ class CustomerAuthProvider extends ChangeNotifier {
       );
 
       if (response.session == null) {
-        emailError = L10n.t.invalidEmailOrPassword;
-        passwordError = L10n.t.invalidEmailOrPassword;
+        emailError = l10.invalidEmailOrPassword;
+        passwordError = l10.invalidEmailOrPassword;
         notifyListeners();
         return false;
       }
@@ -208,8 +212,9 @@ class CustomerAuthProvider extends ChangeNotifier {
           email: email.trim(),
           password: password,
           confirmPassword: password,
+          context: context,
         );
-        if (res['success'] && context!.mounted) {
+        if (res['success'] && context.mounted) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -220,8 +225,8 @@ class CustomerAuthProvider extends ChangeNotifier {
         }
         return false;
       }
-      emailError = L10n.t.invalidEmailOrPassword;
-      passwordError = L10n.t.invalidEmailOrPassword;
+      emailError = l10.invalidEmailOrPassword;
+      passwordError = l10.invalidEmailOrPassword;
       notifyListeners();
       return false;
     } finally {
@@ -229,10 +234,14 @@ class CustomerAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> sendForgotPasswordPassEmail({required String email}) async {
+  Future<dynamic> sendForgotPasswordPassEmail({
+    required String email,
+    required BuildContext context,
+  }) async {
+    final l10 = AppLocalizations.of(context);
     try {
       // Validate email format
-      final emailRes = validateEmail(email);
+      final emailRes = validateEmail(email, l10);
       if (emailRes != null) {
         emailError = emailRes;
         notifyListeners();
@@ -247,12 +256,9 @@ class CustomerAuthProvider extends ChangeNotifier {
           .maybeSingle();
 
       if (response == null) {
-        emailError = L10n.t.emailNotFound;
+        emailError = l10.emailNotFound;
         notifyListeners();
-        return {
-          'success': false,
-          'message': L10n.t.emailNotFound,
-        };
+        return {'success': false, 'message': l10.emailNotFound};
       }
 
       forgotPassLoading = true;
@@ -264,14 +270,14 @@ class CustomerAuthProvider extends ChangeNotifier {
     } on AuthApiException catch (e) {
       if (e.code == "over_email_send_rate_limit") {
         final int? seconds = extractIntFromString(e.message);
-        final errMsg = '${L10n.t.tryAgainIn} $seconds ${L10n.t.seconds}.';
+        final errMsg = '${l10.tryAgainIn} $seconds ${l10.seconds}.';
         emailError = errMsg;
         return {'success': false, 'message': errMsg};
       }
     } catch (e) {
-      emailError = '${L10n.t.somethingWentWrong} $e';
+      emailError = '${l10.somethingWentWrong} $e';
       notifyListeners();
-      return {'success': false, 'message': L10n.t.somethingWentWrong};
+      return {'success': false, 'message': l10.somethingWentWrong};
     } finally {
       forgotPassLoading = false;
       notifyListeners();
@@ -304,12 +310,14 @@ class CustomerAuthProvider extends ChangeNotifier {
   Future<dynamic> resetPassword({
     required String password,
     required String confirmPassword,
+    required BuildContext context,
   }) async {
+    final l10 = AppLocalizations.of(context);
     try {
-      passwordError = validatePassword(password);
-      confirmPasswordError = confirmPassword.isEmpty ? L10n.t.emptyField : null;
+      passwordError = validatePassword(password, l10);
+      confirmPasswordError = confirmPassword.isEmpty ? l10.emptyField : null;
       confirmPasswordError = password != confirmPassword
-          ? L10n.t.passwordsNoMatch
+          ? l10.passwordsNoMatch
           : null;
 
       if (passwordError != null || confirmPasswordError != null) {
@@ -321,9 +329,9 @@ class CustomerAuthProvider extends ChangeNotifier {
       await supabase.auth.updateUser(UserAttributes(password: password));
       return {'success': true, 'message': 'Password reset successfully.'};
     } on AuthApiException {
-      return {'success': false, 'message': L10n.t.somethingWentWrong};
+      return {'success': false, 'message': l10.somethingWentWrong};
     } catch (e) {
-      return {'success': false, 'message': L10n.t.somethingWentWrong};
+      return {'success': false, 'message': l10.somethingWentWrong};
     } finally {
       isLoading = false;
       notifyListeners();
@@ -332,9 +340,13 @@ class CustomerAuthProvider extends ChangeNotifier {
 
   // ---------------- Phone ----------------
 
-  Future<bool> signUpOrSignInWithPhone({required String phoneNumber}) async {
+  Future<bool> signUpOrSignInWithPhone({
+    required String phoneNumber,
+    required BuildContext context,
+  }) async {
+    final l10 = AppLocalizations.of(context);
     if (phoneNumber.isEmpty) {
-      phoneNumberError = L10n.t.emptyField;
+      phoneNumberError = l10.emptyField;
       notifyListeners();
       return false;
     }
@@ -357,17 +369,17 @@ class CustomerAuthProvider extends ChangeNotifier {
           notifyListeners();
           return true;
         } catch (e) {
-          phoneNumberError = L10n.t.somethingWentWrong;
+          phoneNumberError = l10.somethingWentWrong;
           notifyListeners();
           return false;
         }
       }
 
-      phoneNumberError = L10n.t.somethingWentWrong;
+      phoneNumberError = l10.somethingWentWrong;
       notifyListeners();
       return false;
     } catch (e) {
-      phoneNumberError = L10n.t.somethingWentWrong;
+      phoneNumberError = l10.somethingWentWrong;
       notifyListeners();
       return false;
     } finally {

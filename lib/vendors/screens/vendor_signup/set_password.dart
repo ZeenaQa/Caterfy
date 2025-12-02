@@ -1,6 +1,7 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,9 @@ class _SetPasswordState extends State<SetPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final auth = Provider.of<VendorAuthProvider>(context);
-    
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -47,7 +49,7 @@ class _SetPasswordState extends State<SetPassword> {
 
               Center(
                 child: Text(
-                  L10n.t.setYourPassword,
+                  l10.setYourPassword,
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w600,
@@ -60,7 +62,7 @@ class _SetPasswordState extends State<SetPassword> {
                   auth.clearPassError();
                 },
                 hint: '****************',
-                label: L10n.t.password,
+                label: l10.password,
                 errorText: auth.passwordError,
               ),
               LabeledPasswordField(
@@ -69,15 +71,16 @@ class _SetPasswordState extends State<SetPassword> {
                   auth.clearConfirmPassError();
                 },
                 hint: '****************',
-                label: L10n.t.confirmPassword,
+                label: l10.confirmPassword,
                 errorText: auth.confirmPasswordError,
               ),
               FilledBtn(
-                title: L10n.t.signup,
+                title: l10.signup,
                 onPressed: () async {
                   if (auth.validatePasswordInfo(
                     password: password,
                     confirmPassword: confirmPassword,
+                    l10: AppLocalizations.of(context),
                   )) {
                     final success = await auth.signUp(
                       onlyPassword: true,
@@ -88,8 +91,9 @@ class _SetPasswordState extends State<SetPassword> {
                       phoneNumber: widget.phoneNumber,
                       businessName: widget.businessName,
                       businessType: widget.selectedBusiness,
+                      context: context,
                     );
-                    if (success) {
+                    if (success && context.mounted) {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

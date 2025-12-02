@@ -61,28 +61,30 @@ void main() async {
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final ctx = navigatorKey.currentContext;
-
+          print("CONTEXTTTTTTTTTTTTTTTTTTT $ctx");
           if (ctx != null) {
             final globalProvider = Provider.of<GlobalProvider>(
               ctx,
               listen: false,
             );
-
+            print("USERRRRRRRRRRRRRRRRRR $fetchedUser");
             globalProvider.setUser(fetchedUser);
           }
         });
 
-        if (role == "customer") {
-          Navigator.pushReplacement(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
-          );
-        } else {
-          Navigator.pushReplacement(
-            navigatorKey.currentContext!,
-            MaterialPageRoute(builder: (_) => VendorHomeScreen()),
-          );
-        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (role == "customer") {
+            Navigator.pushReplacement(
+              navigatorKey.currentContext!,
+              MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              navigatorKey.currentContext!,
+              MaterialPageRoute(builder: (_) => VendorHomeScreen()),
+            );
+          }
+        });
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -97,10 +99,12 @@ void main() async {
     }
 
     if (event == AuthChangeEvent.signedOut) {
-      Navigator.pushReplacement(
-        navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (_) => SelectionScreen()),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(builder: (_) => SelectionScreen()),
+        );
+      });
     }
   });
 

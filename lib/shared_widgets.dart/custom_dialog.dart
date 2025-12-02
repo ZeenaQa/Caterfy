@@ -1,5 +1,6 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:flutter/material.dart';
 
 Future<bool?> showCustomDialog(
@@ -12,7 +13,7 @@ Future<bool?> showCustomDialog(
   bool popAfterAsync = true,
   VoidCallback? onCancel,
 }) {
-  
+  final l10 = AppLocalizations.of(context);
   final screenWidth = MediaQuery.of(context).size.width;
   return showGeneralDialog(
     context: context,
@@ -28,7 +29,12 @@ Future<bool?> showCustomDialog(
             insetPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Container(
               width: screenWidth * 0.9,
-              padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 19),
+              padding: const EdgeInsets.only(
+                left: 24,
+                right: 24,
+                top: 24,
+                bottom: 19,
+              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -59,7 +65,7 @@ Future<bool?> showCustomDialog(
                           }
                         },
                         color: Colors.green,
-                        text: cancelText ?? L10n.t.cancel,
+                        text: cancelText ?? l10.cancel,
                         isLoading: false,
                       ),
                       const SizedBox(width: 10),
@@ -77,7 +83,7 @@ Future<bool?> showCustomDialog(
                           }
                         },
                         color: Colors.green,
-                        text: confirmText ?? L10n.t.confirm,
+                        text: confirmText ?? l10.confirm,
                       ),
                     ],
                   ),

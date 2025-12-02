@@ -1,4 +1,4 @@
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -9,6 +9,7 @@ class CustomerGlobalTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
 
     return SafeArea(
@@ -63,7 +64,7 @@ class CustomerGlobalTopBar extends StatelessWidget {
                 children: [
                   Icon(Icons.search, color: Color(0xff9d9d9d), size: 21),
                   Text(
-                    L10n.t.search,
+                    l10.search,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,

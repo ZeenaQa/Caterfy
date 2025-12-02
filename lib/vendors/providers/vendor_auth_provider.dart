@@ -1,4 +1,4 @@
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -41,28 +41,28 @@ class VendorAuthProvider extends ChangeNotifier {
   }
 
   // ---------------- Validation ----------------
-  String? validateEmail(String email) {
+  String? validateEmail(String email, AppLocalizations l10) {
     if (email.isEmpty) {
-      return L10n.t.emptyField;
+      return l10.emptyField;
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      return L10n.t.invalidEmail;
+      return l10.invalidEmail;
     }
     return null;
   }
 
-  String? validatePassword(String password) {
+  String? validatePassword(String password, AppLocalizations l10) {
     if (password.isEmpty) {
-      return L10n.t.emptyField;
+      return l10.emptyField;
     }
     if (password.length < 8) {
-      return L10n.t.shortPassword;
+      return l10.shortPassword;
     }
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return L10n.t.oneUppercase;
+      return l10.oneUppercase;
     }
     if (!RegExp(r'\d').hasMatch(password)) {
-      return L10n.t.oneNumber;
+      return l10.oneNumber;
     }
     return null;
   }
@@ -73,18 +73,19 @@ class VendorAuthProvider extends ChangeNotifier {
     required String name,
     required String email,
     required String phoneNumber,
+    required AppLocalizations l10,
   }) {
-    nameError = name.isEmpty ? L10n.t.emptyField : null;
+    nameError = name.isEmpty ? l10.emptyField : null;
 
     if (email.isEmpty) {
-      emailError = L10n.t.emptyField;
+      emailError = l10.emptyField;
     } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      emailError = L10n.t.invalidEmail;
+      emailError = l10.invalidEmail;
     } else {
       emailError = null;
     }
 
-    phoneError = phoneNumber.isEmpty ? L10n.t.emptyField : null;
+    phoneError = phoneNumber.isEmpty ? l10.emptyField : null;
 
     notifyListeners();
 
@@ -96,9 +97,10 @@ class VendorAuthProvider extends ChangeNotifier {
   bool validateBusinessInfo({
     required String businessName,
     required String businessType,
+    required AppLocalizations l10,
   }) {
-    businessNameError = businessName.isEmpty ? L10n.t.emptyField : null;
-    businessTypeError = businessType.isEmpty ? L10n.t.selectType : null;
+    businessNameError = businessName.isEmpty ? l10.emptyField : null;
+    businessTypeError = businessType.isEmpty ? l10.selectType : null;
 
     notifyListeners();
 
@@ -110,10 +112,11 @@ class VendorAuthProvider extends ChangeNotifier {
   bool validatePasswordInfo({
     required String password,
     required String confirmPassword,
+    required AppLocalizations l10,
   }) {
-    passwordError = validatePassword(password);
+    passwordError = validatePassword(password, l10);
     confirmPasswordError = password != confirmPassword
-        ? L10n.t.passwordsNoMatch
+        ? l10.passwordsNoMatch
         : null;
 
     notifyListeners();
@@ -131,22 +134,27 @@ class VendorAuthProvider extends ChangeNotifier {
     required String phoneNumber,
     required String businessName,
     required String businessType,
+    required BuildContext context,
   }) async {
+    final l10 = AppLocalizations.of(context);
     try {
       final isPasswordValid = validatePasswordInfo(
         password: password,
         confirmPassword: confirmPassword,
+        l10: l10,
       );
 
       final isPersonalInfoValid = validatePersonalInfo(
         email: email,
         name: name,
         phoneNumber: phoneNumber,
+        l10: l10,
       );
 
       final isBusinessInfoValid = validateBusinessInfo(
         businessName: businessName,
         businessType: businessType,
+        l10: l10,
       );
 
       if (onlyPassword) {
@@ -183,7 +191,7 @@ class VendorAuthProvider extends ChangeNotifier {
     } on AuthException catch (e) {
       print('errrrrrorrrrrrrrrrrr $e');
       if (e.code == 'user_already_exists') {
-        emailError = L10n.t.emailInUse;
+        emailError = l10.emailInUse;
         notifyListeners();
       } else {
         setSignUpError(e.message);
@@ -204,8 +212,9 @@ class VendorAuthProvider extends ChangeNotifier {
     required String password,
     required BuildContext context,
   }) async {
-    emailError = email.isEmpty ? L10n.t.emptyField : null;
-    passwordError = password.isEmpty ? L10n.t.emptyField : null;
+    final l10 = AppLocalizations.of(context);
+    emailError = email.isEmpty ? l10.emptyField : null;
+    passwordError = password.isEmpty ? l10.emptyField : null;
 
     notifyListeners();
     if (emailError != null || passwordError != null) {
@@ -221,16 +230,16 @@ class VendorAuthProvider extends ChangeNotifier {
       );
 
       if (response.session == null) {
-        emailError = L10n.t.invalidEmailOrPassword;
-        passwordError = L10n.t.invalidEmailOrPassword;
+        emailError = l10.invalidEmailOrPassword;
+        passwordError = l10.invalidEmailOrPassword;
         notifyListeners();
         return false;
       }
 
       return true;
     } on AuthApiException {
-      emailError = L10n.t.invalidEmailOrPassword;
-      passwordError = L10n.t.invalidEmailOrPassword;
+      emailError = l10.invalidEmailOrPassword;
+      passwordError = l10.invalidEmailOrPassword;
       notifyListeners();
       return false;
     } finally {

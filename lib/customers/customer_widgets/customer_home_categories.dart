@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/customer_categories/customer_food_category.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class CustomerHomeCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.only(top: topMargin + 30),
       child: Align(
@@ -18,7 +20,7 @@ class CustomerHomeCategories extends StatelessWidget {
           runSpacing: 15,
           children: [
             CategoryBox(
-              title: L10n.t.food,
+              title: l10.food,
               image: 'assets/images/burger_icon.png',
               onTap: () => Navigator.push(
                 context,
@@ -26,35 +28,32 @@ class CustomerHomeCategories extends StatelessWidget {
               ),
             ),
             CategoryBox(
-              title: L10n.t.ceemart,
+              title: l10.ceemart,
               image: 'assets/images/caterfy_mart_icon.png',
             ),
             CategoryBox(
-              title: L10n.t.groceries,
+              title: l10.groceries,
               image: 'assets/images/grocery_icon.png',
             ),
             CategoryBox(
-              title: L10n.t.electronics,
+              title: l10.electronics,
               image: 'assets/images/electronics_icon.png',
             ),
             CategoryBox(
-              title: L10n.t.pharmacy,
+              title: l10.pharmacy,
               image: 'assets/images/pharmacy_icon.png',
             ),
 
             CategoryBox(
-              title: L10n.t.toysAndKids,
+              title: l10.toysAndKids,
               image: 'assets/images/toys2_icon.png',
             ),
 
             CategoryBox(
-              title: L10n.t.healthAndBeauty,
+              title: l10.healthAndBeauty,
               image: 'assets/images/health_and_beauty_icon.png',
             ),
-            CategoryBox(
-              title: L10n.t.pets,
-              image: 'assets/images/pets_icon.png',
-            ),
+            CategoryBox(title: l10.pets, image: 'assets/images/pets_icon.png'),
           ],
         ),
       ),

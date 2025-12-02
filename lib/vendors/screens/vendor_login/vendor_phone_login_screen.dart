@@ -1,6 +1,7 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
-import 'package:caterfy/util/l10n_helper.dart';
+
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -18,8 +19,9 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
   String phoneNumber = "";
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final vendorAuth = Provider.of<VendorAuthProvider>(context);
-    
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -29,13 +31,13 @@ class _VendorPhoneAuthState extends State<VendorPhoneAuth> {
           children: [
             LabeledPhoneField(
               onChanged: (phoneNumber) {},
-              label: L10n.t.phoneNumber,
+              label: l10.phoneNumber,
             ),
             SizedBox(height: 123),
             Spacer(),
 
             FilledBtn(
-              title: L10n.t.login,
+              title: l10.login,
               onPressed: () async {},
               isLoading: vendorAuth.isLoading,
             ),

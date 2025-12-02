@@ -1,10 +1,6 @@
 import 'package:caterfy/auth/auth_selection_screen.dart';
-import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
-import 'package:caterfy/main.dart';
-import 'package:caterfy/providers/global_provider.dart';
-import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
+import 'package:caterfy/util/initial_loader_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OnBoardingSkip {
@@ -42,24 +38,10 @@ class OnBoardingSkip {
         return const SelectionScreen();
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final ctx = navigatorKey.currentContext;
+      final entryData = {'role': role, 'fetchedUser': fetchedUser};
 
-        if (ctx != null) {
-          final globalProvider = Provider.of<GlobalProvider>(
-            ctx,
-            listen: false,
-          );
-
-          globalProvider.setUser(fetchedUser);
-        }
-      });
-
-      if (role == "customer") {
-        return AuthenticatedCustomer();
-      } else {
-        return VendorHomeScreen();
-      }
+      // Return a new widget responsible for setting state and navigating
+      return InitialLoaderScreen(entryData: entryData);
     } catch (e) {
       return const SelectionScreen();
     }
