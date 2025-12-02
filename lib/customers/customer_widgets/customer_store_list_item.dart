@@ -1,4 +1,3 @@
-import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +7,6 @@ class CustomerStoreListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     return SizedBox(
       height: 90,
@@ -18,7 +16,7 @@ class CustomerStoreListItem extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: 100,
+                width: 113,
                 height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -30,58 +28,79 @@ class CustomerStoreListItem extends StatelessWidget {
                   ),
                 ),
               ),
-              Row(
-                children: [SizedBox(width: 65), OverlapHeartButton(size: 15)],
-              ),
+              OverlapHeartButton(size: 15),
             ],
           ),
-          SizedBox(width: 13),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 2,
-            children: [
-              Row(
-                spacing: 6,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.solidCircleCheck,
-                    size: 13,
-                    color: colors.primary,
+
+          const SizedBox(width: 13),
+
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.solidCircleCheck,
+                      size: 13,
+                      color: colors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: const Text(
+                        'Burger shop',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.locationDot,
+                      size: 13,
+                      color: colors.onSecondary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: const Text(
+                        'Amman',
+                        style: TextStyle(fontSize: 13),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Flexible(
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    // spacing: 6,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.solidStar,
+                        size: 13,
+                        color: colors.secondaryContainer,
+                      ),
+                      SizedBox(width: 6),
+                      Text('5.3 (1k+) ', style: TextStyle(fontSize: 13)),
+                      Text(
+                        '• 15-20 mins • JOD 1.0',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 13),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Burger shop',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              Row(
-                spacing: 6,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.locationDot,
-                    size: 13,
-                    color: colors.onSecondary,
-                  ),
-                  Text('Amman', style: TextStyle(fontSize: 14)),
-                ],
-              ),
-              Row(
-                spacing: 6,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.solidStar,
-                    size: 13,
-                    color: colors.secondaryContainer,
-                  ),
-                  Text(
-                    '5.3 (1k+) • 15-20 mins • JOD 1.00',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
