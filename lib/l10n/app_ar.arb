@@ -106,5 +106,17 @@
   "pharmacy": "الصيدليات",
   "toysAndKids": "الألعاب والأطفال",
   "healthAndBeauty": "الجمال والصحة",
-  "pets": "الحيوانات الأليفة"
+  "pets": "الحيوانات الأليفة",
+  "locationServicesDisabled": "خدمات الموقع متوقفة",
+  "enableGpsFromSettings": "يرجى تفعيل خدمات الموقع (GPS) من إعدادات الجهاز.",
+  "goToSettings": "الذهاب إلى الإعدادات",
+  "locationPermissionDenied": "تم رفض إذن الموقع",
+  "allowLocationPermission": "يرجى السماح بالوصول إلى الموقع.",
+  "locationPermissionPermanentlyDenied": "تم رفض إذن الموقع نهائياً",
+  "enableLocationFromSettings": "يرجى تفعيل إذن الموقع من إعدادات الجهاز.",
+  "notifications": "الإشعارات",
+  "enabled": "مفعلة",
+  "disabled": "معطلة",
+  "enableNotifications": "تفعيل الإشعارات",
+  "disableNotifications": "إيقاف الإشعارات"
 }

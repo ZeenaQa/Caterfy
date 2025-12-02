@@ -1,5 +1,8 @@
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,36 +29,51 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
 
   Future<void> _loadLastLocation() async {
     final provider = Provider.of<GlobalProvider>(context, listen: false);
-    if (provider.lastPickedLocation != null) {
-      setState(() {
-        pickedLocation = provider.lastPickedLocation;
-      });
 
-      if (_mapController != null) {
-        _mapController!.moveCamera(
-            CameraUpdate.newLatLng(provider.lastPickedLocation!));
-      }
+    if (provider.lastPickedLocation != null) {
+      pickedLocation = provider.lastPickedLocation;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController?.moveCamera(CameraUpdate.newLatLng(pickedLocation!));
+      });
     }
   }
 
   Future<String> _getAddressFromLatLng(LatLng latLng) async {
     try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+      final placemarks = await placemarkFromCoordinates(
+        latLng.latitude,
+        latLng.longitude,
+      );
       if (placemarks.isNotEmpty) {
         final placemark = placemarks.first;
         return "${placemark.subLocality}, ${placemark.locality}";
       }
-    } catch (e) {
-      print("Error in reverse geocoding: $e");
-    }
+    } catch (_) {}
     return "Unknown location";
   }
 
   Future<void> _goToCurrentLocation() async {
+    final l10 = AppLocalizations.of(context);
+
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      print('Location services are disabled.');
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10.locationServicesDisabled),
+          content: Text(l10.enableGpsFromSettings),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.of(ctx).pop();
+                await Geolocator.openLocationSettings();
+              },
+              child: Text(l10.goToSettings),
+            ),
+          ],
+        ),
+      );
       return;
     }
 
@@ -63,26 +81,42 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        print('Location permissions are denied');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10.locationPermissionDenied)));
         return;
       }
     }
+
     if (permission == LocationPermission.deniedForever) {
-      print('Location permissions are permanently denied.');
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10.locationPermissionPermanentlyDenied),
+          content: Text(l10.enableLocationFromSettings),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.of(ctx).pop();
+                await Geolocator.openAppSettings();
+              },
+              child: Text(l10.goToSettings),
+            ),
+          ],
+        ),
+      );
       return;
     }
 
-    Position position =
-        await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    LatLng currentLatLng = LatLng(position.latitude, position.longitude);
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
 
-    setState(() {
-      pickedLocation = currentLatLng;
-    });
+    final currentLatLng = LatLng(position.latitude, position.longitude);
 
+    pickedLocation = currentLatLng;
     _mapController?.animateCamera(CameraUpdate.newLatLng(currentLatLng));
 
-    // Save in Provider
     final provider = Provider.of<GlobalProvider>(context, listen: false);
     final address = await _getAddressFromLatLng(currentLatLng);
     provider.setDeliveryLocation(address, currentLatLng);
@@ -91,62 +125,102 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return Scaffold(
-      appBar: CustomAppBar(title:'Pick a Location', ),
-      body: SizedBox.expand(
-        child: GoogleMap(
-          onMapCreated: (controller) async {
-            _mapController = controller;
-            if (pickedLocation != null) {
-              _mapController!.moveCamera(CameraUpdate.newLatLng(pickedLocation!));
-            }
-            if (Theme.of(context).brightness == Brightness.dark) {
-    final darkStyle = await rootBundle.loadString('assets/map_style_dark.json');
-    _mapController?.setMapStyle(darkStyle);
-  } else {
-    _mapController?.setMapStyle(null);
-  }
-          },
-            zoomControlsEnabled: false,
-          initialCameraPosition: CameraPosition(
-            target: pickedLocation ?? LatLng(31.9539, 35.9106),
-            zoom: 12,
-          ),
-          onTap: (latLng) async {
-            setState(() {
-              pickedLocation = latLng;
-            });
 
-            final provider =
-                Provider.of<GlobalProvider>(context, listen: false);
-            final address = await _getAddressFromLatLng(latLng);
-            provider.setDeliveryLocation(address, latLng);
-          },
-          markers: pickedLocation == null
-              ? {}
-              : {Marker(markerId: MarkerId('picked'), position: pickedLocation!)},
-        ),
-      ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Pick a Location'),
+      body: Stack(
         children: [
-          FloatingActionButton(
-            backgroundColor: colors.primary,
-            onPressed: _goToCurrentLocation,
-            heroTag: "current_location",
-            child: Icon(Icons.my_location, color: colors.onPrimary),
-            mini: true,
+          Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      onMapCreated: (controller) async {
+                        _mapController = controller;
+
+                        if (Theme.of(context).brightness == Brightness.dark) {
+                          final darkStyle = await rootBundle.loadString(
+                            'assets/map_style_dark.json',
+                          );
+                          _mapController?.setMapStyle(darkStyle);
+                        } else {
+                          _mapController?.setMapStyle(null);
+                        }
+
+                        if (pickedLocation != null) {
+                          _mapController!.moveCamera(
+                            CameraUpdate.newLatLng(pickedLocation!),
+                          );
+                        }
+                      },
+                      zoomControlsEnabled: false,
+                      initialCameraPosition: CameraPosition(
+                        target:
+                            pickedLocation ?? const LatLng(31.9539, 35.9106),
+                        zoom: 15,
+                      ),
+                      onCameraMove: (position) {
+                        pickedLocation = position.target;
+                      },
+                      onCameraIdle: () async {
+                        if (pickedLocation == null) return;
+
+                        final provider = Provider.of<GlobalProvider>(
+                          context,
+                          listen: false,
+                        );
+                        final address = await _getAddressFromLatLng(
+                          pickedLocation!,
+                        );
+                        provider.setDeliveryLocation(address, pickedLocation!);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: FloatingActionButton(
+                          backgroundColor: colors.primary,
+                          heroTag: "confirm_location",
+                          onPressed: _goToCurrentLocation,
+                          child: Icon(
+                            FontAwesomeIcons.locationCrosshairs,
+                            color: colors.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Buttons under the map
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FilledBtn(
+                      onPressed: () {
+                        if (pickedLocation != null) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      title: 'Confirm pin location',
+                      innerVerticalPadding: 18,
+                      horizontalPadding: 10,
+                    ),
+                    const SizedBox(width: 20),
+                  ],
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            backgroundColor: colors.primary,
-            onPressed: () {
-              if (pickedLocation != null) {
-                Navigator.pop(context);
-              }
-            },
-            heroTag: "confirm_location",
-            child: Icon(Icons.check, color: colors.onPrimary),
+
+          // Center pin
+          const Center(
+            child: Icon(Icons.location_pin, size: 48, color: Colors.red),
           ),
         ],
       ),

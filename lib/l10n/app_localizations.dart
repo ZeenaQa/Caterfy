@@ -739,6 +739,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pets'**
   String get pets;
+
+  /// No description provided for @locationServicesDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Services Disabled'**
+  String get locationServicesDisabled;
+
+  /// No description provided for @enableGpsFromSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable location services (GPS) from your device settings.'**
+  String get enableGpsFromSettings;
+
+  /// No description provided for @goToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get goToSettings;
+
+  /// No description provided for @locationPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission denied'**
+  String get locationPermissionDenied;
+
+  /// No description provided for @allowLocationPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Please allow access to location.'**
+  String get allowLocationPermission;
+
+  /// No description provided for @locationPermissionPermanentlyDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Permission Permanently Denied'**
+  String get locationPermissionPermanentlyDenied;
+
+  /// No description provided for @enableLocationFromSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable location permission from your device settings.'**
+  String get enableLocationFromSettings;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @enableNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enableNotifications;
+
+  /// No description provided for @disableNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Notifications'**
+  String get disableNotifications;
 }
 
 class _AppLocalizationsDelegate

@@ -335,4 +335,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pets => 'Pets';
+
+  @override
+  String get locationServicesDisabled => 'Location Services Disabled';
+
+  @override
+  String get enableGpsFromSettings =>
+      'Please enable location services (GPS) from your device settings.';
+
+  @override
+  String get goToSettings => 'Go to Settings';
+
+  @override
+  String get locationPermissionDenied => 'Location permission denied';
+
+  @override
+  String get allowLocationPermission => 'Please allow access to location.';
+
+  @override
+  String get locationPermissionPermanentlyDenied =>
+      'Location Permission Permanently Denied';
+
+  @override
+  String get enableLocationFromSettings =>
+      'Please enable location permission from your device settings.';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get enableNotifications => 'Enable Notifications';
+
+  @override
+  String get disableNotifications => 'Disable Notifications';
 }

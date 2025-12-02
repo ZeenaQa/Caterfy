@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -19,7 +18,6 @@ android {
     }
 
     signingConfigs {
-        // Modify the existing debug config instead of creating a new one
         getByName("debug") {
             storeFile = file("../../src/shared-debug.keystore")
             storePassword = "android"
@@ -33,8 +31,6 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
-            // For now, reuse the debug keystore so release builds work.
-            // Later, replace with a proper release keystore for Play Store publishing.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -42,11 +38,16 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
 flutter {

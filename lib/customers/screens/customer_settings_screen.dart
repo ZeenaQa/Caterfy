@@ -48,10 +48,37 @@ class CustomerSettingsScreen extends StatelessWidget {
       SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
       SettingsButton(title: l10.changePassword, icon: Icons.key_outlined),
       SettingsButton(
-        title: l10.notifications,
-        icon: Icons.notifications_outlined,
-        rightText: l10.enabled,
+  title: l10.notifications,
+  icon: Icons.notifications_outlined,
+  rightText: context.watch<LocaleProvider>().notificationsEnabled
+      ? l10.enabled
+      : l10.disabled,
+  onTap: () {
+    openDrawer(
+      context,
+      child: Column(
+        children: [
+          DrawerBtn(
+            isSelected: context.read<LocaleProvider>().notificationsEnabled,
+            colors: colors,
+            title: l10.enableNotifications,
+            onPressed: () {
+              context.read<LocaleProvider>().setNotificationsEnabled(true);
+            },
+          ),
+          DrawerBtn(
+            isSelected: !context.read<LocaleProvider>().notificationsEnabled,
+            colors: colors,
+            title: l10.disableNotifications,
+            onPressed: () {
+              context.read<LocaleProvider>().setNotificationsEnabled(false);
+            },
+          ),
+        ],
       ),
+    );
+  },
+),
       SettingsButton(
         onTap: () {
           openDrawer(
