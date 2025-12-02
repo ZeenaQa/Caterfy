@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class WavyShapeBorder extends ShapeBorder {
   final double waveHeight;
 
-  WavyShapeBorder({this.waveHeight = 20});
+  const WavyShapeBorder({this.waveHeight = 20});
 
   @override
   EdgeInsetsGeometry get dimensions => EdgeInsets.only(bottom: waveHeight);

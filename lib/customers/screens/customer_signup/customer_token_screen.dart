@@ -35,7 +35,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 90.0, left: 35, right: 35),
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,6 +1,9 @@
+import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CustomerGlobalTopBar extends StatelessWidget {
   final double height;
@@ -14,38 +17,47 @@ class CustomerGlobalTopBar extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(
-          // top: 21,
-          // bottom: 16,
-          left: 16,
-          right: 16,
-        ),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 6,
               children: [
                 Icon(
                   FontAwesomeIcons.locationDot,
                   size: 16,
                   color: colors.onPrimary,
                 ),
-                RichText(
-                  text: TextSpan(
-                    text: 'Deliver to ',
-                    style: TextStyle(
-                      color: colors.onPrimary,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Hashimate University',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                SizedBox(width: 6),
+                GestureDetector(
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const LocationPickerScreen(),
                       ),
-                    ],
+                    );
+                  },
+                  child: Consumer<GlobalProvider>(
+                    builder: (_, provider, __) {
+                      return RichText(
+                        text: TextSpan(
+                          text: '${l10.deliverTo} ',
+                          style: TextStyle(
+                            color: colors.onPrimary,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: provider.deliveryLocation,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -60,9 +72,9 @@ class CustomerGlobalTopBar extends StatelessWidget {
               width: double.infinity,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 10,
                 children: [
                   Icon(Icons.search, color: Color(0xff9d9d9d), size: 21),
+                  SizedBox(width: 10),
                   Text(
                     l10.search,
                     style: TextStyle(

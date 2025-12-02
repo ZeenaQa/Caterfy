@@ -28,6 +28,10 @@ dependencies:
   pinput: ^5.0.2
   toastification: ^3.0.3
   flutter_skeleton_ui: ^0.0.6
+  google_maps_flutter: ^2.14.0
+  geocoding: ^2.1.5
+  geolocator: ^14.0.2
+ 
 
 dev_dependencies:
   flutter_test:
@@ -51,3 +55,4 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/fonts/
+    - assets/map_style_dark.json

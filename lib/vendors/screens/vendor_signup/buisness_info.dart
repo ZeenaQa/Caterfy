@@ -123,7 +123,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                  value: selectedBusiness.isEmpty ? null : selectedBusiness,
+                  initialValue: selectedBusiness.isEmpty ? null : selectedBusiness,
                   items: businessTypes
                       .map(
                         (type) =>
