@@ -52,9 +52,8 @@ class CustomerStoreListItem extends StatelessWidget {
                         'Burger shop',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
-                        textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -72,7 +71,7 @@ class CustomerStoreListItem extends StatelessWidget {
                     Expanded(
                       child: const Text(
                         'Amman',
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(fontSize: 12),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -90,11 +89,11 @@ class CustomerStoreListItem extends StatelessWidget {
                         color: colors.secondaryContainer,
                       ),
                       SizedBox(width: 6),
-                      Text('5.3 (1k+) ', style: TextStyle(fontSize: 13)),
+                      Text('5.3 (1k+) ', style: TextStyle(fontSize: 12)),
                       Text(
                         '• 15-20 mins • JOD 1.0',
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(fontSize: 12),
                       ),
                     ],
                   ),

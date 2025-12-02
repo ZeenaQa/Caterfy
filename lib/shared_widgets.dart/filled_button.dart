@@ -6,6 +6,8 @@ class FilledBtn extends StatelessWidget {
   final bool isLoading;
   final bool stretch;
   final String title;
+  final double innerVerticalPadding;
+  final double innerHorizontalPadding;
   final double verticalPadding;
   final double horizontalPadding;
 
@@ -15,47 +17,55 @@ class FilledBtn extends StatelessWidget {
     required this.title,
     this.isLoading = false,
     this.stretch = true,
-    this.verticalPadding = 15,
-    this.horizontalPadding = 25,
+    this.innerVerticalPadding = 15,
+    this.innerHorizontalPadding = 25,
+    this.verticalPadding = 0,
+    this.horizontalPadding = 0,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return SizedBox(
-      width: stretch ? double.infinity : null,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: colors.primary,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
+      ),
+      child: SizedBox(
+        width: stretch ? double.infinity : null,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colors.primary,
 
-          minimumSize: Size.zero,
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
-          padding: EdgeInsets.symmetric(
-            vertical: verticalPadding,
-            horizontal: horizontalPadding,
-          ),
-          shadowColor: Colors.transparent,
-        ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Opacity(
-              opacity: isLoading ? 0.0 : 1.0,
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  color: colors.onPrimary,
-                  fontSize: 14,
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: innerVerticalPadding,
+              horizontal: innerHorizontalPadding,
+            ),
+            shadowColor: Colors.transparent,
+          ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Opacity(
+                opacity: isLoading ? 0.0 : 1.0,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: colors.onPrimary,
+                    fontSize: 14,
+                  ),
                 ),
               ),
-            ),
-            if (isLoading) ThreeBounce(),
-          ],
+              if (isLoading) ThreeBounce(),
+            ],
+          ),
         ),
       ),
     );
