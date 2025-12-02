@@ -218,7 +218,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notifications => 'الإشعارات';
 
   @override
-  String get enabled => 'مفعل';
+  String get enabled => 'مفعلة';
 
   @override
   String get english => 'الإنجليزية';
@@ -334,4 +334,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pets => 'الحيوانات الأليفة';
+
+  @override
+  String get locationServicesDisabled => 'خدمات الموقع متوقفة';
+
+  @override
+  String get enableGpsFromSettings =>
+      'يرجى تفعيل خدمات الموقع (GPS) من إعدادات الجهاز.';
+
+  @override
+  String get goToSettings => 'الذهاب إلى الإعدادات';
+
+  @override
+  String get locationPermissionDenied => 'تم رفض إذن الموقع';
+
+  @override
+  String get allowLocationPermission => 'يرجى السماح بالوصول إلى الموقع.';
+
+  @override
+  String get locationPermissionPermanentlyDenied => 'تم رفض إذن الموقع نهائياً';
+
+  @override
+  String get enableLocationFromSettings =>
+      'يرجى تفعيل إذن الموقع من إعدادات الجهاز.';
+
+  @override
+  String get disabled => 'معطلة';
+
+  @override
+  String get enableNotifications => 'تفعيل الإشعارات';
+
+  @override
+  String get disableNotifications => 'إيقاف الإشعارات';
 }

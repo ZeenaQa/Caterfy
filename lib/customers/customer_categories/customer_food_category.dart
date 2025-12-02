@@ -1,7 +1,10 @@
 import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomerFoodCategory extends StatefulWidget {
   const CustomerFoodCategory({super.key});
@@ -51,6 +54,8 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final provider = context.watch<GlobalProvider>();
+    final l10 = AppLocalizations.of(context);
     return Scaffold(
       appBar: CustomAppBar(
         content: Expanded(
@@ -64,9 +69,9 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                   text: TextSpan(
                     style: TextStyle(fontSize: 15, color: colors.onSurface),
                     children: [
-                      TextSpan(text: 'Deliver to '),
+                      TextSpan(text: l10.deliverTo + ' '),
                       TextSpan(
-                        text: 'Hashemite University',
+                        text: provider.deliveryLocation ,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

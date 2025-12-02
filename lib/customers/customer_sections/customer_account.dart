@@ -1,4 +1,5 @@
-import 'package:caterfy/customers/screens/customer_orders_screen.dart';
+import 'package:caterfy/customers/customer_sections/customer_orders.dart';
+
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -27,7 +28,7 @@ class CustomerAccountSection extends StatelessWidget {
         icon: Icons.receipt_outlined,
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => CustomerOrdersScreen()),
+          MaterialPageRoute(builder: (_) => CustomerOrdersSection()),
         ),
       ),
       AccountButton(

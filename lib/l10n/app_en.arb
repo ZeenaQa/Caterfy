@@ -106,5 +106,17 @@
   "pharmacy": "Pharmacy",
   "toysAndKids": "Toys & Kids",
   "healthAndBeauty": "Health & Beauty",
-  "pets": "Pets"
+  "pets": "Pets",
+  "locationServicesDisabled": "Location Services Disabled",
+  "enableGpsFromSettings": "Please enable location services (GPS) from your device settings.",
+  "goToSettings": "Go to Settings",
+  "locationPermissionDenied": "Location permission denied",
+  "allowLocationPermission": "Please allow access to location.",
+  "locationPermissionPermanentlyDenied": "Location Permission Permanently Denied",
+  "enableLocationFromSettings": "Please enable location permission from your device settings.",
+  "notifications": "Notifications",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "enableNotifications": "Enable Notifications",
+  "disableNotifications": "Disable Notifications"
 }
