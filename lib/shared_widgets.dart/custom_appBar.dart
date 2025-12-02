@@ -22,26 +22,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final colors = Theme.of(context).colorScheme;
 
     return AppBar(
-      title: Padding(
-        padding: const EdgeInsets.only(right: 20),
-        child: Row(
-          spacing: 10,
-          children: [
-            if (title.isNotEmpty)
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: titleSize,
-                    fontWeight: FontWeight.w600,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  maxLines: 1,
+      title: Row(
+        spacing: 10,
+        children: [
+          if (title.isNotEmpty)
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: titleSize,
+                  fontWeight: FontWeight.w600,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                maxLines: 1,
               ),
-            if (content != null) content!,
-          ],
-        ),
+            ),
+          if (content != null) ...[content!, SizedBox(width: 3)],
+        ],
       ),
       leadingWidth: 74,
       titleSpacing: -3,

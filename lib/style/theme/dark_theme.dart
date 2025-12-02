@@ -6,6 +6,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFF121212),
     foregroundColor: Color(0xFFE1E1E1),
+    scrolledUnderElevation: 0.0,
     elevation: 0,
   ),
 
@@ -45,6 +46,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     surface: Color(0xFF1E1E1E),
     onSurface: Color(0xFFE1E1E1),
     onSurfaceVariant: Color(0xFF9E9E9E),
+    secondaryContainer: Color(0xfffcba05),
     error: Color(0xFFCF6679),
     onError: Color(0xFF1E1E1E),
   ),

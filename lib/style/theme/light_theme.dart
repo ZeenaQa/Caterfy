@@ -6,9 +6,9 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black87,
+    scrolledUnderElevation: 0.0,
     elevation: 0,
   ),
-  
 
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
@@ -46,6 +46,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     surface: Colors.white,
     onSurface: Color(0xff333333),
     onSurfaceVariant: Color(0xFF8B8B8B),
+    secondaryContainer: Color(0xfffebe03),
     error: Color(0xfffd7a7a),
     onError: Colors.white,
   ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class OutlinedIconBtn extends StatelessWidget {
-  const OutlinedIconBtn({super.key, required this.icon, this.onPressed});
+  const OutlinedIconBtn({super.key, required this.child, this.onPressed});
 
-  final IconData icon;
+  final Widget child;
   final VoidCallback? onPressed;
 
   @override
@@ -17,11 +17,7 @@ class OutlinedIconBtn extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: IconTheme(
           data: IconThemeData(size: 22, color: colors.onSurface),
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: Center(child: Icon(icon)),
-          ),
+          child: SizedBox(width: 40, height: 40, child: Center(child: child)),
         ),
       ),
       onPressed: onPressed,
