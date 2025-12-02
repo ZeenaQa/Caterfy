@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class CustomerFoodCategory extends StatefulWidget {
 class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
   late ScrollController _scrollController;
 
-  double searchBarHeight = 60;
+  double searchBarHeight = 63;
   double currentSearchBarOffset = 0;
   double lastOffset = 0;
 
@@ -26,15 +27,18 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
       double offset = _scrollController.offset;
       double delta = offset - lastOffset;
 
-      currentSearchBarOffset -= delta;
+      double newSearchBarOffset = currentSearchBarOffset - delta;
 
-      if (currentSearchBarOffset > 0) currentSearchBarOffset = 0;
-      if (currentSearchBarOffset < -searchBarHeight)
-        currentSearchBarOffset = -searchBarHeight;
+      if (newSearchBarOffset > 0) newSearchBarOffset = 0;
+      if (newSearchBarOffset < -searchBarHeight)
+        newSearchBarOffset = -searchBarHeight;
+
+      if (newSearchBarOffset != currentSearchBarOffset) {
+        currentSearchBarOffset = newSearchBarOffset;
+        setState(() {});
+      }
 
       lastOffset = offset;
-
-      setState(() {});
     });
   }
 
@@ -69,32 +73,36 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                   ),
                 ),
               ),
-              OutlinedIconBtn(icon: Icons.favorite_outline),
+              OutlinedIconBtn(child: Icon(Icons.favorite_outline, size: 19)),
             ],
           ),
         ),
       ),
       body: Stack(
         children: [
-          ListView.builder(
+          ListView.separated(
             controller: _scrollController,
             padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: searchBarHeight + 26,
+              left: 15,
+              right: 15,
+              top: searchBarHeight + 10,
             ),
-            itemCount: 50,
+            itemCount: 30,
             itemBuilder: (context, index) {
-              return ListTile(title: Text('Item $index'));
+              return CustomerStoreListItem();
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 10);
             },
           ),
+
           Transform.translate(
             offset: Offset(0, currentSearchBarOffset),
             child: Container(
-              color: colors.surface,
+              color: colors.onInverseSurface,
               padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
+                left: 15,
+                right: 15,
                 top: 12,
                 bottom: 10,
               ),
@@ -105,7 +113,7 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                     hintText: "Search food",
                     hintStyle: TextStyle(fontSize: 15),
                     filled: true,
-                    fillColor: colors.outline,
+                    fillColor: colors.surfaceContainer,
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,

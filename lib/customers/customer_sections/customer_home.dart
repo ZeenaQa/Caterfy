@@ -14,7 +14,7 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
 
-  double headerHeight = 175;
+  double headerHeight = 190;
   double currentHeaderOffset = 0;
   double lastOffset = 0;
 
@@ -25,19 +25,24 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
     _scrollController = ScrollController();
 
     _scrollController.addListener(() {
-      double offset = _scrollController.offset;
-      double delta = offset - lastOffset;
+      final double offset = _scrollController.offset;
+      final double delta = offset - lastOffset;
+
+      final double previousHeaderOffset = currentHeaderOffset;
 
       currentHeaderOffset -= delta;
 
-      if (currentHeaderOffset > 0) currentHeaderOffset = 0;
-      if (currentHeaderOffset < -headerHeight) {
+      if (currentHeaderOffset > 0) {
+        currentHeaderOffset = 0;
+      } else if (currentHeaderOffset < -headerHeight) {
         currentHeaderOffset = -headerHeight;
       }
 
-      lastOffset = offset;
+      if (currentHeaderOffset != previousHeaderOffset) {
+        setState(() {});
+      }
 
-      setState(() {});
+      lastOffset = offset;
     });
   }
 
