@@ -14,7 +14,7 @@ class SignInPage extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return PopScope(
-      canPop: true, // allow popping
+      canPop: true,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (didPop) {
           final auth = Provider.of<VendorAuthProvider>(context, listen: false);

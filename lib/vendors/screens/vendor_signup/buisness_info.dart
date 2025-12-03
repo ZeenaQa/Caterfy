@@ -29,27 +29,32 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
   String businessName = '';
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     final l10 = AppLocalizations.of(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        businessTypes = [
-          l10.restaurant,
-          l10.cafe,
-          l10.bakery,
-          l10.grocery,
-          l10.other,
-        ];
-        selectedBusiness = businessTypes[0];
-      });
-    });
+
+    // Initialize businessTypes and selectedBusiness once
+    if (businessTypes.isEmpty) {
+      businessTypes = [
+        l10.restaurant,
+        l10.cafe,
+        l10.bakery,
+        l10.grocery,
+        l10.other,
+      ];
+      selectedBusiness = businessTypes[0];
+
+      // If you need to update the UI
+      // setState(() {});
+    }
   }
 
-  void handleNext(auth) async {
+  void handleNext(auth, l10) async {
     if (auth.validateBusinessInfo(
       businessName: businessName,
       businessType: selectedBusiness,
+      l10: l10,
     )) {
       Navigator.push(
         context,
@@ -123,7 +128,9 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                  initialValue: selectedBusiness.isEmpty ? null : selectedBusiness,
+                  initialValue: selectedBusiness.isEmpty
+                      ? null
+                      : selectedBusiness,
                   items: businessTypes
                       .map(
                         (type) =>
@@ -146,7 +153,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
             Align(
               alignment: Alignment.centerRight,
               child: FilledBtn(
-                onPressed: () => handleNext(auth),
+                onPressed: () => handleNext(auth, l10),
                 title: l10.next,
                 stretch: false,
               ),

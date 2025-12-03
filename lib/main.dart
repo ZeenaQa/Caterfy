@@ -1,6 +1,7 @@
 import 'package:caterfy/auth/auth_selection_screen.dart';
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/style/theme/dark_theme.dart';
@@ -132,6 +133,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CustomerAuthProvider()),
         ChangeNotifierProvider(create: (_) => VendorAuthProvider()),
         ChangeNotifierProvider(create: (_) => GlobalProvider()),
+        ChangeNotifierProvider(create: (_) => LoggedCustomerProvider()),
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {

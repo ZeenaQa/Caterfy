@@ -22,11 +22,12 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
   String email = '';
   String phoneNumber = '';
 
-  void handleNext(auth) {
+  void handleNext(auth, l10) {
     if (auth.validatePersonalInfo(
       email: email.trim(),
       name: name.trim(),
       phoneNumber: phoneNumber.trim(),
+      l10: l10,
     )) {
       Navigator.push(
         context,
@@ -113,7 +114,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: FilledBtn(
-                    onPressed: () => handleNext(auth),
+                    onPressed: () => handleNext(auth, l10),
                     title: l10.next,
                     stretch: false,
                   ),

@@ -1,10 +1,13 @@
 import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/store.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CustomerFoodCategory extends StatefulWidget {
   const CustomerFoodCategory({super.key});
@@ -43,6 +46,13 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
 
       lastOffset = offset;
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = Provider.of<LoggedCustomerProvider>(
+        context,
+        listen: false,
+      );
+      await provider.fetchStores(category: 'food', context: context);
+    });
   }
 
   @override
@@ -53,6 +63,7 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
 
   @override
   Widget build(BuildContext context) {
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<GlobalProvider>();
     final l10 = AppLocalizations.of(context);
@@ -69,9 +80,9 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                   text: TextSpan(
                     style: TextStyle(fontSize: 15, color: colors.onSurface),
                     children: [
-                      TextSpan(text: l10.deliverTo + ' '),
+                      TextSpan(text: '${l10.deliverTo} '),
                       TextSpan(
-                        text: provider.deliveryLocation ,
+                        text: provider.deliveryLocation,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -85,21 +96,51 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
       ),
       body: Stack(
         children: [
-          ListView.separated(
-            controller: _scrollController,
-            padding: EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: searchBarHeight + 10,
+          if (customerProvider.stores.isNotEmpty)
+            ListView.separated(
+              controller: _scrollController,
+              padding: EdgeInsets.only(
+                left: 15,
+                right: 15,
+                top: searchBarHeight + 10,
+              ),
+              itemCount: customerProvider.stores.length,
+              itemBuilder: (context, index) {
+                final store = customerProvider.stores[index];
+                return CustomerStoreListItem(store: store);
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 10);
+              },
+            )
+          else if (customerProvider.isFoodLoading)
+            Skeletonizer(
+              enabled: true,
+              child: ListView.separated(
+                controller: _scrollController,
+                padding: EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                  top: searchBarHeight + 10,
+                ),
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return CustomerStoreListItem(
+                    store: Store(
+                      id: '1',
+                      vendorId: '2',
+                      storeArea: '222222222',
+                      name: '222222222',
+                      description: '222222222',
+                    ),
+                    dummyImage: true,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 10);
+                },
+              ),
             ),
-            itemCount: 30,
-            itemBuilder: (context, index) {
-              return CustomerStoreListItem();
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: 10);
-            },
-          ),
 
           Transform.translate(
             offset: Offset(0, currentSearchBarOffset),

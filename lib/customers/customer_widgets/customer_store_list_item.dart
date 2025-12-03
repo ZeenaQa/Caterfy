@@ -1,9 +1,18 @@
+import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomerStoreListItem extends StatelessWidget {
-  const CustomerStoreListItem({super.key});
+  const CustomerStoreListItem({
+    super.key,
+    required this.store,
+    this.dummyImage = false,
+  });
+
+  final Store store;
+  final bool dummyImage;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +29,10 @@ class CustomerStoreListItem extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                      'https://img.freepik.com/free-photo/burger-with-fries-tomato-sauce_114579-3697.jpg?semt=ais_hybrid&w=740&q=80',
-                    ),
+                  image: DecorationImage(
+                    image: dummyImage
+                        ? AssetImage('assets/images/app_icon.png')
+                        : NetworkImage(store.logoUrl ?? ''),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -32,7 +41,7 @@ class CustomerStoreListItem extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(width: 13),
+          const SizedBox(width: 9),
 
           Expanded(
             child: Column(
@@ -40,6 +49,7 @@ class CustomerStoreListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
                       FontAwesomeIcons.solidCircleCheck,
@@ -48,40 +58,45 @@ class CustomerStoreListItem extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Expanded(
-                      child: const Text(
-                        'Burger shop',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                      child: Baseline(
+                        baseline: 13.5,
+                        baselineType: TextBaseline.alphabetic,
+                        child: Text(
+                          store.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13.5,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 2),
-                Row(
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.locationDot,
-                      size: 13,
-                      color: colors.onSecondary,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: const Text(
-                        'Amman',
-                        style: TextStyle(fontSize: 12),
-                        overflow: TextOverflow.ellipsis,
+                if (store.storeArea != null)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.locationDot,
+                        size: 13,
+                        color: colors.onSecondary,
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          store.storeArea ?? '',
+                          style: TextStyle(fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 const SizedBox(height: 2),
                 Flexible(
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    // spacing: 6,
                     children: [
                       Icon(
                         FontAwesomeIcons.solidStar,

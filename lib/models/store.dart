@@ -19,29 +19,33 @@ class Store {
     this.logoUrl,
     this.bannerUrl,
     this.tags,
-    required this.latitude,
-    required this.longitude,
+    this.latitude = 0,
+    this.longitude = 0,
   });
 
   factory Store.fromMap(Map<String, dynamic> map) {
     return Store(
       id: map['id'],
-      vendorId: map['owner_id'],
+      vendorId: map['vendor_id'],
       name: map['name'],
       description: map['description'],
       storeArea: map['store_area'],
       logoUrl: map['logo_url'],
       bannerUrl: map['banner_url'],
       tags: (map['tags'] as List<dynamic>).map((e) => e.toString()).toList(),
-      latitude: (map['latitude'] as num).toDouble(),
-      longitude: (map['longitude'] as num).toDouble(),
+      latitude: map['latitude'] != null
+          ? (map['latitude'] as num).toDouble()
+          : 0,
+      longitude: map['longitude'] != null
+          ? (map['longitude'] as num).toDouble()
+          : 0,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'owner_id': vendorId,
+      'vendor_id': vendorId,
       'name': name,
       'description': description,
       'store_area': storeArea,
