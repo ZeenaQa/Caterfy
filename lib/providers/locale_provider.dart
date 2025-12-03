@@ -12,7 +12,7 @@ class LocaleProvider extends ChangeNotifier {
 
   LocaleProvider() {
     _loadLocale();
-    _loadNotificationsPreference();
+   
   }
 
 
@@ -44,24 +44,5 @@ class LocaleProvider extends ChangeNotifier {
     await prefs.setString('languageCode', locale.languageCode);
   }
 
-  void setNotificationsEnabled(bool value) {
-    _notificationsEnabled = value;
-    _saveNotificationsPreference(value);
-    notifyListeners();
-  }
-
-  void toggleNotifications() {
-    setNotificationsEnabled(!_notificationsEnabled);
-  }
-
-  Future<void> _loadNotificationsPreference() async {
-    final prefs = await SharedPreferences.getInstance();
-    _notificationsEnabled = prefs.getBool('notifications_enabled') ?? true;
-    notifyListeners();
-  }
-
-  Future<void> _saveNotificationsPreference(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('notifications_enabled', value);
-  }
+ 
 }
