@@ -1,5 +1,7 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/screens/customer_settings/account_info.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
@@ -40,7 +42,14 @@ class CustomerSettingsScreen extends StatelessWidget {
 
     final List<Widget> items = [
       SizedBox(height: 10),
-      SettingsButton(title: l10.accountInfo, icon: Icons.person_outline),
+      SettingsButton(title: l10.accountInfo, icon: Icons.person_outline, onTap: (){
+         Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AccountInfo(),
+      ),
+      );
+      },),
       SettingsButton(
         title: l10.savedAddresses,
         icon: Icons.location_on_outlined,
@@ -50,7 +59,7 @@ class CustomerSettingsScreen extends StatelessWidget {
       SettingsButton(
   title: l10.notifications,
   icon: Icons.notifications_outlined,
-  rightText: context.watch<LocaleProvider>().notificationsEnabled
+  rightText: context.watch<GlobalProvider>().notificationsEnabled
       ? l10.enabled
       : l10.disabled,
   onTap: () {
@@ -59,19 +68,19 @@ class CustomerSettingsScreen extends StatelessWidget {
       child: Column(
         children: [
           DrawerBtn(
-            isSelected: context.read<LocaleProvider>().notificationsEnabled,
+            isSelected: context.read<GlobalProvider>().notificationsEnabled,
             colors: colors,
             title: l10.enableNotifications,
             onPressed: () {
-              context.read<LocaleProvider>().setNotificationsEnabled(true);
+              context.read<GlobalProvider>().setNotificationsEnabled(true);
             },
           ),
           DrawerBtn(
-            isSelected: !context.read<LocaleProvider>().notificationsEnabled,
+            isSelected: !context.read<GlobalProvider>().notificationsEnabled,
             colors: colors,
             title: l10.disableNotifications,
             onPressed: () {
-              context.read<LocaleProvider>().setNotificationsEnabled(false);
+              context.read<GlobalProvider>().setNotificationsEnabled(false);
             },
           ),
         ],
