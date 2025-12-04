@@ -799,6 +799,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disable Notifications'**
   String get disableNotifications;
+
+  /// No description provided for @deliveredBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered by'**
+  String get deliveredBy;
+
+  /// No description provided for @deliverByDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'We always want to deliver the bset experience for you. This store uses Caterfy riders to deliver your products which \nmeans:'**
+  String get deliverByDesc;
+
+  /// No description provided for @trackYourOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your order with constant live updates'**
+  String get trackYourOrder;
+
+  /// No description provided for @trackOrderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you place your order, we can show you where it is in real-time'**
+  String get trackOrderDesc;
+
+  /// No description provided for @onTimeDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'On time delivery'**
+  String get onTimeDelivery;
+
+  /// No description provided for @onTimeDeliveryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When you place your order, we can show you what time it will arrive'**
+  String get onTimeDeliveryDesc;
+
+  /// No description provided for @chatAgentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Caterfy chat agents are here for you'**
+  String get chatAgentsTitle;
+
+  /// No description provided for @chatAgentsInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'If something goes wrong with your order, we can assist you'**
+  String get chatAgentsInfo;
 }
 
 class _AppLocalizationsDelegate

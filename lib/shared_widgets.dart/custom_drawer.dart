@@ -66,7 +66,7 @@ class ModernDrawer extends StatelessWidget {
         children: [
           // Drag handle
           Container(
-            margin: const EdgeInsets.only(top: 12, bottom: 8),
+            margin: const EdgeInsets.only(top: 12, bottom: 3),
             width: 40,
             height: 4,
             decoration: BoxDecoration(
@@ -78,7 +78,7 @@ class ModernDrawer extends StatelessWidget {
           Padding(
             padding:
                 padding ??
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+                const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             child: child,
           ),
         ],

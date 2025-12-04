@@ -19,9 +19,10 @@ class CustomerStoreListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => StoreScreen(store: store,)),
+        MaterialPageRoute(builder: (_) => StoreScreen(store: store)),
       ),
       child: SizedBox(
         height: 90,
@@ -64,17 +65,13 @@ class CustomerStoreListItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Expanded(
-                        child: Baseline(
-                          baseline: 13.5,
-                          baselineType: TextBaseline.alphabetic,
-                          child: Text(
-                            store.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13.5,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                        child: Text(
+                          store.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13.5,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

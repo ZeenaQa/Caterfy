@@ -368,4 +368,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disableNotifications => 'Disable Notifications';
+
+  @override
+  String get deliveredBy => 'Delivered by';
+
+  @override
+  String get deliverByDesc =>
+      'We always want to deliver the bset experience for you. This store uses Caterfy riders to deliver your products which \nmeans:';
+
+  @override
+  String get trackYourOrder => 'Track your order with constant live updates';
+
+  @override
+  String get trackOrderDesc =>
+      'When you place your order, we can show you where it is in real-time';
+
+  @override
+  String get onTimeDelivery => 'On time delivery';
+
+  @override
+  String get onTimeDeliveryDesc =>
+      'When you place your order, we can show you what time it will arrive';
+
+  @override
+  String get chatAgentsTitle => 'Our Caterfy chat agents are here for you';
+
+  @override
+  String get chatAgentsInfo =>
+      'If something goes wrong with your order, we can assist you';
 }

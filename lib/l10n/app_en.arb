@@ -118,5 +118,13 @@
   "enabled": "Enabled",
   "disabled": "Disabled",
   "enableNotifications": "Enable Notifications",
-  "disableNotifications": "Disable Notifications"
+  "disableNotifications": "Disable Notifications",
+  "deliveredBy": "Delivered by",
+  "deliverByDesc": "We always want to deliver the bset experience for you. This store uses Caterfy riders to deliver your products which \nmeans:",
+  "trackYourOrder": "Track your order with constant live updates",
+  "trackOrderDesc": "When you place your order, we can show you where it is in real-time",
+  "onTimeDelivery": "On time delivery",
+  "onTimeDeliveryDesc": "When you place your order, we can show you what time it will arrive",
+  "chatAgentsTitle": "Our Caterfy chat agents are here for you",
+  "chatAgentsInfo": "If something goes wrong with your order, we can assist you"
 }

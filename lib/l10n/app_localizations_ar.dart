@@ -366,4 +366,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get disableNotifications => 'إيقاف الإشعارات';
+
+  @override
+  String get deliveredBy => 'توصيل عبر';
+
+  @override
+  String get deliverByDesc =>
+      'نسعى دائما لتقديم أفضل تجربة تسوّق لعملائنا. هذا المتجر يستخدم خدمة توصيل عبر كاترفاي, وهذا يعني أنك ستستمتع بـ:';
+
+  @override
+  String get trackYourOrder => 'تتبع طلبك مباشرة';
+
+  @override
+  String get trackOrderDesc => 'يمكنك تتبّع موقع طلبك لحظة بلحظة عبر التطبيق';
+
+  @override
+  String get onTimeDelivery => 'استلام طلبك في موعده';
+
+  @override
+  String get onTimeDeliveryDesc =>
+      'عندما تُرسل طلبك للمتجر, سنُخبرك تحديداً متى سيصل الى عتبة بابك';
+
+  @override
+  String get chatAgentsTitle => 'دعم سريع عبر المحادثة';
+
+  @override
+  String get chatAgentsInfo =>
+      'اذا حدث خطأ ما لطلبك. نستطيع مساعدتك فوراً عبر المحادثة مع أحد موظفي خدمة العملاء';
 }
