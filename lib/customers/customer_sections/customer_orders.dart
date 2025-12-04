@@ -4,7 +4,8 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CustomerOrdersSection extends StatelessWidget {
-  const CustomerOrdersSection({super.key});
+  const CustomerOrdersSection({super.key, this.removeTitle = false});
+  final bool removeTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +18,15 @@ class CustomerOrdersSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              l10.orders,
-              style: TextStyle(
-                color: colors.onSurface,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+            if (!removeTitle)
+              Text(
+                l10.orders,
+                style: TextStyle(
+                  color: colors.onSurface,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
-            ),
             CustomerNoOrders(),
           ],
         ),

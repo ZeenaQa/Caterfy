@@ -9,7 +9,7 @@ class OverlapHeartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(10),
       child: Stack(
         alignment: Alignment.center,
         children: [

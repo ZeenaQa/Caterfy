@@ -18,6 +18,9 @@ class CustomerStoreListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final hasLogo = (store.logoUrl ?? '').isNotEmpty;
+    final hasBanner = (store.bannerUrl ?? '').isNotEmpty;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => Navigator.push(
@@ -36,15 +39,53 @@ class CustomerStoreListItem extends StatelessWidget {
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: dummyImage
-                          ? AssetImage('assets/images/app_icon.png')
-                          : NetworkImage(store.logoUrl ?? ''),
-                      fit: BoxFit.cover,
-                    ),
+                    image: hasBanner || hasLogo
+                        ? DecorationImage(
+                            image: dummyImage
+                                ? AssetImage('assets/images/app_icon.png')
+                                : NetworkImage(
+                                    hasBanner
+                                        ? store.bannerUrl!
+                                        : store.logoUrl!,
+                                  ),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
                   ),
                 ),
-                OverlapHeartButton(size: 15),
+                SizedBox(
+                  width: 113,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (!dummyImage)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 6,
+                          ),
+                          child: (hasBanner && hasLogo)
+                              ? Container(
+                                  width: 45,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xffe4e4e4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: NetworkImage(store.logoUrl!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
+                      Spacer(),
+                      OverlapHeartButton(size: 15),
+                    ],
+                  ),
+                ),
               ],
             ),
 

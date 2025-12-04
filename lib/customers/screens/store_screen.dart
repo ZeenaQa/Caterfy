@@ -119,7 +119,7 @@ class StoreScreen extends StatelessWidget {
                                         maxLines: 2,
                                         style: TextStyle(
                                           color: colors.onSurfaceVariant,
-                                          fontSize: 13.5,
+                                          fontSize: 12.5,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -135,7 +135,7 @@ class StoreScreen extends StatelessWidget {
                                         Text(
                                           '4.3',
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -143,6 +143,7 @@ class StoreScreen extends StatelessWidget {
                                           ' (1k+)',
                                           style: TextStyle(
                                             color: colors.onSurfaceVariant,
+                                            fontSize: 13,
                                           ),
                                         ),
                                       ],
@@ -172,7 +173,7 @@ class StoreScreen extends StatelessWidget {
                                         child: Text(
                                           "15-20 mins",
                                           style: TextStyle(
-                                            fontSize: 13.5,
+                                            fontSize: 12.5,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -203,7 +204,7 @@ class StoreScreen extends StatelessWidget {
                                         child: Text(
                                           "JOD 1.00",
                                           style: TextStyle(
-                                            fontSize: 13.5,
+                                            fontSize: 12.5,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -227,6 +228,8 @@ class StoreScreen extends StatelessWidget {
                                     ),
                                     behavior: HitTestBehavior.opaque,
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       spacing: 4,

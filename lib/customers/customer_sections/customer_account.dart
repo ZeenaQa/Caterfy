@@ -3,6 +3,7 @@ import 'package:caterfy/customers/customer_sections/customer_orders.dart';
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
+import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,7 +29,12 @@ class CustomerAccountSection extends StatelessWidget {
         icon: Icons.receipt_outlined,
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => CustomerOrdersSection()),
+          MaterialPageRoute(
+            builder: (_) => Scaffold(
+              appBar: CustomAppBar(title: l10.yourOrders),
+              body: SafeArea(child: CustomerOrdersSection(removeTitle: true)),
+            ),
+          ),
         ),
       ),
       AccountButton(
