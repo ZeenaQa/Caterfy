@@ -84,7 +84,7 @@ class StoreScreen extends StatelessWidget {
                                     image: NetworkImage(store.logoUrl!),
                                     fit: BoxFit.cover,
                                   ),
-                                  color: Colors.red,
+                                  color: Color(0xffe4e4e4),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),

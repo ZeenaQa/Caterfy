@@ -131,7 +131,6 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                       vendorId: '2',
                       storeArea: '222222222',
                       name: '222222222',
-                      description: '222222222',
                     ),
                     dummyImage: true,
                   );

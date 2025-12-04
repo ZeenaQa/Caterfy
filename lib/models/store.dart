@@ -1,7 +1,6 @@
 class Store {
   final String id;
   final String name;
-  final String description;
   final String? logoUrl;
   final String? bannerUrl;
   final String? storeArea;
@@ -14,7 +13,6 @@ class Store {
     required this.id,
     required this.vendorId,
     required this.name,
-    required this.description,
     this.storeArea,
     this.logoUrl,
     this.bannerUrl,
@@ -28,7 +26,6 @@ class Store {
       id: map['id'],
       vendorId: map['vendor_id'],
       name: map['name'],
-      description: map['description'],
       storeArea: map['store_area'],
       logoUrl: map['logo_url'],
       bannerUrl: map['banner_url'],
@@ -47,7 +44,6 @@ class Store {
       'id': id,
       'vendor_id': vendorId,
       'name': name,
-      'description': description,
       'store_area': storeArea,
       'logo_url': logoUrl,
       'banner_url': bannerUrl,
