@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OutlinedIconBtn extends StatelessWidget {
-  const OutlinedIconBtn({super.key, required this.child, this.onPressed});
+  const OutlinedIconBtn({super.key, required this.child, this.onPressed, required Null Function() onTap});
 
   final Widget child;
   final VoidCallback? onPressed;

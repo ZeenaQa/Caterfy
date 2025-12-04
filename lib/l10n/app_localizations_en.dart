@@ -368,4 +368,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disableNotifications => 'Disable Notifications';
+
+  @override
+  String get favorites => 'Favorites';
 }

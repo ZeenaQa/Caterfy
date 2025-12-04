@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/customer_sections/customer_orders.dart';
 
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
+import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
 
@@ -36,8 +37,12 @@ class CustomerAccountSection extends StatelessWidget {
         icon: Icons.wallet_giftcard_outlined,
         // rightText: '0',
       ),
+           AccountButton(title: l10.favorites, icon: Icons.favorite_border,onTap: 
+           (){Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteStoresScreen()));},),
+
       AccountButton(title: l10.getHelp, icon: Icons.help_outline),
       AccountButton(title: l10.aboutApp, icon: Icons.info_outline),
+
     ];
     return SafeArea(
       child: (user == null)

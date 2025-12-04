@@ -118,5 +118,6 @@
   "enabled": "مفعلة",
   "disabled": "معطلة",
   "enableNotifications": "تفعيل الإشعارات",
-  "disableNotifications": "إيقاف الإشعارات"
+  "disableNotifications": "إيقاف الإشعارات",
+  "favorites" : "المفضلة"
 }

@@ -366,4 +366,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get disableNotifications => 'إيقاف الإشعارات';
+
+  @override
+  String get favorites => 'المفضلة';
 }

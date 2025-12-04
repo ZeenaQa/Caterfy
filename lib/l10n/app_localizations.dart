@@ -799,6 +799,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disable Notifications'**
   String get disableNotifications;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
 }
 
 class _AppLocalizationsDelegate

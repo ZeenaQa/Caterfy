@@ -9,6 +9,7 @@ class Store {
   final List<String>? tags;
   final double latitude;
   final double longitude;
+  final bool? isFavorite;
 
   Store({
     required this.id,
@@ -20,7 +21,8 @@ class Store {
     this.bannerUrl,
     this.tags,
     this.latitude = 0,
-    this.longitude = 0,
+    this.longitude = 0, 
+     this.isFavorite,
   });
 
   factory Store.fromMap(Map<String, dynamic> map) {
@@ -54,6 +56,7 @@ class Store {
       'tags': tags,
       'latitude': latitude,
       'longitude': longitude,
+
     };
   }
 }

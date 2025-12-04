@@ -118,5 +118,6 @@
   "enabled": "Enabled",
   "disabled": "Disabled",
   "enableNotifications": "Enable Notifications",
-  "disableNotifications": "Disable Notifications"
+  "disableNotifications": "Disable Notifications",
+  "favorites" : "Favorites"
 }

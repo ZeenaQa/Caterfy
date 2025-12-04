@@ -1,8 +1,10 @@
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerStoreListItem extends StatelessWidget {
   const CustomerStoreListItem({
@@ -17,29 +19,47 @@ class CustomerStoreListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    
+final customerId = Supabase.instance.client.auth.currentUser?.id;
+
     return SizedBox(
       height: 90,
       width: double.infinity,
       child: Row(
         children: [
-          Stack(
-            children: [
-              Container(
-                width: 113,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  image: DecorationImage(
-                    image: dummyImage
-                        ? AssetImage('assets/images/app_icon.png')
-                        : NetworkImage(store.logoUrl ?? ''),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              OverlapHeartButton(size: 15),
-            ],
-          ),
+         Stack(
+  children: [
+    Container(
+      width: 113,
+      height: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        image: DecorationImage(
+          image: dummyImage
+              ? AssetImage('assets/images/app_icon.png')
+              : NetworkImage(store.logoUrl ?? ''),
+          fit: BoxFit.cover,
+        ),
+      ),
+    ),
+    Consumer<LoggedCustomerProvider>(
+      builder: (context, customerProvider, child) {
+        return OverlapHeartButton(
+          isFavorite: customerProvider.isFavorite(store.id),
+          onTap: () {
+  
+            print('Tapped!'); 
+            print('customerId: $customerId');
+             if (customerId != null) {
+          customerProvider.toggleFavorite(customerId, store.id);
+        }
+          },
+        );
+      },
+    ),
+  ],
+),
+
 
           const SizedBox(width: 9),
 
