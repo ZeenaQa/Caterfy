@@ -1,10 +1,13 @@
 import 'package:caterfy/customers/customer_widgets/delivered_by_info.dart';
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key, required this.store});
@@ -13,8 +16,11 @@ class StoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -43,10 +49,22 @@ class StoreScreen extends StatelessWidget {
                           ),
                           Spacer(),
                           OutlinedIconBtn(
+                            onPressed: () {
+                              if (customerId != null) {
+                                customerProvider.toggleFavorite(
+                                  customerId,
+                                  store,
+                                );
+                              }
+                            },
                             child: Icon(
-                              FontAwesomeIcons.heart,
+                              !customerProvider.isFavorite(store.id)
+                                  ? FontAwesomeIcons.heart
+                                  : FontAwesomeIcons.solidHeart,
                               size: 16,
-                              color: colors.onSurface,
+                              color: !customerProvider.isFavorite(store.id)
+                                  ? colors.onSurface
+                                  : const Color(0xFFF7584D),
                             ),
                           ),
                           OutlinedIconBtn(

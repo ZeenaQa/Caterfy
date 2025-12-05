@@ -87,18 +87,15 @@ class CustomerStoreListItem extends StatelessWidget {
                         ),
                       Spacer(),
 
-                      // OverlapHeartButton(size: 15),
                       Consumer<LoggedCustomerProvider>(
                         builder: (context, customerProvider, child) {
                           return OverlapHeartButton(
                             isFavorite: customerProvider.isFavorite(store.id),
                             onTap: () {
-                              print('Tapped!');
-                              print('customerId: $customerId');
                               if (customerId != null) {
                                 customerProvider.toggleFavorite(
                                   customerId,
-                                  store.id,
+                                  store,
                                 );
                               }
                             },

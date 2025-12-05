@@ -14,67 +14,71 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool isFoodLoading = false;
 
   // ===== Favorites =====
-  List<String> _favoriteStoreIds = [];
-  List<String> get favoriteStoreIds => _favoriteStoreIds;
+  Map<String, Store> _favoriteStores = {};
+  Map<String, Store> get favoriteStoreIdsMap => _favoriteStores;
+  List<Store> get favoriteStores => _favoriteStores.values.toList();
 
-  bool isFavorite(String storeId) => _favoriteStoreIds.contains(storeId);
- 
+  bool isFavorite(String storeId) => _favoriteStores.containsKey(storeId);
 
-  Future<void> fetchFavorites(String customerId) async {
+  Future<void> fetchFavorites(String customerId, BuildContext context) async {
     try {
       final data = await supabase
           .from('customer_favorites')
-          .select('store_id')
+          .select('store_id, stores(*)')
           .eq('customer_id', customerId);
+      _favoriteStores = {};
 
-      _favoriteStoreIds =
-          data.map<String>((e) => e['store_id'].toString()).toList();
+      for (final e in data) {
+        final storeId = e['store_id'].toString();
+        final storeObject = e['stores'];
 
+        _favoriteStores[storeId] = Store.fromMap(storeObject);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        final l10 = AppLocalizations.of(context);
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
       notifyListeners();
-    } catch (e) {}
-  }
-
-  
-  Future<void> toggleFavorite(String customerId, String storeId) async {
-  final isCurrentlyFavorite = _favoriteStoreIds.contains(storeId);
-  if (isCurrentlyFavorite) {
-    _favoriteStoreIds.remove(storeId);
-  } else {
-    _favoriteStoreIds.add(storeId);
-  }
-  notifyListeners();
-
-  try {
-    if (!isCurrentlyFavorite) {
-      await supabase.from('customer_favorites').insert({
-        'customer_id': customerId,
-        'store_id': storeId,
-      });
-    } else {
-      print("Deleting favorite with:");
-print("customer_id: $customerId");
-print("store_id: $storeId");
-    final response =await supabase
-    .from('customer_favorites')
-    .delete()
-    .eq('customer_id', customerId)
-    .eq('store_id', storeId).select();
-
-      print('Delete response: $response');
     }
-  } catch (e) {
-    print('Supabase error: $e');
-
-    if (isCurrentlyFavorite) {
-      _favoriteStoreIds.add(storeId);
-    } else {
-      _favoriteStoreIds.remove(storeId);
-    }
-    notifyListeners();
   }
-}
 
-  
+  Future<void> toggleFavorite(String customerId, Store store) async {
+    final isCurrentlyFavorite = _favoriteStores.containsKey(store.id);
+
+    try {
+      if (!isCurrentlyFavorite) {
+        _favoriteStores[store.id] = store;
+        notifyListeners();
+        await supabase.from('customer_favorites').insert({
+          'customer_id': customerId,
+          'store_id': store.id,
+        });
+      } else {
+        _favoriteStores.remove(store.id);
+        notifyListeners();
+        await supabase
+            .from('customer_favorites')
+            .delete()
+            .eq('customer_id', customerId)
+            .eq('store_id', store.id)
+            .select();
+      }
+    } catch (e) {
+      if (isCurrentlyFavorite) {
+        _favoriteStores[store.id] = store;
+      } else {
+        _favoriteStores.remove(store.id);
+      }
+      notifyListeners();
+    }
+  }
+
   // ===== Fetch Stores =====
   Future<void> fetchStores({
     required String category,
@@ -86,8 +90,10 @@ print("store_id: $storeId");
       isFoodLoading = true;
       notifyListeners();
 
-      final data =
-          await supabase.from('stores').select().eq('category', category);
+      final data = await supabase
+          .from('stores')
+          .select()
+          .eq('category', category);
 
       _stores = data.map((item) => Store.fromMap(item)).toList();
     } catch (e) {

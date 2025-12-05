@@ -4,8 +4,8 @@ import 'package:caterfy/l10n/app_localizations.dart';
 
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class FavoriteStoresScreen extends StatelessWidget {
   const FavoriteStoresScreen({super.key});
@@ -17,17 +17,18 @@ class FavoriteStoresScreen extends StatelessWidget {
 
     final l10 = AppLocalizations.of(context);
 
-  
-    final favoriteStores = customerProvider.stores
-        .where((store) => store.isFavorite == true)
-        .toList();
+    final favoriteStores = customerProvider.favoriteStores;
 
     return Scaffold(
       appBar: CustomAppBar(
         content: Expanded(
           child: Text(
             l10.favorites,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: colors.onSurface),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: colors.onSurface,
+            ),
           ),
         ),
       ),
@@ -42,9 +43,24 @@ class FavoriteStoresScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 10),
             )
           : Center(
-              child: Text(
-                "noFavoritesYet" ,
-                style: TextStyle(color: colors.onSurfaceVariant),
+              child: Column(
+                spacing: 20,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.heart,
+                    size: 100,
+                    color: colors.outline,
+                  ),
+                  Text(
+                    "Your favorite stores will appear here",
+                    style: TextStyle(
+                      color: colors.onSurfaceVariant,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                ],
               ),
             ),
     );

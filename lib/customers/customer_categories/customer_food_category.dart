@@ -9,7 +9,6 @@ import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerFoodCategory extends StatefulWidget {
   const CustomerFoodCategory({super.key});
@@ -54,10 +53,6 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
         listen: false,
       );
       await provider.fetchStores(category: 'food', context: context);
-      final customerId = Supabase.instance.client.auth.currentUser?.id;
-      if (customerId != null) {
-        await provider.fetchFavorites(customerId);
-      }
     });
   }
 

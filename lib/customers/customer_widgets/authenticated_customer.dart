@@ -1,9 +1,11 @@
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../customer_sections/customer_home.dart';
 import '../customer_sections/customer_account.dart';
 import '../customer_sections/customer_orders.dart';
@@ -23,6 +25,20 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
     CustomerOrdersSection(),
     CustomerAccountSection(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = Provider.of<LoggedCustomerProvider>(
+        context,
+        listen: false,
+      );
+      final customerId = Supabase.instance.client.auth.currentUser?.id;
+      await provider.fetchFavorites(customerId!, context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

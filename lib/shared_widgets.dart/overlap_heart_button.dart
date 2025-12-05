@@ -25,7 +25,7 @@ class OverlapHeartButton extends StatelessWidget {
             Icon(
               FontAwesomeIcons.heart,
               size: size + 2,
-              color: isFavorite ? Colors.red.shade300 : const Color(0xFFE7E7E7),
+              color: const Color(0xFFE7E7E7),
             ),
 
             // Fill
@@ -34,7 +34,9 @@ class OverlapHeartButton extends StatelessWidget {
               child: Icon(
                 FontAwesomeIcons.solidHeart,
                 size: size,
-                color: isFavorite ? Colors.red : Colors.black,
+                color: isFavorite
+                    ? const Color(0xFFF7584D)
+                    : Colors.black,
               ),
             ),
           ],
