@@ -82,6 +82,7 @@ class _OverlapHeartButtonState extends State<OverlapHeartButton>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
       child: Padding(
         padding: const EdgeInsets.all(7),
@@ -90,7 +91,7 @@ class _OverlapHeartButtonState extends State<OverlapHeartButton>
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.25),
+                color: Colors.black.withOpacity(0.15),
                 blurRadius: 5,
                 offset: const Offset(0, 0),
               ),
@@ -106,7 +107,7 @@ class _OverlapHeartButtonState extends State<OverlapHeartButton>
                 width: widget.size,
                 theme: SvgTheme(
                   currentColor: widget.isFavorite
-                      ? const Color(0xFFF0F0F0)
+                      ? Colors.white
                       : Colors.black.withOpacity(0.5),
                 ),
               ),

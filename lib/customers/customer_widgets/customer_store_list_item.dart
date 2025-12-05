@@ -74,7 +74,7 @@ class CustomerStoreListItem extends StatelessWidget {
                                   width: 45,
                                   height: 45,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 219, 219, 219),
+                                    color: Color(0xFFF1F1F1),
                                     border: Border.all(
                                       color: Color(0xffe4e4e4),
                                     ),
