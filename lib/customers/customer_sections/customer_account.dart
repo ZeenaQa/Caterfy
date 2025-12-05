@@ -41,14 +41,20 @@ class CustomerAccountSection extends StatelessWidget {
       AccountButton(
         title: l10.vouchers,
         icon: Icons.wallet_giftcard_outlined,
-        // rightText: '0',
       ),
-           AccountButton(title: l10.favorites, icon: Icons.favorite_border,onTap: 
-           (){Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriteStoresScreen()));},),
+      AccountButton(
+        title: l10.favorites,
+        icon: Icons.favorite_border,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FavoriteStoresScreen()),
+          );
+        },
+      ),
 
       AccountButton(title: l10.getHelp, icon: Icons.help_outline),
       AccountButton(title: l10.aboutApp, icon: Icons.info_outline),
-
     ];
     return SafeArea(
       child: (user == null)
@@ -111,7 +117,6 @@ class CustomerAccountSection extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () => (),
                     child: Container(
-                      // height: 190,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
@@ -139,7 +144,7 @@ class CustomerAccountSection extends StatelessWidget {
                               ),
                               SizedBox(width: 15),
                               Text(
-                                "0.00 ${l10.jd}",
+                                "0.00 ${l10.jod}",
                                 style: TextStyle(
                                   color: colors.primary,
                                   fontSize: 18,
@@ -151,7 +156,6 @@ class CustomerAccountSection extends StatelessWidget {
 
                           SizedBox(height: 10),
 
-                          // Make sure Column fills width to allow Align to work properly
                           SizedBox(
                             width: double.infinity,
                             child: Align(

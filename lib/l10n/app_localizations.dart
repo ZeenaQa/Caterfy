@@ -470,6 +470,12 @@ abstract class AppLocalizations {
   /// **'Search Caterfy'**
   String get search;
 
+  /// No description provided for @searchAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchAbout;
+
   /// No description provided for @deliverTo.
   ///
   /// In en, this message translates to:
@@ -578,11 +584,11 @@ abstract class AppLocalizations {
   /// **'First and last name'**
   String get firstLastName;
 
-  /// No description provided for @jd.
+  /// No description provided for @jod.
   ///
   /// In en, this message translates to:
-  /// **'jd'**
-  String get jd;
+  /// **'JOD'**
+  String get jod;
 
   /// No description provided for @account.
   ///

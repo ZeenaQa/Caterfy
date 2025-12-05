@@ -200,6 +200,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get search => 'إبحث';
 
   @override
+  String get searchAbout => 'إبحث عن';
+
+  @override
   String get deliverTo => 'التوصيل إلى';
 
   @override
@@ -254,7 +257,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get firstLastName => 'الإسم الأول والأخير';
 
   @override
-  String get jd => 'د.أ';
+  String get jod => 'د.أ';
 
   @override
   String get account => 'الحساب';

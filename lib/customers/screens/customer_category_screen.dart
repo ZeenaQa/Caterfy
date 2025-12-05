@@ -10,14 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class CustomerFoodCategory extends StatefulWidget {
-  const CustomerFoodCategory({super.key});
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key, required this.category});
+
+  final String category;
 
   @override
-  State<CustomerFoodCategory> createState() => _CustomerFoodCategoryState();
+  State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
+class _CategoryScreenState extends State<CategoryScreen> {
   late ScrollController _scrollController;
 
   double searchBarHeight = 63;
@@ -37,8 +39,9 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
       double newSearchBarOffset = currentSearchBarOffset - delta;
 
       if (newSearchBarOffset > 0) newSearchBarOffset = 0;
-      if (newSearchBarOffset < -searchBarHeight)
+      if (newSearchBarOffset < -searchBarHeight) {
         newSearchBarOffset = -searchBarHeight;
+      }
 
       if (newSearchBarOffset != currentSearchBarOffset) {
         currentSearchBarOffset = newSearchBarOffset;
@@ -52,7 +55,7 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
         context,
         listen: false,
       );
-      await provider.fetchStores(category: 'food', context: context);
+      await provider.fetchStores(category: widget.category, context: context);
     });
   }
 
@@ -68,6 +71,11 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<GlobalProvider>();
     final l10 = AppLocalizations.of(context);
+
+    final List<Store> stores = customerProvider.stores
+        .where((store) => store.category == widget.category)
+        .toList();
+
     return Scaffold(
       appBar: CustomAppBar(
         content: Expanded(
@@ -96,7 +104,8 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FavoriteStoresScreen(),
+                      builder: (context) =>
+                          FavoriteStoresScreen(category: widget.category),
                     ),
                   );
                 },
@@ -107,7 +116,7 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
       ),
       body: Stack(
         children: [
-          if (customerProvider.stores.isNotEmpty)
+          if (stores.isNotEmpty)
             ListView.separated(
               controller: _scrollController,
               padding: EdgeInsets.only(
@@ -115,9 +124,9 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                 right: 15,
                 top: searchBarHeight + 10,
               ),
-              itemCount: customerProvider.stores.length,
+              itemCount: stores.length,
               itemBuilder: (context, index) {
-                final store = customerProvider.stores[index];
+                final store = stores[index];
                 return CustomerStoreListItem(store: store);
               },
               separatorBuilder: (context, index) {
@@ -142,6 +151,7 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                       vendorId: '2',
                       storeArea: '222222222',
                       name: '222222222',
+                      category: widget.category,
                     ),
                     dummyImage: true,
                   );
@@ -166,7 +176,7 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                 borderRadius: BorderRadius.circular(50),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: "Search food",
+                    hintText: '${l10.searchAbout} ${widget.category}',
                     hintStyle: TextStyle(fontSize: 15),
                     filled: true,
                     fillColor: colors.surfaceContainer,

@@ -4,6 +4,7 @@ class Store {
   final String? logoUrl;
   final String? bannerUrl;
   final String? storeArea;
+  final String category;
   final String vendorId;
   final List<String>? tags;
   final double latitude;
@@ -13,6 +14,7 @@ class Store {
     required this.id,
     required this.vendorId,
     required this.name,
+    required this.category,
     this.storeArea,
     this.logoUrl,
     this.bannerUrl,
@@ -26,6 +28,7 @@ class Store {
       id: map['id'],
       vendorId: map['vendor_id'],
       name: map['name'],
+      category: map['category'],
       storeArea: map['store_area'],
       logoUrl: map['logo_url'],
       bannerUrl: map['banner_url'],
@@ -44,6 +47,7 @@ class Store {
       'id': id,
       'vendor_id': vendorId,
       'name': name,
+      'category': category,
       'store_area': storeArea,
       'logo_url': logoUrl,
       'banner_url': bannerUrl,

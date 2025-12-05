@@ -201,6 +201,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get search => 'Search Caterfy';
 
   @override
+  String get searchAbout => 'Search';
+
+  @override
   String get deliverTo => 'Deliver to';
 
   @override
@@ -255,7 +258,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get firstLastName => 'First and last name';
 
   @override
-  String get jd => 'jd';
+  String get jod => 'JOD';
 
   @override
   String get account => 'Account';

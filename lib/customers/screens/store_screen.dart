@@ -220,7 +220,7 @@ class StoreScreen extends StatelessWidget {
                                         baseline: 14,
                                         baselineType: TextBaseline.alphabetic,
                                         child: Text(
-                                          "JOD 1.00",
+                                          '1.00 ${l10.jod}',
                                           style: TextStyle(
                                             fontSize: 12.5,
                                             fontWeight: FontWeight.bold,

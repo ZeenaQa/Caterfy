@@ -8,7 +8,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteStoresScreen extends StatelessWidget {
-  const FavoriteStoresScreen({super.key});
+  const FavoriteStoresScreen({super.key, this.category = ''});
+
+  final String category;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,11 @@ class FavoriteStoresScreen extends StatelessWidget {
 
     final l10 = AppLocalizations.of(context);
 
-    final favoriteStores = customerProvider.favoriteStores;
+    final favoriteStores = category.isNotEmpty
+        ? customerProvider.favoriteStores
+              .where((store) => store.category == category)
+              .toList()
+        : customerProvider.favoriteStores;
 
     return Scaffold(
       appBar: CustomAppBar(

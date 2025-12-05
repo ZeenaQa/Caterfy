@@ -1,10 +1,7 @@
-import 'package:caterfy/customers/customer_categories/customer_food_category.dart';
-import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/customer_category_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CustomerHomeCategories extends StatelessWidget {
   final double topMargin;
@@ -25,11 +22,11 @@ class CustomerHomeCategories extends StatelessWidget {
               title: l10.food,
               image: 'assets/images/burger_icon.png',
               onTap: () {
-                final customerProvider = Provider.of<LoggedCustomerProvider>(context, listen: false);
-                print(customerProvider.favoriteStoreIdsMap);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => CustomerFoodCategory()),
+                  MaterialPageRoute(
+                    builder: (_) => CategoryScreen(category: 'food'),
+                  ),
                 );
               },
             ),
