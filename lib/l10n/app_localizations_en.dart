@@ -396,4 +396,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get chatAgentsInfo =>
       'If something goes wrong with your order, we can assist you';
+
+  @override
+  String get favorites => 'Favorites';
 }

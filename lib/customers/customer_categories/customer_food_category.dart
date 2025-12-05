@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -8,6 +9,7 @@ import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerFoodCategory extends StatefulWidget {
   const CustomerFoodCategory({super.key});
@@ -52,6 +54,10 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
         listen: false,
       );
       await provider.fetchStores(category: 'food', context: context);
+      final customerId = Supabase.instance.client.auth.currentUser?.id;
+      if (customerId != null) {
+        await provider.fetchFavorites(customerId);
+      }
     });
   }
 
@@ -89,7 +95,17 @@ class _CustomerFoodCategoryState extends State<CustomerFoodCategory> {
                   ),
                 ),
               ),
-              OutlinedIconBtn(child: Icon(Icons.favorite_outline, size: 19)),
+              OutlinedIconBtn(
+                child: Icon(Icons.favorite_outline, size: 19),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FavoriteStoresScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

@@ -1,9 +1,11 @@
 import 'package:caterfy/customers/screens/store_screen.dart';
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerStoreListItem extends StatelessWidget {
   const CustomerStoreListItem({
@@ -17,6 +19,7 @@ class CustomerStoreListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
     final colors = Theme.of(context).colorScheme;
     final hasLogo = (store.logoUrl ?? '').isNotEmpty;
     final hasBanner = (store.bannerUrl ?? '').isNotEmpty;
@@ -83,7 +86,25 @@ class CustomerStoreListItem extends StatelessWidget {
                               : null,
                         ),
                       Spacer(),
-                      OverlapHeartButton(size: 15),
+
+                      // OverlapHeartButton(size: 15),
+                      Consumer<LoggedCustomerProvider>(
+                        builder: (context, customerProvider, child) {
+                          return OverlapHeartButton(
+                            isFavorite: customerProvider.isFavorite(store.id),
+                            onTap: () {
+                              print('Tapped!');
+                              print('customerId: $customerId');
+                              if (customerId != null) {
+                                customerProvider.toggleFavorite(
+                                  customerId,
+                                  store.id,
+                                );
+                              }
+                            },
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

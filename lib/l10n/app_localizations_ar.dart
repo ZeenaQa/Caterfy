@@ -393,4 +393,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get chatAgentsInfo =>
       'اذا حدث خطأ ما لطلبك. نستطيع مساعدتك فوراً عبر المحادثة مع أحد موظفي خدمة العملاء';
+
+  @override
+  String get favorites => 'المفضلة';
 }

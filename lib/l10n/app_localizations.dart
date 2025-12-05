@@ -847,6 +847,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If something goes wrong with your order, we can assist you'**
   String get chatAgentsInfo;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
 }
 
 class _AppLocalizationsDelegate
