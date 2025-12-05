@@ -402,4 +402,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favorites => 'Favorites';
+
+  @override
+  String get favoriteText => 'Added to your favorites';
+
+  @override
+  String get unfavoriteText => 'Removed from your favorites';
+
+  @override
+  String get viewAll => 'View all';
 }

@@ -399,4 +399,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get favorites => 'المفضلة';
+
+  @override
+  String get favoriteText => 'تمت الإضافة إلي قائمتك المفضلة';
+
+  @override
+  String get unfavoriteText => 'تمت الإزالة من قائمتك المفضلة';
+
+  @override
+  String get viewAll => 'عرض الكل';
 }

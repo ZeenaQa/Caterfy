@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/screens/store_screen.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/models/store.dart';
+import 'package:caterfy/shared_widgets.dart/favorite_toast.dart';
 import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,15 +43,16 @@ class CustomerStoreListItem extends StatelessWidget {
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: hasBanner || hasLogo
+                    image: dummyImage
                         ? DecorationImage(
-                            image: dummyImage
-                                ? AssetImage('assets/images/app_icon.png')
-                                : NetworkImage(
-                                    hasBanner
-                                        ? store.bannerUrl!
-                                        : store.logoUrl!,
-                                  ),
+                            image: AssetImage('assets/images/app_icon.png'),
+                            fit: BoxFit.cover,
+                          )
+                        : (hasBanner || hasLogo)
+                        ? DecorationImage(
+                            image: NetworkImage(
+                              hasBanner ? store.bannerUrl! : store.logoUrl!,
+                            ),
                             fit: BoxFit.cover,
                           )
                         : null,
@@ -89,16 +91,23 @@ class CustomerStoreListItem extends StatelessWidget {
 
                       Consumer<LoggedCustomerProvider>(
                         builder: (context, customerProvider, child) {
+                          final isFav = customerProvider.isFavorite(store.id);
                           return OverlapHeartButton(
-                            isFavorite: customerProvider.isFavorite(store.id),
+                            isFavorite: isFav,
                             onTap: () {
                               if (customerId != null) {
+                                showFavoriteToast(
+                                  context: context,
+                                  isFavorite: !isFav,
+                                  category: store.category
+                                );
                                 customerProvider.toggleFavorite(
                                   customerId,
                                   store,
                                 );
                               }
                             },
+                            size: 23,
                           );
                         },
                       ),

@@ -3,6 +3,7 @@ import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
+import 'package:caterfy/shared_widgets.dart/favorite_toast.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -51,6 +52,14 @@ class StoreScreen extends StatelessWidget {
                           OutlinedIconBtn(
                             onPressed: () {
                               if (customerId != null) {
+                                final isFav = customerProvider.isFavorite(
+                                  store.id,
+                                );
+                                showFavoriteToast(
+                                  context: context,
+                                  isFavorite: !isFav,
+                                  category: store.category,
+                                );
                                 customerProvider.toggleFavorite(
                                   customerId,
                                   store,

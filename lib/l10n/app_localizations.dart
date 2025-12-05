@@ -859,6 +859,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Favorites'**
   String get favorites;
+
+  /// No description provided for @favoriteText.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your favorites'**
+  String get favoriteText;
+
+  /// No description provided for @unfavoriteText.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from your favorites'**
+  String get unfavoriteText;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get viewAll;
 }
 
 class _AppLocalizationsDelegate

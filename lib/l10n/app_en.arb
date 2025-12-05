@@ -128,5 +128,8 @@
   "onTimeDeliveryDesc": "When you place your order, we can show you what time it will arrive",
   "chatAgentsTitle": "Our Caterfy chat agents are here for you",
   "chatAgentsInfo": "If something goes wrong with your order, we can assist you",
-  "favorites" : "Favorites"
+  "favorites" : "Favorites",
+  "favoriteText": "Added to your favorites",
+  "unfavoriteText": "Removed from your favorites",
+  "viewAll": "View all"
 }
