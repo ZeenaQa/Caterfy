@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/customers/screens/customer_settings/account_info.dart';
+import 'package:caterfy/customers/screens/customer_settings/change_password.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/providers/locale_provider.dart';
@@ -39,6 +40,8 @@ class CustomerSettingsScreen extends StatelessWidget {
         customerAuth.notifyLis();
       }
     }
+    final user = Supabase.instance.client.auth.currentUser;
+final bool isEmailUser = user?.email != null;
 
     final List<Widget> items = [
       SizedBox(height: 10),
@@ -56,8 +59,16 @@ class CustomerSettingsScreen extends StatelessWidget {
         title: l10.savedAddresses,
         icon: Icons.location_on_outlined,
       ),
-      SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
-      SettingsButton(title: l10.changePassword, icon: Icons.key_outlined),
+      if (isEmailUser) ...[
+        SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
+        SettingsButton(title: l10.changePassword, icon: Icons.key_outlined,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+          );
+        },),
+      ],
       SettingsButton(
         title: l10.notifications,
         icon: Icons.notifications_outlined,

@@ -4,42 +4,57 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 //------------------- Custom Text Field -------------------
 class CustomTextField extends StatelessWidget {
+    final String? value;
   final String? hint;
   final bool obscureText;
   final TextInputType keyboardType;
   final Widget? suffix;
   final ValueChanged<String>? onChanged;
   final String? errorText;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
+    this.value,
     this.hint,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.suffix,
     this.onChanged,
     this.errorText,
+    this.readOnly = false, 
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: TextStyle(fontSize: 15),
+         controller: TextEditingController(text: value ?? ''),
+      style: const TextStyle(fontSize: 15),
       obscureText: obscureText,
       keyboardType: keyboardType,
-      onChanged: onChanged,
+      readOnly: readOnly,
+      enableInteractiveSelection: !readOnly,
+      onChanged: readOnly ? null : onChanged,
+      focusNode: readOnly ? AlwaysDisabledFocusNode() : null,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-        hintText: hint,
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+
+      hintText: value == null ? hint : null,
         suffixIcon: suffix,
         filled: false,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(),
         ),
       ),
     );
   }
+}
+
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }
 
 /// ------------------- Password Text Field -------------------
@@ -111,6 +126,8 @@ class LabeledTextField extends StatelessWidget {
     this.label,
     this.keyboardType,
     this.errorText,
+    this.readOnly = false,
+    this.value, 
   });
 
   final Function onChanged;
@@ -118,6 +135,8 @@ class LabeledTextField extends StatelessWidget {
   final String? label;
   final TextInputType? keyboardType;
   final String? errorText;
+    final bool readOnly;
+    final String? value; 
 
   @override
   Widget build(BuildContext context) {
@@ -153,11 +172,14 @@ class LabeledTextField extends StatelessWidget {
             ],
           ),
         ),
-        CustomTextField(
-          onChanged: (value) => onChanged(value),
+       CustomTextField(
+  value: value,
           hint: hint,
-          errorText: errorText,
-        ),
+  errorText: errorText,
+  readOnly: readOnly,
+  onChanged: readOnly ? null : (value) => onChanged(value),
+),
+
       ],
     );
   }
