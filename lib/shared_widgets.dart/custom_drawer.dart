@@ -1,4 +1,6 @@
+import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Future<T?> openDrawer<T>(
   BuildContext context, {
@@ -9,6 +11,7 @@ Future<T?> openDrawer<T>(
   Color? backgroundColor,
   double borderRadius = 24.0,
   EdgeInsets? padding,
+  String title = '',
 }) {
   return showModalBottomSheet<T>(
     context: context,
@@ -21,6 +24,7 @@ Future<T?> openDrawer<T>(
       backgroundColor: backgroundColor,
       borderRadius: borderRadius,
       padding: padding,
+      title: title,
       child: child,
     ),
   );
@@ -32,6 +36,7 @@ class ModernDrawer extends StatelessWidget {
   final Color? backgroundColor;
   final double borderRadius;
   final EdgeInsets? padding;
+  final String title;
 
   const ModernDrawer({
     super.key,
@@ -40,6 +45,7 @@ class ModernDrawer extends StatelessWidget {
     this.backgroundColor,
     this.borderRadius = 24.0,
     this.padding,
+    this.title = '',
   });
 
   @override
@@ -75,10 +81,28 @@ class ModernDrawer extends StatelessWidget {
             ),
           ),
           // Content - wrap only if needed
+          Row(
+            children: [
+              SizedBox(width: 12),
+              OutlinedIconBtn(
+                onPressed: () => Navigator.of(context).pop(),
+                size: 40,
+                child: Icon(
+                  FontAwesomeIcons.x,
+                  color: colors.onSurface,
+                  size: 14,
+                ),
+              ),
+              SizedBox(width: 10),
+              if (title.isNotEmpty)
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+            ],
+          ),
           Padding(
-            padding:
-                padding ??
-                const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            padding: padding ?? const EdgeInsets.only(bottom: 15),
             child: child,
           ),
         ],

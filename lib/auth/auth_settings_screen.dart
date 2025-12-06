@@ -25,6 +25,8 @@ class AuthSettingsScreen extends StatelessWidget {
         onTap: () {
           openDrawer(
             context,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            title: l10.language,
             child: Column(
               children: [
                 DrawerBtn(
@@ -57,6 +59,7 @@ class AuthSettingsScreen extends StatelessWidget {
         onTap: () {
           openDrawer(
             context,
+            title: l10.theme,
             child: Column(
               children: [
                 DrawerBtn(

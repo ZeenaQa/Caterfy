@@ -36,6 +36,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     primary: Color(0xFF7944DB),
     onPrimary: Color.fromARGB(255, 236, 236, 236),
     onPrimaryFixedVariant: Color(0xff3D1A3D),
+    onPrimaryFixed: Colors.white,
     surfaceContainer: Color.fromARGB(255, 28, 28, 28),
     onPrimaryContainer: Color(0xff4d2550),
     secondary: Color(0xFFB8B8B8),

@@ -6,11 +6,13 @@ class OutlinedIconBtn extends StatelessWidget {
     required this.child,
     this.onPressed,
     this.size = 40.0,
+    this.color,
   });
 
   final Widget child;
   final VoidCallback? onPressed;
   final double size;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class OutlinedIconBtn extends StatelessWidget {
         shape: CircleBorder(side: BorderSide(color: colors.outline)),
         clipBehavior: Clip.antiAlias,
         child: IconTheme(
-          data: IconThemeData(size: 22, color: colors.onSurface),
+          data: IconThemeData(size: 22, color: color ?? colors.onSurface),
           child: SizedBox(
             width: size,
             height: size,

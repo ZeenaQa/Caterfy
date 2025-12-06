@@ -5,6 +5,7 @@ class Product {
   final String description;
   final String imageUrl;
   final double price;
+  final String foodCategory;
 
   Product({
     required this.id,
@@ -13,6 +14,7 @@ class Product {
     required this.description,
     required this.price,
     required this.imageUrl,
+    this.foodCategory = '',
   });
 
   // FROM SUPABASE (Map → Product)

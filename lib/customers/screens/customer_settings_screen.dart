@@ -42,14 +42,16 @@ class CustomerSettingsScreen extends StatelessWidget {
 
     final List<Widget> items = [
       SizedBox(height: 10),
-      SettingsButton(title: l10.accountInfo, icon: Icons.person_outline, onTap: (){
-         Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const AccountInfo(),
+      SettingsButton(
+        title: l10.accountInfo,
+        icon: Icons.person_outline,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AccountInfo()),
+          );
+        },
       ),
-      );
-      },),
       SettingsButton(
         title: l10.savedAddresses,
         icon: Icons.location_on_outlined,
@@ -57,41 +59,51 @@ class CustomerSettingsScreen extends StatelessWidget {
       SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
       SettingsButton(title: l10.changePassword, icon: Icons.key_outlined),
       SettingsButton(
-  title: l10.notifications,
-  icon: Icons.notifications_outlined,
-  rightText: context.watch<GlobalProvider>().notificationsEnabled
-      ? l10.enabled
-      : l10.disabled,
-  onTap: () {
-    openDrawer(
-      context,
-      child: Column(
-        children: [
-          DrawerBtn(
-            isSelected: context.read<GlobalProvider>().notificationsEnabled,
-            colors: colors,
-            title: l10.enableNotifications,
-            onPressed: () {
-              context.read<GlobalProvider>().setNotificationsEnabled(true);
-            },
-          ),
-          DrawerBtn(
-            isSelected: !context.read<GlobalProvider>().notificationsEnabled,
-            colors: colors,
-            title: l10.disableNotifications,
-            onPressed: () {
-              context.read<GlobalProvider>().setNotificationsEnabled(false);
-            },
-          ),
-        ],
+        title: l10.notifications,
+        icon: Icons.notifications_outlined,
+        rightText: context.watch<GlobalProvider>().notificationsEnabled
+            ? l10.enabled
+            : l10.disabled,
+        onTap: () {
+          openDrawer(
+            context,
+            title: l10.notifications,
+            child: Column(
+              children: [
+                DrawerBtn(
+                  isSelected: context
+                      .read<GlobalProvider>()
+                      .notificationsEnabled,
+                  colors: colors,
+                  title: l10.enableNotifications,
+                  onPressed: () {
+                    context.read<GlobalProvider>().setNotificationsEnabled(
+                      true,
+                    );
+                  },
+                ),
+                DrawerBtn(
+                  isSelected: !context
+                      .read<GlobalProvider>()
+                      .notificationsEnabled,
+                  colors: colors,
+                  title: l10.disableNotifications,
+                  onPressed: () {
+                    context.read<GlobalProvider>().setNotificationsEnabled(
+                      false,
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
       ),
-    );
-  },
-),
       SettingsButton(
         onTap: () {
           openDrawer(
             context,
+            title: l10.language,
             child: Column(
               children: [
                 DrawerBtn(
@@ -124,6 +136,7 @@ class CustomerSettingsScreen extends StatelessWidget {
         onTap: () {
           openDrawer(
             context,
+            title: l10.theme,
             child: Column(
               children: [
                 DrawerBtn(

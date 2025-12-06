@@ -1,8 +1,6 @@
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DeliveredByInfo extends StatelessWidget {
   const DeliveredByInfo({super.key});
@@ -16,19 +14,6 @@ class DeliveredByInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: OutlinedIconBtn(
-              onPressed: () => Navigator.of(context).pop(),
-              size: 40,
-              child: Icon(
-                FontAwesomeIcons.x,
-                color: colors.onSurface,
-                size: 14,
-              ),
-            ),
-          ),
-          SizedBox(height: 5),
           SvgPicture.asset(
             'assets/icons/caterfy_scooter.svg',
             width: 130,
@@ -58,28 +43,25 @@ class DeliveredByInfo extends StatelessWidget {
           SizedBox(height: 10),
           Text(l10.deliverByDesc),
           SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
-            child: Column(
-              spacing: 20,
-              children: [
-                InfoItem(
-                  iconName: 'caterfy_pin.svg',
-                  title: l10.trackYourOrder,
-                  desc: l10.trackOrderDesc,
-                ),
-                InfoItem(
-                  iconName: 'caterfy_helmet.svg',
-                  title: l10.onTimeDelivery,
-                  desc: l10.onTimeDeliveryDesc,
-                ),
-                InfoItem(
-                  iconName: 'caterfy_headset.svg',
-                  title: l10.chatAgentsTitle,
-                  desc: l10.chatAgentsInfo,
-                ),
-              ],
-            ),
+          Column(
+            spacing: 20,
+            children: [
+              InfoItem(
+                iconName: 'caterfy_pin.svg',
+                title: l10.trackYourOrder,
+                desc: l10.trackOrderDesc,
+              ),
+              InfoItem(
+                iconName: 'caterfy_helmet.svg',
+                title: l10.onTimeDelivery,
+                desc: l10.onTimeDeliveryDesc,
+              ),
+              InfoItem(
+                iconName: 'caterfy_headset.svg',
+                title: l10.chatAgentsTitle,
+                desc: l10.chatAgentsInfo,
+              ),
+            ],
           ),
         ],
       ),
