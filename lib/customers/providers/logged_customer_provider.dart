@@ -13,6 +13,26 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   bool isFoodLoading = false;
 
+  int productsNum = 0;
+  double totalPrice = 0;
+
+  void setTotalPrice(double val) {
+    totalPrice += val;
+    notifyListeners();
+  }
+
+  void setProductsNum(int val) {
+    productsNum += val;
+    print(productsNum);
+    notifyListeners();
+  }
+
+  void clearCart() {
+    productsNum = 0;
+    totalPrice = 0;
+    notifyListeners();
+  }
+
   // ===== Favorites =====
   Map<String, Store> _favoriteStores = {};
   Map<String, Store> get favoriteStoreIdsMap => _favoriteStores;

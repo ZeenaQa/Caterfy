@@ -34,6 +34,8 @@ dependencies:
   flutter_local_notifications: ^19.5.0
   skeletonizer: ^2.1.1
   scrollable_positioned_list: ^0.3.8
+  animated_digit: ^3.3.2
+  animated_flip_counter: ^0.3.4
 
 dev_dependencies:
   flutter_test:

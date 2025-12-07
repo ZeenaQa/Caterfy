@@ -10,11 +10,13 @@ class FilledBtn extends StatelessWidget {
   final double innerHorizontalPadding;
   final double verticalPadding;
   final double horizontalPadding;
+  final Widget? content;
 
   const FilledBtn({
     super.key,
     required this.onPressed,
-    required this.title,
+    this.title = '',
+    this.content,
     this.isLoading = false,
     this.stretch = true,
     this.innerVerticalPadding = 15,
@@ -54,14 +56,16 @@ class FilledBtn extends StatelessWidget {
             children: [
               Opacity(
                 opacity: isLoading ? 0.0 : 1.0,
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    color: colors.onPrimary,
-                    fontSize: 14,
-                  ),
-                ),
+                child:
+                    content ??
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        color: colors.onPrimary,
+                        fontSize: 14,
+                      ),
+                    ),
               ),
               if (isLoading) ThreeBounce(),
             ],

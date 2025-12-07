@@ -5,6 +5,7 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/favorite_toast.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -301,10 +302,63 @@ class _StoreScreenState extends State<StoreScreen> {
                     ),
                   ],
                 ),
-                StoreMenuLayout(),
+                StoreMenuLayout(store: widget.store),
               ],
             ),
           ),
+
+          if (customerProvider.productsNum > 0)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: 35,
+                  top: 10,
+                  right: 10,
+                  left: 10,
+                ),
+                height: 100,
+
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  border: Border(top: BorderSide(color: colors.outline)),
+                ),
+                width: double.infinity,
+                child: FilledBtn(
+                  onPressed: () {},
+                  content: Row(
+                    children: [
+                      Text(
+                        customerProvider.productsNum.toString(),
+                        style: TextStyle(
+                          color: colors.onPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      SizedBox(width: 13),
+                      Text(
+                        "View cart",
+                        style: TextStyle(
+                          color: colors.onPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        '${l10.jod} ${customerProvider.totalPrice.toString()}',
+                        style: TextStyle(
+                          color: colors.onPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
           Positioned(
             top: 0,

@@ -1,9 +1,12 @@
 import 'package:caterfy/customers/customer_widgets/product_item.dart';
 import 'package:caterfy/models/product.dart';
+import 'package:caterfy/models/store.dart';
 import 'package:flutter/material.dart';
 
 class StoreMenuLayout extends StatefulWidget {
-  const StoreMenuLayout({super.key});
+  const StoreMenuLayout({super.key, required this.store});
+
+  final Store store;
 
   @override
   State<StoreMenuLayout> createState() => _StoreMenuLayoutState();
@@ -12,95 +15,6 @@ class StoreMenuLayout extends StatefulWidget {
 class _StoreMenuLayoutState extends State<StoreMenuLayout> {
   final ScrollController scrollController = ScrollController();
   final Map<String, GlobalKey> categoryKeys = {};
-
-  final List<Product> products = [
-    // --- BURGERS ---
-    Product(
-      id: '101',
-      foodCategory: 'Burgers',
-      storeId: 'store_1',
-      name: 'Double Cheese Burger',
-      description:
-          'Two beef patties with cheddar cheese, lettuce, and special sauce.',
-      price: 6.50,
-      imageUrl:
-          'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60',
-    ),
-    Product(
-      id: '102',
-      foodCategory: 'Burgers',
-      storeId: 'store_1',
-      name: 'Mushroom Swiss Burger',
-      description: 'Grilled mushroom, swiss cheese, and caramelized onions.',
-      price: 7.20,
-      imageUrl:
-          'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=500&q=60',
-    ),
-    Product(
-      id: '103',
-      foodCategory: 'Burgers',
-      storeId: 'store_1',
-      name: 'Spicy Chicken Zinger',
-      description: 'Fried chicken breast with spicy mayo and coleslaw.',
-      price: 5.80,
-      imageUrl:
-          'https://images.unsplash.com/photo-1615557960916-5f4791effe9d?auto=format&fit=crop&w=500&q=60',
-    ),
-
-    // --- SHAWARMA ---
-    Product(
-      id: '201',
-      foodCategory: 'Shawarma',
-      storeId: 'store_1',
-      name: 'Classic Beef Shawarma',
-      description: 'Authentic beef shawarma with tahini, parsley, and sumac.',
-      price: 3.50,
-      imageUrl:
-          'https://i0.wp.com/shawarmaandalos.ca/wp-content/uploads/2024/01/Beef-Shawarma.png?fit=1000%2C1000&ssl=1',
-    ),
-    Product(
-      id: '202',
-      foodCategory: 'Shawarma',
-      storeId: 'store_1',
-      name: 'Chicken Shawarma Wrap',
-      description: 'Served with garlic sauce (toum) and pickles.',
-      price: 3.00,
-      imageUrl:
-          'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=500&q=60',
-    ),
-    Product(
-      id: '203',
-      foodCategory: 'Shawarma',
-      storeId: 'store_1',
-      name: 'Shawarma Arabi Meal',
-      description: 'Cut shawarma bites served with fries and extra dips.',
-      price: 6.00,
-      imageUrl:
-          'https://images.unsplash.com/photo-1619526881542-c81baff85fa4?auto=format&fit=crop&w=500&q=60',
-    ),
-
-    // --- DRINKS ---
-    Product(
-      id: '301',
-      foodCategory: 'Drinks',
-      storeId: 'store_1',
-      name: 'Coca Cola Zero',
-      description: '330ml can chilled.',
-      price: 1.00,
-      imageUrl:
-          'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=60',
-    ),
-    Product(
-      id: '302',
-      foodCategory: 'Drinks',
-      storeId: 'store_1',
-      name: 'Fresh Orange Juice',
-      description: 'Freshly squeezed orange juice without sugar.',
-      price: 2.50,
-      imageUrl:
-          'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=500&q=60',
-    ),
-  ];
 
   // ---------------------------
   // SCROLL TO CATEGORY
@@ -122,6 +36,95 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Product> products = [
+      // --- BURGERS ---
+      Product(
+        id: '101',
+        foodCategory: 'Burgers',
+        storeId: widget.store.id,
+        name: 'Double Cheese Burger',
+        description:
+            'Two beef patties with cheddar cheese, lettuce, and special sauce.',
+        price: 6.50,
+        imageUrl:
+            'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60',
+      ),
+      Product(
+        id: '102',
+        foodCategory: 'Burgers',
+        storeId: widget.store.id,
+        name: 'Mushroom Swiss Burger',
+        description: 'Grilled mushroom, swiss cheese, and caramelized onions.',
+        price: 7.20,
+        imageUrl:
+            'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=500&q=60',
+      ),
+      Product(
+        id: '103',
+        foodCategory: 'Burgers',
+        storeId: widget.store.id,
+        name: 'Spicy Chicken Zinger',
+        description: 'Fried chicken breast with spicy mayo and coleslaw.',
+        price: 5.80,
+        imageUrl:
+            'https://images.unsplash.com/photo-1615557960916-5f4791effe9d?auto=format&fit=crop&w=500&q=60',
+      ),
+
+      // --- SHAWARMA ---
+      Product(
+        id: '201',
+        foodCategory: 'Shawarma',
+        storeId: widget.store.id,
+        name: 'Classic Beef Shawarma',
+        description: 'Authentic beef shawarma with tahini, parsley, and sumac.',
+        price: 3.50,
+        imageUrl:
+            'https://i0.wp.com/shawarmaandalos.ca/wp-content/uploads/2024/01/Beef-Shawarma.png?fit=1000%2C1000&ssl=1',
+      ),
+      Product(
+        id: '202',
+        foodCategory: 'Shawarma',
+        storeId: widget.store.id,
+        name: 'Chicken Shawarma Wrap',
+        description: 'Served with garlic sauce (toum) and pickles.',
+        price: 3.00,
+        imageUrl:
+            'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=500&q=60',
+      ),
+      Product(
+        id: '203',
+        foodCategory: 'Shawarma',
+        storeId: widget.store.id,
+        name: 'Shawarma Arabi Meal',
+        description: 'Cut shawarma bites served with fries and extra dips.',
+        price: 6.00,
+        imageUrl:
+            'https://images.unsplash.com/photo-1619526881542-c81baff85fa4?auto=format&fit=crop&w=500&q=60',
+      ),
+
+      // --- DRINKS ---
+      Product(
+        id: '301',
+        foodCategory: 'Drinks',
+        storeId: widget.store.id,
+        name: 'Coca Cola Zero',
+        description: '330ml can chilled.',
+        price: 1.00,
+        imageUrl:
+            'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=60',
+      ),
+      Product(
+        id: '302',
+        foodCategory: 'Drinks',
+        storeId: widget.store.id,
+        name: 'Fresh Orange Juice',
+        description: 'Freshly squeezed orange juice without sugar.',
+        price: 2.50,
+        imageUrl:
+            'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=500&q=60',
+      ),
+    ];
+
     // Group items
     final grouped = <String, List<Product>>{};
     for (var p in products) {

@@ -27,10 +27,17 @@ class CustomerStoreListItem extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => StoreScreen(store: store)),
-      ),
+      onTap: () {
+        final provider = Provider.of<LoggedCustomerProvider>(
+          context,
+          listen: false,
+        );
+        provider.clearCart();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => StoreScreen(store: store)),
+        );
+      },
       child: SizedBox(
         height: 90,
         width: double.infinity,
@@ -99,7 +106,7 @@ class CustomerStoreListItem extends StatelessWidget {
                                 showFavoriteToast(
                                   context: context,
                                   isFavorite: !isFav,
-                                  category: store.category
+                                  category: store.category,
                                 );
                                 customerProvider.toggleFavorite(
                                   customerId,

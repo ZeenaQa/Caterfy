@@ -9,9 +9,10 @@ Future<T?> openDrawer<T>(
   bool isDismissible = true,
   bool enableDrag = true,
   Color? backgroundColor,
-  double borderRadius = 24.0,
+  double borderRadius = 34.0,
   EdgeInsets? padding,
   String title = '',
+  bool isStack = false,
 }) {
   return showModalBottomSheet<T>(
     context: context,
@@ -25,6 +26,7 @@ Future<T?> openDrawer<T>(
       borderRadius: borderRadius,
       padding: padding,
       title: title,
+      isStack: isStack,
       child: child,
     ),
   );
@@ -37,15 +39,17 @@ class ModernDrawer extends StatelessWidget {
   final double borderRadius;
   final EdgeInsets? padding;
   final String title;
+  final bool isStack;
 
   const ModernDrawer({
     super.key,
     required this.child,
     this.height,
     this.backgroundColor,
-    this.borderRadius = 24.0,
+    this.borderRadius = 34.0,
     this.padding,
     this.title = '',
+    this.isStack = false,
   });
 
   @override
@@ -71,40 +75,88 @@ class ModernDrawer extends StatelessWidget {
         mainAxisSize: MainAxisSize.min, // KEY: Shrink to fit children
         children: [
           // Drag handle
-          Container(
-            margin: const EdgeInsets.only(top: 12, bottom: 3),
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: colors.onSurface.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          // Content - wrap only if needed
-          Row(
-            children: [
-              SizedBox(width: 12),
-              OutlinedIconBtn(
-                onPressed: () => Navigator.of(context).pop(),
-                size: 40,
-                child: Icon(
-                  FontAwesomeIcons.x,
-                  color: colors.onSurface,
-                  size: 14,
-                ),
+          if (!isStack) ...[
+            Container(
+              margin: const EdgeInsets.only(top: 12, bottom: 3),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: colors.onSurface.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(2),
               ),
-              SizedBox(width: 10),
-              if (title.isNotEmpty)
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            // Content - wrap only if needed
+            Row(
+              children: [
+                SizedBox(width: 12),
+                OutlinedIconBtn(
+                  onPressed: () => Navigator.of(context).pop(),
+                  size: 40,
+                  child: Icon(
+                    FontAwesomeIcons.x,
+                    color: colors.onSurface,
+                    size: 14,
+                  ),
                 ),
-            ],
-          ),
-          Padding(
-            padding: padding ?? const EdgeInsets.only(bottom: 15),
-            child: child,
-          ),
+                SizedBox(width: 10),
+                if (title.isNotEmpty)
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+              ],
+            ),
+            Padding(
+              padding: padding ?? const EdgeInsets.only(bottom: 15),
+              child: child,
+            ),
+          ] else
+            Stack(
+              children: [
+                Padding(
+                  padding: padding ?? const EdgeInsets.only(bottom: 15),
+                  child: child,
+                ),
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 12, bottom: 3),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Color(0xffe5e5e5),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 12),
+                        OutlinedIconBtn(
+                          onPressed: () => Navigator.of(context).pop(),
+                          size: 40,
+                          child: Icon(
+                            FontAwesomeIcons.x,
+                            color: colors.onSurface,
+                            size: 14,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        if (title.isNotEmpty)
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                // Content - wrap only if needed
+              ],
+            ),
         ],
       ),
     );
