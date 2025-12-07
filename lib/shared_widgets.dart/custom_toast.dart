@@ -6,6 +6,9 @@ void showCustomToast({
   required String message,
   String position = 'top',
   int durationSeconds = 3,
+
+  
+  
   ToastificationType type = ToastificationType.info,
 }) {
   Alignment alignment;
@@ -22,10 +25,15 @@ void showCustomToast({
       alignment = Alignment.topCenter;
       break;
   }
-
+    final colors = Theme.of(context).colorScheme;
   toastification.show(
+    backgroundColor:colors.surface,
+     description: Text(
+      message,
+      style: TextStyle(color: colors.onSurface),
+    ),
     context: context,
-    description: Text(message),
+
     alignment: alignment,
     autoCloseDuration: Duration(seconds: durationSeconds),
     animationDuration: Duration(milliseconds: 220),
