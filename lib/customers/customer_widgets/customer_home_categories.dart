@@ -37,10 +37,26 @@ class CustomerHomeCategories extends StatelessWidget {
             CategoryBox(
               title: l10.groceries,
               image: 'assets/images/grocery_icon.png',
+                onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => CategoryScreen(category: 'groceries'),
+                  ),
+                );
+              },
             ),
             CategoryBox(
               title: l10.electronics,
               image: 'assets/images/electronics_icon.png',
+                 onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => CategoryScreen(category: 'electronics'),
+                  ),
+                );
+              },
             ),
             CategoryBox(
               title: l10.pharmacy,
