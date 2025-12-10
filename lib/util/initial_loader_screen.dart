@@ -1,7 +1,7 @@
 import 'package:caterfy/customers/customer_widgets/authenticated_customer.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
-import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
+import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +36,7 @@ class _InitialLoaderScreenState extends State<InitialLoaderScreen> {
     } else {
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => VendorHomeScreen()));
+      ).pushReplacement(MaterialPageRoute(builder: (_) => AuthenticatedVendor()));
     }
   }
 

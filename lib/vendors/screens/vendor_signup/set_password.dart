@@ -1,9 +1,8 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
-
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
+import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -97,7 +96,7 @@ class _SetPasswordState extends State<SetPassword> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VendorHomeScreen(),
+                          builder: (context) => AuthenticatedVendor(),
                         ),
                       );
                     }

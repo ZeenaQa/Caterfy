@@ -7,9 +7,10 @@ import 'package:caterfy/providers/locale_provider.dart';
 import 'package:caterfy/style/theme/dark_theme.dart';
 import 'package:caterfy/util/session.dart';
 import 'package:caterfy/util/theme_controller.dart';
+import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/style/theme/light_theme.dart';
-import 'package:caterfy/vendors/screens/vendor_home_screen.dart';
+import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -82,7 +83,7 @@ void main() async {
           } else {
             Navigator.pushReplacement(
               navigatorKey.currentContext!,
-              MaterialPageRoute(builder: (_) => VendorHomeScreen()),
+              MaterialPageRoute(builder: (_) => AuthenticatedVendor()),
             );
           }
         });
@@ -134,6 +135,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VendorAuthProvider()),
         ChangeNotifierProvider(create: (_) => GlobalProvider()),
         ChangeNotifierProvider(create: (_) => LoggedCustomerProvider()),
+        ChangeNotifierProvider(create: (_) => LoggedVendorProvider()),
+
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {
