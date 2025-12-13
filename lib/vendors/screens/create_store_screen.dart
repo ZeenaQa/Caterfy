@@ -106,19 +106,14 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                         final success = await provider.createStore();
 
                         if (success && context.mounted) {
+                          
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (_) => const VendorStoreSection(),
                             ),
                           );
-                        } else if (provider.errorMessage != null &&
-                            context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(provider.errorMessage!),
-                            ),
-                          );
+                        
                         }
                       }
                     },

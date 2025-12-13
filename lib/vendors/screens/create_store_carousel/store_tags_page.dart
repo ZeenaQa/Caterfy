@@ -2,7 +2,6 @@ import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 class StoreTagsPage extends StatelessWidget {
   const StoreTagsPage({super.key});
 
@@ -23,19 +22,20 @@ class StoreTagsPage extends StatelessWidget {
 
     return PageWrapper(
       title: "Tags",
-      subtitle: "Choose store Tags",
+      subtitle: "Choose store tags",
       child: SingleChildScrollView(
         child: Wrap(
           spacing: 10,
           runSpacing: 10,
           children: _tags.map((tag) {
             final selected = provider.tags.contains(tag);
+
             return ChoiceChip(
               label: Text(tag),
               selected: selected,
               selectedColor: colors.primary.withOpacity(0.15),
-              onSelected: (v) {
-                if (v) {
+              onSelected: (value) {
+                if (value) {
                   provider.tags.add(tag);
                 } else {
                   provider.tags.remove(tag);

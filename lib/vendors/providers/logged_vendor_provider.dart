@@ -1,42 +1,41 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:io';
+
+import 'package:caterfy/models/store.dart';
 
 class LoggedVendorProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   bool isLoading = false;
   bool hasStore = false;
-  String? errorMessage;
-  String? successMessage;
 
-
-  File? logoFile;
-  File? bannerFile;
+  
+  Store? store;
 
   String? storeNameEn;
   String? storeNameAr;
   String? storeCategory;
   String? storeArea;
-  double? storeLatitude;
-  double? storeLongitude;
+  double storeLatitude = 0;
+  double storeLongitude = 0;
 
-
-  String? logoUrl;
-  String? bannerUrl;
+  File? logoFile;
+  File? bannerFile;
 
   List<String> tags = [];
 
+  List<Map<String, dynamic>> subCategories = [];
+
+  
   Future<void> checkVendorStore() async {
     isLoading = true;
     notifyListeners();
 
     final vendorId = supabase.auth.currentUser?.id;
     if (vendorId == null) {
-      hasStore = false;
-      isLoading = false;
-      notifyListeners();
+      _resetStore();
       return;
     }
 
@@ -47,22 +46,48 @@ class LoggedVendorProvider extends ChangeNotifier {
         .maybeSingle();
 
     if (response != null) {
+      store = Store.fromMap(response);
       hasStore = true;
-      storeNameEn = response['name'];
-      storeNameAr = response['name_ar'];
-      storeCategory = response['category'];
-      storeArea = response['store_area'];
-      storeLatitude = response['latitude'];
-      storeLongitude = response['longitude'];
-      tags = List<String>.from(response['tags'] ?? []);
-      logoUrl = response['logo_url'];
-      bannerUrl = response['banner_url'];
+      await fetchCategories();
     } else {
-      hasStore = false;
+      _resetStore();
     }
 
     isLoading = false;
     notifyListeners();
+  }
+
+  void _resetStore() {
+    store = null;
+    hasStore = false;
+    subCategories.clear();
+    isLoading = false;
+    notifyListeners();
+  }
+
+  
+  Future<void> fetchCategories() async {
+    if (store == null) return;
+
+    final response = await supabase
+        .from('sub_categories')
+        .select()
+        .eq('store_id', store!.id)
+        .order('created_at');
+
+    subCategories = List<Map<String, dynamic>>.from(response);
+    notifyListeners();
+  }
+
+  Future<void> addCategory(String name) async {
+    if (store == null || name.trim().isEmpty) return;
+
+    await supabase.from('sub_categories').insert({
+      'store_id': store!.id,
+      'name': name.trim(),
+    });
+
+    await fetchCategories();
   }
 
 
@@ -72,60 +97,59 @@ class LoggedVendorProvider extends ChangeNotifier {
 
     await supabase.storage
         .from('store-images')
-        .upload(path, file, fileOptions: const FileOptions(upsert: true));
+        .upload(
+          path,
+          file,
+          fileOptions: const FileOptions(upsert: true),
+        );
 
     return supabase.storage.from('store-images').getPublicUrl(path);
   }
 
+
   Future<bool> createStore() async {
-    final vendorId = supabase.auth.currentUser?.id;
-    if (vendorId == null) return false;
-
-    if (storeNameEn == null ||
-        storeNameAr == null ||
-        storeCategory == null ||
-        logoFile == null ||
-        bannerFile == null ||
-        storeArea == null ||
-        storeLatitude == null ||
-        storeLongitude == null ||
-        tags.isEmpty) {
-      errorMessage = "Missing required fields";
-      notifyListeners();
-      return false;
-    }
-
     try {
       isLoading = true;
       notifyListeners();
 
-      final uploadedLogoUrl = await uploadImage(logoFile!, 'logos');
-      final uploadedBannerUrl = await uploadImage(bannerFile!, 'banners');
+      final vendorId = supabase.auth.currentUser?.id;
+      if (vendorId == null) return false;
 
-      await supabase.from('stores').upsert({
-        'vendor_id': vendorId,
-        'name': storeNameEn,
-        'name_ar': storeNameAr,
-        'category': storeCategory,
-        'logo_url': uploadedLogoUrl,
-        'banner_url': uploadedBannerUrl,
-        'tags': tags,
-        'store_area': storeArea,
-        'latitude': storeLatitude,
-        'longitude': storeLongitude,
-        'created_at': DateTime.now().toIso8601String(),
-      });
+      String? logoUrl;
+      String? bannerUrl;
 
+      if (logoFile != null) {
+        logoUrl = await uploadImage(logoFile!, 'logos');
+      }
 
-      logoUrl = uploadedLogoUrl;
-      bannerUrl = uploadedBannerUrl;
-      successMessage = "Store created successfully!";
+      if (bannerFile != null) {
+        bannerUrl = await uploadImage(bannerFile!, 'banners');
+      }
+
+      final response = await supabase
+          .from('stores')
+          .insert({
+            'vendor_id': vendorId,
+            'name': storeNameEn,
+            'name_ar': storeNameAr,
+            'category': storeCategory,
+            'store_area': storeArea,
+            'latitude': storeLatitude,
+            'longitude': storeLongitude,
+            'logo_url': logoUrl,
+            'banner_url': bannerUrl,
+            'tags': tags,
+          })
+          .select()
+          .single();
+
+      store = Store.fromMap(response);
       hasStore = true;
+
       isLoading = false;
       notifyListeners();
       return true;
     } catch (e) {
-      errorMessage = e.toString();
       isLoading = false;
       notifyListeners();
       return false;

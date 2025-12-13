@@ -147,11 +147,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 itemBuilder: (context, index) {
                   return CustomerStoreListItem(
                     store: Store(
-                      id: '1',
-                      vendorId: '2',
-                      storeArea: '222222222',
-                      name: '222222222',
-                      category: widget.category,
+                       id: '1',
+    vendorId: '2',
+    name: '222222222',
+    name_ar: '222222222',
+    category: widget.category,
+    storeArea: '222222222',
+    latitude: 0,
+    longitude: 0,
+    tags: const [],
+                     
+
                     ),
                     dummyImage: true,
                   );

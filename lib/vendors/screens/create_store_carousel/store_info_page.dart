@@ -18,17 +18,17 @@ class StoreInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
-    final colors = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Store Info', style: Theme.of(context).textTheme.labelMedium),
+          Text(
+            'Store Info',
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
           const SizedBox(height: 20),
-
-      
           LabeledTextField(
             label: 'Store Name (Arabic)',
             value: provider.storeNameAr,
@@ -38,7 +38,6 @@ class StoreInfoPage extends StatelessWidget {
                 : null,
           ),
           const SizedBox(height: 16),
-
           LabeledTextField(
             label: 'Store Name (English)',
             value: provider.storeNameEn,
@@ -49,19 +48,20 @@ class StoreInfoPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-       
           DropdownButtonFormField<String>(
             value: provider.storeCategory,
             decoration: const InputDecoration(
               labelText: 'Category',
               border: OutlineInputBorder(),
             ),
-            items: categories.map((cat) {
-              return DropdownMenuItem(
-                value: cat,
-                child: Text(cat),
-              );
-            }).toList(),
+            items: categories
+                .map(
+                  (cat) => DropdownMenuItem(
+                    value: cat,
+                    child: Text(cat),
+                  ),
+                )
+                .toList(),
             onChanged: (val) => provider.storeCategory = val,
           ),
         ],
