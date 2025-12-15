@@ -124,12 +124,10 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
     curve: Curves.easeInOut,
   );
 },
-
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
             buildDots(colors.primary, colors.outline),
           ],

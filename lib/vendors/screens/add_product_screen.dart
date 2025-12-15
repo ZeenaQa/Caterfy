@@ -23,7 +23,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
   String name = '';
   String description = '';
   String price = '';
-  File? image;
+
+  final ValueNotifier<File?> imageNotifier = ValueNotifier(null);
+
+  @override
+  void dispose() {
+    imageNotifier.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,32 +81,39 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             ),
                  
 
-        GestureDetector(
-          onTap: () async {
-            final picked = await ImagePicker()
-                .pickImage(source: ImageSource.gallery);
-            if (picked != null) {
-              setState(() => image = File(picked.path));
-            }
-          },
-          child: Container(
-            height: 140,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: image == null
-                ? const Icon(Icons.camera_alt, size: 40)
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      image!,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-          ),
+     ValueListenableBuilder<File?>(
+  valueListenable: imageNotifier,
+  builder: (context, image, _) {
+    return GestureDetector(
+      onTap: () async {
+        final picked = await ImagePicker()
+            .pickImage(source: ImageSource.gallery);
+
+        if (picked != null) {
+          imageNotifier.value = File(picked.path);
+        }
+      },
+      child: Container(
+        height: 140,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(8),
         ),
+        child: image == null
+            ? const Icon(Icons.camera_alt, size: 40)
+            : ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+      ),
+    );
+  },
+),
+
         FilledBtn(
           title: 'Save',
           isLoading: provider.isLoading,
@@ -108,7 +123,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   if (name.isEmpty ||
                       description.isEmpty ||
                       price.isEmpty ||
-                      image == null) {
+                      imageNotifier.value == null) {
                     return;
                   }
 
@@ -116,7 +131,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     name: name,
                     description: description,
                     price: double.parse(price),
-                    imageFile: image!,
+                     imageFile: imageNotifier.value!,
                     subCategoryId: widget.subCategoryId,
                   );
 
