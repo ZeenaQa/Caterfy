@@ -18,11 +18,6 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
   LatLng? pickedLocation;
   GoogleMapController? _mapController;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<String> _getAddressFromLatLng(LatLng latLng) async {
     try {
       final placemarks = await placemarkFromCoordinates(
@@ -40,13 +35,17 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
   Future<void> _goToCurrentLocation() async {
     final position = await Geolocator.getCurrentPosition();
     final latLng = LatLng(position.latitude, position.longitude);
+
     setState(() => pickedLocation = latLng);
 
     final provider = context.read<LoggedVendorProvider>();
-    provider.storeLatitude = latLng.latitude;
-    provider.storeLongitude = latLng.longitude;
-    provider.storeArea = await _getAddressFromLatLng(latLng);
-    provider.notifyListeners();
+    final area = await _getAddressFromLatLng(latLng);
+
+    provider.updateStoreForm(
+      latitude: latLng.latitude,
+      longitude: latLng.longitude,
+      storeArea: area,
+    );
 
     _mapController?.animateCamera(CameraUpdate.newLatLng(latLng));
   }
@@ -55,6 +54,9 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<LoggedVendorProvider>();
+    final storeForm = provider.storeForm;
+
+    if (storeForm == null) return const SizedBox();
 
     return Scaffold(
       body: Stack(
@@ -63,23 +65,32 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
             children: [
               Expanded(
                 child: GoogleMap(
-                  onMapCreated: (controller) async {
+                  onMapCreated: (controller) {
                     _mapController = controller;
-                    if (pickedLocation != null) {
-                      _mapController!.moveCamera(CameraUpdate.newLatLng(pickedLocation!));
-                    }
                   },
                   initialCameraPosition: CameraPosition(
-                    target: pickedLocation ?? const LatLng(31.9539, 35.9106),
+                    target: pickedLocation ??
+                        LatLng(
+                          storeForm.latitude == 0
+                              ? 31.9539
+                              : storeForm.latitude,
+                          storeForm.longitude == 0
+                              ? 35.9106
+                              : storeForm.longitude,
+                        ),
                     zoom: 15,
                   ),
                   zoomControlsEnabled: false,
                   onCameraMove: (pos) async {
                     pickedLocation = pos.target;
-                    provider.storeLatitude = pos.target.latitude;
-                    provider.storeLongitude = pos.target.longitude;
-                    provider.storeArea = await _getAddressFromLatLng(pos.target);
-                    provider.notifyListeners();
+                    final area =
+                        await _getAddressFromLatLng(pos.target);
+
+                    provider.updateStoreForm(
+                      latitude: pos.target.latitude,
+                      longitude: pos.target.longitude,
+                      storeArea: area,
+                    );
                   },
                 ),
               ),

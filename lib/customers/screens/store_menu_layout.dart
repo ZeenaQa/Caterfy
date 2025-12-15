@@ -48,6 +48,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         price: 6.50,
         imageUrl:
             'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=60',
+             subCategoryId: '',
       ),
       Product(
         id: '102',
@@ -57,7 +58,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: 'Grilled mushroom, swiss cheese, and caramelized onions.',
         price: 7.20,
         imageUrl:
-            'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=500&q=60',
+            'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=500&q=60', subCategoryId: '',
       ),
       Product(
         id: '103',
@@ -67,7 +68,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: 'Fried chicken breast with spicy mayo and coleslaw.',
         price: 5.80,
         imageUrl:
-            'https://images.unsplash.com/photo-1615557960916-5f4791effe9d?auto=format&fit=crop&w=500&q=60',
+            'https://images.unsplash.com/photo-1615557960916-5f4791effe9d?auto=format&fit=crop&w=500&q=60', subCategoryId: '',
       ),
 
       // --- SHAWARMA ---
@@ -79,7 +80,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: 'Authentic beef shawarma with tahini, parsley, and sumac.',
         price: 3.50,
         imageUrl:
-            'https://i0.wp.com/shawarmaandalos.ca/wp-content/uploads/2024/01/Beef-Shawarma.png?fit=1000%2C1000&ssl=1',
+            'https://i0.wp.com/shawarmaandalos.ca/wp-content/uploads/2024/01/Beef-Shawarma.png?fit=1000%2C1000&ssl=1', subCategoryId: '',
       ),
       Product(
         id: '202',
@@ -89,7 +90,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: 'Served with garlic sauce (toum) and pickles.',
         price: 3.00,
         imageUrl:
-            'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=500&q=60',
+            'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=500&q=60', subCategoryId: '',
       ),
       Product(
         id: '203',
@@ -99,7 +100,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: 'Cut shawarma bites served with fries and extra dips.',
         price: 6.00,
         imageUrl:
-            'https://images.unsplash.com/photo-1619526881542-c81baff85fa4?auto=format&fit=crop&w=500&q=60',
+            'https://images.unsplash.com/photo-1619526881542-c81baff85fa4?auto=format&fit=crop&w=500&q=60', subCategoryId: '',
       ),
 
       // --- DRINKS ---
@@ -111,7 +112,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: '330ml can chilled.',
         price: 1.00,
         imageUrl:
-            'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=60',
+            'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=60', subCategoryId: '',
       ),
       Product(
         id: '302',
@@ -121,7 +122,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
         description: 'Freshly squeezed orange juice without sugar.',
         price: 2.50,
         imageUrl:
-            'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=500&q=60',
+            'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=500&q=60', subCategoryId: '',
       ),
     ];
 
