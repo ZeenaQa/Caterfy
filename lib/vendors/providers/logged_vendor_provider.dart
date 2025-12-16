@@ -193,38 +193,41 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addProduct({
-    required String name,
-    required String description,
-    required double price,
-    required File imageFile,
-    required String subCategoryId,
-  }) async {
-    if (store == null) return;
+ Future<void> addProduct({
+  required String name,
+  required String description,
+  required double price,
+  required File imageFile,
+  required String subCategoryId,
+}) async {
+  if (store == null) return;
 
-    isLoading = true;
-    notifyListeners();
+  isLoading = true;
+  notifyListeners();
 
+  try {
     final imageUrl = await uploadImage(imageFile, 'products');
 
-    final response = await supabase
-        .from('products')
-        .insert({
-          'store_id': store!.id,
-          'sub_category_id': subCategoryId,
-          'name': name,
-          'description': description,
-          'price': price,
-          'image_url': imageUrl,
-        })
-        .select()
-        .single();
+    await supabase.from('products').insert({
+      'store_id': store!.id,
+      'sub_category_id': subCategoryId,
+      'name': name,
+      'description': description,
+      'price': price,
+      'image_url': imageUrl,
+    });
 
-    products.add(Product.fromMap(response));
-
+ 
+    await fetchProducts();
+  } catch (e) {
+    debugPrint('addProduct error: $e');
+  } finally {
     isLoading = false;
     notifyListeners();
   }
+}
+
+
 
   Future<void> deleteProduct(String productId) async {
     isLoading = true;

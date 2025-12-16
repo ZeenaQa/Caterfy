@@ -103,6 +103,47 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
             store.name,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 16),
+
+FilledBtn(
+  title: 'Add Category',
+  stretch: false,
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (_) {
+        final controller = TextEditingController();
+
+        return AlertDialog(
+          title: const Text('Add Category'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              hintText: 'Category name',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            FilledBtn(
+              title: 'Add',
+              onPressed: () async {
+                await provider.addCategory(controller.text);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  },
+),
+
+    
+
+
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
