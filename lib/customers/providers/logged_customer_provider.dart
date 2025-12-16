@@ -1,4 +1,5 @@
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,12 @@ import 'package:toastification/toastification.dart';
 class LoggedCustomerProvider with ChangeNotifier {
   final supabase = Supabase.instance.client;
 
+  List<Product> _products = [];
+  List<Product> get products => _products;
   List<Store> _stores = [];
   List<Store> get stores => _stores;
 
-  bool isFoodLoading = false;
+  bool isCategoryLoading = false;
 
   int productsNum = 0;
   double totalPrice = 0;
@@ -23,7 +26,6 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   void setProductsNum(int val) {
     productsNum += val;
-    print(productsNum);
     notifyListeners();
   }
 
@@ -54,6 +56,45 @@ class LoggedCustomerProvider with ChangeNotifier {
 
         _favoriteStores[storeId] = Store.fromMap(storeObject);
       }
+    } catch (e) {
+      if (context.mounted) {
+        final l10 = AppLocalizations.of(context);
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchProducts({
+    required String storeId,
+    required BuildContext context,
+  }) async {
+    try {
+      final data = await supabase
+          .from('products')
+          .select('*, sub_categories(name)')
+          .eq('store_id', storeId);
+
+      final Map<String, Product> productsMap = {
+        for (final product in _products) product.id: product,
+      };
+
+      for (final e in data) {
+        final productId = e['id'];
+        final productObject = {
+          ...e,
+          'sub_categories': e['sub_categories']['name'],
+        };
+
+        productsMap[productId] = Product.fromMap(productObject);
+      }
+
+      _products = productsMap.values.toList();
     } catch (e) {
       if (context.mounted) {
         final l10 = AppLocalizations.of(context);
@@ -107,7 +148,7 @@ class LoggedCustomerProvider with ChangeNotifier {
     final l10 = AppLocalizations.of(context);
 
     try {
-      isFoodLoading = true;
+      isCategoryLoading = true;
       notifyListeners();
 
       final data = await supabase
@@ -125,7 +166,7 @@ class LoggedCustomerProvider with ChangeNotifier {
         );
       }
     } finally {
-      isFoodLoading = false;
+      isCategoryLoading = false;
       notifyListeners();
     }
   }

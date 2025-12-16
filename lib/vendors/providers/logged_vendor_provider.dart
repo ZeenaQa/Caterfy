@@ -11,7 +11,6 @@ class LoggedVendorProvider extends ChangeNotifier {
   bool isLoading = false;
   bool hasStore = false;
 
-  
   Store? store;
 
   String? storeNameEn;
@@ -28,7 +27,6 @@ class LoggedVendorProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> subCategories = [];
 
-  
   Future<void> checkVendorStore() async {
     isLoading = true;
     notifyListeners();
@@ -65,7 +63,6 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
   Future<void> fetchCategories() async {
     if (store == null) return;
 
@@ -90,22 +87,16 @@ class LoggedVendorProvider extends ChangeNotifier {
     await fetchCategories();
   }
 
-
   Future<String> uploadImage(File file, String folder) async {
     final userId = supabase.auth.currentUser!.id;
     final path = "$folder/$userId-${DateTime.now().millisecondsSinceEpoch}.jpg";
 
     await supabase.storage
         .from('store-images')
-        .upload(
-          path,
-          file,
-          fileOptions: const FileOptions(upsert: true),
-        );
+        .upload(path, file, fileOptions: const FileOptions(upsert: true));
 
     return supabase.storage.from('store-images').getPublicUrl(path);
   }
-
 
   Future<bool> createStore() async {
     try {

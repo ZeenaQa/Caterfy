@@ -98,18 +98,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 ),
               ),
-              OutlinedIconBtn(
-                child: Icon(Icons.favorite_outline, size: 19),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          FavoriteStoresScreen(category: widget.category),
-                    ),
-                  );
-                },
-              ),
+                OutlinedIconBtn(
+                  child: Icon(Icons.favorite_outline, size: 19),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FavoriteStoresScreen(category: widget.category),
+                      ),
+                    );
+                  },
+                ),
             ],
           ),
         ),
@@ -133,7 +133,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 return const SizedBox(height: 10);
               },
             )
-          else if (customerProvider.isFoodLoading)
+          else if (customerProvider.isCategoryLoading)
             Skeletonizer(
               enabled: true,
               child: ListView.separated(
@@ -147,17 +147,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 itemBuilder: (context, index) {
                   return CustomerStoreListItem(
                     store: Store(
-                       id: '1',
-    vendorId: '2',
-    name: '222222222',
-    name_ar: '222222222',
-    category: widget.category,
-    storeArea: '222222222',
-    latitude: 0,
-    longitude: 0,
-    tags: const [],
-                     
-
+                      id: '1',
+                      vendorId: '2',
+                      name: '222222222',
+                      name_ar: '222222222',
+                      category: widget.category,
+                      storeArea: '222222222',
+                      latitude: 0,
+                      longitude: 0,
+                      tags: const [],
                     ),
                     dummyImage: true,
                   );

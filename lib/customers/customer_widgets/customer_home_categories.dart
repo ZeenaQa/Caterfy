@@ -118,7 +118,7 @@ class CategoryBox extends StatelessWidget {
           onTap: onTap,
           child: Container(
             decoration: BoxDecoration(
-              color: colors.surfaceContainer,
+              color: colors.onPrimaryFixedVariant,
               borderRadius: BorderRadius.circular(13),
             ),
             width: 85,

@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/screens/store_screen.dart';
+import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/favorite_toast.dart';
@@ -50,19 +50,27 @@ class CustomerStoreListItem extends StatelessWidget {
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: dummyImage
-                        ? DecorationImage(
-                            image: AssetImage('assets/images/app_icon.png'),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: dummyImage
+                        ? Image.asset(
+                            'assets/images/app_icon.png',
                             fit: BoxFit.cover,
                           )
                         : (hasBanner || hasLogo)
-                        ? DecorationImage(
-                            image: NetworkImage(
-                              hasBanner ? store.bannerUrl! : store.logoUrl!,
-                            ),
+                        ? Image.network(
+                            hasBanner ? store.bannerUrl! : store.logoUrl!,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Icons.store,
+                                size: 50,
+                                color: Colors.grey[400],
+                              );
+                            },
                           )
-                        : null,
+                        : Icon(Icons.store, size: 50, color: Colors.grey[400]),
                   ),
                 ),
                 SizedBox(
@@ -86,9 +94,20 @@ class CustomerStoreListItem extends StatelessWidget {
                                       color: Color(0xffe4e4e4),
                                     ),
                                     borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                      image: NetworkImage(store.logoUrl!),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      store.logoUrl!,
                                       fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Icon(
+                                              Icons.store,
+                                              size: 30,
+                                              color: Colors.grey[400],
+                                            );
+                                          },
                                     ),
                                   ),
                                 )
@@ -99,23 +118,25 @@ class CustomerStoreListItem extends StatelessWidget {
                       Consumer<LoggedCustomerProvider>(
                         builder: (context, customerProvider, child) {
                           final isFav = customerProvider.isFavorite(store.id);
-                          return OverlapHeartButton(
-                            isFavorite: isFav,
-                            onTap: () {
-                              if (customerId != null) {
-                                showFavoriteToast(
-                                  context: context,
-                                  isFavorite: !isFav,
-                                  category: store.category,
+                          return customerProvider.isCategoryLoading
+                              ? SizedBox()
+                              : OverlapHeartButton(
+                                  isFavorite: isFav,
+                                  onTap: () {
+                                    if (customerId != null) {
+                                      showFavoriteToast(
+                                        context: context,
+                                        isFavorite: !isFav,
+                                        category: store.category,
+                                      );
+                                      customerProvider.toggleFavorite(
+                                        customerId,
+                                        store,
+                                      );
+                                    }
+                                  },
+                                  size: 23,
                                 );
-                                customerProvider.toggleFavorite(
-                                  customerId,
-                                  store,
-                                );
-                              }
-                            },
-                            size: 23,
-                          );
                         },
                       ),
                     ],

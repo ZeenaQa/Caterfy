@@ -5,7 +5,8 @@ class Product {
   final String description;
   final String imageUrl;
   final double price;
-  final String foodCategory;
+  final String subCategoryId;
+  final String subCategory;
 
   Product({
     required this.id,
@@ -14,7 +15,8 @@ class Product {
     required this.description,
     required this.price,
     required this.imageUrl,
-    this.foodCategory = '',
+    required this.subCategoryId,
+    required this.subCategory,
   });
 
   // FROM SUPABASE (Map → Product)
@@ -26,6 +28,8 @@ class Product {
       description: map['description'],
       price: (map['price'] as num).toDouble(),
       imageUrl: map['image_url'],
+      subCategoryId: map['sub_category_id'],
+      subCategory: map['sub_categories'],
     );
   }
 
@@ -38,6 +42,7 @@ class Product {
       'description': description,
       'price': price,
       'image_url': imageUrl,
+      'sub_category_id': subCategoryId,
     };
   }
 }

@@ -35,9 +35,7 @@ class Store {
       storeArea: map['store_area'],
       logoUrl: map['logo_url'],
       bannerUrl: map['banner_url'],
-      tags: map['tags'] != null
-          ? List<String>.from(map['tags'])
-          : null,
+      tags: map['tags'] != null ? List<String>.from(map['tags']) : null,
       latitude: (map['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (map['longitude'] as num?)?.toDouble() ?? 0,
     );
