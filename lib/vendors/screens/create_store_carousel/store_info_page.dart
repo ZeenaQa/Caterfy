@@ -18,6 +18,11 @@ class StoreInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
+    final storeForm = provider.storeForm;
+
+    if (storeForm == null) {
+      return const SizedBox(); 
+    }
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -29,30 +34,55 @@ class StoreInfoPage extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           const SizedBox(height: 20),
+
           LabeledTextField(
             label: 'Store Name (Arabic)',
-            value: provider.storeNameAr,
-            onChanged: (val) => provider.storeNameAr = val,
-            errorText: provider.storeNameAr == null || provider.storeNameAr!.isEmpty
+            value: storeForm.name_ar,
+            onChanged: (val) {
+              provider.updateStoreForm(nameAr: val);
+
+              if (provider.showStoreInfoErrors) {
+                provider.showStoreInfoErrors = false;
+              }
+            },
+            errorText: provider.showStoreInfoErrors &&
+                    storeForm.name_ar.isEmpty
                 ? 'Required'
                 : null,
           ),
+
           const SizedBox(height: 16),
+
+     
           LabeledTextField(
             label: 'Store Name (English)',
-            value: provider.storeNameEn,
-            onChanged: (val) => provider.storeNameEn = val,
-            errorText: provider.storeNameEn == null || provider.storeNameEn!.isEmpty
+            value: storeForm.name,
+            onChanged: (val) {
+              provider.updateStoreForm(name: val);
+
+              if (provider.showStoreInfoErrors) {
+                provider.showStoreInfoErrors = false;
+              }
+            },
+            errorText: provider.showStoreInfoErrors &&
+                    storeForm.name.isEmpty
                 ? 'Required'
                 : null,
           ),
+
           const SizedBox(height: 16),
 
           DropdownButtonFormField<String>(
-            value: provider.storeCategory,
-            decoration: const InputDecoration(
+            value: storeForm.category.isEmpty
+                ? null
+                : storeForm.category,
+            decoration: InputDecoration(
               labelText: 'Category',
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
+              errorText: provider.showStoreInfoErrors &&
+                      storeForm.category.isEmpty
+                  ? 'Required'
+                  : null,
             ),
             items: categories
                 .map(
@@ -62,7 +92,9 @@ class StoreInfoPage extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            onChanged: (val) => provider.storeCategory = val,
+            onChanged: (val) {
+              provider.updateStoreForm(category: val);
+            },
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class StoreTagsPage extends StatelessWidget {
   const StoreTagsPage({super.key});
 
@@ -19,6 +20,11 @@ class StoreTagsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<LoggedVendorProvider>();
+    final storeForm = provider.storeForm;
+
+    if (storeForm == null) return const SizedBox();
+
+    final selectedTags = storeForm.tags ?? [];
 
     return PageWrapper(
       title: "Tags",
@@ -28,19 +34,22 @@ class StoreTagsPage extends StatelessWidget {
           spacing: 10,
           runSpacing: 10,
           children: _tags.map((tag) {
-            final selected = provider.tags.contains(tag);
+            final selected = selectedTags.contains(tag);
 
             return ChoiceChip(
               label: Text(tag),
               selected: selected,
               selectedColor: colors.primary.withOpacity(0.15),
               onSelected: (value) {
+                final newTags = List<String>.from(selectedTags);
+
                 if (value) {
-                  provider.tags.add(tag);
+                  newTags.add(tag);
                 } else {
-                  provider.tags.remove(tag);
+                  newTags.remove(tag);
                 }
-                provider.notifyListeners();
+
+                provider.updateStoreForm(tags: newTags);
               },
             );
           }).toList(),

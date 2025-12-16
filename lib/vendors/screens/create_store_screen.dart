@@ -1,5 +1,5 @@
 import 'package:caterfy/vendors/screens/create_store_carousel/store_brand_page.dart';
-import 'package:caterfy/vendors/screens/create_store_carousel/store_info_page.dart'; // الصفحة الجديدة للمعلومات
+import 'package:caterfy/vendors/screens/create_store_carousel/store_info_page.dart';
 import 'package:caterfy/vendors/screens/create_store_carousel/store_location_page.dart';
 import 'package:caterfy/vendors/screens/create_store_carousel/store_tags_page.dart';
 import 'package:flutter/material.dart';
@@ -96,32 +96,38 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                   child: FilledBtn(
                     title: currentPage == 3 ? "Continue" : "Next",
                     isLoading: provider.isLoading,
-                    onPressed: () async {
-                      if (currentPage < 3) {
-                        _controller.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      } else {
-                        final success = await provider.createStore();
+                   onPressed: () async {
+ 
+  if (currentPage == 1) {
+    provider.showStoreInfoErrors = true;
+    provider.notifyListeners();
 
-                        if (success && context.mounted) {
-                          
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const VendorStoreSection(),
-                            ),
-                          );
-                        
-                        }
-                      }
-                    },
+    if (!provider.isStoreInfoValid) return;
+  }
+
+  if (currentPage == 3) {
+    final success = await provider.createStore();
+
+    if (success && context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const VendorStoreSection(),
+        ),
+      );
+    }
+    return;
+  }
+
+  _controller.nextPage(
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeInOut,
+  );
+},
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
             buildDots(colors.primary, colors.outline),
           ],
