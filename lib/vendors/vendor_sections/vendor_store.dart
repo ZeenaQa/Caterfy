@@ -1,4 +1,6 @@
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/vendors/screens/add_product_screen.dart';
+import 'package:caterfy/vendors/screens/create_store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
@@ -51,6 +53,20 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: colors.onSurface),
             ),
+              const SizedBox(height:15),
+        FilledBtn(
+          stretch: false,
+  title: 'Create Store',
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const CreateStoreCarousel(),
+      ),
+    );
+  },
+),
+
           ],
         ),
       );

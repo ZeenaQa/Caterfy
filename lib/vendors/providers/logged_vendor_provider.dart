@@ -69,11 +69,15 @@ class LoggedVendorProvider extends ChangeNotifier {
   }
 
   Future<void> checkVendorStore() async {
-    isLoading = true;
-    notifyListeners();
+  isLoading = true;
+  notifyListeners();
 
+  try {
     final vendorId = supabase.auth.currentUser?.id;
-    if (vendorId == null) return;
+    if (vendorId == null) {
+      hasStore = false;
+      return;
+    }
 
     final response = await supabase
         .from('stores')
@@ -87,11 +91,17 @@ class LoggedVendorProvider extends ChangeNotifier {
 
       await _refreshSubCategories();
       await fetchProducts();
+    } else {
+      hasStore = false;
+      store = null;
     }
-
+  } catch (e) {
+    debugPrint('checkVendorStore error: $e');
+  } finally {
     isLoading = false;
     notifyListeners();
   }
+}
 
   Future<bool> createStore() async {
     try {
