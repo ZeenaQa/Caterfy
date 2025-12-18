@@ -1,6 +1,7 @@
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:math';
 
 Future<T?> openDrawer<T>(
   BuildContext context, {
@@ -13,6 +14,8 @@ Future<T?> openDrawer<T>(
   EdgeInsets? padding,
   String title = '',
   bool isStack = false,
+  bool showCloseBtn = true,
+  bool accountForKeyboard = false,
 }) {
   return showModalBottomSheet<T>(
     context: context,
@@ -28,6 +31,8 @@ Future<T?> openDrawer<T>(
       title: title,
       isStack: isStack,
       child: child,
+      showCloseBtn: showCloseBtn,
+      accountForKeyboard: accountForKeyboard,
     ),
   );
 }
@@ -40,6 +45,8 @@ class ModernDrawer extends StatelessWidget {
   final EdgeInsets? padding;
   final String title;
   final bool isStack;
+  final bool showCloseBtn;
+  final bool accountForKeyboard;
 
   const ModernDrawer({
     super.key,
@@ -50,114 +57,129 @@ class ModernDrawer extends StatelessWidget {
     this.padding,
     this.title = '',
     this.isStack = false,
+    this.showCloseBtn = true,
+    this.accountForKeyboard = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: EdgeInsets.only(bottom: 30),
-      width: double.infinity,
-      height: height, // Only constrain height if explicitly provided
-      decoration: BoxDecoration(
-        color: backgroundColor ?? colors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
-        boxShadow: [
-          BoxShadow(
-            color: colors.shadow.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
-          ),
-        ],
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: accountForKeyboard
+            ? max(MediaQuery.of(context).viewInsets.bottom - 16, 0)
+            : 0,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min, // KEY: Shrink to fit children
-        children: [
-          // Drag handle
-          if (!isStack) ...[
-            Container(
-              margin: const EdgeInsets.only(top: 12, bottom: 3),
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: colors.onSurface.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(2),
+      child: Container(
+        padding: EdgeInsets.only(bottom: 30),
+        width: double.infinity,
+        height: height, // Only constrain height if explicitly provided
+        decoration: BoxDecoration(
+          color: backgroundColor ?? colors.surface,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(borderRadius),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: colors.shadow.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // KEY: Shrink to fit children
+          children: [
+            // Drag handle
+            if (!isStack) ...[
+              Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 3),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: colors.onSurface.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            // Content - wrap only if needed
-            Row(
-              children: [
-                SizedBox(width: 12),
-                OutlinedIconBtn(
-                  onPressed: () => Navigator.of(context).pop(),
-                  size: 40,
-                  child: Icon(
-                    FontAwesomeIcons.x,
-                    color: colors.onSurface,
-                    size: 14,
-                  ),
-                ),
-                SizedBox(width: 10),
-                if (title.isNotEmpty)
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-              ],
-            ),
-            Padding(
-              padding: padding ?? const EdgeInsets.only(bottom: 15),
-              child: child,
-            ),
-          ] else
-            Stack(
-              children: [
-                Padding(
-                  padding: padding ?? const EdgeInsets.only(bottom: 15),
-                  child: child,
-                ),
-                Column(
+              // Content - wrap only if needed
+              if (showCloseBtn)
+                Row(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 12, bottom: 3),
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Color(0xffe5e5e5),
-                        borderRadius: BorderRadius.circular(2),
+                    SizedBox(width: 12),
+                    OutlinedIconBtn(
+                      onPressed: () => Navigator.of(context).pop(),
+                      size: 40,
+                      child: Icon(
+                        FontAwesomeIcons.x,
+                        color: colors.onSurface,
+                        size: 14,
                       ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(width: 12),
-                        OutlinedIconBtn(
-                          onPressed: () => Navigator.of(context).pop(),
-                          size: 40,
-                          child: Icon(
-                            FontAwesomeIcons.x,
-                            color: colors.onSurface,
-                            size: 14,
-                          ),
+                    SizedBox(width: 10),
+                    if (title.isNotEmpty)
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        SizedBox(width: 10),
-                        if (title.isNotEmpty)
-                          Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                      ],
-                    ),
+                      ),
                   ],
                 ),
+              Padding(
+                padding: padding ?? const EdgeInsets.only(bottom: 15),
+                child: child,
+              ),
+            ] else
+              Stack(
+                children: [
+                  Padding(
+                    padding: padding ?? const EdgeInsets.only(bottom: 15),
+                    child: child,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 12, bottom: 3),
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Color(0xffe5e5e5),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(width: 12),
+                          OutlinedIconBtn(
+                            onPressed: () => Navigator.of(context).pop(),
+                            size: 40,
+                            child: Icon(
+                              FontAwesomeIcons.x,
+                              color: colors.onSurface,
+                              size: 14,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          if (title.isNotEmpty)
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
 
-                // Content - wrap only if needed
-              ],
-            ),
-        ],
+                  // Content - wrap only if needed
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }

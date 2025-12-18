@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RollingQuantitySelector extends StatefulWidget {
+class CartQuantitySelector extends StatefulWidget {
   final int initialValue;
   final int minValue;
   final int maxValue;
   final ValueChanged<int>? onChanged;
+  final double height;
+  final VoidCallback? deleteFunction;
 
-  const RollingQuantitySelector({
+  const CartQuantitySelector({
     super.key,
     this.initialValue = 1,
     this.minValue = 1,
     this.maxValue = 99,
     this.onChanged,
+    this.height = 40,
+    this.deleteFunction,
   });
 
   @override
-  State<RollingQuantitySelector> createState() =>
-      _RollingQuantitySelectorState();
+  State<CartQuantitySelector> createState() => _CartQuantitySelectorState();
 }
 
-class _RollingQuantitySelectorState extends State<RollingQuantitySelector> {
+class _CartQuantitySelectorState extends State<CartQuantitySelector> {
   late int _currentValue;
 
   @override
@@ -52,9 +56,10 @@ class _RollingQuantitySelectorState extends State<RollingQuantitySelector> {
     final colors = Theme.of(context).colorScheme;
 
     return Container(
-      height: 50,
+      height: widget.height,
       // padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
+        color: colors.onInverseSurface,
         border: Border.all(color: colors.outline, width: 1),
         borderRadius: BorderRadius.circular(50),
       ),
@@ -62,7 +67,9 @@ class _RollingQuantitySelectorState extends State<RollingQuantitySelector> {
         mainAxisSize: MainAxisSize.min,
         children: [
           InkWell(
-            onTap: _currentValue > widget.minValue ? _decrement : null,
+            onTap: _currentValue > widget.minValue
+                ? _decrement
+                : widget.deleteFunction,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomLeft: Radius.circular(20),
@@ -72,16 +79,16 @@ class _RollingQuantitySelectorState extends State<RollingQuantitySelector> {
               height: 32,
               alignment: Alignment.center,
               child: Icon(
-                Icons.remove,
-                size: 27,
-                color: _currentValue > widget.minValue
-                    ? colors.primary
-                    : colors.onSurfaceVariant,
+                _currentValue == 1
+                    ? FontAwesomeIcons.solidTrashCan
+                    : FontAwesomeIcons.minus,
+                size: 17,
+                color: colors.primary,
               ),
             ),
           ),
           SizedBox(
-            width: 40,
+            width: 30,
             child: AnimatedFlipCounter(
               value: _currentValue,
               duration: const Duration(milliseconds: 200),
@@ -100,8 +107,8 @@ class _RollingQuantitySelectorState extends State<RollingQuantitySelector> {
               height: 32,
               alignment: Alignment.center,
               child: Icon(
-                Icons.add,
-                size: 27,
+                FontAwesomeIcons.plus,
+                size: 17,
                 color: _currentValue < widget.maxValue
                     ? colors.primary
                     : colors.onSurfaceVariant,
@@ -113,15 +120,3 @@ class _RollingQuantitySelectorState extends State<RollingQuantitySelector> {
     );
   }
 }
-
-// USAGE EXAMPLE:
-// 
-// RollingQuantitySelector(
-//   initialValue: 1,
-//   minValue: 0,
-//   maxValue: 50,
-//   onChanged: (value) {
-//     print('Quantity changed to: $value');
-//     // Update your cart, state, etc.
-//   },
-// )

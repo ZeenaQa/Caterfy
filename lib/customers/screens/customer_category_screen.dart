@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
+import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -71,6 +72,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<GlobalProvider>();
     final l10 = AppLocalizations.of(context);
+    final isLoading = customerProvider.isCategoryLoading;
 
     final List<Store> stores = customerProvider.stores
         .where((store) => store.category == widget.category)
@@ -98,73 +100,46 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 ),
               ),
-                OutlinedIconBtn(
-                  child: Icon(Icons.favorite_outline, size: 19),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            FavoriteStoresScreen(category: widget.category),
-                      ),
-                    );
-                  },
-                ),
+              OutlinedIconBtn(
+                child: Icon(Icons.favorite_outline, size: 19),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          FavoriteStoresScreen(category: widget.category),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
       body: Stack(
         children: [
-          if (stores.isNotEmpty)
-            ListView.separated(
+          Skeletonizer(
+            enabled: isLoading,
+            child: ListView.separated(
               controller: _scrollController,
               padding: EdgeInsets.only(
                 left: 15,
                 right: 15,
                 top: searchBarHeight + 10,
               ),
-              itemCount: stores.length,
+              itemCount: isLoading ? dummyStores.length : stores.length,
               itemBuilder: (context, index) {
-                final store = stores[index];
-                return CustomerStoreListItem(store: store);
+                final store = isLoading ? dummyStores[index] : stores[index];
+                return CustomerStoreListItem(
+                  store: store,
+                  dummyImage: isLoading,
+                );
               },
               separatorBuilder: (context, index) {
                 return const SizedBox(height: 10);
               },
-            )
-          else if (customerProvider.isCategoryLoading)
-            Skeletonizer(
-              enabled: true,
-              child: ListView.separated(
-                controller: _scrollController,
-                padding: EdgeInsets.only(
-                  left: 15,
-                  right: 15,
-                  top: searchBarHeight + 10,
-                ),
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return CustomerStoreListItem(
-                    store: Store(
-                      id: '1',
-                      vendorId: '2',
-                      name: '222222222',
-                      name_ar: '222222222',
-                      category: widget.category,
-                      storeArea: '222222222',
-                      latitude: 0,
-                      longitude: 0,
-                      tags: const [],
-                    ),
-                    dummyImage: true,
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 10);
-                },
-              ),
             ),
+          ),
 
           Transform.translate(
             offset: Offset(0, currentSearchBarOffset),

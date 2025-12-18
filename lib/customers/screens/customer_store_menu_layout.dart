@@ -1,14 +1,18 @@
 import 'package:caterfy/customers/customer_widgets/product_item.dart';
-import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class StoreMenuLayout extends StatefulWidget {
-  const StoreMenuLayout({super.key, required this.store});
+  const StoreMenuLayout({
+    super.key,
+    required this.store,
+    this.products = const [],
+  });
 
   final Store store;
+
+  final List<Product> products;
 
   @override
   State<StoreMenuLayout> createState() => _StoreMenuLayoutState();
@@ -37,22 +41,8 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = Provider.of<LoggedCustomerProvider>(
-        context,
-        listen: false,
-      );
-      await provider.fetchProducts(storeId: widget.store.id, context: context);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
-    final List<Product> products = customerProvider.products;
+    final List<Product> products = widget.products;
 
     // Group items
     final grouped = <String, List<Product>>{};

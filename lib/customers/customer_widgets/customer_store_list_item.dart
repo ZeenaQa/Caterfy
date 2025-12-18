@@ -6,6 +6,7 @@ import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomerStoreListItem extends StatelessWidget {
@@ -28,11 +29,6 @@ class CustomerStoreListItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        final provider = Provider.of<LoggedCustomerProvider>(
-          context,
-          listen: false,
-        );
-        provider.clearCart();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => StoreScreen(store: store)),
@@ -118,25 +114,25 @@ class CustomerStoreListItem extends StatelessWidget {
                       Consumer<LoggedCustomerProvider>(
                         builder: (context, customerProvider, child) {
                           final isFav = customerProvider.isFavorite(store.id);
-                          return customerProvider.isCategoryLoading
-                              ? SizedBox()
-                              : OverlapHeartButton(
-                                  isFavorite: isFav,
-                                  onTap: () {
-                                    if (customerId != null) {
-                                      showFavoriteToast(
-                                        context: context,
-                                        isFavorite: !isFav,
-                                        category: store.category,
-                                      );
-                                      customerProvider.toggleFavorite(
-                                        customerId,
-                                        store,
-                                      );
-                                    }
-                                  },
-                                  size: 23,
-                                );
+                          return Skeleton.ignore(
+                            child: OverlapHeartButton(
+                              isFavorite: isFav,
+                              onTap: () {
+                                if (customerId != null) {
+                                  showFavoriteToast(
+                                    context: context,
+                                    isFavorite: !isFav,
+                                    category: store.category,
+                                  );
+                                  customerProvider.toggleFavorite(
+                                    customerId,
+                                    store,
+                                  );
+                                }
+                              },
+                              size: 23,
+                            ),
+                          );
                         },
                       ),
                     ],

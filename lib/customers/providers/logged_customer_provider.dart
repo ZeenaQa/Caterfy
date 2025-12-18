@@ -1,4 +1,6 @@
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/cart.dart';
+import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
@@ -10,28 +12,77 @@ class LoggedCustomerProvider with ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   List<Product> _products = [];
-  List<Product> get products => _products;
   List<Store> _stores = [];
+
+  List<Product> get products => _products;
   List<Store> get stores => _stores;
 
-  bool isCategoryLoading = false;
+  bool _isCategoryLoading = false;
+  bool _isProductsLoading = false;
+  bool _isFavLoading = false;
 
-  int productsNum = 0;
-  double totalPrice = 0;
+  bool get isProductsLoading => _isProductsLoading;
+  bool get isCategoryLoading => _isCategoryLoading;
+  bool get isFavLoading => _isFavLoading;
 
-  void setTotalPrice(double val) {
-    totalPrice += val;
+  Cart? cart;
+
+  int get totalCartQuantity {
+    if (cart?.storeId == null) return 0;
+    final items = cart?.items ?? const [];
+    int totalQuantity = 0;
+
+    for (var item in items) {
+      totalQuantity += item.quantity;
+    }
+
+    return totalQuantity;
+  }
+
+  double get totalCartPrice {
+    if (cart?.storeId == null) return 0;
+    final items = cart?.items ?? const [];
+    double totalPrice = 0;
+
+    for (var item in items) {
+      totalPrice += item.snapshot.price * item.quantity;
+    }
+
+    return totalPrice;
+  }
+
+  void addToCart({required OrderItem item}) {
+    if (cart?.storeId == null) {
+      cart = Cart(storeId: item.snapshot.storeId);
+    }
+
+    cart!.addItem(item: item);
     notifyListeners();
   }
 
-  void setProductsNum(int val) {
-    productsNum += val;
+  void setItemQuantity({required OrderItem item, required int newQuantity}) {
+    if (cart?.storeId == null) return;
+
+    cart?.setItemQuantity(item: item, newQuantity: newQuantity);
     notifyListeners();
   }
 
-  void clearCart() {
-    productsNum = 0;
-    totalPrice = 0;
+  void setItemNote({required String orderItemId, required String note}) {
+    if (cart?.storeId == null) return;
+    cart?.setItemNote(orderItemId: orderItemId, note: note);
+    notifyListeners();
+  }
+
+  void setOrderItem({required OrderItem item}) {
+    if (cart?.storeId == null) return;
+    cart?.setOrderItem(item: item);
+
+    notifyListeners();
+  }
+
+  void deleteItemFromCart({required String orderItemId}) {
+    if (cart?.storeId == null) return;
+    cart?.deleteItem(orderItemId: orderItemId);
     notifyListeners();
   }
 
@@ -44,6 +95,8 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   Future<void> fetchFavorites(String customerId, BuildContext context) async {
     try {
+      _isFavLoading = true;
+      notifyListeners();
       final data = await supabase
           .from('customer_favorites')
           .select('store_id, stores(*)')
@@ -66,6 +119,7 @@ class LoggedCustomerProvider with ChangeNotifier {
         );
       }
     } finally {
+      _isFavLoading = false;
       notifyListeners();
     }
   }
@@ -75,6 +129,8 @@ class LoggedCustomerProvider with ChangeNotifier {
     required BuildContext context,
   }) async {
     try {
+      _isProductsLoading = true;
+      notifyListeners();
       final data = await supabase
           .from('products')
           .select('*, sub_categories(name)')
@@ -105,6 +161,7 @@ class LoggedCustomerProvider with ChangeNotifier {
         );
       }
     } finally {
+      _isProductsLoading = false;
       notifyListeners();
     }
   }
@@ -148,7 +205,7 @@ class LoggedCustomerProvider with ChangeNotifier {
     final l10 = AppLocalizations.of(context);
 
     try {
-      isCategoryLoading = true;
+      _isCategoryLoading = true;
       notifyListeners();
 
       final data = await supabase
@@ -166,7 +223,7 @@ class LoggedCustomerProvider with ChangeNotifier {
         );
       }
     } finally {
-      isCategoryLoading = false;
+      _isCategoryLoading = false;
       notifyListeners();
     }
   }

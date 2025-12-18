@@ -20,8 +20,12 @@ class ProductItem extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () =>
-          openDrawer(context, padding: EdgeInsets.only(bottom: 0), isStack: true, child: ProductDrawerContent(product: product)),
+      onTap: () => openDrawer(
+        context,
+        padding: EdgeInsets.only(bottom: 0),
+        isStack: true,
+        child: ProductDrawerContent(product: product),
+      ),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: Container(
@@ -85,13 +89,17 @@ class ProductItem extends StatelessWidget {
                 Container(
                   width: 130,
                   height: 100,
+                  clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(product.imageUrl),
-                      fit: BoxFit.cover,
-                    ),
                     color: Color(0xFFF1F1F1),
                     borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Image.network(
+                    product.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.broken_image);
+                    },
                   ),
                 ),
               ],
