@@ -67,12 +67,6 @@ class LoggedCustomerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setItemNote({required String orderItemId, required String note}) {
-    if (cart?.storeId == null) return;
-    cart?.setItemNote(orderItemId: orderItemId, note: note);
-    notifyListeners();
-  }
-
   void setOrderItem({required OrderItem item}) {
     if (cart?.storeId == null) return;
     cart?.setOrderItem(item: item);

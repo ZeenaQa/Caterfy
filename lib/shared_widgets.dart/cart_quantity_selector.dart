@@ -33,6 +33,17 @@ class _CartQuantitySelectorState extends State<CartQuantitySelector> {
     _currentValue = widget.initialValue;
   }
 
+  @override
+  void didUpdateWidget(covariant CartQuantitySelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.initialValue != widget.initialValue) {
+      setState(() {
+        _currentValue = widget.initialValue;
+      });
+    }
+  }
+
   void _increment() {
     if (_currentValue < widget.maxValue) {
       setState(() {
@@ -93,7 +104,7 @@ class _CartQuantitySelectorState extends State<CartQuantitySelector> {
               value: _currentValue,
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,
-              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
           InkWell(

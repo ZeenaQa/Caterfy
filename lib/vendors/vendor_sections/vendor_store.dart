@@ -14,16 +14,14 @@ class VendorStoreSection extends StatefulWidget {
 }
 
 class _VendorStoreSectionState extends State<VendorStoreSection> {
-  bool _isInit = true;
   int? _expandedIndex;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isInit) {
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LoggedVendorProvider>().checkVendorStore();
-      _isInit = false;
-    }
+    });
   }
 
   @override
@@ -40,8 +38,11 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.store_mall_directory,
-                size: 80, color: colors.onSurfaceVariant),
+            Icon(
+              Icons.store_mall_directory,
+              size: 80,
+              color: colors.onSurfaceVariant,
+            ),
             const SizedBox(height: 16),
             const Text(
               'Get Started',
@@ -53,20 +54,19 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: colors.onSurface),
             ),
-              const SizedBox(height:15),
-        FilledBtn(
-          stretch: false,
-  title: 'Create Store',
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const CreateStoreCarousel(),
-      ),
-    );
-  },
-),
-
+            const SizedBox(height: 15),
+            FilledBtn(
+              stretch: false,
+              title: 'Create Store',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CreateStoreCarousel(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       );
@@ -105,45 +105,41 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
           ),
           const SizedBox(height: 16),
 
-FilledBtn(
-  title: 'Add Category',
-  stretch: false,
-  onPressed: () {
-    showDialog(
-      context: context,
-      builder: (_) {
-        final controller = TextEditingController();
+          FilledBtn(
+            title: 'Add Category',
+            stretch: false,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  final controller = TextEditingController();
 
-        return AlertDialog(
-          title: const Text('Add Category'),
-          content: TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-              hintText: 'Category name',
-            ),
+                  return AlertDialog(
+                    title: const Text('Add Category'),
+                    content: TextField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                        hintText: 'Category name',
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      FilledBtn(
+                        title: 'Add',
+                        onPressed: () async {
+                          await provider.addCategory(controller.text);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            FilledBtn(
-              title: 'Add',
-              onPressed: () async {
-                await provider.addCategory(controller.text);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  },
-),
-
-    
-
-
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -190,14 +186,13 @@ FilledBtn(
                         ),
 
                         if (isExpanded) ...[
-                        
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => AddProductScreen(
-                                    subCategoryId: cat['id'], 
+                                    subCategoryId: cat['id'],
                                   ),
                                 ),
                               );
@@ -237,29 +232,28 @@ FilledBtn(
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                          title: Text(p.name),
-subtitle: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Text(
-      p.description,
-      style:  TextStyle(
-        fontSize: 13,
-        color: colors.onSurfaceVariant,
-      ),
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-    ),
-    const SizedBox(height: 4),
-    Text(
-      '${p.price} JOD',
-      style: const TextStyle(
-        fontWeight: FontWeight.w600,
-      ),
-    ),
-  ],
-),
-
+                              title: Text(p.name),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    p.description,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: colors.onSurfaceVariant,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${p.price} JOD',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

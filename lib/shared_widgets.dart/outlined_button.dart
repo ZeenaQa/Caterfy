@@ -11,6 +11,8 @@ class OutlinedBtn extends StatelessWidget {
     this.bottomPadding,
     this.leftPadding,
     this.rightPadding,
+    this.innerVerticalPadding = 12,
+    this.innerHorizontalPadding = 16,
     this.icon,
     this.customSvgIcon,
     this.lighterBorder = false,
@@ -23,6 +25,8 @@ class OutlinedBtn extends StatelessWidget {
   final double? bottomPadding;
   final double? leftPadding;
   final double? rightPadding;
+  final double innerVerticalPadding;
+  final double innerHorizontalPadding;
   final IconData? icon;
   final SvgPicture? customSvgIcon;
   final bool lighterBorder;
@@ -42,7 +46,7 @@ class OutlinedBtn extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           minimumSize: Size.zero,
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: EdgeInsets.symmetric(vertical: innerVerticalPadding, horizontal: innerHorizontalPadding),
 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),

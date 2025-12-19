@@ -78,7 +78,7 @@ class CartItem extends StatelessWidget {
                           Icon(
                             FontAwesomeIcons.penToSquare,
                             color: colors.primary,
-                            size: 13.5,
+                            size: 14,
                           ),
                           Text(
                             "Edit",
@@ -97,8 +97,7 @@ class CartItem extends StatelessWidget {
                       Spacer(),
                       RichText(
                         text: TextSpan(
-                          text:
-                              '${(orderItem.snapshot.price * orderItem.quantity).toString()} ',
+                          text: '${l10.jod} ',
                           style: TextStyle(
                             color: colors.onSurface,
                             fontWeight: FontWeight.normal,
@@ -106,7 +105,8 @@ class CartItem extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: l10.jod,
+                              text:
+                                  (orderItem.snapshot.price * orderItem.quantity).toString(),
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],

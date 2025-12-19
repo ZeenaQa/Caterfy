@@ -10,7 +10,8 @@ class Cart {
     for (int i = 0; i < items.length; i++) {
       final orderItem = items[i];
       final bool isEqual =
-          orderItem.productId == item.productId && orderItem.note == item.note;
+          orderItem.productId == item.productId &&
+          orderItem.note.trim() == item.note.trim();
 
       if (isEqual) {
         items[i] = orderItem.copyWith(
@@ -32,21 +33,24 @@ class Cart {
     }
   }
 
-  void setItemNote({required String orderItemId, required String note}) {
+  void setOrderItem({required OrderItem item}) {
+    int itemIndex = -1;
     for (int i = 0; i < items.length; i++) {
-      if (items[i].id == orderItemId) {
-        items[i] = items[i].copyWith(note: note);
+      if (items[i].id == item.id) {
+        itemIndex = i;
+      }
+      if ((items[i].note.trim() == item.note.trim()) &&
+          (items[i].id != item.id) &&
+          (items[i].productId == item.productId)) {
+        items[i] = items[i].copyWith(
+          quantity: items[i].quantity + item.quantity,
+        );
+        deleteItem(orderItemId: item.id);
         return;
       }
     }
-  }
-
-  void setOrderItem({required OrderItem item}) {
-    for (int i = 0; i < items.length; i++) {
-      if (items[i].id == item.id) {
-        items[i] = item;
-        return;
-      }
+    if (itemIndex > -1) {
+      items[itemIndex] = item;
     }
   }
 

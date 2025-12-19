@@ -6,6 +6,7 @@ class FilledBtn extends StatelessWidget {
   final bool isLoading;
   final bool stretch;
   final String title;
+  final double titleSize;
   final double innerVerticalPadding;
   final double innerHorizontalPadding;
   final double verticalPadding;
@@ -16,6 +17,7 @@ class FilledBtn extends StatelessWidget {
     super.key,
     required this.onPressed,
     this.title = '',
+    this.titleSize = 14,
     this.content,
     this.isLoading = false,
     this.stretch = true,
@@ -63,7 +65,7 @@ class FilledBtn extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
                         color: colors.onPrimary,
-                        fontSize: 14,
+                        fontSize: titleSize,
                       ),
                     ),
               ),

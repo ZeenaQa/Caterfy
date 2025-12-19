@@ -44,6 +44,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     onSecondary: Color(0xff2c2c2c),
     tertiary: Color(0xff00005f),
     outline: Color(0xffe4e4e4),
+    outlineVariant: Color(0xffa7a7a7),
     onInverseSurface: Colors.white,
     surface: Colors.white,
     onSurface: Color(0xff333333),
