@@ -121,18 +121,26 @@ class BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return IntrinsicHeight(
-      child: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.only(
-            bottom: 6,
-            top: 18,
-            left: 14,
-            right: 14,
-          ),
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: colors.outline)),
-          ),
+      child: Container(
+        padding: const EdgeInsets.only(
+          bottom: 18,
+          top: 25,
+          left: 14,
+          right: 14,
+        ),
+        decoration: BoxDecoration(
+          color: colors.onInverseSurface,
+          boxShadow: [
+            BoxShadow(
+              color: colors.shadow,
+              blurRadius: 6,
+              offset: const Offset(0, 3.5),
+            ),
+          ],
+          // border: Border(top: BorderSide(color: colors.outline)),
+        ),
+        child: SafeArea(
+          top: false,
           child: Row(
             spacing: 18,
             children: [
@@ -140,7 +148,7 @@ class BottomNav extends StatelessWidget {
                 child: OutlinedBtn(
                   onPressed: () {},
                   title: 'Add items',
-                  titleSize: 16,
+                  titleSize: 15,
                   innerVerticalPadding: 15,
                 ),
               ),
@@ -148,7 +156,7 @@ class BottomNav extends StatelessWidget {
                 child: FilledBtn(
                   onPressed: () {},
                   title: 'Checkout',
-                  titleSize: 16,
+                  titleSize: 15,
                   innerVerticalPadding: 15,
                 ),
               ),
@@ -318,7 +326,7 @@ class CartSection extends StatelessWidget {
             sectionTitle,
             style: TextStyle(
               color: colors.onSecondary,
-              fontSize: 21,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -76,14 +76,13 @@ class _StoreScreenState extends State<StoreScreen> {
         customerProvider.cart?.storeId == widget.store.id;
 
     return Scaffold(
+      bottomNavigationBar: !showCart ? null : BottomNav(store: widget.store),
       body: Skeletonizer(
         enabled: isLoading,
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(
-                bottom: customerProvider.totalCartQuantity > 0 ? 100 : 20,
-              ),
+              padding: EdgeInsets.only(bottom: 0),
               child: SingleChildScrollView(
                 controller: _scrollController,
                 child: Column(
@@ -412,80 +411,6 @@ class _StoreScreenState extends State<StoreScreen> {
               ),
             ),
 
-            if (showCart)
-              Skeleton.ignore(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      bottom: 35,
-                      top: 10,
-                      right: 10,
-                      left: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      border: Border(top: BorderSide(color: colors.outline)),
-                    ),
-                    width: double.infinity,
-                    child: FilledBtn(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CustomerCart(store: widget.store),
-                          ),
-                        );
-                      },
-                      innerVerticalPadding: 9,
-                      innerHorizontalPadding: 10,
-                      content: Row(
-                        children: [
-                          Container(
-                            width: 34,
-                            height: 34,
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Center(
-                              child: Text(
-                                customerProvider.totalCartQuantity.toString(),
-                                style: TextStyle(
-                                  color: colors.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 13),
-                          Text(
-                            "View cart",
-                            style: TextStyle(
-                              color: colors.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            '${l10.jod} ${customerProvider.totalCartPrice.toString()}',
-                            style: TextStyle(
-                              color: colors.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
             Positioned(
               top: 0,
               left: 0,
@@ -570,6 +495,91 @@ class _StoreScreenState extends State<StoreScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class BottomNav extends StatelessWidget {
+  const BottomNav({super.key, required this.store});
+
+  final Store store;
+
+  @override
+  Widget build(BuildContext context) {
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+    final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
+    return Skeleton.ignore(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+        decoration: BoxDecoration(
+          color: colors.surface,
+          boxShadow: [
+            BoxShadow(
+              color: colors.shadow,
+              blurRadius: 6,
+              offset: const Offset(0, 3.5),
+            ),
+          ],
+        ),
+        width: double.infinity,
+        child: SafeArea(
+          top: false,
+          child: FilledBtn(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CustomerCart(store: store),
+                ),
+              );
+            },
+            innerVerticalPadding: 9,
+            innerHorizontalPadding: 10,
+            content: Row(
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Center(
+                    child: Text(
+                      customerProvider.totalCartQuantity.toString(),
+                      style: TextStyle(
+                        color: colors.onPrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 13),
+                Text(
+                  "View cart",
+                  style: TextStyle(
+                    color: colors.onPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  '${l10.jod} ${customerProvider.totalCartPrice.toString()}',
+                  style: TextStyle(
+                    color: colors.onPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                SizedBox(width: 10),
+              ],
+            ),
+          ),
         ),
       ),
     );

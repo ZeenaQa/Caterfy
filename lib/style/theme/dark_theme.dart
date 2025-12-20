@@ -48,6 +48,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     onSurface: Color(0xFFE1E1E1),
     onSurfaceVariant: Color(0xFF9E9E9E),
     secondaryContainer: Color(0xfffcba05),
+    shadow: Color.fromARGB(55, 82, 82, 82),
     error: Color(0xFFCF6679),
     onError: Color(0xFF1E1E1E),
   ),

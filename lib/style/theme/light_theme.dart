@@ -50,6 +50,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     onSurface: Color(0xff333333),
     onSurfaceVariant: Color(0xFF8B8B8B),
     secondaryContainer: Color(0xfffebe03),
+    shadow: Color.fromARGB(255, 182, 182, 182),
     error: Color(0xfffd7a7a),
     onError: Colors.white,
   ),
