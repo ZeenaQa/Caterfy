@@ -8,6 +8,7 @@ import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({super.key, required this.orderItem, this.isLastItem = false});
@@ -23,25 +24,27 @@ class CartItem extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => openDrawer(
-        context,
-        padding: EdgeInsets.only(bottom: 0),
-        isStack: true,
-        child: ProductDrawerContent(
-          product: Product(
-            id: orderItem.productId,
-            storeId: orderItem.storeId,
-            name: orderItem.name,
-            description: '',
-            price: orderItem.price,
-            imageUrl: orderItem.imageUrl!,
-            subCategoryId: "ss",
-            subCategory: "",
+      onTap: () {
+        openDrawer(
+          context,
+          padding: EdgeInsets.only(bottom: 0),
+          isStack: true,
+          child: ProductDrawerContent(
+            product: Product(
+              id: orderItem.productId,
+              storeId: orderItem.storeId,
+              name: orderItem.name,
+              description: orderItem.description ?? "",
+              price: orderItem.price,
+              imageUrl: orderItem.imageUrl ?? "",
+              subCategoryId: "ss",
+              subCategory: "",
+            ),
+            isInCart: true,
+            orderItem: orderItem,
           ),
-          isInCart: true,
-          orderItem: orderItem,
-        ),
-      ),
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: Container(
@@ -138,12 +141,23 @@ class CartItem extends StatelessWidget {
                           color: Color(0xFFF1F1F1),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Image.network(
-                          orderItem.imageUrl ?? '',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.broken_image);
-                          },
+                        child: Skeleton.replace(
+                          replacement: Image.asset(
+                            'assets/images/app_icon.png',
+                            height: 218,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.broken_image);
+                            },
+                          ),
+                          child: Image.network(
+                            orderItem.imageUrl ?? '',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.broken_image);
+                            },
+                          ),
                         ),
                       ),
                       Positioned(
@@ -154,19 +168,21 @@ class CartItem extends StatelessWidget {
                             width: 130,
                             child: Align(
                               alignment: Alignment.bottomCenter,
-                              child: CartQuantitySelector(
-                                height: 40,
-                                initialValue: orderItem.quantity,
-                                deleteFunction: () =>
-                                    customerProvider.deleteItemFromCart(
-                                      orderItemId: orderItem.id,
-                                    ),
-                                onChanged: (val) {
-                                  customerProvider.setItemQuantity(
-                                    item: orderItem,
-                                    newQuantity: val,
-                                  );
-                                },
+                              child: Skeleton.ignore(
+                                child: CartQuantitySelector(
+                                  height: 40,
+                                  initialValue: orderItem.quantity,
+                                  deleteFunction: () =>
+                                      customerProvider.deleteItemFromCart(
+                                        orderItemId: orderItem.id,
+                                      ),
+                                  onChanged: (val) {
+                                    customerProvider.setItemQuantity(
+                                      item: orderItem,
+                                      newQuantity: val,
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),

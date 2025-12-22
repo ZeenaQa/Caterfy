@@ -3,6 +3,7 @@ class OrderItem {
   final String productId;
   final String storeId;
   final String name;
+  final String? description;
   final String? imageUrl;
   final double price;
   final int quantity;
@@ -13,6 +14,7 @@ class OrderItem {
     required this.productId,
     required this.storeId,
     required this.name,
+    this.description = '',
     this.imageUrl,
     required this.price,
     this.quantity = 1,
@@ -23,6 +25,7 @@ class OrderItem {
     String? productId,
     String? storeId,
     String? name,
+    String? description,
     String? imageUrl,
     double? price,
     int? quantity,
@@ -33,6 +36,7 @@ class OrderItem {
       productId: productId ?? this.productId,
       storeId: storeId ?? this.storeId,
       name: name ?? this.name,
+      description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
@@ -46,7 +50,8 @@ class OrderItem {
       'product_id': productId,
       'store_id': storeId,
       'name': name,
-      'imageUrl': imageUrl,
+      'description': description,
+      'image_url': imageUrl,
       'price': price,
       'quantity': quantity,
       'note': note,
@@ -59,6 +64,7 @@ class OrderItem {
       productId: map['product_id'],
       storeId: map['store_id'],
       name: map['name'],
+      description: map['description'],
       imageUrl: map['image_url'],
       price: map['price'],
       quantity: map['quantity'] ?? 1,

@@ -341,13 +341,16 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                             ),
                                             const SizedBox(width: 8),
                                             GestureDetector(
-                                              onTap: () => openDrawer(
-                                                context,
-                                                padding: EdgeInsets.only(
-                                                  bottom: 20,
-                                                ),
-                                                child: DeliveredByInfo(),
-                                              ),
+                                              onTap: () {
+                                                print(customerProvider.cart?.storeId);
+                                                openDrawer(
+                                                  context,
+                                                  padding: EdgeInsets.only(
+                                                    bottom: 20,
+                                                  ),
+                                                  child: DeliveredByInfo(),
+                                                );
+                                              },
                                               behavior: HitTestBehavior.opaque,
                                               child: Row(
                                                 mainAxisAlignment:
@@ -531,9 +534,7 @@ class BottomNav extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => CustomerCart(),
-                ),
+                MaterialPageRoute(builder: (context) => CustomerCart()),
               );
             },
             innerVerticalPadding: 9,

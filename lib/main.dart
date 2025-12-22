@@ -66,13 +66,11 @@ void main() async {
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final ctx = navigatorKey.currentContext;
-          print("CONTEXTTTTTTTTTTTTTTTTTTT $ctx");
           if (ctx != null) {
             final globalProvider = Provider.of<GlobalProvider>(
               ctx,
               listen: false,
             );
-            print("USERRRRRRRRRRRRRRRRRR $fetchedUser");
             globalProvider.setUser(fetchedUser);
           }
         });

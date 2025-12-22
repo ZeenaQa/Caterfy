@@ -3,6 +3,7 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem({
@@ -94,12 +95,23 @@ class ProductItem extends StatelessWidget {
                     color: Color(0xFFF1F1F1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image.network(
-                    product.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.broken_image);
-                    },
+                  child: Skeleton.replace(
+                    replacement: Image.asset(
+                      'assets/images/app_icon.png',
+                      height: 218,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.broken_image);
+                      },
+                    ),
+                    child: Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.broken_image);
+                      },
+                    ),
                   ),
                 ),
               ],

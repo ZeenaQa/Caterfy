@@ -189,7 +189,6 @@ class VendorAuthProvider extends ChangeNotifier {
 
       return true;
     } on AuthException catch (e) {
-      print('errrrrrorrrrrrrrrrrr $e');
       if (e.code == 'user_already_exists') {
         emailError = l10.emailInUse;
         notifyListeners();
@@ -198,7 +197,6 @@ class VendorAuthProvider extends ChangeNotifier {
       }
       return false;
     } catch (e) {
-      print('errrrrrorrrrrrrrrrrr $e');
       setSignUpError(e.toString());
       return false;
     } finally {

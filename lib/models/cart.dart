@@ -3,9 +3,20 @@ import 'package:caterfy/models/order_item.dart';
 class Cart {
   final String customerId;
   final String? storeId;
-  final List<OrderItem> items = [];
+  List<OrderItem> items = [];
+  String _note = '';
 
   Cart({required this.customerId, this.storeId});
+
+  get note => _note;
+
+  void setItems(List<OrderItem> newList) {
+    items = newList;
+  }
+
+  void setNote(String newNote) {
+    _note = newNote;
+  }
 
   void addItem({required OrderItem item}) {
     for (int i = 0; i < items.length; i++) {
@@ -63,16 +74,22 @@ class Cart {
     return {
       'customerId': customerId,
       'storeId': storeId,
+      'note': _note,
       'items': items.map((e) => e.toMap()).toList(),
     };
   }
 
   factory Cart.fromMap(Map<String, dynamic> map) {
-    return Cart(customerId: map['customerId'], storeId: map['storeId'])
-      ..items.addAll(
-        (map['items'] as List).map(
-          (e) => OrderItem.fromMap(Map<String, dynamic>.from(e)),
-        ),
-      );
+    final cart = Cart(customerId: map['customerId'], storeId: map['storeId']);
+
+    cart._note = map['note'] ?? '';
+
+    cart.items.addAll(
+      (map['items'] as List).map(
+        (e) => OrderItem.fromMap(Map<String, dynamic>.from(e)),
+      ),
+    );
+
+    return cart;
   }
 }

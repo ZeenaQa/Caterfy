@@ -232,14 +232,18 @@ class SpecialRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+
     return TextButton(
       onPressed: () {
         openDrawer(
           context,
           showCloseBtn: false,
           child: AddNote(
-            // initialNote: localNote,
-            onCloseNote: (note) => {},
+            initialNote: customerProvider.cart?.note ?? "",
+            onCloseNote: (note) => {
+              customerProvider.setOrderNote(newNote: note),
+            },
           ),
           borderRadius: 0,
           accountForKeyboard: true,
@@ -268,7 +272,9 @@ class SpecialRequest extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Anything else we need to know?',
+                    customerProvider.cart?.note.isEmpty
+                        ? "Anything else we need to know?"
+                        : customerProvider.cart?.note,
                     style: TextStyle(fontSize: 13),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

@@ -87,8 +87,11 @@ class LoggedCustomerProvider with ChangeNotifier {
     return totalPrice;
   }
 
-  Store getStoreById(String storeId) {
-    return stores.firstWhere((store) => store.id == storeId);
+  Store? getStoreById(String storeId) {
+    for (final store in stores) {
+      if (store.id == storeId) return store;
+    }
+    return null;
   }
 
   void addToCart({required OrderItem item}) {
@@ -120,6 +123,13 @@ class LoggedCustomerProvider with ChangeNotifier {
   void deleteItemFromCart({required String orderItemId}) {
     if (_cart?.storeId == null) return;
     _cart?.deleteItem(orderItemId: orderItemId);
+    saveCart();
+    notifyListeners();
+  }
+
+  void setOrderNote({required String newNote}) {
+    if (_cart?.storeId == null) return;
+    _cart?.setNote(newNote);
     saveCart();
     notifyListeners();
   }
@@ -266,6 +276,71 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchProductsInCart({
+    required String storeId,
+    required BuildContext context,
+  }) async {
+    try {
+      _isProductsLoading = true;
+      notifyListeners();
+      final data = await supabase
+          .from('products')
+          .select('*, sub_categories(name)')
+          .eq('store_id', storeId);
+
+      final Map<String, Product> productsMap = {
+        for (final product in _products) product.id: product,
+      };
+
+      for (final e in data) {
+        final productId = e['id'];
+        final productObject = {
+          ...e,
+          'sub_categories': e['sub_categories']['name'],
+        };
+
+        productsMap[productId] = Product.fromMap(productObject);
+      }
+
+      _products = productsMap.values.toList();
+
+      final cartItems = cart?.items;
+      if (cartItems!.isEmpty) return;
+
+      final List<OrderItem> newList = [];
+
+      for (var item in cartItems) {
+        final equalProduct = productsMap[item.productId];
+        if (equalProduct == null) continue;
+
+        final OrderItem newItem = item.copyWith(
+          name: equalProduct.name,
+          description: equalProduct.description,
+          imageUrl: equalProduct.imageUrl,
+          price: equalProduct.price,
+        );
+
+        newList.add(newItem);
+      }
+
+      cart?.setItems(newList);
+
+      saveCart();
+    } catch (e) {
+      if (context.mounted) {
+        final l10 = AppLocalizations.of(context);
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isProductsLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchCartContent({
     required String storeId,
     required BuildContext context,
@@ -280,7 +355,7 @@ class LoggedCustomerProvider with ChangeNotifier {
           .from('stores')
           .select()
           .eq('id', storeId);
-      await fetchProducts(storeId: storeId, context: context);
+      await fetchProductsInCart(storeId: storeId, context: context);
 
       final readyStore = Store.fromMap(receivedStore.first);
 

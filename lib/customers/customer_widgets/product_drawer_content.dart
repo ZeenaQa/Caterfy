@@ -175,6 +175,7 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
                           productId: product.id,
                           storeId: product.storeId,
                           name: product.name,
+                          description: product.description,
                           imageUrl: product.imageUrl,
                           price: product.price,
                           quantity: quantity,
