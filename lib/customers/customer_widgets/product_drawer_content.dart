@@ -172,8 +172,11 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
 
                         final OrderItem item = OrderItem(
                           id: isInCart ? widget.orderItem!.id : Uuid().v4(),
-                          snapshot: product,
                           productId: product.id,
+                          storeId: product.storeId,
+                          name: product.name,
+                          imageUrl: product.imageUrl,
+                          price: product.price,
                           quantity: quantity,
                           note: localNote,
                         );

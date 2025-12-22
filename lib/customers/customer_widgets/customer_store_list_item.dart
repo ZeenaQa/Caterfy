@@ -31,7 +31,7 @@ class CustomerStoreListItem extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => StoreScreen(store: store)),
+          MaterialPageRoute(builder: (_) => CustomerStoreScreen(store: store)),
         );
       },
       child: SizedBox(

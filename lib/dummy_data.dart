@@ -1,3 +1,4 @@
+import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 
@@ -145,5 +146,53 @@ final List<Store> dummyStores = [
     tags: ['equipment', 'wear', 'outdoor'],
     latitude: 32.555,
     longitude: 35.850,
+  ),
+];
+
+final List<OrderItem> dummyOrderItems = [
+  OrderItem(
+    id: '${dummyProducts[0].id} 0',
+    storeId: dummyProducts[0].storeId,
+    name: dummyProducts[0].name,
+    imageUrl: dummyProducts[0].imageUrl,
+    price: dummyProducts[0].price,
+    productId: dummyProducts[0].id,
+    note: "THIS IS A RANDOM NOTEEE SAYYING STUPID THINGS :))))",
+  ),
+  OrderItem(
+    id: '${dummyProducts[1].id} 1',
+    storeId: dummyProducts[1].storeId,
+    name: dummyProducts[1].name,
+    imageUrl: dummyProducts[1].imageUrl,
+    price: dummyProducts[1].price,
+    productId: dummyProducts[1].id,
+    note: "THIS IS A RANDOM NOTEEE SAYYING STUPID THINGS :))))",
+  ),
+  OrderItem(
+    id: '${dummyProducts[2].id} 2',
+    storeId: dummyProducts[2].storeId,
+    name: dummyProducts[2].name,
+    imageUrl: dummyProducts[2].imageUrl,
+    price: dummyProducts[2].price,
+    productId: dummyProducts[2].id,
+    note: "THIS IS A RANDOM NOTEEE SAYYING STUPID THINGS :))))",
+  ),
+  OrderItem(
+    id: '${dummyProducts[3].id} 3',
+    storeId: dummyProducts[3].storeId,
+    name: dummyProducts[3].name,
+    imageUrl: dummyProducts[3].imageUrl,
+    price: dummyProducts[3].price,
+    productId: dummyProducts[3].id,
+    note: "THIS IS A RANDOM NOTEEE SAYYING STUPID THINGS :))))",
+  ),
+  OrderItem(
+    id: '${dummyProducts[4].id} 4',
+    storeId: dummyProducts[4].storeId,
+    name: dummyProducts[4].name,
+    imageUrl: dummyProducts[4].imageUrl,
+    price: dummyProducts[4].price,
+    productId: dummyProducts[4].id,
+    note: "THIS IS A RANDOM NOTEEE SAYYING STUPID THINGS :))))",
   ),
 ];

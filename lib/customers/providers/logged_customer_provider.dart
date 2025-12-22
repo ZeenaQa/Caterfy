@@ -4,12 +4,48 @@ import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
+import 'package:caterfy/util/debouncer.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
 
 class LoggedCustomerProvider with ChangeNotifier {
   final supabase = Supabase.instance.client;
+  final customerId = Supabase.instance.client.auth.currentUser?.id;
+  final box = Hive.box('cartBox');
+
+  final debouncer = Debouncer(milliseconds: 300);
+
+  Cart? _cart;
+
+  Cart? get cart => _cart;
+
+  Cart? loadCart() {
+    final data = box.get('cart_$customerId');
+    if (data == null) return null;
+    return Cart.fromMap(Map<String, dynamic>.from(data));
+  }
+
+  void saveCart() {
+    final bool noItems = _cart!.items.isEmpty;
+    if (noItems) {
+      _cart = null;
+      deleteCart();
+      return;
+    }
+    debouncer.run(() {
+      box.put('cart_$customerId', _cart?.toMap());
+    });
+  }
+
+  void deleteCart() {
+    box.delete('cart_$customerId');
+  }
+
+  LoggedCustomerProvider() {
+    _cart = loadCart();
+  }
 
   List<Product> _products = [];
   List<Store> _stores = [];
@@ -20,16 +56,16 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool _isCategoryLoading = false;
   bool _isProductsLoading = false;
   bool _isFavLoading = false;
+  bool _isCartLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
   bool get isFavLoading => _isFavLoading;
-
-  Cart? cart;
+  bool get isCartLoading => _isCartLoading;
 
   int get totalCartQuantity {
-    if (cart?.storeId == null) return 0;
-    final items = cart?.items ?? const [];
+    if (_cart?.storeId == null) return 0;
+    final items = _cart?.items ?? const [];
     int totalQuantity = 0;
 
     for (var item in items) {
@@ -40,43 +76,51 @@ class LoggedCustomerProvider with ChangeNotifier {
   }
 
   double get totalCartPrice {
-    if (cart?.storeId == null) return 0;
-    final items = cart?.items ?? const [];
+    if (_cart?.storeId == null) return 0;
+    final items = _cart?.items ?? const [];
     double totalPrice = 0;
 
     for (var item in items) {
-      totalPrice += item.snapshot.price * item.quantity;
+      totalPrice += item.price * item.quantity;
     }
 
     return totalPrice;
   }
 
+  Store getStoreById(String storeId) {
+    return stores.firstWhere((store) => store.id == storeId);
+  }
+
   void addToCart({required OrderItem item}) {
-    if (cart?.storeId == null) {
-      cart = Cart(storeId: item.snapshot.storeId);
+    if (customerId!.isEmpty) return;
+    if (_cart?.storeId == null) {
+      _cart = Cart(customerId: customerId!, storeId: item.storeId);
     }
 
-    cart!.addItem(item: item);
+    _cart!.addItem(item: item);
+    saveCart();
     notifyListeners();
   }
 
   void setItemQuantity({required OrderItem item, required int newQuantity}) {
-    if (cart?.storeId == null) return;
+    if (_cart?.storeId == null) return;
 
-    cart?.setItemQuantity(item: item, newQuantity: newQuantity);
+    _cart?.setItemQuantity(item: item, newQuantity: newQuantity);
+    saveCart();
     notifyListeners();
   }
 
   void setOrderItem({required OrderItem item}) {
-    if (cart?.storeId == null) return;
-    cart?.setOrderItem(item: item);
-
+    if (_cart?.storeId == null) return;
+    _cart?.setOrderItem(item: item);
+    saveCart();
     notifyListeners();
   }
 
   void deleteItemFromCart({required String orderItemId}) {
-    if (cart?.storeId == null) return;
-    cart?.deleteItem(orderItemId: orderItemId);
+    if (_cart?.storeId == null) return;
+    _cart?.deleteItem(orderItemId: orderItemId);
+    saveCart();
     notifyListeners();
   }
 
@@ -218,6 +262,51 @@ class LoggedCustomerProvider with ChangeNotifier {
       }
     } finally {
       _isCategoryLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchCartContent({
+    required String storeId,
+    required BuildContext context,
+  }) async {
+    final l10 = AppLocalizations.of(context);
+
+    try {
+      _isCartLoading = true;
+      notifyListeners();
+
+      final receivedStore = await supabase
+          .from('stores')
+          .select()
+          .eq('id', storeId);
+      await fetchProducts(storeId: storeId, context: context);
+
+      final readyStore = Store.fromMap(receivedStore.first);
+
+      bool addToList = true;
+
+      for (int i = 0; i < _stores.length; i++) {
+        if (_stores[i].id == readyStore.id) {
+          _stores[i] = readyStore;
+          addToList = false;
+          break;
+        }
+      }
+
+      if (addToList) {
+        _stores.add(readyStore);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isCartLoading = false;
       notifyListeners();
     }
   }

@@ -14,6 +14,7 @@ import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,6 +22,8 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('cartBox');
 
   await Supabase.initialize(
     url: 'https://vnnjwcertgamqqlzygwd.supabase.co',
@@ -136,7 +139,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GlobalProvider()),
         ChangeNotifierProvider(create: (_) => LoggedCustomerProvider()),
         ChangeNotifierProvider(create: (_) => LoggedVendorProvider()),
-
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {

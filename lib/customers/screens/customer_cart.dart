@@ -1,6 +1,8 @@
 import 'package:caterfy/customers/customer_widgets/add_note.dart';
 import 'package:caterfy/customers/customer_widgets/cart_item.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/customer_store_screen.dart';
+import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -10,11 +12,37 @@ import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class CustomerCart extends StatelessWidget {
-  const CustomerCart({super.key, required this.store});
+class CustomerCart extends StatefulWidget {
+  const CustomerCart({super.key});
 
-  final Store store;
+  @override
+  State<CustomerCart> createState() => _CustomerCartState();
+}
+
+class _CustomerCartState extends State<CustomerCart> {
+  Store? store;
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final customerProvider = Provider.of<LoggedCustomerProvider>(
+        context,
+        listen: false,
+      );
+      final String? cartStoreId = customerProvider.cart?.storeId;
+
+      if (cartStoreId == null) return;
+
+      await customerProvider.fetchCartContent(
+        storeId: cartStoreId,
+        context: context,
+      );
+      store = customerProvider.getStoreById(cartStoreId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +50,10 @@ class CustomerCart extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final items = customerProvider.cart?.items ?? const [];
+    final bool isLoading = customerProvider.isCartLoading;
 
     return Scaffold(
-      bottomNavigationBar: BottomNav(),
+      bottomNavigationBar: isLoading ? null : BottomNav(store: store),
       appBar: CustomAppBar(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,80 +63,85 @@ class CustomerCart extends StatelessWidget {
               style: TextStyle(fontSize: 16.5, fontWeight: FontWeight.bold),
             ),
             Text(
-              store.name,
+              store?.name ?? '',
               style: TextStyle(fontSize: 12, color: colors.onSurfaceVariant),
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListView.builder(
-              padding: const EdgeInsets.all(15),
-              itemCount: items.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return CartItem(
-                  orderItem: items[index],
-                  isLastItem: index == items.length - 1,
-                );
-              },
-            ),
-            CartSection(
-              sectionTitle: 'Special request',
-              content: [SpecialRequest()],
-            ),
-            CartSection(
-              sectionTitle: 'Save on your order',
-              content: [SaveOnOrder(), SizedBox(height: 14)],
-            ),
-            CartSection(
-              sectionTitle: 'Payment summery',
-              content: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 12.0,
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 11,
-                    children: [
-                      PaymentRow(
-                        title: "Subtotal",
-                        price: customerProvider.totalCartPrice.toString(),
-                      ),
-                      PaymentRow(title: "Delivery fee", price: '1.00'),
-                      PaymentRow(title: "Service fee", price: '0.20'),
-                      Row(
-                        children: [
-                          Text(
-                            "Total amount",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+      body: Skeletonizer(
+        enabled: isLoading,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListView.builder(
+                padding: const EdgeInsets.all(15),
+                itemCount: isLoading ? 2 : items.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return CartItem(
+                    orderItem: isLoading
+                        ? dummyOrderItems[index]
+                        : items[index],
+                    isLastItem: index == (isLoading ? 1 : items.length - 1),
+                  );
+                },
+              ),
+              CartSection(
+                sectionTitle: 'Special request',
+                content: [SpecialRequest()],
+              ),
+              CartSection(
+                sectionTitle: 'Save on your order',
+                content: [SaveOnOrder(), SizedBox(height: 14)],
+              ),
+              CartSection(
+                sectionTitle: 'Payment summery',
+                content: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 12.0,
+                      left: 15,
+                      right: 15,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 11,
+                      children: [
+                        PaymentRow(
+                          title: "Subtotal",
+                          price: customerProvider.totalCartPrice.toString(),
+                        ),
+                        PaymentRow(title: "Delivery fee", price: '1.00'),
+                        PaymentRow(title: "Service fee", price: '0.20'),
+                        Row(
+                          children: [
+                            Text(
+                              "Total amount",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Spacer(),
-                          Text(
-                            '${l10.jod} ${(customerProvider.totalCartPrice + 1.00 + 0.20).toString()}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                            Spacer(),
+                            Text(
+                              '${l10.jod} ${(customerProvider.totalCartPrice + 1.00 + 0.20).toString()}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -115,7 +149,9 @@ class CustomerCart extends StatelessWidget {
 }
 
 class BottomNav extends StatelessWidget {
-  const BottomNav({super.key});
+  const BottomNav({super.key, required this.store});
+
+  final Store? store;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +182,15 @@ class BottomNav extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedBtn(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (store == null) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CustomerStoreScreen(store: store!),
+                      ),
+                    );
+                  },
                   title: 'Add items',
                   titleSize: 15,
                   innerVerticalPadding: 15,

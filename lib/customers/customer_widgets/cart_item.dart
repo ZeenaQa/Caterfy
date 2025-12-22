@@ -1,3 +1,4 @@
+import 'package:caterfy/models/product.dart';
 import 'package:caterfy/shared_widgets.dart/cart_quantity_selector.dart';
 import 'package:caterfy/customers/customer_widgets/product_drawer_content.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
@@ -27,7 +28,16 @@ class CartItem extends StatelessWidget {
         padding: EdgeInsets.only(bottom: 0),
         isStack: true,
         child: ProductDrawerContent(
-          product: orderItem.snapshot,
+          product: Product(
+            id: orderItem.productId,
+            storeId: orderItem.storeId,
+            name: orderItem.name,
+            description: '',
+            price: orderItem.price,
+            imageUrl: orderItem.imageUrl!,
+            subCategoryId: "ss",
+            subCategory: "",
+          ),
           isInCart: true,
           orderItem: orderItem,
         ),
@@ -53,7 +63,7 @@ class CartItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        orderItem.snapshot.name,
+                        orderItem.name,
                         style: TextStyle(
                           color: colors.onPrimaryFixed,
                           fontWeight: FontWeight.bold,
@@ -105,8 +115,8 @@ class CartItem extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text:
-                                  (orderItem.snapshot.price * orderItem.quantity).toString(),
+                              text: (orderItem.price * orderItem.quantity)
+                                  .toString(),
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -129,7 +139,7 @@ class CartItem extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Image.network(
-                          orderItem.snapshot.imageUrl,
+                          orderItem.imageUrl ?? '',
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return const Icon(Icons.broken_image);

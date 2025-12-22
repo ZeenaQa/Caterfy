@@ -1,10 +1,11 @@
 import 'package:caterfy/models/order_item.dart';
 
 class Cart {
+  final String customerId;
   final String? storeId;
   final List<OrderItem> items = [];
 
-  Cart({this.storeId});
+  Cart({required this.customerId, this.storeId});
 
   void addItem({required OrderItem item}) {
     for (int i = 0; i < items.length; i++) {
@@ -56,5 +57,22 @@ class Cart {
 
   void deleteItem({required orderItemId}) {
     items.removeWhere((item) => item.id == orderItemId);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'customerId': customerId,
+      'storeId': storeId,
+      'items': items.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  factory Cart.fromMap(Map<String, dynamic> map) {
+    return Cart(customerId: map['customerId'], storeId: map['storeId'])
+      ..items.addAll(
+        (map['items'] as List).map(
+          (e) => OrderItem.fromMap(Map<String, dynamic>.from(e)),
+        ),
+      );
   }
 }

@@ -16,16 +16,16 @@ import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class StoreScreen extends StatefulWidget {
-  const StoreScreen({super.key, required this.store});
+class CustomerStoreScreen extends StatefulWidget {
+  const CustomerStoreScreen({super.key, required this.store});
 
   final Store store;
 
   @override
-  State<StoreScreen> createState() => _StoreScreenState();
+  State<CustomerStoreScreen> createState() => _CustomerStoreScreenState();
 }
 
-class _StoreScreenState extends State<StoreScreen> {
+class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
   late ScrollController _scrollController;
   double _appBarOpacity = 0.0;
 
@@ -71,12 +71,12 @@ class _StoreScreenState extends State<StoreScreen> {
         customerProvider.isProductsLoading ||
         customerProvider.isCategoryLoading;
 
-    final bool showCart =
-        customerProvider.totalCartQuantity > 0 &&
-        customerProvider.cart?.storeId == widget.store.id;
+    final bool showCart = customerProvider.cart?.storeId == widget.store.id;
 
     return Scaffold(
-      bottomNavigationBar: !showCart ? null : BottomNav(store: widget.store),
+      bottomNavigationBar: (!showCart || isLoading)
+          ? null
+          : BottomNav(store: widget.store),
       body: Skeletonizer(
         enabled: isLoading,
         child: Stack(
@@ -532,7 +532,7 @@ class BottomNav extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CustomerCart(store: store),
+                  builder: (context) => CustomerCart(),
                 ),
               );
             },
