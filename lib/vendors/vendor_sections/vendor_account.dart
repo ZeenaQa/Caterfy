@@ -8,15 +8,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class VendorAccountSection extends StatelessWidget {
   const VendorAccountSection({super.key});
-  
 
   @override
   Widget build(BuildContext context) {
-          final VendorAuth = Provider.of<VendorAuthProvider>(context);
-              final l10 = AppLocalizations.of(context);
+    final VendorAuth = Provider.of<VendorAuthProvider>(context);
+    final l10 = AppLocalizations.of(context);
 
-
-  Future<void> handleLogout() async {
+    Future<void> handleLogout() async {
       VendorAuth.isLoading = true;
       VendorAuth.notifyLis();
 
@@ -28,7 +26,9 @@ class VendorAccountSection extends StatelessWidget {
         VendorAuth.notifyLis();
       }
     }
-    return   Stack(
+
+    return SafeArea(
+      child: Stack(
         children: [
           Column(
             children: [
@@ -50,6 +50,7 @@ class VendorAccountSection extends StatelessWidget {
             ],
           ),
         ],
-      );
+      ),
+    );
   }
 }
