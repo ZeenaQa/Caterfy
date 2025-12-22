@@ -12,6 +12,8 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final String? errorText;
   final bool readOnly;
+  final int? maxLines;
+
 
   const CustomTextField({
     super.key,
@@ -22,17 +24,27 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
     this.onChanged,
     this.errorText,
-    this.readOnly = false,
+    this.readOnly = false, 
+     this.maxLines=1,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: TextEditingController(text: value ?? ''),
       style: const TextStyle(fontSize: 15),
+      controller: value != null
+    ? TextEditingController.fromValue(
+        TextEditingValue(
+          text: value!,
+          selection: TextSelection.collapsed(offset: value!.length),
+        ),
+      )
+    : null,
+
       obscureText: obscureText,
       keyboardType: keyboardType,
       readOnly: readOnly,
+       maxLines: maxLines,
       enableInteractiveSelection: !readOnly,
       onChanged: readOnly ? null : onChanged,
       focusNode: readOnly ? AlwaysDisabledFocusNode() : null,
@@ -41,7 +53,6 @@ class CustomTextField extends StatelessWidget {
           vertical: 14,
           horizontal: 12,
         ),
-
         hintText: value == null ? hint : null,
         suffixIcon: suffix,
         filled: false,
@@ -130,6 +141,7 @@ class LabeledTextField extends StatelessWidget {
     this.errorText,
     this.readOnly = false,
     this.value,
+    this.maxLines = 1,
   });
 
   final Function onChanged;
@@ -139,6 +151,7 @@ class LabeledTextField extends StatelessWidget {
   final String? errorText;
   final bool readOnly;
   final String? value;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +190,7 @@ class LabeledTextField extends StatelessWidget {
         CustomTextField(
           value: value,
           hint: hint,
+           maxLines: maxLines,
           errorText: errorText,
           readOnly: readOnly,
           onChanged: readOnly ? null : (value) => onChanged(value),

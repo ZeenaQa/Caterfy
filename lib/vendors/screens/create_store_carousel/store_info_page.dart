@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
+import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
 class StoreInfoPage extends StatelessWidget {
   const StoreInfoPage({super.key});
@@ -38,9 +39,11 @@ class StoreInfoPage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          LabeledInput(
+          /// ===== STORE NAME (AR) =====
+          LabeledTextField(
             label: 'Store Name (Arabic)',
             hint: 'اكتب اسم المتجر بالعربية',
+            value: storeForm.name_ar,
             errorText: provider.showStoreInfoErrors &&
                     storeForm.name_ar.isEmpty
                 ? 'Required'
@@ -53,9 +56,11 @@ class StoreInfoPage extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          LabeledInput(
+          /// ===== STORE NAME (EN) =====
+          LabeledTextField(
             label: 'Store Name (English)',
             hint: 'Write store name in English',
+            value: storeForm.name,
             errorText: provider.showStoreInfoErrors &&
                     storeForm.name.isEmpty
                 ? 'Required'
@@ -66,14 +71,21 @@ class StoreInfoPage extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 21),
 
+          /// ===== CATEGORY =====
           DropdownButtonFormField<String>(
             value:
                 storeForm.category.isEmpty ? null : storeForm.category,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Category',
-              border: OutlineInputBorder(),
+              errorText: provider.showStoreInfoErrors &&
+                      storeForm.category.isEmpty
+                  ? 'Required'
+                  : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             items: categories
                 .map(
@@ -90,59 +102,6 @@ class StoreInfoPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-
-class LabeledInput extends StatelessWidget {
-  final String label;
-  final String? hint;
-  final String? errorText;
-  final ValueChanged<String> onChanged;
-  final TextInputType keyboardType;
-
-  const LabeledInput({
-    super.key,
-    required this.label,
-    required this.onChanged,
-    this.hint,
-    this.errorText,
-    this.keyboardType = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 6, left: 12),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: errorText != null ? colors.error : colors.onSurface,
-            ),
-          ),
-        ),
-        TextField(
-          keyboardType: keyboardType,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            hintText: hint,
-            errorText: errorText,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

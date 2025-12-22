@@ -177,6 +177,59 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  Future<void> updateCategory({
+  required String categoryId,
+  required String newName,
+}) async {
+  if (newName.trim().isEmpty) return;
+
+  isLoading = true;
+  notifyListeners();
+
+  try {
+    await supabase
+        .from('sub_categories')
+        .update({'name': newName.trim()})
+        .eq('id', categoryId);
+
+    await _refreshSubCategories();
+  } catch (e) {
+    debugPrint('updateCategory error: $e');
+  } finally {
+    isLoading = false;
+    notifyListeners();
+  }
+}
+
+
+Future<void> deleteCategory(String categoryId) async {
+  isLoading = true;
+  notifyListeners();
+
+  try {
+    // delete products under category
+    await supabase
+        .from('products')
+        .delete()
+        .eq('sub_category_id', categoryId);
+
+    // delete category
+    await supabase
+        .from('sub_categories')
+        .delete()
+        .eq('id', categoryId);
+
+    await _refreshSubCategories();
+    await fetchProducts();
+  } catch (e) {
+    debugPrint('deleteCategory error: $e');
+  } finally {
+    isLoading = false;
+    notifyListeners();
+  }
+}
+
   /* ===================== PRODUCTS ===================== */
 
   Future<void> fetchProducts() async {
@@ -241,23 +294,48 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProduct(Product product) async {
-    isLoading = true;
-    notifyListeners();
+
+  Future<void> updateProductData({
+  required String productId,
+  required String name,
+  required String description,
+  required double price,
+  File? imageFile,
+}) async {
+  isLoading = true;
+  notifyListeners();
+
+  try {
+    String? imageUrl;
+
+    if (imageFile != null) {
+      imageUrl = await uploadImage(imageFile, 'products');
+    }
+
+    final updateData = {
+      'name': name,
+      'description': description,
+      'price': price,
+    };
+
+    if (imageUrl != null) {
+      updateData['image_url'] = imageUrl;
+    }
 
     await supabase
         .from('products')
-        .update(product.toMap())
-        .eq('id', product.id);
+        .update(updateData)
+        .eq('id', productId);
 
-    final index = products.indexWhere((p) => p.id == product.id);
-    if (index != -1) {
-      products[index] = product;
-    }
-
+    await fetchProducts();
+  } catch (e) {
+    debugPrint('updateProductData error: $e');
+  } finally {
     isLoading = false;
     notifyListeners();
   }
+}
+
 
   List<Product> productsBySubCategory(String subCategoryId) {
     return products.where((p) => p.subCategoryId == subCategoryId).toList();
@@ -275,4 +353,55 @@ class LoggedVendorProvider extends ChangeNotifier {
 
     return supabase.storage.from('store-images').getPublicUrl(path);
   }
+  Future<bool> updateStore() async {
+  if (storeForm == null || store == null) return false;
+
+  try {
+    isLoading = true;
+    notifyListeners();
+
+    String? logoUrl = store!.logoUrl;
+    String? bannerUrl = store!.bannerUrl;
+
+    /// ===== UPLOAD LOGO =====
+    if (logoFile != null) {
+      logoUrl = await uploadImage(logoFile!, 'logos');
+    }
+
+    /// ===== UPLOAD BANNER =====
+    if (bannerFile != null) {
+      bannerUrl = await uploadImage(bannerFile!, 'banners');
+    }
+
+    /// ===== UPDATE STORE =====
+    final response = await supabase
+        .from('stores')
+        .update({
+          'name': storeForm!.name,
+          'tags': storeForm!.tags,
+          'logo_url': logoUrl,
+          'banner_url': bannerUrl,
+        })
+        .eq('id', store!.id)
+        .select()
+        .single();
+
+    /// ===== UPDATE LOCAL STATE =====
+    store = Store.fromMap(response);
+    storeForm = store;
+
+    logoFile = null;
+    bannerFile = null;
+
+    isLoading = false;
+    notifyListeners();
+    return true;
+  } catch (e) {
+    debugPrint('updateStore error: $e');
+    isLoading = false;
+    notifyListeners();
+    return false;
+  }
+}
+
 }

@@ -9,6 +9,7 @@ class OutlinedBtn extends StatelessWidget {
     this.titleSize = 14,
     this.topPadding,
     this.bottomPadding,
+    this.stretch,
     this.leftPadding,
     this.rightPadding,
     this.innerVerticalPadding = 12,
@@ -30,7 +31,7 @@ class OutlinedBtn extends StatelessWidget {
   final IconData? icon;
   final SvgPicture? customSvgIcon;
   final bool lighterBorder;
-
+  final bool? stretch;
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -42,38 +43,41 @@ class OutlinedBtn extends StatelessWidget {
         left: leftPadding ?? 0,
         right: rightPadding ?? 0,
       ),
-      child: OutlinedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          minimumSize: Size.zero,
-          padding: EdgeInsets.symmetric(vertical: innerVerticalPadding, horizontal: innerHorizontalPadding),
-
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
-          side: BorderSide(
-            color: lighterBorder ? colors.outline : colors.onSurfaceVariant,
-            width: 1,
-          ),
-        ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
-        onPressed: () => onPressed(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null)
-              Icon(icon, color: colors.onSecondary, size: 18)
-            else if (customSvgIcon != null)
-              customSvgIcon!,
-            if (icon != null || customSvgIcon != null) SizedBox(width: 10),
-            Text(
-              title,
-              style: TextStyle(
-                color: colors.onSecondary,
-                fontWeight: FontWeight.w600,
-                fontSize: titleSize,
-              ),
+      child: SizedBox(
+        
+        child: OutlinedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            minimumSize: Size.zero,
+            padding: EdgeInsets.symmetric(vertical: innerVerticalPadding, horizontal: innerHorizontalPadding),
+        
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
             ),
-          ],
+            side: BorderSide(
+              color: lighterBorder ? colors.outline : colors.onSurfaceVariant,
+              width: 1,
+            ),
+          ).copyWith(overlayColor: WidgetStateProperty.all(Colors.transparent)),
+          onPressed: () => onPressed(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null)
+                Icon(icon, color: colors.onSecondary, size: 18)
+              else if (customSvgIcon != null)
+                customSvgIcon!,
+              if (icon != null || customSvgIcon != null) SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(
+                  color: colors.onSecondary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: titleSize,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
