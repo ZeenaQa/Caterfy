@@ -12,7 +12,7 @@ import 'package:toastification/toastification.dart';
 
 class LoggedCustomerProvider with ChangeNotifier {
   final supabase = Supabase.instance.client;
-  final customerId = Supabase.instance.client.auth.currentUser?.id;
+
   final box = Hive.box('cartBox');
 
   final debouncer = Debouncer(milliseconds: 300);
@@ -21,10 +21,16 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   Cart? get cart => _cart;
 
-  Cart? loadCart() {
+  void loadCart() {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
     final data = box.get('cart_$customerId');
-    if (data == null) return null;
-    return Cart.fromMap(Map<String, dynamic>.from(data));
+    if (data == null) {
+      _cart = null;
+      return;
+    }
+
+    _cart = Cart.fromMap(Map<String, dynamic>.from(data));
+    notifyListeners();
   }
 
   void saveCart() {
@@ -35,16 +41,18 @@ class LoggedCustomerProvider with ChangeNotifier {
       return;
     }
     debouncer.run(() {
+      final customerId = Supabase.instance.client.auth.currentUser?.id;
       box.put('cart_$customerId', _cart?.toMap());
     });
   }
 
   void deleteCart() {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
     box.delete('cart_$customerId');
   }
 
   LoggedCustomerProvider() {
-    _cart = loadCart();
+    loadCart();
   }
 
   List<Product> _products = [];
@@ -95,9 +103,10 @@ class LoggedCustomerProvider with ChangeNotifier {
   }
 
   void addToCart({required OrderItem item}) {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
     if (customerId!.isEmpty) return;
     if (_cart?.storeId == null) {
-      _cart = Cart(customerId: customerId!, storeId: item.storeId);
+      _cart = Cart(customerId: customerId, storeId: item.storeId);
     }
 
     _cart!.addItem(item: item);

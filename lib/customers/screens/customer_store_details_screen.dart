@@ -165,6 +165,7 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                       ),
                       leftText: "Legal name",
                       rightText: store.name,
+                      isLastItem: true,
                     ),
                   ],
                 ),

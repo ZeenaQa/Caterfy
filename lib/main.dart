@@ -97,6 +97,7 @@ void main() async {
             ctx,
             listen: false,
           ).setLoading(false);
+          ctx.read<LoggedCustomerProvider>().loadCart();
         }
       });
     }

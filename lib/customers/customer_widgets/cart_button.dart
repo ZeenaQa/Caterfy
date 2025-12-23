@@ -31,8 +31,7 @@ class CartButton extends StatelessWidget {
                 end: 2,
                 child: IgnorePointer(
                   child: Container(
-                    width: 21,
-                    height: 21,
+                    constraints: BoxConstraints(minHeight: 21, minWidth: 21),
                     decoration: BoxDecoration(
                       color: colors.primary,
                       border: Border.all(
@@ -42,12 +41,15 @@ class CartButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Center(
-                      child: Text(
-                        customerProvider.totalCartQuantity.toString(),
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: colors.onInverseSurface,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          customerProvider.totalCartQuantity.toString(),
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: colors.onInverseSurface,
+                          ),
                         ),
                       ),
                     ),

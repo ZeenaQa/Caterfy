@@ -51,99 +51,134 @@ class _CustomerCartState extends State<CustomerCart> {
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final items = customerProvider.cart?.items ?? const [];
     final bool isLoading = customerProvider.isCartLoading;
+    final bool isCartEmpty = customerProvider.cart?.items.isEmpty ?? true;
 
     return Scaffold(
-      bottomNavigationBar: isLoading ? null : BottomNav(store: store),
+      bottomNavigationBar: isLoading || isCartEmpty
+          ? null
+          : BottomNav(store: store),
       appBar: CustomAppBar(
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Cart",
-              style: TextStyle(fontSize: 16.5, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              store?.name ?? '',
-              style: TextStyle(fontSize: 12, color: colors.onSurfaceVariant),
-            ),
-          ],
-        ),
-      ),
-      body: Skeletonizer(
-        enabled: isLoading,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListView.builder(
-                padding: const EdgeInsets.all(15),
-                itemCount: isLoading ? 2 : items.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return CartItem(
-                    orderItem: isLoading
-                        ? dummyOrderItems[index]
-                        : items[index],
-                    isLastItem: index == (isLoading ? 1 : items.length - 1),
-                  );
-                },
-              ),
-              CartSection(
-                sectionTitle: 'Special request',
-                content: [SpecialRequest()],
-              ),
-              CartSection(
-                sectionTitle: 'Save on your order',
-                content: [SaveOnOrder(), SizedBox(height: 14)],
-              ),
-              CartSection(
-                sectionTitle: 'Payment summery',
-                content: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 12.0,
-                      left: 15,
-                      right: 15,
+        content: isCartEmpty
+            ? null
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Cart",
+                    style: TextStyle(
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.bold,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 11,
-                      children: [
-                        PaymentRow(
-                          title: "Subtotal",
-                          price: customerProvider.totalCartPrice.toString(),
-                        ),
-                        PaymentRow(title: "Delivery fee", price: '1.00'),
-                        PaymentRow(title: "Service fee", price: '0.20'),
-                        Row(
-                          children: [
-                            Text(
-                              "Total amount",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              '${l10.jod} ${(customerProvider.totalCartPrice + 1.00 + 0.20).toString()}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                  ),
+                  Text(
+                    store?.name ?? '',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colors.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
       ),
+      body: isCartEmpty
+          ? Center(
+              child: Column(
+                spacing: 20,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_bag_rounded,
+                    size: 120,
+                    color: colors.outline,
+                  ),
+                  Text(
+                    "Your favorite stores will appear here",
+                    style: TextStyle(
+                      color: colors.onSurfaceVariant,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                ],
+              ),
+            )
+          : Skeletonizer(
+              enabled: isLoading,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView.builder(
+                      padding: const EdgeInsets.all(15),
+                      itemCount: isLoading ? 2 : items.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return CartItem(
+                          orderItem: isLoading
+                              ? dummyOrderItems[index]
+                              : items[index],
+                          isLastItem:
+                              index == (isLoading ? 1 : items.length - 1),
+                        );
+                      },
+                    ),
+                    CartSection(
+                      sectionTitle: 'Special request',
+                      content: [SpecialRequest()],
+                    ),
+                    CartSection(
+                      sectionTitle: 'Save on your order',
+                      content: [SaveOnOrder(), SizedBox(height: 14)],
+                    ),
+                    CartSection(
+                      sectionTitle: 'Payment summery',
+                      content: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12.0,
+                            left: 15,
+                            right: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 11,
+                            children: [
+                              PaymentRow(
+                                title: "Subtotal",
+                                price: customerProvider.totalCartPrice
+                                    .toString(),
+                              ),
+                              PaymentRow(title: "Delivery fee", price: '1.00'),
+                              PaymentRow(title: "Service fee", price: '0.20'),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Total amount",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    '${l10.jod} ${(customerProvider.totalCartPrice + 1.00 + 0.20).toString()}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }
