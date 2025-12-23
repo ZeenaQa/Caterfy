@@ -233,6 +233,7 @@ class SpecialRequest extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+    final customerNote = customerProvider.cart?.note;
 
     return TextButton(
       onPressed: () {
@@ -272,9 +273,9 @@ class SpecialRequest extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    customerProvider.cart?.note.isEmpty
+                    (customerNote == null || customerNote.isEmpty)
                         ? "Anything else we need to know?"
-                        : customerProvider.cart?.note,
+                        : customerNote,
                     style: TextStyle(fontSize: 13),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

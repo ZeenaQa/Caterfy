@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/customer_widgets/cart_button.dart';
 import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
@@ -82,7 +83,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: CustomAppBar(
         content: Expanded(
           child: Row(
-            spacing: 10,
             children: [
               Expanded(
                 child: RichText(
@@ -100,6 +100,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 ),
               ),
+              SizedBox(width: 10),
               OutlinedIconBtn(
                 child: Icon(Icons.favorite_outline, size: 19),
                 onPressed: () {
@@ -112,6 +113,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   );
                 },
               ),
+              CartButton(),
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/customer_widgets/cart_button.dart';
 import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -21,48 +22,55 @@ class CustomerGlobalTopBar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Stack(
+              clipBehavior: Clip.none,
               children: [
-                Icon(
-                  FontAwesomeIcons.locationDot,
-                  size: 16,
-                  color: colors.onPrimary,
-                ),
-                SizedBox(width: 6),
-                GestureDetector(
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const LocationPickerScreen(),
-                      ),
-                    );
-                  },
-                  child: Consumer<GlobalProvider>(
-                    builder: (_, provider, __) {
-                      return RichText(
-                        text: TextSpan(
-                          text: '${l10.deliverTo} ',
-                          style: TextStyle(
-                            color: colors.onPrimary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.locationDot,
+                      size: 16,
+                      color: colors.onPrimary,
+                    ),
+                    SizedBox(width: 6),
+                    GestureDetector(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LocationPickerScreen(),
                           ),
-                          children: [
-                            TextSpan(
-                              text: provider.deliveryLocation,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                        );
+                      },
+                      child: Consumer<GlobalProvider>(
+                        builder: (_, provider, __) {
+                          return RichText(
+                            text: TextSpan(
+                              text: '${l10.deliverTo} ',
+                              style: TextStyle(
+                                color: colors.onPrimary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: provider.deliveryLocation,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
+
+                PositionedDirectional(end: 0, top: -15, child: CartButton()),
               ],
             ),
-            SizedBox(height: 17),
+            SizedBox(height: 19),
             Container(
               decoration: BoxDecoration(
                 color: colors.surface,
