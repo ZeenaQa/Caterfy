@@ -2,6 +2,7 @@ import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 
 class StoreTagsPage extends StatelessWidget {
   const StoreTagsPage({super.key});
@@ -50,9 +51,11 @@ class StoreTagsPage extends StatelessWidget {
 
     final selectedTags = storeForm.tags ?? [];
 
+    final l10 = AppLocalizations.of(context);
+
     return PageWrapper(
-      title: "Tags",
-      subtitle: "Choose store tags",
+      title: l10.tags,
+      subtitle: l10.chooseStoreTags,
       child: SingleChildScrollView(
         child: Wrap(
           spacing: 10,

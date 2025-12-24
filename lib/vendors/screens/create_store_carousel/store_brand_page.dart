@@ -4,6 +4,7 @@ import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 
 class StoreBrandBannerPage extends StatelessWidget {
   const StoreBrandBannerPage({super.key});
@@ -15,11 +16,10 @@ class StoreBrandBannerPage extends StatelessWidget {
     final image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       if (isLogo) {
-        provider.logoFile = File(image.path);
+        provider.setLogoFile(File(image.path));
       } else {
-        provider.bannerFile = File(image.path);
+        provider.setBannerFile(File(image.path));
       }
-      provider.notifyListeners();
     }
   }
 
@@ -28,9 +28,11 @@ class StoreBrandBannerPage extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<LoggedVendorProvider>();
 
+    final l10 = AppLocalizations.of(context);
+
     return PageWrapper(
-      title: "Brand & Banner",
-      subtitle: "Upload your store logo and banner",
+      title: l10.brandAndBanner,
+      subtitle: l10.uploadLogoBanner,
       child: Stack(
         clipBehavior: Clip.none,
         children: [

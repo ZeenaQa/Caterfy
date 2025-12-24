@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/vendor_sections/vendor_store.dart';
 
@@ -44,6 +45,7 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<LoggedVendorProvider>();
+    final l10 = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -77,7 +79,7 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                   SizedBox(
                     width: 140,
                     child: OutlinedBtn(
-                      title: "Back",
+                      title: l10.back,
                       onPressed: () {
                         _controller.previousPage(
                           duration: const Duration(milliseconds: 300),
@@ -94,12 +96,11 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                 SizedBox(
                   width: 140,
                   child: FilledBtn(
-                    title: currentPage == 3 ? "Continue" : "Next",
+                    title: currentPage == 3 ? l10.continueBtn : l10.next,
                     isLoading: provider.isLoading,
                     onPressed: () async {
                       if (currentPage == 1) {
-                        provider.showStoreInfoErrors = true;
-                        provider.notifyListeners();
+                        provider.setShowStoreInfoErrors(true);
 
                         if (!provider.isStoreInfoValid) return;
                       }

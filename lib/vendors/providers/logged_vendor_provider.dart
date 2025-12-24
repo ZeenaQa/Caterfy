@@ -153,12 +153,13 @@ class LoggedVendorProvider extends ChangeNotifier {
 
   /* ===================== SUB CATEGORIES ===================== */
 
-  Future<void> addCategory(String name) async {
+  Future<void> addCategory(String name, {String? nameAr}) async {
     if (store == null || name.trim().isEmpty) return;
 
     await supabase.from('sub_categories').insert({
       'store_id': store!.id,
       'name': name.trim(),
+      'name_ar': nameAr?.trim(),
     });
 
     await _refreshSubCategories();
@@ -180,6 +181,7 @@ class LoggedVendorProvider extends ChangeNotifier {
   Future<void> updateCategory({
     required String categoryId,
     required String newName,
+    String? newNameAr,
   }) async {
     if (newName.trim().isEmpty) return;
 
@@ -187,9 +189,17 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      final updateData = {
+        'name': newName.trim(),
+      };
+
+      if (newNameAr != null) {
+        updateData['name_ar'] = newNameAr.trim();
+      }
+
       await supabase
           .from('sub_categories')
-          .update({'name': newName.trim()})
+          .update(updateData)
           .eq('id', categoryId);
 
       await _refreshSubCategories();
@@ -391,4 +401,21 @@ class LoggedVendorProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  // ======= Helpers to set files safely =====
+  void setLogoFile(File? file) {
+    logoFile = file;
+    notifyListeners();
+  }
+
+  void setBannerFile(File? file) {
+    bannerFile = file;
+    notifyListeners();
+  }
+
+  void setShowStoreInfoErrors(bool value) {
+    showStoreInfoErrors = value;
+    notifyListeners();
+  }
 }
+

@@ -407,7 +407,196 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unfavoriteText => 'تمت الإزالة من قائمتك المفضلة';
 
   @override
+  String get getStarted => 'ابدأ';
+
+  @override
+  String get noStoreYet => 'ليس لديك متجر بعد. لنقم بإنشاء واحد!';
+
+  @override
+  String get createStore => 'إنشاء متجر';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get menu => 'القائمة';
+
+  @override
+  String get add => 'إضافة';
+
+  @override
+  String get categoryName => 'اسم الفئة';
+
+  @override
+  String get categoryNameEnglish => 'اسم الفئة (بالإنجليزية)';
+
+  @override
+  String get enterCategoryNameEnglish => 'أدخل اسم الفئة بالإنجليزية';
+
+  @override
+  String get categoryNameArabic => 'اسم الفئة (بالعربية)';
+
+  @override
+  String get enterCategoryNameArabic => 'أدخل اسم الفئة بالعربية';
+
+  @override
+  String get category => 'الفئة';
+
+  @override
+  String get items => 'عناصر';
+
+  @override
+  String get noProductsYet => 'لا توجد منتجات بعد';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get editStore => 'تعديل المتجر';
+
+  @override
+  String get storeTags => 'وسوم المتجر';
+
+  @override
+  String get change => 'تغيير';
+
+  @override
+  String get back => 'الرجوع';
+
+  @override
+  String get deleteProduct => 'حذف المنتج';
+
+  @override
+  String get markUnavailableToday => 'اجعل المنتج غير متوفر اليوم';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
+
+  @override
+  String get editCategory => 'تعديل الفئة';
+
+  @override
+  String get deleteCategory => 'حذف الفئة';
+
+  @override
+  String get addProduct => 'إضافة منتج';
+
+  @override
+  String get confirmStoreLocation => 'تأكيد موقع المتجر';
+
+  @override
+  String get unknownArea => 'منطقة غير معروفة';
+
+  @override
+  String get storeLocation => 'موقع المتجر';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get storeInfo => 'معلومات المتجر';
+
+  @override
+  String get storeNameArabic => 'اسم المتجر (بالعربية)';
+
+  @override
+  String get storeNameArabicHint => 'اكتب اسم المتجر بالعربية';
+
+  @override
+  String get storeNameEnglish => 'اسم المتجر (بالإنجليزية)';
+
+  @override
+  String get storeNameEnglishHint => 'اكتب اسم المتجر بالإنجليزية';
+
+  @override
+  String get banner => 'صورة الغلاف';
+
+  @override
+  String get logo => 'الشعار';
+
+  @override
+  String get storeName => 'اسم المتجر';
+
+  @override
+  String get required => 'مطلوب';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get deleteProductConfirmation =>
+      'سيؤدي هذا إلى حذف المنتج. هل أنت متأكد؟';
+
+  @override
+  String get deleteCategoryConfirmation =>
+      'سيؤدي هذا إلى حذف الفئة وكل منتجاتها. هل أنت متأكد؟';
+
+  @override
+  String get available => 'متوفر';
+
+  @override
+  String get productAvailabilityInfo =>
+      'يمكن للعملاء مشاهدة هذا المنتج وطلبه خلال ساعات عمل المتجر';
+
+  @override
+  String get productName => 'اسم المنتج';
+
+  @override
+  String get productNameHint => 'اسم المنتج';
+
+  @override
+  String get dinars => 'دينار';
+
+  @override
+  String get cents => 'فلس';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get currentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get enterCurrentPassword => 'أدخل كلمة المرور الحالية';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get enterNewPassword => 'أدخل كلمة المرور الجديدة';
+
+  @override
+  String get confirmPasswordHint => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get currentPasswordIncorrect => 'كلمة المرور الحالية غير صحيحة';
+
+  @override
+  String get tags => 'الوسوم';
+
+  @override
+  String get chooseStoreTags => 'اختر وسوم المتجر';
+
+  @override
+  String get brandAndBanner => 'الشعار والغلاف';
+
+  @override
+  String get uploadLogoBanner => 'قم بتحميل شعار وصورة الغلاف للمتجر';
+
+  @override
   String get viewAll => 'عرض الكل';
+
+  @override
+  String get loading => 'تحميل...';
+
+  @override
+  String get storeStatus => 'حالة المتجر';
+
+  @override
+  String get opened => 'مفتوح';
+
+  @override
+  String get closed => 'مغلق';
 
   @override
   String get store => 'المتجر';

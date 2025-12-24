@@ -1,6 +1,6 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
-import 'package:caterfy/vendors/vendor_settings.dart';
+import 'package:caterfy/vendors/screens/app_screens/vendor_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,10 +32,10 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
 
     return SafeArea(
       child: (user == null)
-          ? const Center(
+          ? Center(
               child: Text(
-                "LOADING",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                l10.loading,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             )
           : Column(
@@ -103,8 +103,7 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Store Status",
-                        // l10.storeStatus,
+                        l10.storeStatus,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -122,8 +121,7 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
                           const SizedBox(width: 15),
                           Expanded(
                             child: Text(
-                              isStoreOpen ? "opened" : "closed",
-                                // isStoreOpen ? l10.open : l10.closed,
+                              isStoreOpen ? l10.opened : l10.closed,
                               style: TextStyle(
                                 color:
                                     isStoreOpen ? colors.onSurface : colors.onSurfaceVariant,

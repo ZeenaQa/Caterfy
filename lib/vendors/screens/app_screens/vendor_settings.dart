@@ -1,5 +1,5 @@
 
-import 'package:caterfy/customers/screens/customer_settings/change_password.dart';
+
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/providers/locale_provider.dart';
@@ -10,6 +10,7 @@ import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
+import 'package:caterfy/vendors/screens/app_screens/vendor_change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,18 +25,15 @@ class VendorSettingsScreen extends StatelessWidget {
     final locale = Provider.of<LocaleProvider>(context).locale;
     final themeController = context.watch<ThemeController>();
     final isDark = themeController.themeMode == ThemeMode.dark;
-
     final VendorAuth = Provider.of<VendorAuthProvider>(context);
 
     Future<void> handleLogout() async {
-      VendorAuth.isLoading = true;
-      VendorAuth.notifyListeners();
+      VendorAuth.setLoading(true);
       try {
         await Future.delayed(Duration(milliseconds: 500));
         await Supabase.instance.client.auth.signOut();
       } finally {
-        VendorAuth.isLoading = false;
-        VendorAuth.notifyListeners();
+        VendorAuth.setLoading(false);
       }
     }
 
@@ -53,7 +51,7 @@ class VendorSettingsScreen extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+              MaterialPageRoute(builder: (_) => const VendorChangePassword()),
             );
           },
         ),
@@ -109,7 +107,7 @@ class VendorSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: locale.languageCode == "ar",
                   colors: colors,
-                  title: "العربية",
+                  title: l10.arabic,
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('en'));
                     context.read<LocaleProvider>().toggleLocale();
@@ -118,7 +116,7 @@ class VendorSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: locale.languageCode == "en",
                   colors: colors,
-                  title: "English",
+                  title: l10.english,
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('ar'));
                     context.read<LocaleProvider>().toggleLocale();
@@ -130,7 +128,7 @@ class VendorSettingsScreen extends StatelessWidget {
         },
         title: l10.language,
         icon: Icons.language_outlined,
-        rightText: locale.languageCode == "en" ? "English" : "العربية",
+        rightText: locale.languageCode == "en" ? l10.english : l10.arabic,
       ),
       SettingsButton(
         onTap: () {

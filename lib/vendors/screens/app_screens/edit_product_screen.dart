@@ -73,10 +73,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
               if (value == 'delete') {
                 final confirmed = await showCustomDialog(
                   context,
-                  title: 'Delete Product',
-                  content: 'This will delete the product. Are you sure?',
-                  confirmText: 'Delete',
-                  cancelText: 'Cancel',
+                  title: l10.deleteProduct,
+                  content: l10.deleteProductConfirmation,
+                  confirmText: l10.delete,
+                  cancelText: l10.cancel,
                   onConfirmAsync: () async {
                     await context.read<LoggedVendorProvider>().deleteProduct(
                       widget.productId,
@@ -89,14 +89,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 }
               }
             },
-            itemBuilder: (context) => const [
+            itemBuilder: (context) => [
               PopupMenuItem(
                 value: 'delete',
                 child: Row(
                   children: [
                     Icon(Icons.delete_outline, color: Colors.red),
                     SizedBox(width: 8),
-                    Text('Delete Product', style: TextStyle(color: Colors.red)),
+                    Text(l10.deleteProduct, style: TextStyle(color: Colors.red)),
                   ],
                 ),
               ),
@@ -117,7 +117,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   Icon(Icons.check_circle, color: Colors.green, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    'Available',
+                    l10.available,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -127,10 +127,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ),
 
               Text(
-                'Customers can view and order this product during store hours',
+                l10.productAvailabilityInfo,
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
-              OutlinedBtn(onPressed: () {}, title: 'Mark as Unavailable Today'),
+              OutlinedBtn(onPressed: () {}, title: l10.markUnavailableToday),
               Divider(thickness: 4, color: colors.surfaceContainer),
 
               ValueListenableBuilder<File?>(
@@ -141,7 +141,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     children: [
                       Expanded(
                         child: LabeledTextField(
-                          label: 'Name',
+                          label: l10.name,
                           value: productName,
                           onChanged: (val) {
                             setState(() {
@@ -189,8 +189,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   Expanded(
                     flex: 2,
                     child: LabeledTextField(
-                      label: 'Dinars',
-                      value: dinars,
+                      label: l10.dinars,
+                      hint: '0',
                       keyboardType: TextInputType.number,
                       onChanged: (val) => dinars = val.trim(),
                     ),
@@ -209,7 +209,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
                   Expanded(
                     child: LabeledTextField(
-                      label: 'Cents',
+                      label: l10.cents,
                       value: cents,
                       keyboardType: TextInputType.number,
                       onChanged: (val) => cents = val.trim(),
@@ -219,7 +219,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ),
 
               LabeledTextField(
-                label: 'Description',
+                label: l10.description,
                 value: productDescription,
                 maxLines: 4,
                 onChanged: (val) => productDescription = val.trim(),
@@ -229,7 +229,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 spacing: 0,
                 children: [
                   FilledBtn(
-                    title: 'Save Changes',
+                    title: l10.saveChanges,
                     isLoading: provider.isLoading,
                     onPressed: provider.isLoading
                         ? () {}

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 
 class EditStoreScreen extends StatefulWidget {
   const EditStoreScreen({super.key});
@@ -64,6 +65,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
     final store = provider.storeForm;
 
     if (store == null) {
@@ -71,7 +73,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Store')),
+      appBar: AppBar(title: Text(l10.editStore)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -79,9 +81,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
           children: [
             Row(
               children: [
-                const Text(
-                  'Banner',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                Text(
+                  l10.banner,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
 
                 const Spacer(),
@@ -109,11 +111,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       source: ImageSource.gallery,
                     );
                     if (picked != null) {
-                      provider.bannerFile = File(picked.path);
-                      provider.notifyListeners();
+                      provider.setBannerFile(File(picked.path));
                     }
                   },
-                  title: 'Change',
+                  title: l10.change,
                 ),
               ],
             ),
@@ -122,9 +123,9 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
             Row(
               children: [
-                const Text(
-                  'Logo',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                Text(
+                  l10.logo,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
 
                 const Spacer(),
@@ -152,11 +153,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                       source: ImageSource.gallery,
                     );
                     if (picked != null) {
-                      provider.logoFile = File(picked.path);
-                      provider.notifyListeners();
+                      provider.setLogoFile(File(picked.path));
                     }
                   },
-                  title: 'Change',
+                  title: l10.change,
                 ),
               ],
             ),
@@ -164,8 +164,20 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             const SizedBox(height: 24),
 
             /////////////////////////////////////////////
+            // Store name (Arabic)
             LabeledTextField(
-              label: 'Store Name',
+              label: l10.storeNameArabic,
+              value: store.name_ar,
+              onChanged: (val) {
+                provider.updateStoreForm(nameAr: val.trim());
+              },
+            ),
+
+            const SizedBox(height: 16),
+
+            // Store name (English)
+            LabeledTextField(
+              label: l10.storeName,
               value: store.name,
               onChanged: (val) {
                 provider.updateStoreForm(name: val.trim());
@@ -178,7 +190,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Icon(Icons.local_offer_outlined, color: colors.primary),
-              title: const Text('Store Tags'),
+              title: Text(l10.storeTags),
               trailing: Icon(
                 showTagsSelector
                     ? Icons.keyboard_arrow_up
@@ -239,7 +251,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
             const SizedBox(height: 32),
 
             FilledBtn(
-              title: 'Save Changes',
+              title: l10.saveChanges,
               isLoading: provider.isLoading,
               onPressed: provider.isLoading
                   ? () {}

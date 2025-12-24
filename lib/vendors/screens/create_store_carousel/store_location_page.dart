@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import '../../providers/logged_vendor_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -18,7 +19,8 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
   LatLng? pickedLocation;
   GoogleMapController? _mapController;
 
-  Future<String> _getAddressFromLatLng(LatLng latLng) async {
+  Future<String> _getAddressFromLatLng(BuildContext context, LatLng latLng) async {
+    final l10 = AppLocalizations.of(context);
     try {
       final placemarks = await placemarkFromCoordinates(
         latLng.latitude,
@@ -29,7 +31,7 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
         return "${p.subLocality}, ${p.locality}";
       }
     } catch (_) {}
-    return "Unknown area";
+    return l10.unknownArea;
   }
 
   Future<void> _goToCurrentLocation() async {
@@ -39,7 +41,7 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
     setState(() => pickedLocation = latLng);
 
     final provider = context.read<LoggedVendorProvider>();
-    final area = await _getAddressFromLatLng(latLng);
+    final area = await _getAddressFromLatLng(context, latLng);
 
     provider.updateStoreForm(
       latitude: latLng.latitude,
@@ -54,6 +56,7 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final provider = context.watch<LoggedVendorProvider>();
+    final l10 = AppLocalizations.of(context);
     final storeForm = provider.storeForm;
 
     if (storeForm == null) return const SizedBox();
@@ -84,7 +87,7 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
                   zoomControlsEnabled: false,
                   onCameraMove: (pos) async {
                     pickedLocation = pos.target;
-                    final area = await _getAddressFromLatLng(pos.target);
+                    final area = await _getAddressFromLatLng(context, pos.target);
 
                     provider.updateStoreForm(
                       latitude: pos.target.latitude,
@@ -97,7 +100,7 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: FilledBtn(
-                  title: 'Confirm store location',
+                  title: l10.confirmStoreLocation,
                   innerVerticalPadding: 18,
                   horizontalPadding: 10,
                   onPressed: () {},
