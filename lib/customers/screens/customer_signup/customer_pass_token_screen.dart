@@ -54,7 +54,7 @@ class _CustomerPassTokenScreenState extends State<CustomerPassTokenScreen> {
           context,
           title: l10.verification,
           content: l10.cancelVerificationQuestion,
-          confirmText: l10.cancel, 
+          confirmText: l10.cancel,
           cancelText: l10.stay,
           onConfirmAsync: () async => Navigator.of(context).pop(),
         );

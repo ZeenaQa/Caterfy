@@ -65,48 +65,45 @@ class _EditProductScreenState extends State<EditProductScreen> {
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-     appBar: CustomAppBar(
-  title: productName,
-  actions: [
-    PopupMenuButton<String>(
-      onSelected: (value) async {
-        if (value == 'delete') {
-          final confirmed = await showCustomDialog(
-            context,
-            title: 'Delete Product',
-            content: 'This will delete the product. Are you sure?',
-            confirmText: 'Delete',
-            cancelText: 'Cancel',
-            onConfirmAsync: () async {
-              await context
-                  .read<LoggedVendorProvider>()
-                  .deleteProduct(widget.productId);
-            },
-          );
+      appBar: CustomAppBar(
+        title: productName,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'delete') {
+                final confirmed = await showCustomDialog(
+                  context,
+                  title: 'Delete Product',
+                  content: 'This will delete the product. Are you sure?',
+                  confirmText: 'Delete',
+                  cancelText: 'Cancel',
+                  onConfirmAsync: () async {
+                    await context.read<LoggedVendorProvider>().deleteProduct(
+                      widget.productId,
+                    );
+                  },
+                );
 
-          if (confirmed == true && context.mounted) {
-            Navigator.pop(context);
-          }
-        }
-      },
-      itemBuilder: (context) => const [
-        PopupMenuItem(
-          value: 'delete',
-          child: Row(
-            children: [
-              Icon(Icons.delete_outline, color: Colors.red),
-              SizedBox(width: 8),
-              Text(
-                'Delete Product',
-                style: TextStyle(color: Colors.red),
+                if (confirmed == true && context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outline, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Delete Product', style: TextStyle(color: Colors.red)),
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-      ],
-    ),
-  ],
-),
+        ],
+      ),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -115,14 +112,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             spacing: 20,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-           
               Row(
                 children: [
-                        Icon(Icons.check_circle,
-                      color: Colors.green, size: 20),
+                  Icon(Icons.check_circle, color: Colors.green, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                   'Available',
+                    'Available',
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -131,16 +126,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ],
               ),
 
-                 Text(
-                    'Customers can view and order this product during store hours',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-              OutlinedBtn(
-                onPressed: () {},
-                 title: 'Mark as Unavailable Today',
-               
+              Text(
+                'Customers can view and order this product during store hours',
+                style: TextStyle(fontWeight: FontWeight.w500),
               ),
-               Divider(thickness:4,color: colors.surfaceContainer,),
+              OutlinedBtn(onPressed: () {}, title: 'Mark as Unavailable Today'),
+              Divider(thickness: 4, color: colors.surfaceContainer),
 
               ValueListenableBuilder<File?>(
                 valueListenable: imageNotifier,
@@ -162,12 +153,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       const SizedBox(width: 16),
                       GestureDetector(
                         onTap: () async {
-                          final picked = await ImagePicker()
-                              .pickImage(
-                                  source: ImageSource.gallery);
+                          final picked = await ImagePicker().pickImage(
+                            source: ImageSource.gallery,
+                          );
                           if (picked != null) {
-                            imageNotifier.value =
-                                File(picked.path);
+                            imageNotifier.value = File(picked.path);
                           }
                         },
                         child: ClipRRect(
@@ -192,8 +182,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
               ),
 
-          
-
               Row(
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -207,7 +195,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onChanged: (val) => dinars = val.trim(),
                     ),
                   ),
-         
+
                   const Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
@@ -218,7 +206,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       ),
                     ),
                   ),
-               
+
                   Expanded(
                     child: LabeledTextField(
                       label: 'Cents',
@@ -234,42 +222,37 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 label: 'Description',
                 value: productDescription,
                 maxLines: 4,
-                onChanged: (val) =>
-                    productDescription = val.trim(),
+                onChanged: (val) => productDescription = val.trim(),
               ),
 
-         Column(
-  spacing: 0,
-  children: [
-    FilledBtn(
-      title: 'Save Changes',
-      isLoading: provider.isLoading,
-      onPressed: provider.isLoading
-          ? () {}
-          : () async {
-              final price = double.parse(
-                '${dinars.isEmpty ? '0' : dinars}.${cents.isEmpty ? '00' : cents.padRight(2, '0')}',
-              );
+              Column(
+                spacing: 0,
+                children: [
+                  FilledBtn(
+                    title: 'Save Changes',
+                    isLoading: provider.isLoading,
+                    onPressed: provider.isLoading
+                        ? () {}
+                        : () async {
+                            final price = double.parse(
+                              '${dinars.isEmpty ? '0' : dinars}.${cents.isEmpty ? '00' : cents.padRight(2, '0')}',
+                            );
 
-              await provider.updateProductData(
-                productId: widget.productId,
-                name: productName,
-                description: productDescription,
-                price: price,
-                imageFile: imageNotifier.value,
-              );
+                            await provider.updateProductData(
+                              productId: widget.productId,
+                              name: productName,
+                              description: productDescription,
+                              price: price,
+                              imageFile: imageNotifier.value,
+                            );
 
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            },
-    ),
-
-   
-  ],
-),
-
-
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                  ),
+                ],
+              ),
             ],
           ),
         ),

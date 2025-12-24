@@ -96,34 +96,33 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                   child: FilledBtn(
                     title: currentPage == 3 ? "Continue" : "Next",
                     isLoading: provider.isLoading,
-                   onPressed: () async {
- 
-  if (currentPage == 1) {
-    provider.showStoreInfoErrors = true;
-    provider.notifyListeners();
+                    onPressed: () async {
+                      if (currentPage == 1) {
+                        provider.showStoreInfoErrors = true;
+                        provider.notifyListeners();
 
-    if (!provider.isStoreInfoValid) return;
-  }
+                        if (!provider.isStoreInfoValid) return;
+                      }
 
-  if (currentPage == 3) {
-    final success = await provider.createStore();
+                      if (currentPage == 3) {
+                        final success = await provider.createStore();
 
-    if (success && context.mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const VendorStoreSection(),
-        ),
-      );
-    }
-    return;
-  }
+                        if (success && context.mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const VendorStoreSection(),
+                            ),
+                          );
+                        }
+                        return;
+                      }
 
-  _controller.nextPage(
-    duration: const Duration(milliseconds: 300),
-    curve: Curves.easeInOut,
-  );
-},
+                      _controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
                   ),
                 ),
               ],

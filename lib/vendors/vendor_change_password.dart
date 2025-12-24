@@ -1,8 +1,8 @@
-import 'package:caterfy/customers/providers/customer_auth_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,8 +21,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool _isSaving = false;
 
   Future<void> _changePassword() async {
-    final auth = Provider.of<CustomerAuthProvider>(context, listen: false);
-    final user = Supabase.instance.client.auth.currentUser;
+    final auth = Provider.of<VendorAuthProvider>(context, listen: false);
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser;
     if (user == null) return;
 
     auth.clearPassError();
@@ -45,15 +46,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     setState(() => _isSaving = true);
 
     try {
-      await Supabase.instance.client.auth.updateUser(
-        UserAttributes(password: newPassword),
+      await supabase.auth.signInWithPassword(
+        email: user.email!,
+        password: currentPassword,
       );
+
+      await supabase.auth.updateUser(UserAttributes(password: newPassword));
 
       if (context.mounted) {
         Navigator.pop(context);
       }
     } catch (e) {
-      auth.passwordError = "Error updating password";
+      auth.passwordError = "Current password is incorrect";
       setState(() {});
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -62,7 +66,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<CustomerAuthProvider>(context);
+    final auth = Provider.of<VendorAuthProvider>(context);
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'Change Password'),

@@ -38,10 +38,7 @@ class CustomerAccountSection extends StatelessWidget {
           ),
         ),
       ),
-      AccountButton(
-        title: l10.vouchers,
-        icon: Icons.wallet_giftcard_outlined,
-      ),
+      AccountButton(title: l10.vouchers, icon: Icons.wallet_giftcard_outlined),
       AccountButton(
         title: l10.favorites,
         icon: Icons.favorite_border,

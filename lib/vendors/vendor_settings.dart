@@ -1,5 +1,4 @@
-import 'package:caterfy/customers/providers/customer_auth_provider.dart';
-import 'package:caterfy/customers/screens/customer_settings/account_info.dart';
+
 import 'package:caterfy/customers/screens/customer_settings/change_password.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -9,14 +8,14 @@ import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/drawer_button.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
-
 import 'package:caterfy/util/theme_controller.dart';
+import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class CustomerSettingsScreen extends StatelessWidget {
-  const CustomerSettingsScreen({super.key});
+class VendorSettingsScreen extends StatelessWidget {
+  const VendorSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +25,17 @@ class CustomerSettingsScreen extends StatelessWidget {
     final themeController = context.watch<ThemeController>();
     final isDark = themeController.themeMode == ThemeMode.dark;
 
-    final customerAuth = Provider.of<CustomerAuthProvider>(context);
+    final VendorAuth = Provider.of<VendorAuthProvider>(context);
 
     Future<void> handleLogout() async {
-      customerAuth.isLoading = true;
-      customerAuth.notifyLis();
-
+      VendorAuth.isLoading = true;
+      VendorAuth.notifyListeners();
       try {
         await Future.delayed(Duration(milliseconds: 500));
         await Supabase.instance.client.auth.signOut();
       } finally {
-        customerAuth.isLoading = false;
-        customerAuth.notifyLis();
+        VendorAuth.isLoading = false;
+        VendorAuth.notifyListeners();
       }
     }
 
@@ -46,20 +44,7 @@ class CustomerSettingsScreen extends StatelessWidget {
 
     final List<Widget> items = [
       SizedBox(height: 10),
-      SettingsButton(
-        title: l10.accountInfo,
-        icon: Icons.person_outline,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AccountInfo()),
-          );
-        },
-      ),
-      SettingsButton(
-        title: l10.savedAddresses,
-        icon: Icons.location_on_outlined,
-      ),
+
       if (isEmailUser) ...[
         SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
         SettingsButton(

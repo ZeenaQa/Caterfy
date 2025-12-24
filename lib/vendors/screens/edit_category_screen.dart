@@ -51,87 +51,79 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-     appBar: CustomAppBar(
-  title: 'Edit Category',
-  actions: [
-    PopupMenuButton<String>(
-      onSelected: (value) async {
-        if (value == 'delete') {
-          final confirmed = await showCustomDialog(
-            context,
-            title: 'Delete Category',
-            content:
-                'This will delete the category and all its products. Are you sure?',
-            confirmText: 'Delete',
-            cancelText: 'Cancel',
-            onConfirmAsync: () async {
-              await context
-                  .read<LoggedVendorProvider>()
-                  .deleteCategory(widget.categoryId);
-            },
-          );
+      appBar: CustomAppBar(
+        title: 'Edit Category',
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'delete') {
+                final confirmed = await showCustomDialog(
+                  context,
+                  title: 'Delete Category',
+                  content:
+                      'This will delete the category and all its products. Are you sure?',
+                  confirmText: 'Delete',
+                  cancelText: 'Cancel',
+                  onConfirmAsync: () async {
+                    await context.read<LoggedVendorProvider>().deleteCategory(
+                      widget.categoryId,
+                    );
+                  },
+                );
 
-          if (confirmed == true && context.mounted) {
-            Navigator.pop(context);
-          }
-        }
-      },
-      itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'delete',
-          child: Row(
-            children: [
-              Icon(Icons.delete_outline, color: Colors.red),
-              SizedBox(width: 8),
-              Text(
-                'Delete Category',
-                style: TextStyle(color: Colors.red),
+                if (confirmed == true && context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outline, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text(
+                      'Delete Category',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-      ],
-    ),
-  ],
-),
+        ],
+      ),
 
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
-           
             children: [
-  
-
-             
               LabeledTextField(
-              label: 'Category name',
-              value: categoryName,
-               onChanged: (val) => categoryName = val.trim(),
+                label: 'Category name',
+                value: categoryName,
+                onChanged: (val) => categoryName = val.trim(),
               ),
 
               const SizedBox(height: 24),
-             
 
-            ListTile(
-  leading: Icon(Icons.add_box_outlined, color: colors.primary),
-  title: Text(
-   'Add Product',
-  ),
-  trailing: Icon(
-    showAddProductForm
-        ? Icons.keyboard_arrow_up
-        : Icons.keyboard_arrow_down,
-    color: colors.onSurfaceVariant,
-  ),
-  onTap: () {
-    setState(() {
-      showAddProductForm = !showAddProductForm;
-    });
-  },
-),
+              ListTile(
+                leading: Icon(Icons.add_box_outlined, color: colors.primary),
+                title: Text('Add Product'),
+                trailing: Icon(
+                  showAddProductForm
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: colors.onSurfaceVariant,
+                ),
+                onTap: () {
+                  setState(() {
+                    showAddProductForm = !showAddProductForm;
+                  });
+                },
+              ),
 
-   
               if (showAddProductForm) ...[
                 const SizedBox(height: 16),
 
@@ -147,13 +139,11 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                   label: 'Description',
                   hint: 'Product description',
                   maxLines: 4,
-                  onChanged: (val) =>
-                      productDescription = val.trim(),
+                  onChanged: (val) => productDescription = val.trim(),
                 ),
 
                 const SizedBox(height: 16),
 
-             
                 Row(
                   spacing: 10,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -164,11 +154,10 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         label: 'Dinars',
                         hint: '0',
                         keyboardType: TextInputType.number,
-                        onChanged: (val) =>
-                            productDinars = val.trim(),
+                        onChanged: (val) => productDinars = val.trim(),
                       ),
                     ),
-                 
+
                     const Padding(
                       padding: EdgeInsets.only(top: 14),
                       child: Text(
@@ -179,14 +168,13 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         ),
                       ),
                     ),
-                  
+
                     Expanded(
                       child: LabeledTextField(
                         label: 'Cents',
                         hint: '00',
                         keyboardType: TextInputType.number,
-                        onChanged: (val) =>
-                            productCents = val.trim(),
+                        onChanged: (val) => productCents = val.trim(),
                       ),
                     ),
                   ],
@@ -199,8 +187,9 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                   builder: (context, image, _) {
                     return GestureDetector(
                       onTap: () async {
-                        final picked = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
+                        final picked = await ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        );
                         if (picked != null) {
                           imageNotifier.value = File(picked.path);
                         }
@@ -216,10 +205,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                             ? const Icon(Icons.camera_alt, size: 40)
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  image,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: Image.file(image, fit: BoxFit.cover),
                               ),
                       ),
                     );
@@ -235,9 +221,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                 onPressed: provider.isLoading
                     ? () {}
                     : () async {
-                    
-                        if (categoryName.trim() !=
-                            widget.categoryName) {
+                        if (categoryName.trim() != widget.categoryName) {
                           await provider.updateCategory(
                             categoryId: widget.categoryId,
                             newName: categoryName.trim(),
@@ -251,10 +235,12 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                             return;
                           }
 
-                          final dinars =
-                              productDinars.isEmpty ? '0' : productDinars;
-                          final cents =
-                              productCents.isEmpty ? '0' : productCents;
+                          final dinars = productDinars.isEmpty
+                              ? '0'
+                              : productDinars;
+                          final cents = productCents.isEmpty
+                              ? '0'
+                              : productCents;
 
                           final price = double.parse(
                             '$dinars.${cents.padRight(2, '0')}',
@@ -274,7 +260,6 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         }
                       },
               ),
-      
             ],
           ),
         ),

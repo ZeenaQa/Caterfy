@@ -118,7 +118,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
 }
 
 // USAGE EXAMPLE:
-// 
+//
 // RollingQuantitySelector(
 //   initialValue: 1,
 //   minValue: 0,

@@ -19,20 +19,43 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   bool showTagsSelector = false;
 
   final List<String> availableTags = const [
-    "Pizza","Burger","Desserts","Drinks","Coffee","Bakery",
-    "Fast Food","Healthy Food","Grocery","Supermarket",
-    "Mini Market","Fruits & Vegetables","Butcher","Dairy",
-    "Cleaning","Laundry","Maintenance","Delivery","Car Wash",
-    "Printing","Computers","Mobile Phones","Electronics",
-    "Accessories","Repair","Clothes","Shoes","Gifts",
-    "Flowers","Pharmacy","Beauty",
+    "Pizza",
+    "Burger",
+    "Desserts",
+    "Drinks",
+    "Coffee",
+    "Bakery",
+    "Fast Food",
+    "Healthy Food",
+    "Grocery",
+    "Supermarket",
+    "Mini Market",
+    "Fruits & Vegetables",
+    "Butcher",
+    "Dairy",
+    "Cleaning",
+    "Laundry",
+    "Maintenance",
+    "Delivery",
+    "Car Wash",
+    "Printing",
+    "Computers",
+    "Mobile Phones",
+    "Electronics",
+    "Accessories",
+    "Repair",
+    "Clothes",
+    "Shoes",
+    "Gifts",
+    "Flowers",
+    "Pharmacy",
+    "Beauty",
   ];
 
   @override
   void initState() {
     super.initState();
-    final provider =
-        Provider.of<LoggedVendorProvider>(context, listen: false);
+    final provider = Provider.of<LoggedVendorProvider>(context, listen: false);
 
     provider.storeForm = provider.store;
   }
@@ -44,9 +67,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
     final store = provider.storeForm;
 
     if (store == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -56,94 +77,93 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-        
-Row(
-  children: [
-    const Text(
-      'Banner',
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-    ),
+            Row(
+              children: [
+                const Text(
+                  'Banner',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
 
-    const Spacer(),
+                const Spacer(),
 
-    /// ===== FILE NAME =====
-    if (provider.bannerFile != null)
-      SizedBox(
-        width: 120,
-        child: Text(
-          provider.bannerFile!.path.split('/').last,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12,
-            color: colors.onSurfaceVariant,
-          ),
-        ),
-      ),
+                /// ===== FILE NAME =====
+                if (provider.bannerFile != null)
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      provider.bannerFile!.path.split('/').last,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
 
-    const SizedBox(width: 8),
+                const SizedBox(width: 8),
 
-    OutlinedBtn(
-      onPressed: () async {
-        final picked =
-            await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (picked != null) {
-          provider.bannerFile = File(picked.path);
-          provider.notifyListeners();
-        }
-      },
-      title: 'Change',
-    ),
-  ],
-),
+                OutlinedBtn(
+                  onPressed: () async {
+                    final picked = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (picked != null) {
+                      provider.bannerFile = File(picked.path);
+                      provider.notifyListeners();
+                    }
+                  },
+                  title: 'Change',
+                ),
+              ],
+            ),
 
+            const SizedBox(height: 16),
 
-const SizedBox(height: 16),
+            Row(
+              children: [
+                const Text(
+                  'Logo',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
 
-Row(
-  children: [
-    const Text(
-      'Logo',
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-    ),
+                const Spacer(),
 
-    const Spacer(),
+                /// ===== FILE NAME  =====
+                if (provider.logoFile != null)
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      provider.logoFile!.path.split('/').last,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
 
-    /// ===== FILE NAME  =====
-    if (provider.logoFile != null)
-      SizedBox(
-        width: 120,
-        child: Text(
-          provider.logoFile!.path.split('/').last,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12,
-            color: colors.onSurfaceVariant,
-          ),
-        ),
-      ),
+                const SizedBox(width: 8),
 
-    const SizedBox(width: 8),
-
-    OutlinedBtn(
-      onPressed: () async {
-        final picked =
-            await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (picked != null) {
-          provider.logoFile = File(picked.path);
-          provider.notifyListeners();
-        }
-      },
-      title: 'Change',
-    ),
-  ],
-),
-
+                OutlinedBtn(
+                  onPressed: () async {
+                    final picked = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (picked != null) {
+                      provider.logoFile = File(picked.path);
+                      provider.notifyListeners();
+                    }
+                  },
+                  title: 'Change',
+                ),
+              ],
+            ),
 
             const SizedBox(height: 24),
 
-           /////////////////////////////////////////////
+            /////////////////////////////////////////////
             LabeledTextField(
               label: 'Store Name',
               value: store.name,
@@ -154,11 +174,10 @@ Row(
 
             const SizedBox(height: 24),
 
-          //////////////////////////////////////////
+            //////////////////////////////////////////
             ListTile(
               contentPadding: EdgeInsets.zero,
-              leading:
-                  Icon(Icons.local_offer_outlined, color: colors.primary),
+              leading: Icon(Icons.local_offer_outlined, color: colors.primary),
               title: const Text('Store Tags'),
               trailing: Icon(
                 showTagsSelector
@@ -179,17 +198,17 @@ Row(
                 spacing: 8,
                 runSpacing: 8,
                 children: availableTags.map((tag) {
-                  final selected =
-                      (store.tags ?? []).contains(tag);
+                  final selected = (store.tags ?? []).contains(tag);
 
                   return FilterChip(
                     label: Text(tag),
                     selected: selected,
                     showCheckmark: false,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
-                    materialTapTargetSize:
-                        MaterialTapTargetSize.shrinkWrap,
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     selectedColor: colors.primaryContainer,
                     backgroundColor: colors.surface,
                     labelStyle: TextStyle(
@@ -199,13 +218,10 @@ Row(
                       fontWeight: FontWeight.w500,
                     ),
                     side: BorderSide(
-                      color: selected
-                          ? colors.primary
-                          : colors.outline,
+                      color: selected ? colors.primary : colors.outline,
                     ),
                     onSelected: (value) {
-                      final newTags =
-                          List<String>.from(store.tags ?? []);
+                      final newTags = List<String>.from(store.tags ?? []);
 
                       if (value) {
                         newTags.add(tag);
@@ -222,21 +238,19 @@ Row(
 
             const SizedBox(height: 32),
 
-           
-           FilledBtn(
-  title: 'Save Changes',
-  isLoading: provider.isLoading,
-  onPressed: provider.isLoading
-      ? () {}
-      : () async {
-          final success = await provider.updateStore();
+            FilledBtn(
+              title: 'Save Changes',
+              isLoading: provider.isLoading,
+              onPressed: provider.isLoading
+                  ? () {}
+                  : () async {
+                      final success = await provider.updateStore();
 
-          if (success && context.mounted) {
-            Navigator.pop(context);
-          }
-        },
-),
-
+                      if (success && context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    },
+            ),
           ],
         ),
       ),

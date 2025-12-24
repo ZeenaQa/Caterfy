@@ -49,7 +49,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         final placemark = placemarks.first;
         print("${placemark.subLocality}, ${placemark.locality}, ");
         return "${placemark.subLocality}, ${placemark.locality}, ";
-        
       }
     } catch (_) {}
     return "Unknown location";

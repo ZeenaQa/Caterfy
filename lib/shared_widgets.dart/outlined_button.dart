@@ -44,13 +44,15 @@ class OutlinedBtn extends StatelessWidget {
         right: rightPadding ?? 0,
       ),
       child: SizedBox(
-        
         child: OutlinedButton(
           style: ElevatedButton.styleFrom(
             elevation: 0,
             minimumSize: Size.zero,
-            padding: EdgeInsets.symmetric(vertical: innerVerticalPadding, horizontal: innerHorizontalPadding),
-        
+            padding: EdgeInsets.symmetric(
+              vertical: innerVerticalPadding,
+              horizontal: innerHorizontalPadding,
+            ),
+
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),

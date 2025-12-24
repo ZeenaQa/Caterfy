@@ -14,7 +14,6 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
   final int? maxLines;
 
-
   const CustomTextField({
     super.key,
     this.value,
@@ -24,8 +23,8 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
     this.onChanged,
     this.errorText,
-    this.readOnly = false, 
-     this.maxLines=1,
+    this.readOnly = false,
+    this.maxLines = 1,
   });
 
   @override
@@ -33,18 +32,18 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       style: const TextStyle(fontSize: 15),
       controller: value != null
-    ? TextEditingController.fromValue(
-        TextEditingValue(
-          text: value!,
-          selection: TextSelection.collapsed(offset: value!.length),
-        ),
-      )
-    : null,
+          ? TextEditingController.fromValue(
+              TextEditingValue(
+                text: value!,
+                selection: TextSelection.collapsed(offset: value!.length),
+              ),
+            )
+          : null,
 
       obscureText: obscureText,
       keyboardType: keyboardType,
       readOnly: readOnly,
-       maxLines: maxLines,
+      maxLines: maxLines,
       enableInteractiveSelection: !readOnly,
       onChanged: readOnly ? null : onChanged,
       focusNode: readOnly ? AlwaysDisabledFocusNode() : null,
@@ -190,7 +189,7 @@ class LabeledTextField extends StatelessWidget {
         CustomTextField(
           value: value,
           hint: hint,
-           maxLines: maxLines,
+          maxLines: maxLines,
           errorText: errorText,
           readOnly: readOnly,
           onChanged: readOnly ? null : (value) => onChanged(value),

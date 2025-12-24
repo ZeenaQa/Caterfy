@@ -69,7 +69,8 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
                     _mapController = controller;
                   },
                   initialCameraPosition: CameraPosition(
-                    target: pickedLocation ??
+                    target:
+                        pickedLocation ??
                         LatLng(
                           storeForm.latitude == 0
                               ? 31.9539
@@ -83,8 +84,7 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
                   zoomControlsEnabled: false,
                   onCameraMove: (pos) async {
                     pickedLocation = pos.target;
-                    final area =
-                        await _getAddressFromLatLng(pos.target);
+                    final area = await _getAddressFromLatLng(pos.target);
 
                     provider.updateStoreForm(
                       latitude: pos.target.latitude,

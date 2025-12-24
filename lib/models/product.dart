@@ -29,7 +29,7 @@ class Product {
       price: (map['price'] as num).toDouble(),
       imageUrl: map['image_url'],
       subCategoryId: map['sub_category_id'],
-    subCategory: map['sub_categories'] ?? '',
+      subCategory: map['sub_categories'] ?? '',
     );
   }
 

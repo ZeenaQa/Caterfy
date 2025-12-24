@@ -33,10 +33,7 @@ class StoreInfoPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Store Info',
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+          Text('Store Info', style: Theme.of(context).textTheme.labelMedium),
           const SizedBox(height: 20),
 
           /// ===== STORE NAME (AR) =====
@@ -44,8 +41,7 @@ class StoreInfoPage extends StatelessWidget {
             label: 'Store Name (Arabic)',
             hint: 'اكتب اسم المتجر بالعربية',
             value: storeForm.name_ar,
-            errorText: provider.showStoreInfoErrors &&
-                    storeForm.name_ar.isEmpty
+            errorText: provider.showStoreInfoErrors && storeForm.name_ar.isEmpty
                 ? 'Required'
                 : null,
             onChanged: (val) {
@@ -61,8 +57,7 @@ class StoreInfoPage extends StatelessWidget {
             label: 'Store Name (English)',
             hint: 'Write store name in English',
             value: storeForm.name,
-            errorText: provider.showStoreInfoErrors &&
-                    storeForm.name.isEmpty
+            errorText: provider.showStoreInfoErrors && storeForm.name.isEmpty
                 ? 'Required'
                 : null,
             onChanged: (val) {
@@ -75,12 +70,11 @@ class StoreInfoPage extends StatelessWidget {
 
           /// ===== CATEGORY =====
           DropdownButtonFormField<String>(
-            value:
-                storeForm.category.isEmpty ? null : storeForm.category,
+            value: storeForm.category.isEmpty ? null : storeForm.category,
             decoration: InputDecoration(
               labelText: 'Category',
-              errorText: provider.showStoreInfoErrors &&
-                      storeForm.category.isEmpty
+              errorText:
+                  provider.showStoreInfoErrors && storeForm.category.isEmpty
                   ? 'Required'
                   : null,
               border: OutlineInputBorder(
@@ -88,12 +82,7 @@ class StoreInfoPage extends StatelessWidget {
               ),
             ),
             items: categories
-                .map(
-                  (cat) => DropdownMenuItem(
-                    value: cat,
-                    child: Text(cat),
-                  ),
-                )
+                .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
                 .toList(),
             onChanged: (val) {
               provider.updateStoreForm(category: val);
