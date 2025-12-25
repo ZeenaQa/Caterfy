@@ -872,11 +872,383 @@ abstract class AppLocalizations {
   /// **'Removed from your favorites'**
   String get unfavoriteText;
 
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @noStoreYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You don’t have a store yet. Let\'s create one!'**
+  String get noStoreYet;
+
+  /// No description provided for @createStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Store'**
+  String get createStore;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @categoryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name'**
+  String get categoryName;
+
+  /// No description provided for @categoryNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name (English)'**
+  String get categoryNameEnglish;
+
+  /// No description provided for @enterCategoryNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter category name in English'**
+  String get enterCategoryNameEnglish;
+
+  /// No description provided for @categoryNameArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Category name (Arabic)'**
+  String get categoryNameArabic;
+
+  /// No description provided for @enterCategoryNameArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter category name in Arabic'**
+  String get enterCategoryNameArabic;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @items.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get items;
+
+  /// No description provided for @noProductsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No products yet'**
+  String get noProductsYet;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @editStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Store'**
+  String get editStore;
+
+  /// No description provided for @storeTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Tags'**
+  String get storeTags;
+
+  /// No description provided for @change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get change;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @deleteProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Product'**
+  String get deleteProduct;
+
+  /// No description provided for @markUnavailableToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Unavailable Today'**
+  String get markUnavailableToday;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @editCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
+
+  /// No description provided for @deleteCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Category'**
+  String get deleteCategory;
+
+  /// No description provided for @addProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Product'**
+  String get addProduct;
+
+  /// No description provided for @confirmStoreLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm store location'**
+  String get confirmStoreLocation;
+
+  /// No description provided for @unknownArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown area'**
+  String get unknownArea;
+
+  /// No description provided for @storeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Store location'**
+  String get storeLocation;
+
+  /// No description provided for @arabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get arabic;
+
+  /// No description provided for @storeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Info'**
+  String get storeInfo;
+
+  /// No description provided for @storeNameArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Name (Arabic)'**
+  String get storeNameArabic;
+
+  /// No description provided for @storeNameArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write store name in Arabic'**
+  String get storeNameArabicHint;
+
+  /// No description provided for @storeNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Name (English)'**
+  String get storeNameEnglish;
+
+  /// No description provided for @storeNameEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write store name in English'**
+  String get storeNameEnglishHint;
+
+  /// No description provided for @banner.
+  ///
+  /// In en, this message translates to:
+  /// **'Banner'**
+  String get banner;
+
+  /// No description provided for @logo.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo'**
+  String get logo;
+
+  /// No description provided for @storeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Name'**
+  String get storeName;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteProductConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete the product. Are you sure?'**
+  String get deleteProductConfirmation;
+
+  /// No description provided for @deleteCategoryConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete the category and all its products. Are you sure?'**
+  String get deleteCategoryConfirmation;
+
+  /// No description provided for @available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available;
+
+  /// No description provided for @productAvailabilityInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers can view and order this product during store hours'**
+  String get productAvailabilityInfo;
+
+  /// No description provided for @productName.
+  ///
+  /// In en, this message translates to:
+  /// **'Product name'**
+  String get productName;
+
+  /// No description provided for @productNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Product name'**
+  String get productNameHint;
+
+  /// No description provided for @dinars.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinars'**
+  String get dinars;
+
+  /// No description provided for @cents.
+  ///
+  /// In en, this message translates to:
+  /// **'Cents'**
+  String get cents;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPassword;
+
+  /// No description provided for @enterCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter current password'**
+  String get enterCurrentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter new password'**
+  String get enterNewPassword;
+
+  /// No description provided for @confirmPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get confirmPasswordHint;
+
+  /// No description provided for @currentPasswordIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password is incorrect'**
+  String get currentPasswordIncorrect;
+
+  /// No description provided for @tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tags;
+
+  /// No description provided for @chooseStoreTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose store tags'**
+  String get chooseStoreTags;
+
+  /// No description provided for @brandAndBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand & Banner'**
+  String get brandAndBanner;
+
+  /// No description provided for @uploadLogoBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your store logo and banner'**
+  String get uploadLogoBanner;
+
   /// No description provided for @viewAll.
   ///
   /// In en, this message translates to:
   /// **'View all'**
   String get viewAll;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @storeStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Status'**
+  String get storeStatus;
+
+  /// No description provided for @opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened'**
+  String get opened;
+
+  /// No description provided for @closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get closed;
 
   /// No description provided for @store.
   ///

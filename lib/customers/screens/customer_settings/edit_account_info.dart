@@ -18,7 +18,7 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
   String name = '';
   String email = '';
   bool _isSaving = false;
-      late final l10 = AppLocalizations.of(context);
+  late final l10 = AppLocalizations.of(context);
 
   @override
   void initState() {
@@ -39,11 +39,9 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
     setState(() => _isSaving = true);
 
     try {
-   
       await Supabase.instance.client.auth.updateUser(
         UserAttributes(data: {'name': name}),
       );
-
 
       if (user.email != null && email != user.email) {
         await Supabase.instance.client.auth.updateUser(
@@ -52,23 +50,22 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
       }
 
       if (context.mounted) {
-          showCustomToast(
-                            context: context,
-                            type: ToastificationType.success,
-                            message: ("Updated successfully!"),
-                            position: 'bottom'
-                            
-                          );
+        showCustomToast(
+          context: context,
+          type: ToastificationType.success,
+          message: ("Updated successfully!"),
+          position: 'bottom',
+        );
         Navigator.pop(context);
       }
     } catch (e) {
       if (context.mounted) {
-          showCustomToast(
-                            context: context,
-                            type: ToastificationType.error,
-                            message:("Something went wrong"),
-                             position: 'bottom'
-                          );
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: ("Something went wrong"),
+          position: 'bottom',
+        );
       }
     } finally {
       if (mounted) {
@@ -88,12 +85,12 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         child: Column(
           children: [
-       
             LabeledTextField(
               label: isEmailUser ? 'Email' : 'Phone Number',
               value: isEmailUser ? user!.email! : user!.phone!,
-              keyboardType:
-                  isEmailUser ? TextInputType.emailAddress : TextInputType.phone,
+              keyboardType: isEmailUser
+                  ? TextInputType.emailAddress
+                  : TextInputType.phone,
               onChanged: (val) => email = val,
               readOnly: !isEmailUser,
             ),
@@ -106,14 +103,13 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
             ),
             const SizedBox(height: 20),
 
-         FilledBtn(
-  onPressed: () {
-    if (!_isSaving) _saveChanges();
-  },
-  title:'Save',
-  isLoading: _isSaving,
-)
-
+            FilledBtn(
+              onPressed: () {
+                if (!_isSaving) _saveChanges();
+              },
+              title: 'Save',
+              isLoading: _isSaving,
+            ),
           ],
         ),
       ),

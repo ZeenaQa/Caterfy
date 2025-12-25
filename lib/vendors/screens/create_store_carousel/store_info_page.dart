@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
 class StoreInfoPage extends StatelessWidget {
@@ -18,6 +19,26 @@ class StoreInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
+    final l10 = AppLocalizations.of(context);
+
+    String catLabel(String cat) {
+      switch (cat) {
+        case 'electronics':
+          return l10.electronics;
+        case 'food':
+          return l10.food;
+        case 'groceries':
+          return l10.groceries;
+        case 'pharmacy':
+          return l10.pharmacy;
+        case 'toysAndKids':
+          return l10.toysAndKids;
+        case 'healthAndBeauty':
+          return l10.healthAndBeauty;
+        default:
+          return cat;
+      }
+    }
 
     if (provider.storeForm == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -33,20 +54,16 @@ class StoreInfoPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Store Info',
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
+          Text(l10.storeInfo, style: Theme.of(context).textTheme.labelMedium),
           const SizedBox(height: 20),
 
           /// ===== STORE NAME (AR) =====
           LabeledTextField(
-            label: 'Store Name (Arabic)',
-            hint: 'اكتب اسم المتجر بالعربية',
+            label: l10.storeNameArabic,
+            hint: l10.storeNameArabicHint,
             value: storeForm.name_ar,
-            errorText: provider.showStoreInfoErrors &&
-                    storeForm.name_ar.isEmpty
-                ? 'Required'
+            errorText: provider.showStoreInfoErrors && storeForm.name_ar.isEmpty
+                ? l10.required
                 : null,
             onChanged: (val) {
               provider.updateStoreForm(nameAr: val);
@@ -58,12 +75,11 @@ class StoreInfoPage extends StatelessWidget {
 
           /// ===== STORE NAME (EN) =====
           LabeledTextField(
-            label: 'Store Name (English)',
-            hint: 'Write store name in English',
+            label: l10.storeNameEnglish,
+            hint: l10.storeNameEnglishHint,
             value: storeForm.name,
-            errorText: provider.showStoreInfoErrors &&
-                    storeForm.name.isEmpty
-                ? 'Required'
+            errorText: provider.showStoreInfoErrors && storeForm.name.isEmpty
+                ? l10.required
                 : null,
             onChanged: (val) {
               provider.updateStoreForm(name: val);
@@ -75,25 +91,19 @@ class StoreInfoPage extends StatelessWidget {
 
           /// ===== CATEGORY =====
           DropdownButtonFormField<String>(
-            value:
-                storeForm.category.isEmpty ? null : storeForm.category,
+            value: storeForm.category.isEmpty ? null : storeForm.category,
             decoration: InputDecoration(
-              labelText: 'Category',
-              errorText: provider.showStoreInfoErrors &&
-                      storeForm.category.isEmpty
-                  ? 'Required'
+              labelText: l10.category,
+              errorText:
+                  provider.showStoreInfoErrors && storeForm.category.isEmpty
+                  ? l10.required
                   : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             items: categories
-                .map(
-                  (cat) => DropdownMenuItem(
-                    value: cat,
-                    child: Text(cat),
-                  ),
-                )
+                .map((cat) => DropdownMenuItem(value: cat, child: Text(catLabel(cat))))
                 .toList(),
             onChanged: (val) {
               provider.updateStoreForm(category: val);

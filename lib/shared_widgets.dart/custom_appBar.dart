@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onPressed,
     this.noBackButton = false,
     this.content,
-     this.actions,
+    this.actions,
   });
 
   final String title;
@@ -17,14 +17,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPressed;
   final bool noBackButton;
   final Widget? content;
-  final List<Widget>? actions; 
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
     return AppBar(
-       actions: actions,
+      actions: actions,
       title: Row(
         spacing: 10,
         children: [
@@ -37,7 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   fontWeight: FontWeight.w600,
                   overflow: TextOverflow.ellipsis,
                 ),
-                
+
                 maxLines: 1,
               ),
             ),

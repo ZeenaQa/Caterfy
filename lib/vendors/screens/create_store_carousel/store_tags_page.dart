@@ -2,18 +2,43 @@ import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 
 class StoreTagsPage extends StatelessWidget {
   const StoreTagsPage({super.key});
 
   static const _tags = [
-    "Pizza","Burger","Desserts","Drinks","Coffee","Bakery",
-    "Fast Food","Healthy Food","Grocery","Supermarket",
-    "Mini Market","Fruits & Vegetables","Butcher","Dairy",
-    "Cleaning","Laundry","Maintenance","Delivery","Car Wash",
-    "Printing","Computers","Mobile Phones","Electronics",
-    "Accessories","Repair","Clothes","Shoes","Gifts",
-    "Flowers","Pharmacy","Beauty",
+    "Pizza",
+    "Burger",
+    "Desserts",
+    "Drinks",
+    "Coffee",
+    "Bakery",
+    "Fast Food",
+    "Healthy Food",
+    "Grocery",
+    "Supermarket",
+    "Mini Market",
+    "Fruits & Vegetables",
+    "Butcher",
+    "Dairy",
+    "Cleaning",
+    "Laundry",
+    "Maintenance",
+    "Delivery",
+    "Car Wash",
+    "Printing",
+    "Computers",
+    "Mobile Phones",
+    "Electronics",
+    "Accessories",
+    "Repair",
+    "Clothes",
+    "Shoes",
+    "Gifts",
+    "Flowers",
+    "Pharmacy",
+    "Beauty",
   ];
 
   @override
@@ -26,9 +51,11 @@ class StoreTagsPage extends StatelessWidget {
 
     final selectedTags = storeForm.tags ?? [];
 
+    final l10 = AppLocalizations.of(context);
+
     return PageWrapper(
-      title: "Tags",
-      subtitle: "Choose store tags",
+      title: l10.tags,
+      subtitle: l10.chooseStoreTags,
       child: SingleChildScrollView(
         child: Wrap(
           spacing: 10,

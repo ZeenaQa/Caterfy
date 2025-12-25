@@ -1,10 +1,11 @@
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
-import 'package:caterfy/vendors/screens/create_store_screen.dart';
-import 'package:caterfy/vendors/screens/edit_category_screen.dart';
-import 'package:caterfy/vendors/screens/edit_product_screen.dart';
-import 'package:caterfy/vendors/screens/edit_store.screen.dart';
+import 'package:caterfy/vendors/screens/app_screens/create_store_screen.dart';
+import 'package:caterfy/vendors/screens/app_screens/edit_category_screen.dart';
+import 'package:caterfy/vendors/screens/app_screens/edit_product_screen.dart';
+import 'package:caterfy/vendors/screens/app_screens/edit_store.screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
@@ -19,7 +20,8 @@ class VendorStoreSection extends StatefulWidget {
 
 class _VendorStoreSectionState extends State<VendorStoreSection> {
   bool isAddingCategory = false;
-  String newCategoryName = '';
+  String newCategoryNameEn = '';
+  String newCategoryNameAr = '';
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
 
     if (provider.isLoading) {
       return const Center(child: ThreeBounce());
@@ -49,20 +52,20 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
               color: colors.onSurfaceVariant,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Get Started',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              l10.getStarted,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              'You don’t have a store yet. Let’s create one!',
+              l10.noStoreYet,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: colors.onSurface),
             ),
             const SizedBox(height: 15),
             FilledBtn(
               stretch: false,
-              title: 'Create Store',
+              title: l10.createStore,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -78,11 +81,17 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
     }
 
     final store = provider.store!;
-
+    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (store.name_ar.isNotEmpty) ? store.name_ar : store.name;
+    String catLabel(Map<String, dynamic> cat) {
+      return Localizations.localeOf(context).languageCode == 'ar' && (cat['name_ar']?.isNotEmpty ?? false)
+        ? cat['name_ar'] ?? ''
+        : cat['name'] ?? '';
+    }
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        
         children: [
           Stack(
             clipBehavior: Clip.none,
@@ -126,7 +135,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
 
           const SizedBox(height: 56),
 
-          const SizedBox(height: 12),
+         
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -141,7 +150,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                     children: [
                       /// ===== STORE NAME =====
                       Text(
-                        store.name,
+                        storeNameToShow,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -170,7 +179,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
 
                           Expanded(
                             child: Text(
-                              store.storeArea ?? 'Store location',
+                              store.storeArea ?? l10.storeLocation,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -186,7 +195,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                 ),
 
                 OutlinedBtn(
-                  title: 'edit',
+                  title: l10.edit,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -206,14 +215,14 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                const Text(
-                  'Menu',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Text(
+                  l10.menu,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
 
                 OutlinedBtn(
-                  title: 'add',
+                  title: l10.add,
                   onPressed: () {
                     setState(() {
                       isAddingCategory = true;
@@ -232,14 +241,28 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                 children: [
                   /// TEXT FIELD
                   Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      onChanged: (val) {
-                        newCategoryName = val.trim();
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Category name',
-                      ),
+                    child: Column(
+                      children: [
+                        TextField(
+                          autofocus: true,
+                          onChanged: (val) {
+                            newCategoryNameEn = val.trim();
+                          },
+                          decoration: InputDecoration(
+                            hintText: l10.enterCategoryNameEnglish,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          onChanged: (val) {
+                            newCategoryNameAr = val.trim();
+                          },
+                          textDirection: TextDirection.rtl,
+                          decoration: InputDecoration(
+                            hintText: l10.enterCategoryNameArabic,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
@@ -250,7 +273,8 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                     child: const Icon(Icons.close),
                     onPressed: () {
                       setState(() {
-                        newCategoryName = '';
+                        newCategoryNameEn = '';
+                        newCategoryNameAr = '';
                         isAddingCategory = false;
                       });
                     },
@@ -258,12 +282,16 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
 
                   OutlinedIconBtn(
                     onPressed: () async {
-                      if (newCategoryName.isEmpty) return;
+                      if (newCategoryNameEn.isEmpty) return;
 
-                      await provider.addCategory(newCategoryName);
+                      await provider.addCategory(
+                        newCategoryNameEn,
+                        nameAr: newCategoryNameAr.isEmpty ? null : newCategoryNameAr,
+                      );
 
                       setState(() {
-                        newCategoryName = '';
+                        newCategoryNameEn = '';
+                        newCategoryNameAr = '';
                         isAddingCategory = false;
                       });
                     },
@@ -302,7 +330,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            'Category',
+                            l10.category,
                             style: TextStyle(
                               fontSize: 11,
                               color: colors.primary,
@@ -317,7 +345,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                         children: [
                           Expanded(
                             child: Text(
-                              cat['name'] ?? '',
+                              catLabel(cat),
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -348,7 +376,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(12, 2, 12, 8),
                         child: Text(
-                          '${subProducts.length} Items',
+                          '${subProducts.length} ${l10.items}',
                           style: TextStyle(
                             fontSize: 13,
                             color: colors.onSurfaceVariant,
@@ -356,11 +384,11 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                         ),
                       ),
                       if (subProducts.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.all(12),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
                           child: Text(
-                            'No products yet',
-                            style: TextStyle(color: Colors.grey),
+                            l10.noProductsYet,
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ),
 
@@ -419,7 +447,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      '${p.price} JOD',
+                                      '${p.price} ${l10.jod}',
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: colors.onSurfaceVariant,

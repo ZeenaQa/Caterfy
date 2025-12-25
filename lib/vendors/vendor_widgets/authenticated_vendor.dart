@@ -1,4 +1,3 @@
-
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/util/theme_controller.dart';
 
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
 
 class AuthenticatedVendor extends StatefulWidget {
   const AuthenticatedVendor({super.key});
@@ -22,11 +20,9 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-        VendorStoreSection(),
-     VendorOrdersSection(),
-     VendorAccountSection()
-
-
+    VendorStoreSection(),
+    VendorOrdersSection(),
+    VendorAccountSection(),
   ];
 
   @override

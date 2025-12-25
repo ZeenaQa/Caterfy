@@ -34,9 +34,9 @@ class _InitialLoaderScreenState extends State<InitialLoaderScreen> {
         MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
       );
     } else {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => AuthenticatedVendor()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => AuthenticatedVendor()),
+      );
     }
   }
 

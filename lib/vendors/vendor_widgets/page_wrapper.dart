@@ -33,10 +33,7 @@ class PageWrapper extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             subtitle,
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: colors.onSurfaceVariant, fontSize: 14),
           ),
           const SizedBox(height: 32),
           Expanded(child: child),

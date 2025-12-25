@@ -342,7 +342,11 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                             const SizedBox(width: 8),
                                             GestureDetector(
                                               onTap: () {
-                                                print(customerProvider.cart?.storeId);
+                                                print(
+                                                  customerProvider
+                                                      .cart
+                                                      ?.storeId,
+                                                );
                                                 openDrawer(
                                                   context,
                                                   padding: EdgeInsets.only(

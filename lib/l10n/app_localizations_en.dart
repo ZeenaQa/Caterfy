@@ -410,7 +410,196 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unfavoriteText => 'Removed from your favorites';
 
   @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get noStoreYet => 'You don’t have a store yet. Let\'s create one!';
+
+  @override
+  String get createStore => 'Create Store';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get menu => 'Menu';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get categoryName => 'Category name';
+
+  @override
+  String get categoryNameEnglish => 'Category name (English)';
+
+  @override
+  String get enterCategoryNameEnglish => 'Enter category name in English';
+
+  @override
+  String get categoryNameArabic => 'Category name (Arabic)';
+
+  @override
+  String get enterCategoryNameArabic => 'Enter category name in Arabic';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get items => 'Items';
+
+  @override
+  String get noProductsYet => 'No products yet';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get editStore => 'Edit Store';
+
+  @override
+  String get storeTags => 'Store Tags';
+
+  @override
+  String get change => 'Change';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get deleteProduct => 'Delete Product';
+
+  @override
+  String get markUnavailableToday => 'Mark as Unavailable Today';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get editCategory => 'Edit Category';
+
+  @override
+  String get deleteCategory => 'Delete Category';
+
+  @override
+  String get addProduct => 'Add Product';
+
+  @override
+  String get confirmStoreLocation => 'Confirm store location';
+
+  @override
+  String get unknownArea => 'Unknown area';
+
+  @override
+  String get storeLocation => 'Store location';
+
+  @override
+  String get arabic => 'Arabic';
+
+  @override
+  String get storeInfo => 'Store Info';
+
+  @override
+  String get storeNameArabic => 'Store Name (Arabic)';
+
+  @override
+  String get storeNameArabicHint => 'Write store name in Arabic';
+
+  @override
+  String get storeNameEnglish => 'Store Name (English)';
+
+  @override
+  String get storeNameEnglishHint => 'Write store name in English';
+
+  @override
+  String get banner => 'Banner';
+
+  @override
+  String get logo => 'Logo';
+
+  @override
+  String get storeName => 'Store Name';
+
+  @override
+  String get required => 'Required';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteProductConfirmation =>
+      'This will delete the product. Are you sure?';
+
+  @override
+  String get deleteCategoryConfirmation =>
+      'This will delete the category and all its products. Are you sure?';
+
+  @override
+  String get available => 'Available';
+
+  @override
+  String get productAvailabilityInfo =>
+      'Customers can view and order this product during store hours';
+
+  @override
+  String get productName => 'Product name';
+
+  @override
+  String get productNameHint => 'Product name';
+
+  @override
+  String get dinars => 'Dinars';
+
+  @override
+  String get cents => 'Cents';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get enterCurrentPassword => 'Enter current password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get enterNewPassword => 'Enter new password';
+
+  @override
+  String get confirmPasswordHint => 'Confirm new password';
+
+  @override
+  String get currentPasswordIncorrect => 'Current password is incorrect';
+
+  @override
+  String get tags => 'Tags';
+
+  @override
+  String get chooseStoreTags => 'Choose store tags';
+
+  @override
+  String get brandAndBanner => 'Brand & Banner';
+
+  @override
+  String get uploadLogoBanner => 'Upload your store logo and banner';
+
+  @override
   String get viewAll => 'View all';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get storeStatus => 'Store Status';
+
+  @override
+  String get opened => 'Opened';
+
+  @override
+  String get closed => 'Closed';
 
   @override
   String get store => 'Store';

@@ -7,14 +7,14 @@ class GlobalProvider extends ChangeNotifier {
 
   String deliveryLocation = 'Pick a Location';
   LatLng? lastPickedLocation;
-    bool _notificationsEnabled = true;
+  bool _notificationsEnabled = true;
 
-    bool get notificationsEnabled => _notificationsEnabled;
+  bool get notificationsEnabled => _notificationsEnabled;
 
   GlobalProvider() {
     loadLastLocation();
     _loadNotificationsPreference();
-     _loadNotificationsPreference();
+    _loadNotificationsPreference();
   }
 
   // ---------- LOCATION ----------

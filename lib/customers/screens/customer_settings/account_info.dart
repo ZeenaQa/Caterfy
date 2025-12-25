@@ -18,7 +18,7 @@ class _AccountInfoState extends State<AccountInfo> {
   @override
   void initState() {
     super.initState();
-           _loadUser();
+    _loadUser();
   }
 
   void _loadUser() {
@@ -39,9 +39,7 @@ class _AccountInfoState extends State<AccountInfo> {
           onPressed: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const EditAccountInfo(),
-              ),
+              MaterialPageRoute(builder: (_) => const EditAccountInfo()),
             );
             _loadUser();
           },
@@ -51,7 +49,6 @@ class _AccountInfoState extends State<AccountInfo> {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         child: Column(
           children: [
-          
             LabeledTextField(
               label: isEmailUser ? 'Email' : 'Phone Number',
               hint: isEmailUser ? user?.email : user?.phone,
@@ -64,7 +61,6 @@ class _AccountInfoState extends State<AccountInfo> {
 
             const SizedBox(height: 12),
 
-         
             LabeledTextField(
               label: 'Name',
               hint: user?.userMetadata?['name'] ?? '',

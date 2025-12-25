@@ -4,6 +4,7 @@ import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:flutter/material.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,8 @@ class EditCategoryScreen extends StatefulWidget {
 
 class _EditCategoryScreenState extends State<EditCategoryScreen> {
   String categoryName = '';
+  String categoryNameAr = '';
+  String originalCategoryNameAr = '';
   bool showAddProductForm = false;
   String productName = '';
   String productDescription = '';
@@ -37,6 +40,15 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
   void initState() {
     super.initState();
     categoryName = widget.categoryName;
+
+    final provider = Provider.of<LoggedVendorProvider>(context, listen: false);
+    final cat = provider.subCategories.firstWhere(
+      (c) => c['id'] == widget.categoryId,
+      orElse: () => {},
+    );
+
+    categoryNameAr = cat.isNotEmpty ? (cat['name_ar'] ?? '') : '';
+    originalCategoryNameAr = categoryNameAr;
   }
 
   @override
@@ -49,111 +61,109 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
 
     return Scaffold(
-     appBar: CustomAppBar(
-  title: 'Edit Category',
-  actions: [
-    PopupMenuButton<String>(
-      onSelected: (value) async {
-        if (value == 'delete') {
-          final confirmed = await showCustomDialog(
-            context,
-            title: 'Delete Category',
-            content:
-                'This will delete the category and all its products. Are you sure?',
-            confirmText: 'Delete',
-            cancelText: 'Cancel',
-            onConfirmAsync: () async {
-              await context
-                  .read<LoggedVendorProvider>()
-                  .deleteCategory(widget.categoryId);
-            },
-          );
+      appBar: CustomAppBar(
+        title: l10.editCategory,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'delete') {
+                final confirmed = await showCustomDialog(
+                  context,
+                  title: l10.deleteCategory,
+                  content: l10.deleteCategoryConfirmation,
+                  confirmText: l10.delete,
+                  cancelText: l10.cancel,
+                  onConfirmAsync: () async {
+                    await context.read<LoggedVendorProvider>().deleteCategory(
+                      widget.categoryId,
+                    );
+                  },
+                );
 
-          if (confirmed == true && context.mounted) {
-            Navigator.pop(context);
-          }
-        }
-      },
-      itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'delete',
-          child: Row(
-            children: [
-              Icon(Icons.delete_outline, color: Colors.red),
-              SizedBox(width: 8),
-              Text(
-                'Delete Category',
-                style: TextStyle(color: Colors.red),
+                if (confirmed == true && context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outline, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Text(
+                      l10.deleteCategory,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-      ],
-    ),
-  ],
-),
+        ],
+      ),
 
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
-           
             children: [
-  
-
-             
               LabeledTextField(
-              label: 'Category name',
-              value: categoryName,
-               onChanged: (val) => categoryName = val.trim(),
+                label: l10.categoryName,
+                value: categoryName,
+                onChanged: (val) => categoryName = val.trim(),
+              ),
+
+              const SizedBox(height: 12),
+
+              LabeledTextField(
+                label: l10.categoryNameArabic,
+                value: categoryNameAr,
+                onChanged: (val) => categoryNameAr = val.trim(),
               ),
 
               const SizedBox(height: 24),
-             
 
-            ListTile(
-  leading: Icon(Icons.add_box_outlined, color: colors.primary),
-  title: Text(
-   'Add Product',
-  ),
-  trailing: Icon(
-    showAddProductForm
-        ? Icons.keyboard_arrow_up
-        : Icons.keyboard_arrow_down,
-    color: colors.onSurfaceVariant,
-  ),
-  onTap: () {
-    setState(() {
-      showAddProductForm = !showAddProductForm;
-    });
-  },
-),
+              ListTile(
+                leading: Icon(Icons.add_box_outlined, color: colors.primary),
+                title: Text(l10.addProduct),
+                trailing: Icon(
+                  showAddProductForm
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: colors.onSurfaceVariant,
+                ),
+                onTap: () {
+                  setState(() {
+                    showAddProductForm = !showAddProductForm;
+                  });
+                },
+              ),
 
-   
               if (showAddProductForm) ...[
                 const SizedBox(height: 16),
 
                 LabeledTextField(
-                  label: 'Product name',
-                  hint: 'Product name',
+                  label: l10.productName,
+                  hint: l10.productNameHint,
                   onChanged: (val) => productName = val.trim(),
                 ),
 
                 const SizedBox(height: 16),
 
                 LabeledTextField(
-                  label: 'Description',
-                  hint: 'Product description',
+                  label: l10.description,
+                  hint: l10.description,
                   maxLines: 4,
-                  onChanged: (val) =>
-                      productDescription = val.trim(),
+                  onChanged: (val) => productDescription = val.trim(),
                 ),
 
                 const SizedBox(height: 16),
 
-             
                 Row(
                   spacing: 10,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -161,14 +171,13 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                     Expanded(
                       flex: 2,
                       child: LabeledTextField(
-                        label: 'Dinars',
+                        label: l10.dinars,
                         hint: '0',
                         keyboardType: TextInputType.number,
-                        onChanged: (val) =>
-                            productDinars = val.trim(),
+                        onChanged: (val) => productDinars = val.trim(),
                       ),
                     ),
-                 
+
                     const Padding(
                       padding: EdgeInsets.only(top: 14),
                       child: Text(
@@ -179,14 +188,13 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         ),
                       ),
                     ),
-                  
+
                     Expanded(
                       child: LabeledTextField(
-                        label: 'Cents',
+                        label: l10.cents,
                         hint: '00',
                         keyboardType: TextInputType.number,
-                        onChanged: (val) =>
-                            productCents = val.trim(),
+                        onChanged: (val) => productCents = val.trim(),
                       ),
                     ),
                   ],
@@ -199,8 +207,9 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                   builder: (context, image, _) {
                     return GestureDetector(
                       onTap: () async {
-                        final picked = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
+                        final picked = await ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        );
                         if (picked != null) {
                           imageNotifier.value = File(picked.path);
                         }
@@ -216,10 +225,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                             ? const Icon(Icons.camera_alt, size: 40)
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  image,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: Image.file(image, fit: BoxFit.cover),
                               ),
                       ),
                     );
@@ -230,17 +236,16 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
               const SizedBox(height: 32),
 
               FilledBtn(
-                title: 'Save',
+                title: l10.save,
                 isLoading: provider.isLoading,
                 onPressed: provider.isLoading
                     ? () {}
                     : () async {
-                    
-                        if (categoryName.trim() !=
-                            widget.categoryName) {
+                        if (categoryName.trim() != widget.categoryName || categoryNameAr.trim() != originalCategoryNameAr) {
                           await provider.updateCategory(
                             categoryId: widget.categoryId,
                             newName: categoryName.trim(),
+                            newNameAr: categoryNameAr.isEmpty ? null : categoryNameAr.trim(),
                           );
                         }
 
@@ -251,10 +256,12 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                             return;
                           }
 
-                          final dinars =
-                              productDinars.isEmpty ? '0' : productDinars;
-                          final cents =
-                              productCents.isEmpty ? '0' : productCents;
+                          final dinars = productDinars.isEmpty
+                              ? '0'
+                              : productDinars;
+                          final cents = productCents.isEmpty
+                              ? '0'
+                              : productCents;
 
                           final price = double.parse(
                             '$dinars.${cents.padRight(2, '0')}',
@@ -274,7 +281,6 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         }
                       },
               ),
-      
             ],
           ),
         ),
