@@ -106,7 +106,7 @@ class ProductItem extends StatelessWidget {
                       },
                     ),
                     child: Image.network(
-                      product.imageUrl,
+                      product.imageUrl ?? '',
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return const Icon(Icons.broken_image);

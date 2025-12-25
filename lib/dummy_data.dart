@@ -1,3 +1,4 @@
+import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
@@ -194,5 +195,43 @@ final List<OrderItem> dummyOrderItems = [
     price: dummyProducts[4].price,
     productId: dummyProducts[4].id,
     note: "THIS IS A RANDOM NOTEEE SAYYING STUPID THINGS :))))",
+  ),
+];
+
+final List<Order> dummyOrders = [
+  Order(
+    customerId: "1",
+    storeId: "1",
+    storeName: "Burger King",
+    createdAt: DateTime.now().toString(),
+    items: dummyOrderItems,
+  ),
+  Order(
+    customerId: "1",
+    storeId: "1",
+    storeName: "Burger King",
+    createdAt: DateTime.now().toString(),
+    items: dummyOrderItems,
+  ),
+  Order(
+    customerId: "1",
+    storeId: "1",
+    storeName: "Burger King",
+    createdAt: DateTime.now().toString(),
+    items: dummyOrderItems,
+  ),
+  Order(
+    customerId: "1",
+    storeId: "1",
+    storeName: "Burger King",
+    createdAt: DateTime.now().toString(),
+    items: dummyOrderItems,
+  ),
+  Order(
+    customerId: "1",
+    storeId: "1",
+    storeName: "Burger King",
+    createdAt: DateTime.now().toString(),
+    items: dummyOrderItems,
   ),
 ];

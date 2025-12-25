@@ -1,5 +1,6 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/cart.dart';
+import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
@@ -24,7 +25,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   void loadCart() {
     final customerId = Supabase.instance.client.auth.currentUser?.id;
     final data = box.get('cart_$customerId');
-    if (data == null) {
+    if (data == null || customerId == null) {
       _cart = null;
       return;
     }
@@ -57,19 +58,25 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   List<Product> _products = [];
   List<Store> _stores = [];
+  List<Order> _orderHistory = [];
 
   List<Product> get products => _products;
   List<Store> get stores => _stores;
+  List<Order> get orderHistory => _orderHistory;
 
   bool _isCategoryLoading = false;
   bool _isProductsLoading = false;
   bool _isFavLoading = false;
   bool _isCartLoading = false;
+  bool _isPlaceOrderLoading = false;
+  bool _isOrderHistoryLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
   bool get isFavLoading => _isFavLoading;
   bool get isCartLoading => _isCartLoading;
+  bool get isPlaceOrderLoading => _isPlaceOrderLoading;
+  bool get isOrderHistoryLoading => _isOrderHistoryLoading;
 
   int get totalCartQuantity {
     if (_cart?.storeId == null) return 0;
@@ -102,11 +109,30 @@ class LoggedCustomerProvider with ChangeNotifier {
     return null;
   }
 
+  void orderAgain({required Order order}) {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
+    if (customerId != null) {
+      deleteCart();
+      _cart = Cart(
+        customerId: customerId,
+        storeId: order.storeId,
+        storeName: order.storeName,
+        items: order.items,
+      );
+    }
+  }
+
   void addToCart({required OrderItem item}) {
     final customerId = Supabase.instance.client.auth.currentUser?.id;
     if (customerId!.isEmpty) return;
+    final Store store = _stores.firstWhere((store) => store.id == item.storeId);
+    final storeName = store.name;
     if (_cart?.storeId == null) {
-      _cart = Cart(customerId: customerId, storeId: item.storeId);
+      _cart = Cart(
+        customerId: customerId,
+        storeId: item.storeId,
+        storeName: storeName,
+      );
     }
 
     _cart!.addItem(item: item);
@@ -157,7 +183,8 @@ class LoggedCustomerProvider with ChangeNotifier {
       final data = await supabase
           .from('customer_favorites')
           .select('store_id, stores(*)')
-          .eq('customer_id', customerId);
+          .eq('customer_id', customerId)
+          .order('created_at', ascending: false);
       _favoriteStores = {};
 
       for (final e in data) {
@@ -391,6 +418,76 @@ class LoggedCustomerProvider with ChangeNotifier {
       }
     } finally {
       _isCartLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> placeOrder({required BuildContext context}) async {
+    if (_cart?.storeId == null || _cart!.items.isEmpty) return;
+    final l10 = AppLocalizations.of(context);
+    try {
+      _isPlaceOrderLoading = true;
+      notifyListeners();
+
+      final mapCart = _cart!.toMap();
+
+      await supabase.from('orders').insert(mapCart);
+
+      _cart = null;
+      deleteCart();
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isPlaceOrderLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchOrderHistory({required BuildContext context}) async {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
+    final l10 = AppLocalizations.of(context);
+    if (customerId == null) return;
+    try {
+      _isOrderHistoryLoading = true;
+      notifyListeners();
+
+      final data = await supabase
+          .from('orders')
+          .select('*, stores:store_id (logo_url)')
+          .eq('customer_id', customerId)
+          .order('created_at', ascending: false);
+
+      Map<String, dynamic> checkStoreLogo(order) {
+        final storeLogo = (order['stores'] is Map)
+            ? order['stores']['logo_url']
+            : null;
+
+        if (storeLogo == null) {
+          return order;
+        }
+
+        return {...order, 'store_logo': storeLogo};
+      }
+
+      _orderHistory = data
+          .map((order) => Order.fromMap(checkStoreLogo(order)))
+          .toList();
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isOrderHistoryLoading = false;
       notifyListeners();
     }
   }

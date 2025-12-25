@@ -55,7 +55,7 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(34)),
             image: DecorationImage(
-              image: NetworkImage(product.imageUrl),
+              image: NetworkImage(product.imageUrl ?? ''),
               fit: BoxFit.cover,
             ),
           ),

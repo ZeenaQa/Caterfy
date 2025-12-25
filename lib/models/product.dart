@@ -3,7 +3,7 @@ class Product {
   final String storeId;
   final String name;
   final String description;
-  final String imageUrl;
+  final String? imageUrl;
   final double price;
   final String subCategoryId;
   final String subCategory;
@@ -14,7 +14,7 @@ class Product {
     required this.name,
     required this.description,
     required this.price,
-    required this.imageUrl,
+    this.imageUrl,
     required this.subCategoryId,
     required this.subCategory,
   });
@@ -29,7 +29,7 @@ class Product {
       price: (map['price'] as num).toDouble(),
       imageUrl: map['image_url'],
       subCategoryId: map['sub_category_id'],
-    subCategory: map['sub_categories'] ?? '',
+      subCategory: map['sub_categories'] ?? '',
     );
   }
 

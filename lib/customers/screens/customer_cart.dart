@@ -92,7 +92,7 @@ class _CustomerCartState extends State<CustomerCart> {
                     color: colors.outline,
                   ),
                   Text(
-                    "Your favorite stores will appear here",
+                    "There's nothing in your cart yet",
                     style: TextStyle(
                       color: colors.onSurfaceVariant,
                       fontSize: 18,
@@ -191,6 +191,8 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+
     return IntrinsicHeight(
       child: Container(
         padding: const EdgeInsets.only(
@@ -233,7 +235,12 @@ class BottomNav extends StatelessWidget {
               ),
               Expanded(
                 child: FilledBtn(
-                  onPressed: () {},
+                  loadingSize: 15,
+                  isLoading: customerProvider.isPlaceOrderLoading,
+                  onPressed: () async {
+                    await customerProvider.placeOrder(context: context);
+                    if (context.mounted) Navigator.of(context).pop();
+                  },
                   title: 'Checkout',
                   titleSize: 15,
                   innerVerticalPadding: 15,

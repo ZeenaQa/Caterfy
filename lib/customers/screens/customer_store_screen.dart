@@ -100,7 +100,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                             },
                           ),
                           child: Image.network(
-                            widget.store.bannerUrl!,
+                            widget.store.bannerUrl ?? '',
                             height: 218,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -165,7 +165,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                     },
                                               ),
                                               child: Image.network(
-                                                widget.store.logoUrl!,
+                                                widget.store.logoUrl ?? "",
                                                 fit: BoxFit.cover,
                                                 errorBuilder:
                                                     (

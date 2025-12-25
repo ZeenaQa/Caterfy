@@ -74,7 +74,19 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
               backgroundColor: colors.surface,
               iconSize: 20,
               currentIndex: _currentIndex,
-              onTap: (index) => setState(() => _currentIndex = index),
+              onTap: (index) => setState(() {
+                _currentIndex = index;
+                if (index == 1) {
+                  if (context
+                      .read<LoggedCustomerProvider>()
+                      .isOrderHistoryLoading) {
+                    return;
+                  }
+                  context.read<LoggedCustomerProvider>().fetchOrderHistory(
+                    context: context,
+                  );
+                }
+              }),
               items: [
                 BottomNavigationBarItem(
                   icon: Padding(

@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/customer_sections/customer_orders.dart';
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
@@ -28,20 +29,25 @@ class CustomerAccountSection extends StatelessWidget {
       AccountButton(
         title: l10.yourOrders,
         icon: Icons.receipt_outlined,
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => Scaffold(
-              appBar: CustomAppBar(title: l10.yourOrders),
-              body: SafeArea(child: CustomerOrdersSection(removeTitle: true)),
+        onTap: () {
+          if (context.read<LoggedCustomerProvider>().isOrderHistoryLoading) {
+            return;
+          }
+          context.read<LoggedCustomerProvider>().fetchOrderHistory(
+            context: context,
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => Scaffold(
+                appBar: CustomAppBar(title: l10.yourOrders),
+                body: SafeArea(child: CustomerOrdersSection(removeTitle: true)),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
-      AccountButton(
-        title: l10.vouchers,
-        icon: Icons.wallet_giftcard_outlined,
-      ),
+      AccountButton(title: l10.vouchers, icon: Icons.wallet_giftcard_outlined),
       AccountButton(
         title: l10.favorites,
         icon: Icons.favorite_border,

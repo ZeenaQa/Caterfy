@@ -12,6 +12,7 @@ class FilledBtn extends StatelessWidget {
   final double verticalPadding;
   final double horizontalPadding;
   final Widget? content;
+  final double loadingSize;
 
   const FilledBtn({
     super.key,
@@ -25,6 +26,7 @@ class FilledBtn extends StatelessWidget {
     this.innerHorizontalPadding = 25,
     this.verticalPadding = 0,
     this.horizontalPadding = 0,
+    this.loadingSize = 17
   });
 
   @override
@@ -68,7 +70,7 @@ class FilledBtn extends StatelessWidget {
                       ),
                     ),
               ),
-              if (isLoading) ThreeBounce(),
+              if (isLoading) ThreeBounce(size: loadingSize,),
             ],
           ),
         ),
