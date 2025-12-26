@@ -1,5 +1,7 @@
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_cart.dart';
+import 'package:caterfy/customers/screens/customer_order_details_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/order.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +21,12 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final orderDate = order.createdAt != null
-        ? DateFormat("MMM d - h:mm a").format(DateTime.parse(order.createdAt!))
+        ? DateFormat(
+            "MMM d - h:mm a",
+          ).format(DateTime.parse(order.createdAt!).toLocal())
         : '';
 
     double getTotalPrice() {
@@ -78,7 +83,7 @@ class OrderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
@@ -101,14 +106,26 @@ class OrderCard extends StatelessWidget {
                     ),
                     SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        order.storeName,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            order.storeName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${order.items.length} items',
+                            style: TextStyle(
+                              height: 1.2,
+                              color: colors.onSurface,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -144,14 +161,23 @@ class OrderCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 2),
-                      Text(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        "View details",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: colors.onSurface,
-                          fontSize: 13.5,
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CustomerOrderDetailScreen(),
+                          ),
+                        ),
+                        child: Text(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          l10.viewDetails,
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: colors.onSurface,
+                            fontSize: 13.5,
+                          ),
                         ),
                       ),
                     ],
@@ -180,9 +206,15 @@ class OrderCard extends StatelessWidget {
           ),
           SizedBox(height: 15),
           Container(
-            color: colors.onPrimaryFixedVariant,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11),
             width: double.infinity,
+            decoration: BoxDecoration(
+              color: colors.surfaceContainer,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
+            ),
             child: Row(
               spacing: 16,
               children: [

@@ -55,7 +55,9 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: const Color.fromARGB(66, 226, 226, 226),
+                color: isDark
+                    ? Colors.transparent
+                    : Color.fromARGB(66, 226, 226, 226),
                 blurRadius: 6,
                 offset: Offset(0, 0),
               ),
@@ -75,6 +77,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
               iconSize: 20,
               currentIndex: _currentIndex,
               onTap: (index) => setState(() {
+                if (index == _currentIndex) return;
                 _currentIndex = index;
                 if (index == 1) {
                   if (context

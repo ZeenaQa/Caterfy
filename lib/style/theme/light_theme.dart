@@ -35,7 +35,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     brightness: Brightness.light,
     primary: Color(0xFF9359FF),
     // 8314d8
-    onPrimaryFixedVariant: Color(0xfffff1ff),
+    onPrimaryFixedVariant: Color(0xFFEFE7F3),
     surfaceContainer: Color.fromARGB(255, 247, 247, 247),
     onPrimaryContainer: Color(0xfffbc1ff),
     onPrimary: Colors.white,

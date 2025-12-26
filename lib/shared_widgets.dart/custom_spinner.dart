@@ -3,13 +3,12 @@ import 'dart:math' as math;
 
 class CustomThreeLineSpinner extends StatefulWidget {
   final double size;
-
   final double strokeWidth;
 
   const CustomThreeLineSpinner({
     super.key,
     this.size = 50.0,
-    this.strokeWidth = 3.0,
+    this.strokeWidth = 4.0,
   });
 
   @override
@@ -25,7 +24,8 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      // Slightly faster cycle to match Talabat's snappy feel
+      duration: const Duration(milliseconds: 1150),
     )..repeat();
   }
 
@@ -45,8 +45,9 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
         animation: _controller,
         builder: (context, child) {
           return CustomPaint(
-            painter: _ThreeLineSpinnerPainter(
+            painter: _TalabatStylePainter(
               progress: _controller.value,
+              // Talabat's signature Orange
               color: colors.primary,
               strokeWidth: widget.strokeWidth,
             ),
@@ -57,12 +58,12 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
   }
 }
 
-class _ThreeLineSpinnerPainter extends CustomPainter {
+class _TalabatStylePainter extends CustomPainter {
   final double progress;
   final Color color;
   final double strokeWidth;
 
-  _ThreeLineSpinnerPainter({
+  _TalabatStylePainter({
     required this.progress,
     required this.color,
     required this.strokeWidth,
@@ -72,51 +73,50 @@ class _ThreeLineSpinnerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 4;
+
     final paint = Paint()
       ..color = color
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
-    // Draw three lines at 120-degree intervals
+    // Apply a Cubic curve to the rotation to get that "Sprint & Brake" feel
+    final curveValue = Curves.easeInOutCubic.transform(progress);
+
+    // Base rotation of the entire group
+    final globalRotation = curveValue * 2 * math.pi;
+
     for (int i = 0; i < 3; i++) {
-      // Base rotation angle
-      final baseAngle = (progress * 2 * math.pi) + (i * 2 * math.pi / 3);
+      // 120 degree separation
+      final baseOffset = i * (2 * math.pi / 3);
 
-      // Create slithering effect by modulating the line length
-      // Each line has a phase offset so they slither independently
-      final phaseOffset = i * (2 * math.pi / 3);
-      final slitherProgress = (progress * 2 * math.pi * 2) + phaseOffset;
+      // "Chase" effect:
+      final speedFactor = math.sin(progress * math.pi);
 
-      // Length varies between 0.15 and 0.5 radians (creating the slither effect)
-      final minLength = 0.3;
-      final maxLength = 0.9;
-      final currentLength =
-          minLength +
-          (maxLength - minLength) * ((math.sin(slitherProgress) + 1) / 2);
+      // CHANGE HERE:
+      // 1. We square the speedFactor (pow(..., 2)). This makes the value drop
+      //    drastically closer to 0 when it's not at peak speed.
+      // 2. We lowered the base length from 0.5 to 0.15 (making them dots).
+      final shrinkCurve = math.pow(speedFactor, 3.5);
+      final currentLength = 0.35 + (shrinkCurve * 1.2);
 
-      // Offset the center of the line slightly for more dynamic movement
-      final centerOffset = math.cos(slitherProgress * 1.5) * 0.1;
+      // We shift the start angle slightly based on speed to make the tail look like it's dragging
+      final startAngle = globalRotation + baseOffset;
 
-      // Calculate start and end points for each line
-      final startAngle = baseAngle + centerOffset - currentLength / 2;
-      final endAngle = baseAngle + centerOffset + currentLength / 2;
-
-      // Draw curved arc instead of straight line
-      final rect = Rect.fromCircle(center: center, radius: radius);
-      canvas.drawArc(rect, startAngle, endAngle - startAngle, false, paint);
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        currentLength,
+        false,
+        paint,
+      );
     }
   }
 
   @override
-  bool shouldRepaint(_ThreeLineSpinnerPainter oldDelegate) {
+  bool shouldRepaint(_TalabatStylePainter oldDelegate) {
     return oldDelegate.progress != progress ||
         oldDelegate.color != color ||
         oldDelegate.strokeWidth != strokeWidth;
   }
 }
-
-// Usage example:
-// CustomThreeLineSpinner()
-// or with custom size:
-// CustomThreeLineSpinner(size: 60.0, strokeWidth: 4.0)
