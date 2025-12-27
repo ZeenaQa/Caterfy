@@ -1,5 +1,3 @@
-
-
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/providers/locale_provider.dart';

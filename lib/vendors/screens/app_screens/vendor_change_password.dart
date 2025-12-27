@@ -86,7 +86,7 @@ class _VendorChangePasswordState extends State<VendorChangePassword> {
             LabeledPasswordField(
               label: l10.newPassword,
               hint: l10.enterNewPassword,
-              
+
               onChanged: (val) => newPassword = val,
             ),
             const SizedBox(height: 12),

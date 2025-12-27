@@ -600,4 +600,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get store => 'المتجر';
+
+  @override
+  String get changeLocation => 'تغيير الموقع';
+
+  @override
+  String get location => 'الموقع';
+
+  @override
+  String get addCategory => 'إضافة فئة';
 }

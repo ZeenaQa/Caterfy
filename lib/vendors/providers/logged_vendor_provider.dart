@@ -189,9 +189,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final updateData = {
-        'name': newName.trim(),
-      };
+      final updateData = {'name': newName.trim()};
 
       if (newNameAr != null) {
         updateData['name_ar'] = newNameAr.trim();
@@ -361,22 +359,24 @@ class LoggedVendorProvider extends ChangeNotifier {
       String? logoUrl = store!.logoUrl;
       String? bannerUrl = store!.bannerUrl;
 
-      /// ===== UPLOAD LOGO =====
       if (logoFile != null) {
         logoUrl = await uploadImage(logoFile!, 'logos');
       }
 
-      /// ===== UPLOAD BANNER =====
       if (bannerFile != null) {
         bannerUrl = await uploadImage(bannerFile!, 'banners');
       }
 
-      /// ===== UPDATE STORE =====
       final response = await supabase
           .from('stores')
           .update({
             'name': storeForm!.name,
+            'name_ar': storeForm!.name_ar,
+            'category': storeForm!.category,
             'tags': storeForm!.tags,
+            'store_area': storeForm!.storeArea,
+            'latitude': storeForm!.latitude,
+            'longitude': storeForm!.longitude,
             'logo_url': logoUrl,
             'banner_url': bannerUrl,
           })
@@ -384,7 +384,6 @@ class LoggedVendorProvider extends ChangeNotifier {
           .select()
           .single();
 
-      /// ===== UPDATE LOCAL STATE =====
       store = Store.fromMap(response);
       storeForm = store;
 
@@ -418,4 +417,3 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-

@@ -103,7 +103,10 @@ class StoreInfoPage extends StatelessWidget {
               ),
             ),
             items: categories
-                .map((cat) => DropdownMenuItem(value: cat, child: Text(catLabel(cat))))
+                .map(
+                  (cat) =>
+                      DropdownMenuItem(value: cat, child: Text(catLabel(cat))),
+                )
                 .toList(),
             onChanged: (val) {
               provider.updateStoreForm(category: val);

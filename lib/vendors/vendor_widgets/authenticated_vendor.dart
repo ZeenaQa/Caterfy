@@ -1,9 +1,7 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/util/theme_controller.dart';
-
 import 'package:caterfy/vendors/vendor_sections/vendor_account.dart';
 import 'package:caterfy/vendors/vendor_sections/vendor_orders.dart';
-import 'package:caterfy/vendors/vendor_sections/vendor_store.dart';
 import 'package:caterfy/vendors/vendor_sections/vstore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

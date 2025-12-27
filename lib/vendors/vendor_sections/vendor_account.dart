@@ -123,8 +123,9 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
                             child: Text(
                               isStoreOpen ? l10.opened : l10.closed,
                               style: TextStyle(
-                                color:
-                                    isStoreOpen ? colors.onSurface : colors.onSurfaceVariant,
+                                color: isStoreOpen
+                                    ? colors.onSurface
+                                    : colors.onSurfaceVariant,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),

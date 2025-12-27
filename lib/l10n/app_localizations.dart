@@ -1255,6 +1255,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Store'**
   String get store;
+
+  /// No description provided for @changeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Location'**
+  String get changeLocation;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Category'**
+  String get addCategory;
 }
 
 class _AppLocalizationsDelegate

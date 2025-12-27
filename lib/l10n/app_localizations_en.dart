@@ -603,4 +603,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get store => 'Store';
+
+  @override
+  String get changeLocation => 'Change Location';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get addCategory => 'Add Category';
 }

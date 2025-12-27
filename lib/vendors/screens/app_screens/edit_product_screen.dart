@@ -96,7 +96,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   children: [
                     Icon(Icons.delete_outline, color: Colors.red),
                     SizedBox(width: 8),
-                    Text(l10.deleteProduct, style: TextStyle(color: Colors.red)),
+                    Text(
+                      l10.deleteProduct,
+                      style: TextStyle(color: Colors.red),
+                    ),
                   ],
                 ),
               ),
@@ -190,7 +193,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     flex: 2,
                     child: LabeledTextField(
                       label: l10.dinars,
-                      hint: '0',
+                      value: dinars,
                       keyboardType: TextInputType.number,
                       onChanged: (val) => dinars = val.trim(),
                     ),

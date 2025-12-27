@@ -192,5 +192,8 @@
   "storeStatus": "حالة المتجر",
   "opened": "مفتوح",
   "closed": "مغلق",
-  "store": "المتجر"
+  "store": "المتجر",
+  "changeLocation": "تغيير الموقع",
+  "location": "الموقع",
+  "addCategory": "إضافة فئة"
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
+import 'package:caterfy/vendors/screens/app_screens/edit_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +84,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               children: [
                 Text(
                   l10.banner,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
 
                 const Spacer(),
@@ -125,7 +129,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               children: [
                 Text(
                   l10.logo,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
 
                 const Spacer(),
@@ -161,9 +168,43 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               ],
             ),
 
+            const SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// ===== CURRENT AREA =====
+                Row(
+                  children: [
+                    Text(l10.location, style: const TextStyle(fontSize: 16)),
+                    const Spacer(),
+                    Text(
+                      store.storeArea?.isNotEmpty == true
+                          ? store.storeArea!
+                          : l10.unknownArea,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    const Spacer(),
+                    OutlinedBtn(
+                      title: l10.change,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EditStoreLocationScreen(),
+                          ),
+                        );
+
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+              ],
+            ),
             const SizedBox(height: 24),
 
-            /////////////////////////////////////////////
             // Store name (Arabic)
             LabeledTextField(
               label: l10.storeNameArabic,
@@ -250,6 +291,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
 
             const SizedBox(height: 32),
 
+            /// ===== LOCATION =====
             FilledBtn(
               title: l10.saveChanges,
               isLoading: provider.isLoading,

@@ -194,5 +194,8 @@
   "storeStatus": "Store Status",
   "opened": "Opened",
   "closed": "Closed",
-  "store": "Store"
+  "store": "Store",
+  "changeLocation": "Change Location",
+  "location": "Location",
+  "addCategory": "Add Category"
 }
