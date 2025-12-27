@@ -27,11 +27,9 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
   String categoryName = '';
   String categoryNameAr = '';
   String originalCategoryNameAr = '';
-  bool showAddProductForm = false;
-  String productName = '';
-  String productDescription = '';
-  String productDinars = '';
-  String productCents = '';
+
+  String? categoryNameError;
+  String? categoryNameArError;
 
   final ValueNotifier<File?> imageNotifier = ValueNotifier<File?>(null);
 
@@ -59,7 +57,6 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
-    final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
 
     return Scaffold(
@@ -92,7 +89,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                 value: 'delete',
                 child: Row(
                   children: [
-                    Icon(Icons.delete_outline, color: Colors.red),
+                    const Icon(Icons.delete_outline, color: Colors.red),
                     const SizedBox(width: 8),
                     Text(
                       l10.deleteCategory,
@@ -114,7 +111,13 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
               LabeledTextField(
                 label: l10.categoryName,
                 value: categoryName,
-                onChanged: (val) => categoryName = val.trim(),
+                errorText: categoryNameError,
+                onChanged: (val) {
+                  categoryName = val.trim();
+                  if (categoryNameError != null) {
+                    setState(() => categoryNameError = null);
+                  }
+                },
               ),
 
               const SizedBox(height: 12),
@@ -122,7 +125,13 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
               LabeledTextField(
                 label: l10.categoryNameArabic,
                 value: categoryNameAr,
-                onChanged: (val) => categoryNameAr = val.trim(),
+                errorText: categoryNameArError,
+                onChanged: (val) {
+                  categoryNameAr = val.trim();
+                  if (categoryNameArError != null) {
+                    setState(() => categoryNameArError = null);
+                  }
+                },
               ),
 
               const SizedBox(height: 24),
@@ -133,16 +142,30 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                 onPressed: provider.isLoading
                     ? () {}
                     : () async {
+                        setState(() {
+                          categoryNameError = categoryName.trim().isEmpty
+                              ? l10.required
+                              : null;
+
+                          categoryNameArError = categoryNameAr.trim().isEmpty
+                              ? l10.required
+                              : null;
+                        });
+
+                        if (categoryNameError != null ||
+                            categoryNameArError != null) {
+                          return;
+                        }
+
                         if (categoryName.trim() != widget.categoryName ||
                             categoryNameAr.trim() != originalCategoryNameAr) {
                           await provider.updateCategory(
                             categoryId: widget.categoryId,
                             newName: categoryName.trim(),
-                            newNameAr: categoryNameAr.isEmpty
-                                ? null
-                                : categoryNameAr.trim(),
+                            newNameAr: categoryNameAr.trim(),
                           );
                         }
+
                         if (context.mounted) {
                           Navigator.pop(context);
                         }

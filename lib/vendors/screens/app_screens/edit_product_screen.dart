@@ -38,6 +38,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   late String dinars;
   late String cents;
 
+  String? nameError;
+  String? descriptionError;
+  String? dinarsError;
+
   final ValueNotifier<File?> imageNotifier = ValueNotifier<File?>(null);
 
   @override
@@ -94,11 +98,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 value: 'delete',
                 child: Row(
                   children: [
-                    Icon(Icons.delete_outline, color: Colors.red),
-                    SizedBox(width: 8),
+                    const Icon(Icons.delete_outline, color: Colors.red),
+                    const SizedBox(width: 8),
                     Text(
                       l10.deleteProduct,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ],
                 ),
@@ -117,7 +121,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             children: [
               Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.green, size: 20),
+                  const Icon(Icons.check_circle, color: Colors.green, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     l10.available,
@@ -131,11 +135,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
               Text(
                 l10.productAvailabilityInfo,
-                style: TextStyle(fontWeight: FontWeight.w500),
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               OutlinedBtn(onPressed: () {}, title: l10.markUnavailableToday),
               Divider(thickness: 4, color: colors.surfaceContainer),
 
+              /// ================= NAME + IMAGE =================
               ValueListenableBuilder<File?>(
                 valueListenable: imageNotifier,
                 builder: (context, image, _) {
@@ -146,10 +151,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         child: LabeledTextField(
                           label: l10.name,
                           value: productName,
+                          errorText: nameError,
                           onChanged: (val) {
-                            setState(() {
-                              productName = val.trim();
-                            });
+                            productName = val.trim();
+                            if (nameError != null) {
+                              setState(() => nameError = null);
+                            }
                           },
                         ),
                       ),
@@ -185,6 +192,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
               ),
 
+              /// ================= PRICE =================
               Row(
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -194,11 +202,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     child: LabeledTextField(
                       label: l10.dinars,
                       value: dinars,
+                      errorText: dinarsError,
                       keyboardType: TextInputType.number,
-                      onChanged: (val) => dinars = val.trim(),
+                      onChanged: (val) {
+                        dinars = val.trim();
+                        if (dinarsError != null) {
+                          setState(() => dinarsError = null);
+                        }
+                      },
                     ),
                   ),
-
                   const Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Text(
@@ -209,7 +222,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       ),
                     ),
                   ),
-
                   Expanded(
                     child: LabeledTextField(
                       label: l10.cents,
@@ -221,40 +233,57 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ],
               ),
 
+              /// ================= DESCRIPTION =================
               LabeledTextField(
                 label: l10.description,
                 value: productDescription,
+                errorText: descriptionError,
                 maxLines: 4,
-                onChanged: (val) => productDescription = val.trim(),
+                onChanged: (val) {
+                  productDescription = val.trim();
+                  if (descriptionError != null) {
+                    setState(() => descriptionError = null);
+                  }
+                },
               ),
 
-              Column(
-                spacing: 0,
-                children: [
-                  FilledBtn(
-                    title: l10.saveChanges,
-                    isLoading: provider.isLoading,
-                    onPressed: provider.isLoading
-                        ? () {}
-                        : () async {
-                            final price = double.parse(
-                              '${dinars.isEmpty ? '0' : dinars}.${cents.isEmpty ? '00' : cents.padRight(2, '0')}',
-                            );
+              /// ================= SAVE =================
+              FilledBtn(
+                title: l10.saveChanges,
+                isLoading: provider.isLoading,
+                onPressed: provider.isLoading
+                    ? () {}
+                    : () async {
+                        setState(() {
+                          nameError = productName.isEmpty ? l10.required : null;
+                          descriptionError = productDescription.isEmpty
+                              ? l10.required
+                              : null;
+                          dinarsError = dinars.isEmpty ? l10.required : null;
+                        });
 
-                            await provider.updateProductData(
-                              productId: widget.productId,
-                              name: productName,
-                              description: productDescription,
-                              price: price,
-                              imageFile: imageNotifier.value,
-                            );
+                        if (nameError != null ||
+                            descriptionError != null ||
+                            dinarsError != null) {
+                          return;
+                        }
 
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
-                          },
-                  ),
-                ],
+                        final price = double.parse(
+                          '${dinars.isEmpty ? '0' : dinars}.${cents.isEmpty ? '00' : cents.padRight(2, '0')}',
+                        );
+
+                        await provider.updateProductData(
+                          productId: widget.productId,
+                          name: productName,
+                          description: productDescription,
+                          price: price,
+                          imageFile: imageNotifier.value,
+                        );
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      },
               ),
             ],
           ),

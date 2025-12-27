@@ -609,4 +609,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addCategory => 'إضافة فئة';
+
+  @override
+  String get categoryAlreadyExists => 'الفئة موجودة مسبقاً';
 }

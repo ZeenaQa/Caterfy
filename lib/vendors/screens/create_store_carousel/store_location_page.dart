@@ -4,11 +4,20 @@ import 'package:caterfy/shared_widgets.dart/map_picker.dart';
 import 'package:caterfy/util/map_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import '../../providers/logged_vendor_provider.dart';
 
 class StoreLocationPage extends StatefulWidget {
-  const StoreLocationPage({super.key});
+  final void Function(String area, double latitude, double longitude)
+  onLocationSelected;
+
+  final double? initialLatitude;
+  final double? initialLongitude;
+
+  const StoreLocationPage({
+    super.key,
+    required this.onLocationSelected,
+    this.initialLatitude,
+    this.initialLongitude,
+  });
 
   @override
   State<StoreLocationPage> createState() => _StoreLocationPageState();
@@ -19,15 +28,11 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LoggedVendorProvider>();
     final l10 = AppLocalizations.of(context);
-    final storeForm = provider.storeForm;
-
-    if (storeForm == null) return const SizedBox();
 
     final initialLocation = LatLng(
-      storeForm.latitude == 0 ? 31.9539 : storeForm.latitude,
-      storeForm.longitude == 0 ? 35.9106 : storeForm.longitude,
+      widget.initialLatitude ?? 31.9539, // Amman default
+      widget.initialLongitude ?? 35.9106,
     );
 
     return Scaffold(
@@ -38,17 +43,17 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
             child: MapPicker(
               initialLocation: pickedLocation ?? initialLocation,
               onLocationChanged: (latLng) async {
-                pickedLocation = latLng;
+                setState(() => pickedLocation = latLng);
 
                 final area = await MapHelper.getAddressFromLatLng(
                   latLng,
                   l10.unknownArea,
                 );
 
-                provider.updateStoreForm(
-                  latitude: latLng.latitude,
-                  longitude: latLng.longitude,
-                  storeArea: area,
+                widget.onLocationSelected(
+                  area,
+                  latLng.latitude,
+                  latLng.longitude,
                 );
               },
             ),

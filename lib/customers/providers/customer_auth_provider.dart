@@ -12,7 +12,6 @@ class CustomerAuthProvider extends ChangeNotifier {
   bool tokenIsLoading = false;
   bool forgotPassLoading = false;
   bool isGoogleLoading = false;
-
   String? signUpError;
   String? logInError;
   String? successMessage;

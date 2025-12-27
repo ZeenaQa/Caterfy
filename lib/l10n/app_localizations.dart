@@ -1273,6 +1273,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Category'**
   String get addCategory;
+
+  /// No description provided for @categoryAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Category already exists'**
+  String get categoryAlreadyExists;
 }
 
 class _AppLocalizationsDelegate

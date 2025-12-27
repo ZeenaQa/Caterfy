@@ -197,5 +197,6 @@
   "store": "Store",
   "changeLocation": "Change Location",
   "location": "Location",
-  "addCategory": "Add Category"
+  "addCategory": "Add Category",
+  "categoryAlreadyExists": "Category already exists"
 }

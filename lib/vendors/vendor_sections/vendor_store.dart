@@ -256,7 +256,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                             newCategoryNameEn = val.trim();
                           },
                           decoration: InputDecoration(
-                            hintText: l10.enterCategoryNameEnglish,
+                            hintText: l10.categoryNameEnglish,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -266,7 +266,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                           },
                           textDirection: TextDirection.rtl,
                           decoration: InputDecoration(
-                            hintText: l10.enterCategoryNameArabic,
+                            hintText: l10.categoryNameArabic,
                           ),
                         ),
                       ],
@@ -292,7 +292,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
                       if (newCategoryNameEn.isEmpty) return;
 
                       await provider.addCategory(
-                        newCategoryNameEn,
+                        name: newCategoryNameEn,
                         nameAr: newCategoryNameAr.isEmpty
                             ? null
                             : newCategoryNameAr,

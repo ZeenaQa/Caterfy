@@ -10,63 +10,12 @@ class LoggedVendorProvider extends ChangeNotifier {
 
   bool isLoading = false;
   bool hasStore = false;
+
   Store? store;
-  Store? storeForm;
-  bool showStoreInfoErrors = false;
-  File? logoFile;
-  File? bannerFile;
   List<Map<String, dynamic>> subCategories = [];
   List<Product> products = [];
 
-  void initStoreForm() {
-    storeForm = Store(
-      id: '',
-      vendorId: '',
-      name: '',
-      name_ar: '',
-      category: '',
-      storeArea: null,
-      latitude: 0,
-      longitude: 0,
-      tags: [],
-    );
-    notifyListeners();
-  }
-
-  bool get isStoreInfoValid {
-    return storeForm != null &&
-        storeForm!.name.isNotEmpty &&
-        storeForm!.name_ar.isNotEmpty &&
-        storeForm!.category.isNotEmpty;
-  }
-
-  void updateStoreForm({
-    String? name,
-    String? nameAr,
-    String? category,
-    String? storeArea,
-    double? latitude,
-    double? longitude,
-    List<String>? tags,
-  }) {
-    if (storeForm == null) return;
-
-    storeForm = Store(
-      id: storeForm!.id,
-      vendorId: storeForm!.vendorId,
-      name: name ?? storeForm!.name,
-      name_ar: nameAr ?? storeForm!.name_ar,
-      category: category ?? storeForm!.category,
-      storeArea: storeArea ?? storeForm!.storeArea,
-      latitude: latitude ?? storeForm!.latitude,
-      longitude: longitude ?? storeForm!.longitude,
-      tags: tags ?? storeForm!.tags,
-      logoUrl: storeForm!.logoUrl,
-      bannerUrl: storeForm!.bannerUrl,
-    );
-
-    notifyListeners();
-  }
+  /* ===================== STORE ===================== */
 
   Future<void> checkVendorStore() async {
     isLoading = true;
@@ -103,10 +52,12 @@ class LoggedVendorProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> createStore() async {
+  Future<bool> createStore({
+    required Store storeData,
+    File? logoFile,
+    File? bannerFile,
+  }) async {
     try {
-      if (storeForm == null) return false;
-
       isLoading = true;
       notifyListeners();
 
@@ -117,17 +68,17 @@ class LoggedVendorProvider extends ChangeNotifier {
       String? bannerUrl;
 
       if (logoFile != null) {
-        logoUrl = await uploadImage(logoFile!, 'logos');
+        logoUrl = await uploadImage(logoFile, 'logos');
       }
 
       if (bannerFile != null) {
-        bannerUrl = await uploadImage(bannerFile!, 'banners');
+        bannerUrl = await uploadImage(bannerFile, 'banners');
       }
 
       final response = await supabase
           .from('stores')
           .insert({
-            ...storeForm!.toMap(),
+            ...storeData.toMap(),
             'vendor_id': vendorId,
             'logo_url': logoUrl,
             'banner_url': bannerUrl,
@@ -141,19 +92,69 @@ class LoggedVendorProvider extends ChangeNotifier {
       await _refreshSubCategories();
       await fetchProducts();
 
-      isLoading = false;
-      notifyListeners();
       return true;
     } catch (e) {
+      debugPrint('createStore error: $e');
+      return false;
+    } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> updateStore({
+    required Store updatedStore,
+    File? logoFile,
+    File? bannerFile,
+  }) async {
+    if (store == null) return false;
+
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      String? logoUrl = store!.logoUrl;
+      String? bannerUrl = store!.bannerUrl;
+
+      if (logoFile != null) {
+        logoUrl = await uploadImage(logoFile, 'logos');
+      }
+
+      if (bannerFile != null) {
+        bannerUrl = await uploadImage(bannerFile, 'banners');
+      }
+
+      final response = await supabase
+          .from('stores')
+          .update({
+            'name': updatedStore.name,
+            'name_ar': updatedStore.name_ar,
+            'category': updatedStore.category,
+            'tags': updatedStore.tags,
+            'store_area': updatedStore.storeArea,
+            'latitude': updatedStore.latitude,
+            'longitude': updatedStore.longitude,
+            'logo_url': logoUrl,
+            'banner_url': bannerUrl,
+          })
+          .eq('id', store!.id)
+          .select()
+          .single();
+
+      store = Store.fromMap(response);
+      return true;
+    } catch (e) {
+      debugPrint('updateStore error: $e');
       return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
   /* ===================== SUB CATEGORIES ===================== */
 
-  Future<void> addCategory(String name, {String? nameAr}) async {
+  Future<void> addCategory({required String name, String? nameAr}) async {
     if (store == null || name.trim().isEmpty) return;
 
     await supabase.from('sub_categories').insert({
@@ -163,19 +164,6 @@ class LoggedVendorProvider extends ChangeNotifier {
     });
 
     await _refreshSubCategories();
-  }
-
-  Future<void> _refreshSubCategories() async {
-    if (store == null) return;
-
-    final response = await supabase
-        .from('sub_categories')
-        .select('*')
-        .eq('store_id', store!.id)
-        .order('created_at');
-
-    subCategories = List<Map<String, dynamic>>.from(response);
-    notifyListeners();
   }
 
   Future<void> updateCategory({
@@ -214,13 +202,11 @@ class LoggedVendorProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // delete products under category
       await supabase
           .from('products')
           .delete()
           .eq('sub_category_id', categoryId);
 
-      // delete category
       await supabase.from('sub_categories').delete().eq('id', categoryId);
 
       await _refreshSubCategories();
@@ -231,6 +217,19 @@ class LoggedVendorProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _refreshSubCategories() async {
+    if (store == null) return;
+
+    final response = await supabase
+        .from('sub_categories')
+        .select('*')
+        .eq('store_id', store!.id)
+        .order('created_at');
+
+    subCategories = List<Map<String, dynamic>>.from(response);
+    notifyListeners();
   }
 
   /* ===================== PRODUCTS ===================== */
@@ -245,7 +244,6 @@ class LoggedVendorProvider extends ChangeNotifier {
         .order('created_at');
 
     products = response.map<Product>((e) => Product.fromMap(e)).toList();
-
     notifyListeners();
   }
 
@@ -280,18 +278,6 @@ class LoggedVendorProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
-  }
-
-  Future<void> deleteProduct(String productId) async {
-    isLoading = true;
-    notifyListeners();
-
-    await supabase.from('products').delete().eq('id', productId);
-
-    products.removeWhere((p) => p.id == productId);
-
-    isLoading = false;
-    notifyListeners();
   }
 
   Future<void> updateProductData({
@@ -332,6 +318,22 @@ class LoggedVendorProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteProduct(String productId) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      await supabase.from('products').delete().eq('id', productId);
+
+      products.removeWhere((p) => p.id == productId);
+    } catch (e) {
+      debugPrint('deleteProduct error: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   List<Product> productsBySubCategory(String subCategoryId) {
     return products.where((p) => p.subCategoryId == subCategoryId).toList();
   }
@@ -340,80 +342,12 @@ class LoggedVendorProvider extends ChangeNotifier {
 
   Future<String> uploadImage(File file, String folder) async {
     final userId = supabase.auth.currentUser!.id;
-    final path = "$folder/$userId-${DateTime.now().millisecondsSinceEpoch}.jpg";
+    final path = '$folder/$userId-${DateTime.now().millisecondsSinceEpoch}.jpg';
 
     await supabase.storage
         .from('store-images')
         .upload(path, file, fileOptions: const FileOptions(upsert: true));
 
     return supabase.storage.from('store-images').getPublicUrl(path);
-  }
-
-  Future<bool> updateStore() async {
-    if (storeForm == null || store == null) return false;
-
-    try {
-      isLoading = true;
-      notifyListeners();
-
-      String? logoUrl = store!.logoUrl;
-      String? bannerUrl = store!.bannerUrl;
-
-      if (logoFile != null) {
-        logoUrl = await uploadImage(logoFile!, 'logos');
-      }
-
-      if (bannerFile != null) {
-        bannerUrl = await uploadImage(bannerFile!, 'banners');
-      }
-
-      final response = await supabase
-          .from('stores')
-          .update({
-            'name': storeForm!.name,
-            'name_ar': storeForm!.name_ar,
-            'category': storeForm!.category,
-            'tags': storeForm!.tags,
-            'store_area': storeForm!.storeArea,
-            'latitude': storeForm!.latitude,
-            'longitude': storeForm!.longitude,
-            'logo_url': logoUrl,
-            'banner_url': bannerUrl,
-          })
-          .eq('id', store!.id)
-          .select()
-          .single();
-
-      store = Store.fromMap(response);
-      storeForm = store;
-
-      logoFile = null;
-      bannerFile = null;
-
-      isLoading = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      debugPrint('updateStore error: $e');
-      isLoading = false;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  // ======= Helpers to set files safely =====
-  void setLogoFile(File? file) {
-    logoFile = file;
-    notifyListeners();
-  }
-
-  void setBannerFile(File? file) {
-    bannerFile = file;
-    notifyListeners();
-  }
-
-  void setShowStoreInfoErrors(bool value) {
-    showStoreInfoErrors = value;
-    notifyListeners();
   }
 }

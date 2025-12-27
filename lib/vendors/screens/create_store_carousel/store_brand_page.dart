@@ -1,33 +1,42 @@
 import 'dart:io';
-import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
+
 import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 
 class StoreBrandBannerPage extends StatelessWidget {
-  const StoreBrandBannerPage({super.key});
+  final File? logoFile;
+  final File? bannerFile;
+  final Function(File file) onLogoSelected;
+  final Function(File file) onBannerSelected;
 
-  Future<void> _pickImage(BuildContext context, bool isLogo) async {
+  const StoreBrandBannerPage({
+    super.key,
+    required this.onLogoSelected,
+    required this.onBannerSelected,
+    this.logoFile,
+    this.bannerFile,
+  });
+
+  Future<void> _pickImage(BuildContext context, {required bool isLogo}) async {
     final picker = ImagePicker();
-    final provider = context.read<LoggedVendorProvider>();
-
     final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      if (isLogo) {
-        provider.setLogoFile(File(image.path));
-      } else {
-        provider.setBannerFile(File(image.path));
-      }
+
+    if (image == null) return;
+
+    final file = File(image.path);
+
+    if (isLogo) {
+      onLogoSelected(file);
+    } else {
+      onBannerSelected(file);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final provider = context.watch<LoggedVendorProvider>();
-
     final l10 = AppLocalizations.of(context);
 
     return PageWrapper(
@@ -43,19 +52,19 @@ class StoreBrandBannerPage extends StatelessWidget {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
-              onTap: () => _pickImage(context, false),
+              onTap: () => _pickImage(context, isLogo: false),
               child: Container(
                 height: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  image: provider.bannerFile != null
+                  image: bannerFile != null
                       ? DecorationImage(
-                          image: FileImage(provider.bannerFile!),
+                          image: FileImage(bannerFile!),
                           fit: BoxFit.cover,
                         )
                       : null,
                 ),
-                child: provider.bannerFile == null
+                child: bannerFile == null
                     ? Center(
                         child: Icon(
                           Icons.image_outlined,
@@ -67,11 +76,13 @@ class StoreBrandBannerPage extends StatelessWidget {
               ),
             ),
           ),
+
+          /// LOGO
           Positioned(
             bottom: 200,
             left: 16,
             child: GestureDetector(
-              onTap: () => _pickImage(context, true),
+              onTap: () => _pickImage(context, isLogo: true),
               child: Container(
                 height: 100,
                 width: 100,
@@ -84,14 +95,14 @@ class StoreBrandBannerPage extends StatelessWidget {
                       blurRadius: 8,
                     ),
                   ],
-                  image: provider.logoFile != null
+                  image: logoFile != null
                       ? DecorationImage(
-                          image: FileImage(provider.logoFile!),
+                          image: FileImage(logoFile!),
                           fit: BoxFit.cover,
                         )
                       : null,
                 ),
-                child: provider.logoFile == null
+                child: logoFile == null
                     ? Icon(Icons.add_a_photo, color: colors.primary)
                     : null,
               ),

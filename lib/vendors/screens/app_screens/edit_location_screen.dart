@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/store.dart';
 
 class EditStoreLocationScreen extends StatefulWidget {
-  const EditStoreLocationScreen({super.key});
+  final Store store;
+  final Function(Store updatedStore) onLocationSaved;
+
+  const EditStoreLocationScreen({
+    super.key,
+    required this.store,
+    required this.onLocationSaved,
+  });
 
   @override
   State<EditStoreLocationScreen> createState() =>
@@ -49,14 +55,12 @@ class _EditStoreLocationScreenState extends State<EditStoreLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LoggedVendorProvider>();
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
-    final store = provider.storeForm!;
 
     pickedLocation ??= LatLng(
-      store.latitude == 0 ? 31.9539 : store.latitude,
-      store.longitude == 0 ? 35.9106 : store.longitude,
+      widget.store.latitude == 0 ? 31.9539 : widget.store.latitude,
+      widget.store.longitude == 0 ? 35.9106 : widget.store.longitude,
     );
 
     return Scaffold(
@@ -89,11 +93,19 @@ class _EditStoreLocationScreenState extends State<EditStoreLocationScreen> {
 
                     final area = await _getAddress(context, pickedLocation!);
 
-                    provider.updateStoreForm(
+                    final updatedStore = Store(
+                      id: widget.store.id,
+                      vendorId: widget.store.vendorId,
+                      name: widget.store.name,
+                      name_ar: widget.store.name_ar,
+                      category: widget.store.category,
+                      storeArea: area,
                       latitude: pickedLocation!.latitude,
                       longitude: pickedLocation!.longitude,
-                      storeArea: area,
+                      tags: widget.store.tags,
                     );
+
+                    widget.onLocationSaved(updatedStore);
 
                     if (context.mounted) {
                       Navigator.pop(context);

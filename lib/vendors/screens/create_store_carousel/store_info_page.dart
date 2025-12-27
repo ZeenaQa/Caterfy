@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
-class StoreInfoPage extends StatelessWidget {
-  const StoreInfoPage({super.key});
+class StoreInfoPage extends StatefulWidget {
+  final void Function(String name, String nameAr, String category) onChanged;
+
+  final bool showErrors;
+
+  final String initialName;
+  final String initialNameAr;
+  final String initialCategory;
+
+  const StoreInfoPage({
+    super.key,
+    required this.onChanged,
+    required this.showErrors,
+    this.initialName = '',
+    this.initialNameAr = '',
+    this.initialCategory = '',
+  });
 
   static const categories = [
     'electronics',
@@ -17,8 +30,28 @@ class StoreInfoPage extends StatelessWidget {
   ];
 
   @override
+  State<StoreInfoPage> createState() => _StoreInfoPageState();
+}
+
+class _StoreInfoPageState extends State<StoreInfoPage> {
+  late String _name;
+  late String _nameAr;
+  String? _category;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = widget.initialName;
+    _nameAr = widget.initialNameAr;
+    _category = widget.initialCategory.isEmpty ? null : widget.initialCategory;
+  }
+
+  void _notifyParent() {
+    widget.onChanged(_name.trim(), _nameAr.trim(), _category ?? '');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LoggedVendorProvider>();
     final l10 = AppLocalizations.of(context);
 
     String catLabel(String cat) {
@@ -40,15 +73,6 @@ class StoreInfoPage extends StatelessWidget {
       }
     }
 
-    if (provider.storeForm == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        provider.initStoreForm();
-      });
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final storeForm = provider.storeForm!;
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -61,13 +85,13 @@ class StoreInfoPage extends StatelessWidget {
           LabeledTextField(
             label: l10.storeNameArabic,
             hint: l10.storeNameArabicHint,
-            value: storeForm.name_ar,
-            errorText: provider.showStoreInfoErrors && storeForm.name_ar.isEmpty
+            value: _nameAr,
+            errorText: widget.showErrors && _nameAr.trim().isEmpty
                 ? l10.required
                 : null,
             onChanged: (val) {
-              provider.updateStoreForm(nameAr: val);
-              provider.showStoreInfoErrors = false;
+              setState(() => _nameAr = val);
+              _notifyParent();
             },
           ),
 
@@ -77,13 +101,13 @@ class StoreInfoPage extends StatelessWidget {
           LabeledTextField(
             label: l10.storeNameEnglish,
             hint: l10.storeNameEnglishHint,
-            value: storeForm.name,
-            errorText: provider.showStoreInfoErrors && storeForm.name.isEmpty
+            value: _name,
+            errorText: widget.showErrors && _name.trim().isEmpty
                 ? l10.required
                 : null,
             onChanged: (val) {
-              provider.updateStoreForm(name: val);
-              provider.showStoreInfoErrors = false;
+              setState(() => _name = val);
+              _notifyParent();
             },
           ),
 
@@ -91,26 +115,26 @@ class StoreInfoPage extends StatelessWidget {
 
           /// ===== CATEGORY =====
           DropdownButtonFormField<String>(
-            value: storeForm.category.isEmpty ? null : storeForm.category,
+            value: _category,
             decoration: InputDecoration(
               labelText: l10.category,
               errorText:
-                  provider.showStoreInfoErrors && storeForm.category.isEmpty
+                  widget.showErrors && (_category == null || _category!.isEmpty)
                   ? l10.required
                   : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            items: categories
+            items: StoreInfoPage.categories
                 .map(
                   (cat) =>
                       DropdownMenuItem(value: cat, child: Text(catLabel(cat))),
                 )
                 .toList(),
             onChanged: (val) {
-              provider.updateStoreForm(category: val);
-              provider.showStoreInfoErrors = false;
+              setState(() => _category = val);
+              _notifyParent();
             },
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:caterfy/models/product.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
+import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/util/wavy_clipper.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/screens/app_screens/add_product_screen.dart';
@@ -24,6 +25,12 @@ class Vstore extends StatefulWidget {
 class _VstoreState extends State<Vstore> {
   String newCategoryNameEn = '';
   String newCategoryNameAr = '';
+  String? categoryNameEnError;
+  String? categoryNameArError;
+  void clearErrors() {
+    categoryNameEnError = null;
+    categoryNameArError = null;
+  }
 
   @override
   void initState() {
@@ -50,21 +57,32 @@ class _VstoreState extends State<Vstore> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                autofocus: true,
-                onChanged: (v) => newCategoryNameEn = v.trim(),
-                decoration: InputDecoration(
-                  hintText: l10.enterCategoryNameEnglish,
-                ),
+              LabeledTextField(
+                label: l10.categoryNameEnglish,
+                value: newCategoryNameEn,
+                errorText: categoryNameEnError,
+                onChanged: (val) {
+                  setModalState(() {
+                    clearErrors();
+                    newCategoryNameEn = val.trim();
+                    categoryNameEnError = null;
+                  });
+                },
               ),
+
               const SizedBox(height: 8),
-              TextField(
-                textDirection: TextDirection.rtl,
-                onChanged: (v) => newCategoryNameAr = v.trim(),
-                decoration: InputDecoration(
-                  hintText: l10.enterCategoryNameArabic,
-                ),
+              LabeledTextField(
+                label: l10.categoryNameArabic,
+                value: newCategoryNameAr,
+                errorText: categoryNameArError,
+                onChanged: (val) {
+                  setModalState(() {
+                    newCategoryNameAr = val.trim();
+                    categoryNameArError = null;
+                  });
+                },
               ),
+
               const SizedBox(height: 20),
 
               /// ===== ACTION BUTTONS =====
@@ -77,6 +95,7 @@ class _VstoreState extends State<Vstore> {
                         newCategoryNameEn = '';
                         newCategoryNameAr = '';
                         Navigator.pop(context);
+                        clearErrors();
                       },
                     ),
                   ),
@@ -88,19 +107,76 @@ class _VstoreState extends State<Vstore> {
                       onPressed: isSaving
                           ? () {}
                           : () async {
-                              if (newCategoryNameEn.isEmpty) return;
+                              final categories = provider.subCategories;
 
+                              bool hasError = false;
+
+                              // ===== EMPTY CHECK =====
+                              setModalState(() {
+                                categoryNameEnError = newCategoryNameEn.isEmpty
+                                    ? l10.required
+                                    : null;
+
+                                categoryNameArError = newCategoryNameAr.isEmpty
+                                    ? l10.required
+                                    : null;
+
+                                hasError =
+                                    categoryNameEnError != null ||
+                                    categoryNameArError != null;
+                              });
+
+                              if (hasError) return;
+
+                              // ===== DUPLICATE CHECK =====
+                              bool enExists = false;
+                              bool arExists = false;
+
+                              for (final c in categories) {
+                                final en = (c['name'] ?? '')
+                                    .toString()
+                                    .toLowerCase()
+                                    .trim();
+                                final ar = (c['name_ar'] ?? '')
+                                    .toString()
+                                    .toLowerCase()
+                                    .trim();
+
+                                if (en ==
+                                    newCategoryNameEn.toLowerCase().trim()) {
+                                  enExists = true;
+                                }
+
+                                if (ar ==
+                                    newCategoryNameAr.toLowerCase().trim()) {
+                                  arExists = true;
+                                }
+                              }
+
+                              if (enExists || arExists) {
+                                setModalState(() {
+                                  categoryNameEnError = enExists
+                                      ? l10.categoryAlreadyExists
+                                      : null;
+
+                                  categoryNameArError = arExists
+                                      ? l10.categoryAlreadyExists
+                                      : null;
+                                });
+                                return;
+                              }
+
+                              // ===== SAVE =====
                               setModalState(() => isSaving = true);
 
                               await provider.addCategory(
-                                newCategoryNameEn,
-                                nameAr: newCategoryNameAr.isEmpty
-                                    ? null
-                                    : newCategoryNameAr,
+                                name: newCategoryNameEn,
+                                nameAr: newCategoryNameAr,
                               );
 
                               newCategoryNameEn = '';
                               newCategoryNameAr = '';
+                              clearErrors();
 
                               Navigator.pop(context);
                             },
