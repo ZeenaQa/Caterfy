@@ -3,10 +3,9 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/util/image_utils.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -118,11 +117,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 builder: (context, image, _) {
                   return GestureDetector(
                     onTap: () async {
-                      final picked = await ImagePicker().pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (picked != null) {
-                        imageNotifier.value = File(picked.path);
+                      final file = await pickAndCropImage();
+                      if (file != null) {
+                        imageNotifier.value = file;
                       }
                     },
                     child: Container(

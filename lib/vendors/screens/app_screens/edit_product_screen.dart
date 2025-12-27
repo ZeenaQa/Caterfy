@@ -6,8 +6,8 @@ import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/util/image_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
@@ -161,32 +161,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () async {
-                          final picked = await ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                          );
-                          if (picked != null) {
-                            imageNotifier.value = File(picked.path);
-                          }
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: image == null
-                              ? Image.network(
-                                  widget.imageUrl,
-                                  width: 72,
-                                  height: 72,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.file(
-                                  image,
-                                  width: 72,
-                                  height: 72,
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                      ),
+                     GestureDetector(
+  onTap: () async {
+ 
+    final croppedImage = await pickAndCropImage();
+    if (croppedImage != null) {
+      imageNotifier.value = croppedImage;
+    }
+  },
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(12),
+    child: image == null
+        ? Image.network(
+            widget.imageUrl,
+            width: 72,
+            height: 72,
+            fit: BoxFit.cover,
+          )
+        : Image.file(
+            image,
+            width: 72,
+            height: 72,
+            fit: BoxFit.cover,
+          ),
+  ),
+),
+
                     ],
                   );
                 },

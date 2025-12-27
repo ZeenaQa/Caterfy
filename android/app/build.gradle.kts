@@ -10,12 +10,14 @@ android {
     ndkVersion = flutter.ndkVersion
 
     defaultConfig {
-        applicationId = "com.example.caterfy"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
+    applicationId = "com.example.caterfy"
+    minSdk = flutter.minSdkVersion
+    targetSdk = 33
+    versionCode = flutter.versionCode
+    versionName = flutter.versionName
+}
+
+
 
     signingConfigs {
         getByName("debug") {

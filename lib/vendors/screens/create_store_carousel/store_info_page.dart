@@ -115,7 +115,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
 
           /// ===== CATEGORY =====
           DropdownButtonFormField<String>(
-            value: _category,
+            initialValue: _category,
             decoration: InputDecoration(
               labelText: l10.category,
               errorText:

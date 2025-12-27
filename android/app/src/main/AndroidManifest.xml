@@ -8,44 +8,38 @@
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
 
     <application
-        android:label="caterfy"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+    android:label="caterfy"
+    android:name="${applicationName}"
+    android:icon="@mipmap/ic_launcher">
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+    <activity
+        android:name=".MainActivity"
+        android:exported="true"
+        android:launchMode="singleTop"
+        android:theme="@style/LaunchTheme"
+        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+        android:hardwareAccelerated="true"
+        android:windowSoftInputMode="adjustResize">
 
-    
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
+    </activity>
 
-         
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="com.example.caterfy" android:host="login-callback"/>
-            </intent-filter>
-        </activity>
 
-     
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
+    <activity
+        android:name="com.yalantis.ucrop.UCropActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:exported="false"/>
 
-       
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCcEEVbxSZ6GRn53ISfBV96fiYWzzKBIoQ"/>
-    </application>
+    <meta-data
+        android:name="flutterEmbedding"
+        android:value="2" />
+</application>
+
+
 
     
     <queries>

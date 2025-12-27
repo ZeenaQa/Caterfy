@@ -1,8 +1,7 @@
 import 'dart:io';
 
+import 'package:caterfy/util/image_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/screens/app_screens/edit_location_screen.dart';
@@ -98,17 +97,16 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     ),
                   ),
                 const SizedBox(width: 8),
-                OutlinedBtn(
-                  title: l10.change,
-                  onPressed: () async {
-                    final picked = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (picked != null) {
-                      setState(() => bannerFile = File(picked.path));
-                    }
-                  },
-                ),
+              OutlinedBtn(
+  title: l10.change,
+  onPressed: () async {
+    final cropped = await pickAndCropImage();
+    if (cropped != null) {
+      setState(() => bannerFile = cropped);
+    }
+  },
+),
+
               ],
             ),
 
@@ -128,17 +126,16 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     ),
                   ),
                 const SizedBox(width: 8),
-                OutlinedBtn(
-                  title: l10.change,
-                  onPressed: () async {
-                    final picked = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (picked != null) {
-                      setState(() => logoFile = File(picked.path));
-                    }
-                  },
-                ),
+             OutlinedBtn(
+  title: l10.change,
+  onPressed: () async {
+    final cropped = await pickAndCropImage();
+    if (cropped != null) {
+      setState(() => logoFile = cropped);
+    }
+  },
+),
+
               ],
             ),
 

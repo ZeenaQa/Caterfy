@@ -30,9 +30,9 @@ Future<T?> openDrawer<T>(
       padding: padding,
       title: title,
       isStack: isStack,
-      child: child,
       showCloseBtn: showCloseBtn,
       accountForKeyboard: accountForKeyboard,
+      child: child,
     ),
   );
 }

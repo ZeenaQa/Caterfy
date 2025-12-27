@@ -133,7 +133,7 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
                           ),
                           Switch(
                             value: isStoreOpen,
-                            activeColor: colors.primary,
+                            activeThumbColor: colors.primary,
                             onChanged: (val) {
                               setState(() {
                                 isStoreOpen = val;

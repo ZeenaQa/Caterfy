@@ -1,5 +1,4 @@
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
-import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
 import 'package:flutter/material.dart';
 
 class CustomerOrderDetailScreen extends StatelessWidget {

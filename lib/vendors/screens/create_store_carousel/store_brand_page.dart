@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:caterfy/util/image_utils.dart';
 import 'package:caterfy/vendors/vendor_widgets/page_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 
 class StoreBrandBannerPage extends StatelessWidget {
@@ -19,20 +19,17 @@ class StoreBrandBannerPage extends StatelessWidget {
     this.bannerFile,
   });
 
-  Future<void> _pickImage(BuildContext context, {required bool isLogo}) async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
+ Future<void> _pickImage(BuildContext context, {required bool isLogo}) async {
+  final file = await pickAndCropImage(); 
+  if (file == null) return;
 
-    if (image == null) return;
-
-    final file = File(image.path);
-
-    if (isLogo) {
-      onLogoSelected(file);
-    } else {
-      onBannerSelected(file);
-    }
+  if (isLogo) {
+    onLogoSelected(file);
+  } else {
+    onBannerSelected(file);
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

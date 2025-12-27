@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocaleProvider extends ChangeNotifier {
   Locale _locale = const Locale('en');
-  bool _notificationsEnabled = true;
+  final bool _notificationsEnabled = true;
 
   Locale get locale => _locale;
   bool get notificationsEnabled => _notificationsEnabled;
