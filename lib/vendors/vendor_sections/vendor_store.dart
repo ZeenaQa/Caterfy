@@ -81,17 +81,23 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
     }
 
     final store = provider.store!;
-    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (store.name_ar.isNotEmpty) ? store.name_ar : store.name;
+    final storeNameToShow =
+        Localizations.localeOf(context).languageCode == 'ar' &&
+            (store.name_ar.isNotEmpty)
+        ? store.name_ar
+        : store.name;
     String catLabel(Map<String, dynamic> cat) {
-      return Localizations.localeOf(context).languageCode == 'ar' && (cat['name_ar']?.isNotEmpty ?? false)
-        ? cat['name_ar'] ?? ''
-        : cat['name'] ?? '';
+      return Localizations.localeOf(context).languageCode == 'ar' &&
+              (cat['name_ar']?.isNotEmpty ?? false)
+          ? cat['name_ar'] ?? ''
+          : cat['name'] ?? '';
     }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        
+
         children: [
           Stack(
             clipBehavior: Clip.none,
@@ -134,8 +140,6 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
           ),
 
           const SizedBox(height: 56),
-
-         
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -217,7 +221,10 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
               children: [
                 Text(
                   l10.menu,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const Spacer(),
 
@@ -286,7 +293,9 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
 
                       await provider.addCategory(
                         newCategoryNameEn,
-                        nameAr: newCategoryNameAr.isEmpty ? null : newCategoryNameAr,
+                        nameAr: newCategoryNameAr.isEmpty
+                            ? null
+                            : newCategoryNameAr,
                       );
 
                       setState(() {

@@ -4,6 +4,7 @@ import 'package:caterfy/util/theme_controller.dart';
 import 'package:caterfy/vendors/vendor_sections/vendor_account.dart';
 import 'package:caterfy/vendors/vendor_sections/vendor_orders.dart';
 import 'package:caterfy/vendors/vendor_sections/vendor_store.dart';
+import 'package:caterfy/vendors/vendor_sections/vstore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,7 +21,7 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    VendorStoreSection(),
+    Vstore(),
     VendorOrdersSection(),
     VendorAccountSection(),
   ];
@@ -40,7 +41,9 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: const Color.fromARGB(66, 226, 226, 226),
+                color: isDark
+                    ? Colors.transparent
+                    : Color.fromARGB(66, 226, 226, 226),
                 blurRadius: 6,
                 offset: Offset(0, 0),
               ),

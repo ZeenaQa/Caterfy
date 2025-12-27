@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:math';
 
 class OutlinedBtn extends StatelessWidget {
   const OutlinedBtn({
@@ -17,6 +18,7 @@ class OutlinedBtn extends StatelessWidget {
     this.icon,
     this.customSvgIcon,
     this.lighterBorder = false,
+    this.borderRadius = 50,
   });
 
   final Function onPressed;
@@ -28,6 +30,7 @@ class OutlinedBtn extends StatelessWidget {
   final double? rightPadding;
   final double innerVerticalPadding;
   final double innerHorizontalPadding;
+  final double borderRadius;
   final IconData? icon;
   final SvgPicture? customSvgIcon;
   final bool lighterBorder;
@@ -54,7 +57,7 @@ class OutlinedBtn extends StatelessWidget {
             ),
 
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(max(borderRadius, 0)),
             ),
             side: BorderSide(
               color: lighterBorder ? colors.outline : colors.onSurfaceVariant,
