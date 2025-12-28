@@ -2,7 +2,6 @@ import 'package:caterfy/customers/customer_widgets/product_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:flutter/material.dart';
-import 'package:caterfy/customers/utils/localization_helpers.dart';
 
 class StoreMenuLayout extends StatefulWidget {
   const StoreMenuLayout({

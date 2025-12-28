@@ -396,4 +396,16 @@ class LoggedVendorProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  Future<void> updateStoreStatus({
+  required String storeId,
+  required bool isOpen,
+}) async {
+  await supabase
+      .from('stores')
+      .update({'is_open': isOpen})
+      .eq('id', storeId);
 }
+
+  
+}
+

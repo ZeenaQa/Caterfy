@@ -10,6 +10,8 @@ class Store {
   final List<String>? tags;
   final double latitude;
   final double longitude;
+  final bool? isOpen;
+
 
   Store({
     required this.id,
@@ -23,6 +25,7 @@ class Store {
     this.tags,
     this.latitude = 0,
     this.longitude = 0,
+     this.isOpen,
   });
 
   factory Store.fromMap(Map<String, dynamic> map) {
@@ -38,6 +41,8 @@ class Store {
       tags: map['tags'] != null ? List<String>.from(map['tags']) : null,
       latitude: (map['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (map['longitude'] as num?)?.toDouble() ?? 0,
+      isOpen: map['is_open'] ?? true,
+
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
+import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/screens/app_screens/vendor_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,8 @@ class VendorAccountSection extends StatefulWidget {
 }
 
 class _VendorAccountSectionState extends State<VendorAccountSection> {
-  bool isStoreOpen = true;
+   bool? isStoreOpen;
+  bool isUpdatingStoreStatus = false;
 
   String getInitial(String name) {
     if (name.isEmpty) return '';
@@ -24,7 +26,8 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final user = Provider.of<GlobalProvider>(context).user;
-
+    final vendorProvider = Provider.of<LoggedVendorProvider>(context);
+    final store = vendorProvider.store;
     final List<Widget> items = [
       AccountButton(title: l10.getHelp, icon: Icons.help_outline),
       AccountButton(title: l10.aboutApp, icon: Icons.info_outline),
@@ -121,25 +124,46 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
                           const SizedBox(width: 15),
                           Expanded(
                             child: Text(
-                              isStoreOpen ? l10.opened : l10.closed,
+                         (isStoreOpen ?? true) ? l10.opened : l10.closed
+                              ,
                               style: TextStyle(
-                                color: isStoreOpen
-                                    ? colors.onSurface
-                                    : colors.onSurfaceVariant,
+                              color: (isStoreOpen ?? true)
+    ? colors.onSurface
+    : colors.onSurfaceVariant,
+
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          Switch(
-                            value: isStoreOpen,
-                            activeThumbColor: colors.primary,
-                            onChanged: (val) {
-                              setState(() {
-                                isStoreOpen = val;
-                              });
-                            },
-                          ),
+                       Switch(
+  value: isStoreOpen ?? true,
+  onChanged: isUpdatingStoreStatus
+      ? null
+      : (val) async {
+          setState(() {
+            isUpdatingStoreStatus = true;
+            isStoreOpen = val;
+          });
+
+          try {
+            await vendorProvider.updateStoreStatus(
+              storeId: store!.id,
+              isOpen: val,
+            );
+          } catch (e) {
+            // rollback
+            setState(() {
+              isStoreOpen = !val;
+            });
+          } finally {
+            setState(() {
+              isUpdatingStoreStatus = false;
+            });
+          }
+        },
+),
+
                         ],
                       ),
                     ],

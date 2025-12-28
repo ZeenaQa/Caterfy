@@ -208,48 +208,57 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchProducts({
-    required String storeId,
-    required BuildContext context,
-  }) async {
-    try {
-      _isProductsLoading = true;
-      notifyListeners();
-      final data = await supabase
-          .from('products')
-          .select('*, sub_categories(name)')
-          .eq('store_id', storeId);
+Future<void> fetchProducts({
+  required String storeId,
+  required BuildContext context,
+}) async {
+  final l10 = AppLocalizations.of(context);
+  final isArabic = l10.localeName == 'ar';
 
-      final Map<String, Product> productsMap = {
-        for (final product in _products) product.id: product,
+  try {
+    _isProductsLoading = true;
+    notifyListeners();
+
+    final data = await supabase
+        .from('products')
+        .select('*, sub_categories(name, name_ar)')
+        .eq('store_id', storeId);
+
+    final Map<String, Product> productsMap = {};
+
+    for (final e in data) {
+      final subcat = e['sub_categories'];
+
+      final subCategoryName = (subcat is Map)
+          ? (isArabic &&
+                  (subcat['name_ar']?.toString().isNotEmpty ?? false)
+              ? subcat['name_ar']
+              : subcat['name'])
+          : '';
+
+      final productObject = {
+        ...e,
+        'sub_categories': subCategoryName,
       };
 
-      for (final e in data) {
-        final productId = e['id'];
-        final productObject = {
-          ...e,
-          'sub_categories': e['sub_categories']['name'],
-          // 'ar_category': e['sub_categories']['name_ar'],
-        };
-
-        productsMap[productId] = Product.fromMap(productObject);
-      }
-
-      _products = productsMap.values.toList();
-    } catch (e) {
-      if (context.mounted) {
-        final l10 = AppLocalizations.of(context);
-        showCustomToast(
-          context: context,
-          type: ToastificationType.error,
-          message: l10.somethingWentWrong,
-        );
-      }
-    } finally {
-      _isProductsLoading = false;
-      notifyListeners();
+      productsMap[e['id']] = Product.fromMap(productObject);
     }
+
+    _products = productsMap.values.toList();
+  } catch (e) {
+    if (context.mounted) {
+      showCustomToast(
+        context: context,
+        type: ToastificationType.error,
+        message: l10.somethingWentWrong,
+      );
+    }
+  } finally {
+    _isProductsLoading = false;
+    notifyListeners();
   }
+}
+
 
   Future<void> toggleFavorite(String customerId, Store store) async {
     final isCurrentlyFavorite = _favoriteStores.containsKey(store.id);
@@ -288,6 +297,7 @@ class LoggedCustomerProvider with ChangeNotifier {
     required BuildContext context,
   }) async {
     final l10 = AppLocalizations.of(context);
+    
 
     try {
       _isCategoryLoading = true;
