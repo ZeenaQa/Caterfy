@@ -64,7 +64,7 @@ class CustomerAccountSection extends StatelessWidget {
     ];
     return SafeArea(
       child: (user == null)
-          ? Text("LOADING", style: TextStyle(fontWeight: FontWeight.bold))
+          ? Text(l10.loading, style: TextStyle(fontWeight: FontWeight.bold))
           : Column(
               children: [
                 GestureDetector(
@@ -133,7 +133,7 @@ class CustomerAccountSection extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Caterfy pay",
+                            l10.caterfyPay,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,

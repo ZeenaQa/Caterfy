@@ -25,6 +25,7 @@ class CustomerStoreListItem extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final hasLogo = (store.logoUrl ?? '').isNotEmpty;
     final hasBanner = (store.bannerUrl ?? '').isNotEmpty;
+    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (store.name_ar.isNotEmpty) ? store.name_ar : store.name;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -159,7 +160,7 @@ class CustomerStoreListItem extends StatelessWidget {
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          store.name,
+                          storeNameToShow,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13.5,

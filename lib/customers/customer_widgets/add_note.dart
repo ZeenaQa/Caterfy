@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 
 class AddNote extends StatefulWidget {
   const AddNote({super.key, this.onCloseNote, this.initialNote = ''});
@@ -22,6 +23,7 @@ class _AddNoteState extends State<AddNote> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
@@ -40,7 +42,7 @@ class _AddNoteState extends State<AddNote> {
             maxLength: 200,
             autofocus: true,
             decoration: InputDecoration(
-              label: Text("Special request"),
+              label: Text(l10.specialRequest),
               floatingLabelAlignment: FloatingLabelAlignment.start,
               floatingLabelStyle: TextStyle(color: colors.onSurfaceVariant),
               border: OutlineInputBorder(),

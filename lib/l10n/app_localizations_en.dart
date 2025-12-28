@@ -617,5 +617,101 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryAlreadyExists => 'Category already exists';
 
   @override
+  String get viewCart => 'View cart';
+
+  @override
+  String get storeDetails => 'Store details';
+
+  @override
+  String get storeArea => 'Store area';
+
+  @override
+  String get deliveryTime => 'Delivery time';
+
+  @override
+  String get deliveryFee => 'Delivery fee';
+
+  @override
+  String get legalName => 'Legal name';
+
+  @override
+  String get favoriteStoresEmpty => 'Your favorite stores will appear here';
+
+  @override
+  String get cart => 'Cart';
+
+  @override
+  String get emptyCartMessage => 'There\'s nothing in your cart yet';
+
+  @override
+  String get specialRequest => 'Special request';
+
+  @override
+  String get anySpecialRequests => 'Any special requests?';
+
+  @override
+  String get specialRequestHint => 'Anything else we need to know?';
+
+  @override
+  String get saveOnOrder => 'Save on your order';
+
+  @override
+  String get paymentSummary => 'Payment summary';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get serviceFee => 'Service fee';
+
+  @override
+  String get totalAmount => 'Total amount';
+
+  @override
+  String get addItems => 'Add items';
+
+  @override
+  String get checkout => 'Checkout';
+
+  @override
+  String get enterCouponCode => 'Enter coupon code';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get pickLocation => 'Pick a Location';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get addItem => 'Add item';
+
+  @override
+  String get delivered => 'Delivered';
+
+  @override
+  String get orderAgain => 'Order again';
+
+  @override
+  String get rate => 'Rate';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get errorUpdatingPassword => 'Error updating password';
+
+  @override
+  String get emailSentSuccessfully => 'Email sent successfully';
+
+  @override
+  String get editAccountInfo => 'Edit account info';
+
+  @override
+  String get updatedSuccessfully => 'Updated successfully!';
+
+  @override
   String get more => 'More';
 }

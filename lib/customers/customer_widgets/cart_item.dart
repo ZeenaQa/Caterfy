@@ -94,7 +94,7 @@ class CartItem extends StatelessWidget {
                             size: 14,
                           ),
                           Text(
-                            "Edit",
+                            l10.edit,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 3,
                             style: TextStyle(

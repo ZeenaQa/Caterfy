@@ -124,7 +124,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: locale.languageCode == "ar",
                   colors: colors,
-                  title: "العربية",
+                  title: l10.arabic,
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('en'));
                     context.read<LocaleProvider>().toggleLocale();
@@ -133,7 +133,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: locale.languageCode == "en",
                   colors: colors,
-                  title: "English",
+                  title: l10.english,
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('ar'));
                     context.read<LocaleProvider>().toggleLocale();
@@ -145,7 +145,7 @@ class CustomerSettingsScreen extends StatelessWidget {
         },
         title: l10.language,
         icon: Icons.language_outlined,
-        rightText: locale.languageCode == "en" ? "English" : "العربية",
+        rightText: locale.languageCode == "en" ? l10.english : l10.arabic,
       ),
       SettingsButton(
         onTap: () {

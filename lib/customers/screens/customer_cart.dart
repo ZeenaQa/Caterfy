@@ -52,6 +52,7 @@ class _CustomerCartState extends State<CustomerCart> {
     final items = customerProvider.cart?.items ?? const [];
     final bool isLoading = customerProvider.isCartLoading;
     final bool isCartEmpty = customerProvider.cart?.items.isEmpty ?? true;
+    final storeNameToShow = store == null ? '' : (Localizations.localeOf(context).languageCode == 'ar' && store!.name_ar.isNotEmpty ? store!.name_ar : store!.name);
 
     return Scaffold(
       bottomNavigationBar: isLoading || isCartEmpty
@@ -64,14 +65,14 @@ class _CustomerCartState extends State<CustomerCart> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Cart",
+                    l10.cart,
                     style: TextStyle(
                       fontSize: 16.5,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    store?.name ?? '',
+                    storeNameToShow,
                     style: TextStyle(
                       fontSize: 12,
                       color: colors.onSurfaceVariant,
@@ -92,7 +93,7 @@ class _CustomerCartState extends State<CustomerCart> {
                     color: colors.outline,
                   ),
                   Text(
-                    "There's nothing in your cart yet",
+                    l10.emptyCartMessage,
                     style: TextStyle(
                       color: colors.onSurfaceVariant,
                       fontSize: 18,
@@ -124,15 +125,15 @@ class _CustomerCartState extends State<CustomerCart> {
                       },
                     ),
                     CartSection(
-                      sectionTitle: 'Special request',
+                      sectionTitle: l10.specialRequest,
                       content: [SpecialRequest()],
                     ),
                     CartSection(
-                      sectionTitle: 'Save on your order',
+                      sectionTitle: l10.saveOnOrder,
                       content: [SaveOnOrder(), SizedBox(height: 14)],
                     ),
                     CartSection(
-                      sectionTitle: 'Payment summery',
+                      sectionTitle: l10.paymentSummary,
                       content: [
                         Padding(
                           padding: const EdgeInsets.only(
@@ -145,16 +146,16 @@ class _CustomerCartState extends State<CustomerCart> {
                             spacing: 11,
                             children: [
                               PaymentRow(
-                                title: "Subtotal",
+                                title: l10.subtotal,
                                 price: customerProvider.totalCartPrice
                                     .toString(),
                               ),
-                              PaymentRow(title: "Delivery fee", price: '1.00'),
-                              PaymentRow(title: "Service fee", price: '0.20'),
+                              PaymentRow(title: l10.deliveryFee, price: '1.00'),
+                              PaymentRow(title: l10.serviceFee, price: '0.20'),
                               Row(
                                 children: [
                                   Text(
-                                    "Total amount",
+                                    l10.totalAmount,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -192,6 +193,7 @@ class BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+    final l10 = AppLocalizations.of(context);
 
     return IntrinsicHeight(
       child: Container(
@@ -228,7 +230,7 @@ class BottomNav extends StatelessWidget {
                       ),
                     );
                   },
-                  title: 'Add items',
+                  title: l10.addItems,
                   titleSize: 15,
                   innerVerticalPadding: 15,
                 ),
@@ -241,7 +243,7 @@ class BottomNav extends StatelessWidget {
                     await customerProvider.placeOrder(context: context);
                     if (context.mounted) Navigator.of(context).pop();
                   },
-                  title: 'Checkout',
+                  title: l10.checkout,
                   titleSize: 15,
                   innerVerticalPadding: 15,
                 ),
@@ -276,6 +278,7 @@ class SpecialRequest extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final customerNote = customerProvider.cart?.note;
+    final l10 = AppLocalizations.of(context);
 
     return TextButton(
       onPressed: () {
@@ -308,7 +311,7 @@ class SpecialRequest extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Any special requests?",
+                    l10.anySpecialRequests,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 13.5,
@@ -316,7 +319,7 @@ class SpecialRequest extends StatelessWidget {
                   ),
                   Text(
                     (customerNote == null || customerNote.isEmpty)
-                        ? "Anything else we need to know?"
+                        ? l10.specialRequestHint
                         : customerNote,
                     style: TextStyle(fontSize: 13),
                     maxLines: 2,
@@ -338,6 +341,7 @@ class SaveOnOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
       borderSide: BorderSide(color: colors.outline, width: 1),
@@ -350,7 +354,7 @@ class SaveOnOrder extends StatelessWidget {
           SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
-              hintText: 'Enter coupon code',
+              hintText: l10.enterCouponCode,
               hintStyle: TextStyle(
                 color: colors.outlineVariant,
                 fontSize: 15,
@@ -375,7 +379,7 @@ class SaveOnOrder extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "Submit",
+                    l10.submit,
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: colors.secondary,

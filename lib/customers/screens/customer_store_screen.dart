@@ -67,6 +67,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
+    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (widget.store.name_ar.isNotEmpty) ? widget.store.name_ar : widget.store.name;
     final isLoading =
         customerProvider.isProductsLoading ||
         customerProvider.isCategoryLoading;
@@ -204,7 +205,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        widget.store.name,
+                                                        storeNameToShow,
                                                         maxLines: 2,
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -445,7 +446,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                         SizedBox(width: 11),
                         Expanded(
                           child: Text(
-                            widget.store.name,
+                            storeNameToShow,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -565,7 +566,7 @@ class BottomNav extends StatelessWidget {
                 ),
                 SizedBox(width: 13),
                 Text(
-                  "View cart",
+                  l10.viewCart,
                   style: TextStyle(
                     color: colors.onPrimary,
                     fontWeight: FontWeight.bold,

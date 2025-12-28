@@ -614,5 +614,101 @@ class AppLocalizationsAr extends AppLocalizations {
   String get categoryAlreadyExists => 'الفئة موجودة مسبقاً';
 
   @override
+  String get viewCart => 'عرض السلة';
+
+  @override
+  String get storeDetails => 'تفاصيل المتجر';
+
+  @override
+  String get storeArea => 'منطقة المتجر';
+
+  @override
+  String get deliveryTime => 'زمن التوصيل';
+
+  @override
+  String get deliveryFee => 'رسوم التوصيل';
+
+  @override
+  String get legalName => 'الاسم القانوني';
+
+  @override
+  String get favoriteStoresEmpty => 'المتاجر المفضلة ستظهر هنا';
+
+  @override
+  String get cart => 'السلة';
+
+  @override
+  String get emptyCartMessage => 'لا يوجد شيء في سلتك بعد';
+
+  @override
+  String get specialRequest => 'طلب خاص';
+
+  @override
+  String get anySpecialRequests => 'هل لديك طلبات خاصة؟';
+
+  @override
+  String get specialRequestHint => 'هل هناك أي شيء آخر يجب أن نعرفه؟';
+
+  @override
+  String get saveOnOrder => 'وفر على طلبك';
+
+  @override
+  String get paymentSummary => 'ملخص الدفع';
+
+  @override
+  String get subtotal => 'المجموع';
+
+  @override
+  String get serviceFee => 'رسوم الخدمة';
+
+  @override
+  String get totalAmount => 'المبلغ الإجمالي';
+
+  @override
+  String get addItems => 'أضف عناصر';
+
+  @override
+  String get checkout => 'الدفع';
+
+  @override
+  String get enterCouponCode => 'أدخل رمز القسيمة';
+
+  @override
+  String get submit => 'إرسال';
+
+  @override
+  String get pickLocation => 'اختر موقعًا';
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get addItem => 'أضف عنصر';
+
+  @override
+  String get delivered => 'تم التوصيل';
+
+  @override
+  String get orderAgain => 'اطلب مرة أخرى';
+
+  @override
+  String get rate => 'التقييم';
+
+  @override
+  String get addNote => 'أضف ملاحظة';
+
+  @override
+  String get errorUpdatingPassword => 'حدث خطأ أثناء تحديث كلمة المرور';
+
+  @override
+  String get emailSentSuccessfully => 'تم إرسال البريد الإلكتروني بنجاح';
+
+  @override
+  String get editAccountInfo => 'تعديل معلومات الحساب';
+
+  @override
+  String get updatedSuccessfully => 'تم التعديل بنجاح!';
+
+  @override
   String get more => 'المزيد';
 }

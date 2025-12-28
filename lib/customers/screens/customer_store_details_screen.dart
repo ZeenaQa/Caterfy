@@ -13,9 +13,10 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
+    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (store.name_ar.isNotEmpty) ? store.name_ar : store.name;
 
     return Scaffold(
-      appBar: CustomAppBar(title: "Store details"),
+      appBar: CustomAppBar(title: l10n.storeDetails),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -54,7 +55,7 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            store.name,
+                            storeNameToShow,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -124,7 +125,7 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                           color: colors.onSecondary,
                         ),
                       ),
-                      leftText: "Store area",
+                      leftText: l10n.storeArea,
                       rightText: store.storeArea!,
                     ),
                     InfoItem(
@@ -137,7 +138,7 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                           color: colors.onSecondary,
                         ),
                       ),
-                      leftText: "Delivery time",
+                      leftText: l10n.deliveryTime,
                       rightText: "25-30 mins",
                     ),
                     InfoItem(
@@ -150,7 +151,7 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                           color: colors.onSecondary,
                         ),
                       ),
-                      leftText: "Delivery fee",
+                      leftText: l10n.deliveryFee,
                       rightText: '1.00 ${l10n.jod}',
                     ),
                     InfoItem(
@@ -163,8 +164,8 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                           color: colors.onSecondary,
                         ),
                       ),
-                      leftText: "Legal name",
-                      rightText: store.name,
+                      leftText: l10n.legalName,
+                      rightText: storeNameToShow,
                       isLastItem: true,
                     ),
                   ],

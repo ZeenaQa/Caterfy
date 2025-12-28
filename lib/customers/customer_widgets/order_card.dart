@@ -59,7 +59,7 @@ class OrderCard extends StatelessWidget {
               spacing: 13,
               children: [
                 Text(
-                  "Delivered",
+                  l10.delivered,
                   style: TextStyle(
                     color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -147,7 +147,7 @@ class OrderCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         text: TextSpan(
-                          text: 'JOD ',
+                          text: l10.jod ,
                           style: TextStyle(
                             color: colors.onSurface,
                             fontWeight: FontWeight.normal,
@@ -196,7 +196,7 @@ class OrderCard extends StatelessWidget {
                         MaterialPageRoute(builder: (_) => CustomerCart()),
                       );
                     },
-                    title: "Order again",
+                    title: l10.orderAgain,
                     innerVerticalPadding: 10,
                     innerHorizontalPadding: 18,
                   ),
@@ -205,49 +205,49 @@ class OrderCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: colors.surfaceContainer,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
-            ),
-            child: Row(
-              spacing: 16,
-              children: [
-                Text("Rate", style: TextStyle(fontWeight: FontWeight.bold)),
-                Spacer(),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+          //   width: double.infinity,
+          //   decoration: BoxDecoration(
+          //     color: colors.surfaceContainer,
+          //     borderRadius: BorderRadius.only(
+          //       bottomLeft: Radius.circular(15),
+          //       bottomRight: Radius.circular(15),
+          //     ),
+          //   ),
+          //   child: Row(
+          //     spacing: 16,
+          //     children: [
+          //       Text("Rate", style: TextStyle(fontWeight: FontWeight.bold)),
+          //       Spacer(),
+          //       Icon(
+          //         FontAwesomeIcons.star,
+          //         size: 18,
+          //         color: colors.outlineVariant,
+          //       ),
+          //       Icon(
+          //         FontAwesomeIcons.star,
+          //         size: 18,
+          //         color: colors.outlineVariant,
+          //       ),
+          //       Icon(
+          //         FontAwesomeIcons.star,
+          //         size: 18,
+          //         color: colors.outlineVariant,
+          //       ),
+          //       Icon(
+          //         FontAwesomeIcons.star,
+          //         size: 18,
+          //         color: colors.outlineVariant,
+          //       ),
+          //       Icon(
+          //         FontAwesomeIcons.star,
+          //         size: 18,
+          //         color: colors.outlineVariant,
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

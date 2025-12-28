@@ -36,9 +36,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     final l10 = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Pick a Location'),
+      appBar: CustomAppBar(title: l10.pickLocation),
       body: Column(
-        children: [
+        children: [ 
           /// ===== MAP =====
           Expanded(
             child: MapPicker(
@@ -48,7 +48,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
 
                 final address = await MapHelper.getAddressFromLatLng(
                   latLng,
-                  "unknownLocation",
+                  l10.unknownArea,
                 );
 
                 context.read<GlobalProvider>().setDeliveryLocation(
@@ -63,7 +63,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: FilledBtn(
-              title: "confirmPinLocation",
+              title: l10.confirmStoreLocation,
               innerVerticalPadding: 18,
               horizontalPadding: 10,
               onPressed: () {

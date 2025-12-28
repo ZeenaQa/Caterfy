@@ -4,6 +4,7 @@ import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/customers/utils/localization_helpers.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -157,7 +158,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 borderRadius: BorderRadius.circular(50),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: '${l10.searchAbout} ${widget.category}',
+                    hintText: '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
                     hintStyle: TextStyle(fontSize: 15),
                     filled: true,
                     fillColor: colors.surfaceContainer,

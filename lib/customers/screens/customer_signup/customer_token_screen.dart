@@ -3,6 +3,7 @@ import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pinput/pinput.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 
 class CustomerSignupTokenScreen extends StatefulWidget {
   final String email;
@@ -19,6 +20,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
+    final l10 = AppLocalizations.of(context);
 
     final defaultPinTheme = PinTheme(
       width: 55,
@@ -43,7 +45,7 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Verification",
+                  l10.verification,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 27,
@@ -52,13 +54,13 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Enter the code sent to the email",
+                  l10.enterCodeSent,
                   style: TextStyle(fontSize: 20, color: Color(0xff96a4b2)),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 15),
                 Text(
-                  "waseemalamad@gmail.com",
+                  widget.email,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -81,11 +83,11 @@ class _CustomerSignupTokenScreenState extends State<CustomerSignupTokenScreen> {
                 ),
                 const SizedBox(height: 40),
                 Text(
-                  "Didn't receive code?",
+                  l10.didntReceiveCode,
                   style: TextStyle(fontSize: 17, color: Color(0xff642ad0)),
                 ),
                 Text(
-                  "Resend",
+                  l10.resend,
                   style: TextStyle(
                     fontSize: 15,
                     decoration: TextDecoration.underline,

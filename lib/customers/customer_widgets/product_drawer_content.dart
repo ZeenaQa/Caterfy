@@ -122,7 +122,7 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Any special requests?",
+                            l10.anySpecialRequests,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13.5,
@@ -140,7 +140,7 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      localNote.isEmpty ? "Add note" : "Edit",
+                      localNote.isEmpty ? l10.addNote : l10.edit,
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,
@@ -194,7 +194,7 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
                       content: Row(
                         children: [
                           Text(
-                            widget.isInCart ? "Update" : 'Add item',
+                            widget.isInCart ? l10.update : l10.addItem,
                             style: TextStyle(
                               color: colors.onPrimary,
                               fontWeight: FontWeight.bold,

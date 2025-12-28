@@ -321,7 +321,7 @@ class LoggedCustomerProvider with ChangeNotifier {
       notifyListeners();
       final data = await supabase
           .from('products')
-          .select('*, sub_categories(name)')
+          .select('*, sub_categories(name, name_ar)')
           .eq('store_id', storeId);
 
       final Map<String, Product> productsMap = {
@@ -330,9 +330,14 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       for (final e in data) {
         final productId = e['id'];
+        final subcat = e['sub_categories'];
+        final subcatName = (subcat is Map)
+            ? ((Localizations.localeOf(context).languageCode == 'ar' && (subcat['name_ar']?.toString().isNotEmpty ?? false)) ? subcat['name_ar'] : subcat['name'])
+            : (subcat?.toString() ?? '');
+
         final productObject = {
           ...e,
-          'sub_categories': e['sub_categories']['name'],
+          'sub_categories': subcatName,
         };
 
         productsMap[productId] = Product.fromMap(productObject);

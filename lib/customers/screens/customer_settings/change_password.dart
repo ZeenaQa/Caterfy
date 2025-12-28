@@ -28,13 +28,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     auth.clearPassError();
     auth.clearConfirmPassError();
 
+    final l10 = AppLocalizations.of(context);
+
     if (newPassword != confirmPassword) {
-      auth.confirmPasswordError = "Passwords do not match";
+      auth.confirmPasswordError = l10.passwordsNoMatch;
       setState(() {});
       return;
     }
 
-    final l10 = AppLocalizations.of(context);
     final validationError = auth.validatePassword(newPassword, l10);
     if (validationError != null) {
       auth.passwordError = validationError;
@@ -53,7 +54,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         Navigator.pop(context);
       }
     } catch (e) {
-      auth.passwordError = "Error updating password";
+      auth.passwordError = l10.errorUpdatingPassword;
       setState(() {});
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -63,31 +64,32 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<CustomerAuthProvider>(context);
+    final l10 = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Change Password'),
+      appBar: CustomAppBar(title: l10.changePassword),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         child: Column(
           children: [
             LabeledPasswordField(
-              label: 'Current Password',
-              hint: 'Enter current password',
+              label: l10.currentPassword,
+              hint: l10.enterCurrentPassword,
               onChanged: (val) => currentPassword = val,
             ),
             const SizedBox(height: 12),
 
             LabeledPasswordField(
-              label: 'New Password',
-              hint: 'Enter new password',
+              label: l10.newPassword,
+              hint: l10.enterNewPassword,
               errorText: auth.passwordError,
               onChanged: (val) => newPassword = val,
             ),
             const SizedBox(height: 12),
 
             LabeledPasswordField(
-              label: 'Confirm Password',
-              hint: 'Confirm new password',
+              label: l10.confirmPassword,
+              hint: l10.confirmPasswordHint,
               errorText: auth.confirmPasswordError,
               onChanged: (val) => confirmPassword = val,
             ),
@@ -96,7 +98,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               onPressed: () {
                 if (!_isSaving) _changePassword();
               },
-              title: 'Save',
+              title: l10.save,
               isLoading: _isSaving,
             ),
           ],

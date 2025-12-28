@@ -72,7 +72,7 @@ class _FavoriteStoresScreenState extends State<FavoriteStoresScreen> {
                     color: colors.outline,
                   ),
                   Text(
-                    "Your favorite stores will appear here",
+                    l10.favoriteStoresEmpty,
                     style: TextStyle(
                       color: colors.onSurfaceVariant,
                       fontSize: 18,

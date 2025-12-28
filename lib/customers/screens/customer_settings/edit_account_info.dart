@@ -80,13 +80,13 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
     final isEmailUser = user?.email != null;
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Account Info'),
+      appBar: CustomAppBar(title: l10.editAccountInfo),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         child: Column(
           children: [
             LabeledTextField(
-              label: isEmailUser ? 'Email' : 'Phone Number',
+              label: isEmailUser ? l10.email : l10.phoneNumber,
               value: isEmailUser ? user!.email! : user!.phone!,
               keyboardType: isEmailUser
                   ? TextInputType.emailAddress
@@ -97,7 +97,7 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
             const SizedBox(height: 12),
 
             LabeledTextField(
-              label: 'Name',
+              label: l10.name,
               value: name,
               onChanged: (val) => name = val,
             ),
@@ -107,7 +107,7 @@ class _EditAccountInfoState extends State<EditAccountInfo> {
               onPressed: () {
                 if (!_isSaving) _saveChanges();
               },
-              title: 'Save',
+              title: l10.save,
               isLoading: _isSaving,
             ),
           ],

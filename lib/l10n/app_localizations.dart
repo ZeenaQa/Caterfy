@@ -1280,6 +1280,198 @@ abstract class AppLocalizations {
   /// **'Category already exists'**
   String get categoryAlreadyExists;
 
+  /// No description provided for @viewCart.
+  ///
+  /// In en, this message translates to:
+  /// **'View cart'**
+  String get viewCart;
+
+  /// No description provided for @storeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Store details'**
+  String get storeDetails;
+
+  /// No description provided for @storeArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Store area'**
+  String get storeArea;
+
+  /// No description provided for @deliveryTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery time'**
+  String get deliveryTime;
+
+  /// No description provided for @deliveryFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery fee'**
+  String get deliveryFee;
+
+  /// No description provided for @legalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal name'**
+  String get legalName;
+
+  /// No description provided for @favoriteStoresEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your favorite stores will appear here'**
+  String get favoriteStoresEmpty;
+
+  /// No description provided for @cart.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get cart;
+
+  /// No description provided for @emptyCartMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s nothing in your cart yet'**
+  String get emptyCartMessage;
+
+  /// No description provided for @specialRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Special request'**
+  String get specialRequest;
+
+  /// No description provided for @anySpecialRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Any special requests?'**
+  String get anySpecialRequests;
+
+  /// No description provided for @specialRequestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else we need to know?'**
+  String get specialRequestHint;
+
+  /// No description provided for @saveOnOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Save on your order'**
+  String get saveOnOrder;
+
+  /// No description provided for @paymentSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment summary'**
+  String get paymentSummary;
+
+  /// No description provided for @subtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get subtotal;
+
+  /// No description provided for @serviceFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Service fee'**
+  String get serviceFee;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount'**
+  String get totalAmount;
+
+  /// No description provided for @addItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Add items'**
+  String get addItems;
+
+  /// No description provided for @checkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get checkout;
+
+  /// No description provided for @enterCouponCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter coupon code'**
+  String get enterCouponCode;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @pickLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a Location'**
+  String get pickLocation;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @addItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get addItem;
+
+  /// No description provided for @delivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get delivered;
+
+  /// No description provided for @orderAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Order again'**
+  String get orderAgain;
+
+  /// No description provided for @rate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate'**
+  String get rate;
+
+  /// No description provided for @addNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add note'**
+  String get addNote;
+
+  /// No description provided for @errorUpdatingPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating password'**
+  String get errorUpdatingPassword;
+
+  /// No description provided for @emailSentSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Email sent successfully'**
+  String get emailSentSuccessfully;
+
+  /// No description provided for @editAccountInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit account info'**
+  String get editAccountInfo;
+
+  /// No description provided for @updatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated successfully!'**
+  String get updatedSuccessfully;
+
   /// No description provided for @more.
   ///
   /// In en, this message translates to:
