@@ -612,4 +612,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get categoryAlreadyExists => 'الفئة موجودة مسبقاً';
+
+  @override
+  String get more => 'المزيد';
 }

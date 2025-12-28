@@ -196,5 +196,6 @@
   "changeLocation": "تغيير الموقع",
   "location": "الموقع",
   "addCategory": "إضافة فئة",
-  "categoryAlreadyExists": "الفئة موجودة مسبقاً"
+  "categoryAlreadyExists": "الفئة موجودة مسبقاً",
+  "more": "المزيد"
 }

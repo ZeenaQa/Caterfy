@@ -455,10 +455,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
-  String get editStore => 'Edit Store';
+  String get editStore => 'Edit store';
 
   @override
-  String get storeTags => 'Store Tags';
+  String get storeTags => 'Store tags';
 
   @override
   String get change => 'Change';
@@ -467,19 +467,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get back => 'Back';
 
   @override
-  String get deleteProduct => 'Delete Product';
+  String get deleteProduct => 'Delete product';
 
   @override
-  String get markUnavailableToday => 'Mark as Unavailable Today';
+  String get markUnavailableToday => 'Mark as unavailable today';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Save changes';
 
   @override
-  String get editCategory => 'Edit Category';
+  String get editCategory => 'Edit category';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Delete category';
 
   @override
   String get addProduct => 'Add Product';
@@ -500,13 +500,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get storeInfo => 'Store Info';
 
   @override
-  String get storeNameArabic => 'Store Name (Arabic)';
+  String get storeNameArabic => 'Store name (Arabic)';
 
   @override
   String get storeNameArabicHint => 'Write store name in Arabic';
 
   @override
-  String get storeNameEnglish => 'Store Name (English)';
+  String get storeNameEnglish => 'Store name (English)';
 
   @override
   String get storeNameEnglishHint => 'Write store name in English';
@@ -518,7 +518,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logo => 'Logo';
 
   @override
-  String get storeName => 'Store Name';
+  String get storeName => 'Store name';
 
   @override
   String get required => 'Required';
@@ -593,7 +593,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loading => 'Loading...';
 
   @override
-  String get storeStatus => 'Store Status';
+  String get storeStatus => 'Store status';
 
   @override
   String get opened => 'Opened';
@@ -605,14 +605,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get store => 'Store';
 
   @override
-  String get changeLocation => 'Change Location';
+  String get changeLocation => 'Change location';
 
   @override
   String get location => 'Location';
 
   @override
-  String get addCategory => 'Add Category';
+  String get addCategory => 'Add category';
 
   @override
   String get categoryAlreadyExists => 'Category already exists';
+
+  @override
+  String get more => 'More';
 }

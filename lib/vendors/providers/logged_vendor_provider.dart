@@ -9,7 +9,6 @@ class LoggedVendorProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   bool isLoading = false;
-  bool hasStore = false;
 
   Store? store;
   List<Map<String, dynamic>> subCategories = [];
@@ -24,7 +23,6 @@ class LoggedVendorProvider extends ChangeNotifier {
     try {
       final vendorId = supabase.auth.currentUser?.id;
       if (vendorId == null) {
-        hasStore = false;
         return;
       }
 
@@ -36,12 +34,10 @@ class LoggedVendorProvider extends ChangeNotifier {
 
       if (response != null) {
         store = Store.fromMap(response);
-        hasStore = true;
 
         await _refreshSubCategories();
         await fetchProducts();
       } else {
-        hasStore = false;
         store = null;
       }
     } catch (e) {
@@ -87,7 +83,6 @@ class LoggedVendorProvider extends ChangeNotifier {
           .single();
 
       store = Store.fromMap(response);
-      hasStore = true;
 
       await _refreshSubCategories();
       await fetchProducts();

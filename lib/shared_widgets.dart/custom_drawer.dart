@@ -16,6 +16,7 @@ Future<T?> openDrawer<T>(
   bool isStack = false,
   bool showCloseBtn = true,
   bool accountForKeyboard = false,
+  Function? onClose,
 }) {
   return showModalBottomSheet<T>(
     context: context,
@@ -32,6 +33,7 @@ Future<T?> openDrawer<T>(
       isStack: isStack,
       showCloseBtn: showCloseBtn,
       accountForKeyboard: accountForKeyboard,
+      onClose: onClose,
       child: child,
     ),
   );
@@ -47,6 +49,7 @@ class ModernDrawer extends StatelessWidget {
   final bool isStack;
   final bool showCloseBtn;
   final bool accountForKeyboard;
+  final Function? onClose;
 
   const ModernDrawer({
     super.key,
@@ -59,126 +62,132 @@ class ModernDrawer extends StatelessWidget {
     this.isStack = false,
     this.showCloseBtn = true,
     this.accountForKeyboard = false,
+    this.onClose,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: accountForKeyboard
-            ? max(MediaQuery.of(context).viewInsets.bottom - 16, 0)
-            : 0,
-      ),
-      child: Container(
-        padding: EdgeInsets.only(bottom: 30),
-        width: double.infinity,
-        height: height, // Only constrain height if explicitly provided
-        decoration: BoxDecoration(
-          color: backgroundColor ?? colors.surface,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(borderRadius),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colors.shadow.withOpacity(0.1),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (onClose != null) onClose!();
+      },
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: accountForKeyboard
+              ? max(MediaQuery.of(context).viewInsets.bottom - 16, 0)
+              : 0,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min, // KEY: Shrink to fit children
-          children: [
-            // Drag handle
-            if (!isStack) ...[
-              Container(
-                margin: const EdgeInsets.only(top: 12, bottom: 3),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colors.onSurface.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(2),
-                ),
+        child: Container(
+          padding: EdgeInsets.only(bottom: 30),
+          width: double.infinity,
+          height: height, // Only constrain height if explicitly provided
+          decoration: BoxDecoration(
+            color: backgroundColor ?? colors.surface,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(borderRadius),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: colors.shadow.withOpacity(0.1),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
               ),
-              // Content - wrap only if needed
-              if (showCloseBtn)
-                Row(
-                  children: [
-                    SizedBox(width: 12),
-                    OutlinedIconBtn(
-                      onPressed: () => Navigator.of(context).pop(),
-                      size: 40,
-                      child: Icon(
-                        FontAwesomeIcons.x,
-                        color: colors.onSurface,
-                        size: 14,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    if (title.isNotEmpty)
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                  ],
-                ),
-              Padding(
-                padding: padding ?? const EdgeInsets.only(bottom: 15),
-                child: child,
-              ),
-            ] else
-              Stack(
-                children: [
-                  Padding(
-                    padding: padding ?? const EdgeInsets.only(bottom: 15),
-                    child: child,
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // KEY: Shrink to fit children
+            children: [
+              // Drag handle
+              if (!isStack) ...[
+                Container(
+                  margin: const EdgeInsets.only(top: 12, bottom: 3),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: colors.onSurface.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  Column(
+                ),
+                // Content - wrap only if needed
+                if (showCloseBtn)
+                  Row(
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 12, bottom: 3),
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Color(0xffe5e5e5),
-                          borderRadius: BorderRadius.circular(2),
+                      SizedBox(width: 12),
+                      OutlinedIconBtn(
+                        onPressed: () => Navigator.of(context).pop(),
+                        size: 40,
+                        child: Icon(
+                          FontAwesomeIcons.x,
+                          color: colors.onSurface,
+                          size: 14,
                         ),
                       ),
-                      Row(
-                        children: [
-                          SizedBox(width: 12),
-                          OutlinedIconBtn(
-                            onPressed: () => Navigator.of(context).pop(),
-                            size: 40,
-                            child: Icon(
-                              FontAwesomeIcons.x,
-                              color: colors.onSurface,
-                              size: 14,
-                            ),
+                      SizedBox(width: 10),
+                      if (title.isNotEmpty)
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: 10),
-                          if (title.isNotEmpty)
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                        ],
-                      ),
+                        ),
                     ],
                   ),
+                Padding(
+                  padding: padding ?? const EdgeInsets.only(bottom: 15),
+                  child: child,
+                ),
+              ] else
+                Stack(
+                  children: [
+                    Padding(
+                      padding: padding ?? const EdgeInsets.only(bottom: 15),
+                      child: child,
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 12, bottom: 3),
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Color(0xffe5e5e5),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(width: 12),
+                            OutlinedIconBtn(
+                              onPressed: () => Navigator.of(context).pop(),
+                              size: 40,
+                              child: Icon(
+                                FontAwesomeIcons.x,
+                                color: colors.onSurface,
+                                size: 14,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            if (title.isNotEmpty)
+                              Text(
+                                title,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
 
-                  // Content - wrap only if needed
-                ],
-              ),
-          ],
+                    // Content - wrap only if needed
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );

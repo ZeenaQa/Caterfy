@@ -5,7 +5,6 @@ import 'package:caterfy/vendors/vendor_sections/vendor_orders.dart';
 import 'package:caterfy/vendors/vendor_sections/vstore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AuthenticatedVendor extends StatefulWidget {
@@ -65,17 +64,7 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 1),
-                    child: SvgPicture.asset(
-                      'assets/icons/caterfy_initial.svg',
-                      height: 15,
-                      width: 15,
-                      colorFilter: ColorFilter.mode(
-                        _currentIndex == 0
-                            ? colors.primary
-                            : colors.onSurfaceVariant,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                    child: Icon(Icons.storefront),
                   ),
                   label: l10.store,
                 ),
@@ -89,9 +78,9 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 1),
-                    child: Icon(Icons.account_circle_outlined),
+                    child: Icon(Icons.menu),
                   ),
-                  label: l10.account,
+                  label: l10.more,
                 ),
               ],
             ),

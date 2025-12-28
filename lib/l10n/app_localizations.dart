@@ -965,13 +965,13 @@ abstract class AppLocalizations {
   /// No description provided for @editStore.
   ///
   /// In en, this message translates to:
-  /// **'Edit Store'**
+  /// **'Edit store'**
   String get editStore;
 
   /// No description provided for @storeTags.
   ///
   /// In en, this message translates to:
-  /// **'Store Tags'**
+  /// **'Store tags'**
   String get storeTags;
 
   /// No description provided for @change.
@@ -989,31 +989,31 @@ abstract class AppLocalizations {
   /// No description provided for @deleteProduct.
   ///
   /// In en, this message translates to:
-  /// **'Delete Product'**
+  /// **'Delete product'**
   String get deleteProduct;
 
   /// No description provided for @markUnavailableToday.
   ///
   /// In en, this message translates to:
-  /// **'Mark as Unavailable Today'**
+  /// **'Mark as unavailable today'**
   String get markUnavailableToday;
 
   /// No description provided for @saveChanges.
   ///
   /// In en, this message translates to:
-  /// **'Save Changes'**
+  /// **'Save changes'**
   String get saveChanges;
 
   /// No description provided for @editCategory.
   ///
   /// In en, this message translates to:
-  /// **'Edit Category'**
+  /// **'Edit category'**
   String get editCategory;
 
   /// No description provided for @deleteCategory.
   ///
   /// In en, this message translates to:
-  /// **'Delete Category'**
+  /// **'Delete category'**
   String get deleteCategory;
 
   /// No description provided for @addProduct.
@@ -1055,7 +1055,7 @@ abstract class AppLocalizations {
   /// No description provided for @storeNameArabic.
   ///
   /// In en, this message translates to:
-  /// **'Store Name (Arabic)'**
+  /// **'Store name (Arabic)'**
   String get storeNameArabic;
 
   /// No description provided for @storeNameArabicHint.
@@ -1067,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @storeNameEnglish.
   ///
   /// In en, this message translates to:
-  /// **'Store Name (English)'**
+  /// **'Store name (English)'**
   String get storeNameEnglish;
 
   /// No description provided for @storeNameEnglishHint.
@@ -1091,7 +1091,7 @@ abstract class AppLocalizations {
   /// No description provided for @storeName.
   ///
   /// In en, this message translates to:
-  /// **'Store Name'**
+  /// **'Store name'**
   String get storeName;
 
   /// No description provided for @required.
@@ -1235,7 +1235,7 @@ abstract class AppLocalizations {
   /// No description provided for @storeStatus.
   ///
   /// In en, this message translates to:
-  /// **'Store Status'**
+  /// **'Store status'**
   String get storeStatus;
 
   /// No description provided for @opened.
@@ -1259,7 +1259,7 @@ abstract class AppLocalizations {
   /// No description provided for @changeLocation.
   ///
   /// In en, this message translates to:
-  /// **'Change Location'**
+  /// **'Change location'**
   String get changeLocation;
 
   /// No description provided for @location.
@@ -1271,7 +1271,7 @@ abstract class AppLocalizations {
   /// No description provided for @addCategory.
   ///
   /// In en, this message translates to:
-  /// **'Add Category'**
+  /// **'Add category'**
   String get addCategory;
 
   /// No description provided for @categoryAlreadyExists.
@@ -1279,6 +1279,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category already exists'**
   String get categoryAlreadyExists;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
 }
 
 class _AppLocalizationsDelegate

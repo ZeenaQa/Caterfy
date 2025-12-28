@@ -52,6 +52,7 @@ class _VstoreState extends State<Vstore> {
       title: l10.addCategory,
       accountForKeyboard: true,
       padding: const EdgeInsets.only(left: 21, right: 21, top: 20, bottom: 10),
+      onClose: clearErrors,
       child: StatefulBuilder(
         builder: (context, setModalState) {
           return Column(
@@ -201,7 +202,7 @@ class _VstoreState extends State<Vstore> {
       return const Center(child: ThreeBounce());
     }
 
-    if (!provider.hasStore || provider.store == null) {
+    if (provider.store == null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

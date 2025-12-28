@@ -41,7 +41,7 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
       return const Center(child: ThreeBounce());
     }
 
-    if (!provider.hasStore || provider.store == null) {
+    if (provider.store == null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
