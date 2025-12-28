@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:caterfy/models/vendor_order.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -8,7 +9,11 @@ import 'package:caterfy/models/product.dart';
 class LoggedVendorProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
-  bool isLoading = false;
+  bool _isLoading = false;
+  bool _isOrdersLoading = false;
+
+  bool get isLoading => _isLoading;
+  bool get isOrdersLoading => _isOrdersLoading;
 
   Store? store;
   List<Map<String, dynamic>> subCategories = [];
@@ -17,7 +22,7 @@ class LoggedVendorProvider extends ChangeNotifier {
   /* ===================== STORE ===================== */
 
   Future<void> checkVendorStore() async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -43,7 +48,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('checkVendorStore error: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -54,7 +59,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     File? bannerFile,
   }) async {
     try {
-      isLoading = true;
+      _isLoading = true;
       notifyListeners();
 
       final vendorId = supabase.auth.currentUser?.id;
@@ -92,7 +97,7 @@ class LoggedVendorProvider extends ChangeNotifier {
       debugPrint('createStore error: $e');
       return false;
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -105,7 +110,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     if (store == null) return false;
 
     try {
-      isLoading = true;
+      _isLoading = true;
       notifyListeners();
 
       String? logoUrl = store!.logoUrl;
@@ -142,7 +147,7 @@ class LoggedVendorProvider extends ChangeNotifier {
       debugPrint('updateStore error: $e');
       return false;
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -168,7 +173,7 @@ class LoggedVendorProvider extends ChangeNotifier {
   }) async {
     if (newName.trim().isEmpty) return;
 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -187,13 +192,13 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('updateCategory error: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> deleteCategory(String categoryId) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -209,7 +214,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('deleteCategory error: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -251,7 +256,7 @@ class LoggedVendorProvider extends ChangeNotifier {
   }) async {
     if (store == null) return;
 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -270,7 +275,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('addProduct error: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -282,7 +287,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     required double price,
     File? imageFile,
   }) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -308,13 +313,13 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('updateProductData error: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> deleteProduct(String productId) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -324,7 +329,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('deleteProduct error: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -344,5 +349,51 @@ class LoggedVendorProvider extends ChangeNotifier {
         .upload(path, file, fileOptions: const FileOptions(upsert: true));
 
     return supabase.storage.from('store-images').getPublicUrl(path);
+  }
+
+  List<VendorOrder> _orders = [];
+
+  get orders => _orders;
+
+  Future<void> fetchOrders() async {
+    final String? storeId = store?.id;
+
+    if (storeId == null) return;
+
+    try {
+      _isOrdersLoading = true;
+      notifyListeners();
+
+      final PostgrestList data = await supabase
+          .from('orders')
+          .select('*, customers:customer_id (name, email, phone)')
+          .eq('store_id', storeId)
+          .order('created_at', ascending: false);
+
+      Map<String, dynamic> setUpOrder(Map<String, dynamic> order) {
+        final customer = order['customers'];
+        if (customer == null) return order;
+        final String? customerName = order['customers']['name'];
+        final String? customerEmail = order['customers']['email'];
+        final String? customerPhone = order['customers']['phone'];
+        return {
+          ...order,
+          'customer_name': customerName,
+          'customer_phone': customerPhone,
+          'customer_email': customerEmail,
+        };
+      }
+
+      _orders = data
+          .map((order) => VendorOrder.fromMap(setUpOrder(order)))
+          .toList();
+
+      // print(_orders);
+    } catch (e) {
+      debugPrint('$e');
+    } finally {
+      _isOrdersLoading = false;
+      notifyListeners();
+    }
   }
 }

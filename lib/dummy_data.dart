@@ -2,6 +2,7 @@ import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
+import 'package:caterfy/models/vendor_order.dart';
 
 final List<Product> dummyProducts = [
   Product(
@@ -233,5 +234,53 @@ final List<Order> dummyOrders = [
     storeName: "Burger King",
     createdAt: DateTime.now().toString(),
     items: dummyOrderItems,
+  ),
+];
+
+List<VendorOrder> dummyVendorOrders = [
+  VendorOrder(
+    customerId: '1',
+    customerName: "David Jones",
+    customerEmail: "exampleEmail@gmail.com",
+    customerPhone: "+962999999999",
+    note: "Extra mayo please habibi <3",
+    items: dummyOrderItems,
+    createdAt: DateTime.now().toString(),
+  ),
+  VendorOrder(
+    customerId: '1',
+    customerName: "David Jones",
+    customerEmail: "exampleEmail@gmail.com",
+    customerPhone: "+962999999999",
+    note: "Extra mayo please habibi <3",
+    items: dummyOrderItems,
+    createdAt: DateTime.now().toString(),
+  ),
+  VendorOrder(
+    customerId: '1',
+    customerName: "David Jones",
+    customerEmail: "exampleEmail@gmail.com",
+    customerPhone: "+962999999999",
+    note: "Extra mayo please habibi <3",
+    items: dummyOrderItems,
+    createdAt: DateTime.now().toString(),
+  ),
+  VendorOrder(
+    customerId: '1',
+    customerName: "David Jones",
+    customerEmail: "exampleEmail@gmail.com",
+    customerPhone: "+962999999999",
+    note: "Extra mayo please habibi <3",
+    items: dummyOrderItems,
+    createdAt: DateTime.now().toString(),
+  ),
+  VendorOrder(
+    customerId: '1',
+    customerName: "David Jones",
+    customerEmail: "exampleEmail@gmail.com",
+    customerPhone: "+962999999999",
+    note: "Extra mayo please habibi <3",
+    items: dummyOrderItems,
+    createdAt: DateTime.now().toString(),
   ),
 ];

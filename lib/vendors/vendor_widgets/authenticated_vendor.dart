@@ -1,8 +1,9 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/util/theme_controller.dart';
+import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:caterfy/vendors/vendor_sections/vendor_account.dart';
-import 'package:caterfy/vendors/vendor_sections/vendor_orders.dart';
-import 'package:caterfy/vendors/vendor_sections/vstore.dart';
+import 'package:caterfy/vendors/vendor_sections/vendor_store.dart';
+import 'package:caterfy/vendors/vendor_widgets/vendor_orders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    Vstore(),
+    VendorStoreSection(),
     VendorOrdersSection(),
     VendorAccountSection(),
   ];
@@ -59,7 +60,13 @@ class AuthenticatedVendorState extends State<AuthenticatedVendor> {
               backgroundColor: colors.surface,
               iconSize: 20,
               currentIndex: _currentIndex,
-              onTap: (index) => setState(() => _currentIndex = index),
+              onTap: (index) => setState(() {
+                if (index == _currentIndex) return;
+                if (index == 1) {
+                  context.read<LoggedVendorProvider>().fetchOrders();
+                }
+                _currentIndex = index;
+              }),
               items: [
                 BottomNavigationBarItem(
                   icon: Padding(

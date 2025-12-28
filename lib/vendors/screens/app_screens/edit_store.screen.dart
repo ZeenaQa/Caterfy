@@ -73,7 +73,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoggedVendorProvider>();
-    final colors = Theme.of(context).colorScheme;
+    // final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
 
     final tags = storeDraft.tags ?? [];

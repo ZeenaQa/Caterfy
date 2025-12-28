@@ -1,26 +1,25 @@
-import 'package:caterfy/customers/providers/logged_customer_provider.dart';
-import 'package:caterfy/customers/screens/customer_cart.dart';
 import 'package:caterfy/customers/screens/customer_order_details_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/models/order.dart';
-import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
+import 'package:caterfy/models/vendor_order.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 const url =
     'https://marketplace.canva.com/EAGMppVJ_aY/1/0/1600w/canva-dark-green-cute-and-playful-kitchen-restaurant-logo-S2LGeYCK5eM.jpg';
 
-class OrderCard extends StatelessWidget {
-  const OrderCard({super.key, required this.order, this.dummyImage = false});
+class VendorOrderCard extends StatelessWidget {
+  const VendorOrderCard({super.key, required this.order});
 
-  final Order order;
-  final bool dummyImage;
+  final VendorOrder order;
 
   @override
   Widget build(BuildContext context) {
+    String getInitial(String name) {
+      if (name.isEmpty) return '';
+      return name[0].toUpperCase();
+    }
+
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final orderDate = order.createdAt != null
@@ -85,47 +84,33 @@ class OrderCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: dummyImage
-                          ? Image.asset(
-                              'assets/images/app_icon.png',
-                              fit: BoxFit.cover,
-                              width: 55,
-                              height: 55,
-                            )
-                          : Image.network(
-                              order.storeLogo,
-                              height: 55,
-                              width: 55,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.broken_image);
-                              },
-                            ),
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: colors.onPrimaryContainer,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Center(
+                        child: Text(
+                          getInitial(order.customerName ?? ''),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(width: 12),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            order.storeName,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '${order.items.length} items',
-                            style: TextStyle(
-                              height: 1.2,
-                              color: colors.onSurface,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        order.customerName ?? "",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -184,70 +169,10 @@ class OrderCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
-                Skeleton.ignore(
-                  child: OutlinedBtn(
-                    onPressed: () {
-                      context.read<LoggedCustomerProvider>().orderAgain(
-                        order: order,
-                      );
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => CustomerCart()),
-                      );
-                    },
-                    title: "Order again",
-                    innerVerticalPadding: 10,
-                    innerHorizontalPadding: 18,
-                  ),
-                ),
               ],
             ),
           ),
           SizedBox(height: 15),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: colors.surfaceContainer,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
-            ),
-            child: Row(
-              spacing: 16,
-              children: [
-                Text("Rate", style: TextStyle(fontWeight: FontWeight.bold)),
-                Spacer(),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
