@@ -229,6 +229,7 @@ class LoggedCustomerProvider with ChangeNotifier {
         final productObject = {
           ...e,
           'sub_categories': e['sub_categories']['name'],
+          // 'ar_category': e['sub_categories']['name_ar'],
         };
 
         productsMap[productId] = Product.fromMap(productObject);
@@ -332,13 +333,13 @@ class LoggedCustomerProvider with ChangeNotifier {
         final productId = e['id'];
         final subcat = e['sub_categories'];
         final subcatName = (subcat is Map)
-            ? ((Localizations.localeOf(context).languageCode == 'ar' && (subcat['name_ar']?.toString().isNotEmpty ?? false)) ? subcat['name_ar'] : subcat['name'])
+            ? ((Localizations.localeOf(context).languageCode == 'ar' &&
+                      (subcat['name_ar']?.toString().isNotEmpty ?? false))
+                  ? subcat['name_ar']
+                  : subcat['name'])
             : (subcat?.toString() ?? '');
 
-        final productObject = {
-          ...e,
-          'sub_categories': subcatName,
-        };
+        final productObject = {...e, 'sub_categories': subcatName};
 
         productsMap[productId] = Product.fromMap(productObject);
       }

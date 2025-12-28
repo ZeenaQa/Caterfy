@@ -44,6 +44,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
   @override
   Widget build(BuildContext context) {
     final List<Product> products = widget.products;
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     // Group items
     final grouped = <String, List<Product>>{};
@@ -83,14 +84,14 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        getLocalizedCategory(context, category),
+                        category,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    
+
                     // PRODUCTS
                     ...items.asMap().entries.map((entry) {
                       final index = entry.key;

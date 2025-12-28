@@ -67,7 +67,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
-    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (widget.store.name_ar.isNotEmpty) ? widget.store.name_ar : widget.store.name;
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final isLoading =
         customerProvider.isProductsLoading ||
         customerProvider.isCategoryLoading;
@@ -205,7 +205,11 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        storeNameToShow,
+                                                        isArabic
+                                                            ? widget
+                                                                  .store
+                                                                  .name_ar
+                                                            : widget.store.name,
                                                         maxLines: 2,
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -446,7 +450,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                         SizedBox(width: 11),
                         Expanded(
                           child: Text(
-                            storeNameToShow,
+                            isArabic ? widget.store.name_ar : widget.store.name,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
