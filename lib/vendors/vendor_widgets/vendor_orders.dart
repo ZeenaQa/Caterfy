@@ -1,25 +1,25 @@
-import 'package:caterfy/customers/customer_widgets/customer_no_orders.dart';
-import 'package:caterfy/customers/customer_widgets/customer_order_card.dart';
-import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
+import 'package:caterfy/vendors/vendor_widgets/vendor_no_orders.dart';
+import 'package:caterfy/vendors/vendor_widgets/vendor_order_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class CustomerOrdersSection extends StatelessWidget {
-  const CustomerOrdersSection({super.key, this.removeTitle = false});
+class VendorOrdersSection extends StatelessWidget {
+  const VendorOrdersSection({super.key, this.removeTitle = false});
   final bool removeTitle;
 
   @override
   Widget build(BuildContext context) {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
-    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
-    final orders = customerProvider.orderHistory;
+    final vendorProvider = Provider.of<LoggedVendorProvider>(context);
+    final orders = vendorProvider.orders;
     // final orders = [];
-    final isLoading = customerProvider.isOrderHistoryLoading;
+    final isLoading = vendorProvider.isOrdersLoading;
 
     return SafeArea(
       child: Skeletonizer(
@@ -41,31 +41,28 @@ class CustomerOrdersSection extends StatelessWidget {
                   ),
                 ),
               if (orders.isEmpty && !isLoading)
-                CustomerNoOrders()
+                VendorNoOrders()
               else ...[
                 if (!removeTitle) SizedBox(height: 20),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: isLoading ? dummyOrders.length : orders.length,
+                    itemCount: isLoading
+                        ? dummyVendorOrders.length
+                        : orders.length,
                     itemBuilder: (context, index) {
                       final order = isLoading
-                          ? dummyOrders[index]
+                          ? dummyVendorOrders[index]
                           : orders[index];
                       if (index == orders.length - 1) {
                         return Column(
                           children: [
-                            CustomerOrderCard(
-                              order: order,
-                              dummyImage: isLoading,
-                            ),
+                            VendorOrderCard(order: order),
+                            // CustomerOrderCard(order: order, dummyImage: isLoading),
                             SizedBox(height: 25),
                           ],
                         );
                       } else {
-                        return CustomerOrderCard(
-                          order: order,
-                          dummyImage: isLoading,
-                        );
+                        return VendorOrderCard(order: order);
                       }
                     },
                     separatorBuilder: (context, index) {
