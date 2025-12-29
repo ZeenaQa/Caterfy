@@ -50,6 +50,7 @@ android {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 }
 
 flutter {

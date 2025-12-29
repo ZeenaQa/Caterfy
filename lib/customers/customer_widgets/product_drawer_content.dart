@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/customer_widgets/add_note.dart';
+import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/quantity_selector.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
@@ -17,10 +18,12 @@ class ProductDrawerContent extends StatefulWidget {
     required this.product,
     this.isInCart = false,
     this.orderItem,
+    required this.isStoreOpen,
   });
 
   final Product product;
   final bool isInCart;
+  final bool isStoreOpen;
   final OrderItem? orderItem;
 
   @override
@@ -166,48 +169,76 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
                   SizedBox(width: 20),
                   Expanded(
                     child: FilledBtn(
-                      onPressed: () {
-                        final bool isInCart =
-                            widget.isInCart && widget.orderItem != null;
+                      onPressed: !widget.isStoreOpen
+                          ? null
+                          : () {
+                              final bool isInCart =
+                                  widget.isInCart && widget.orderItem != null;
 
-                        final OrderItem item = OrderItem(
-                          id: isInCart ? widget.orderItem!.id : Uuid().v4(),
-                          productId: product.id,
-                          storeId: product.storeId,
-                          name: product.name,
-                          description: product.description,
-                          imageUrl: product.imageUrl,
-                          price: product.price,
-                          quantity: quantity,
-                          note: localNote,
-                        );
+                              final OrderItem item = OrderItem(
+                                id: isInCart
+                                    ? widget.orderItem!.id
+                                    : Uuid().v4(),
+                                productId: product.id,
+                                storeId: product.storeId,
+                                name: product.name,
+                                description: product.description,
+                                imageUrl: product.imageUrl,
+                                price: product.price,
+                                quantity: quantity,
+                                note: localNote,
+                              );
 
-                        if (isInCart) {
-                          customerProvider.setOrderItem(item: item);
-                        } else {
-                          customerProvider.addToCart(item: item);
-                        }
+                              if (isInCart) {
+                                customerProvider.setOrderItem(item: item);
+                              } else {
+                                if (customerProvider.cart?.storeId !=
+                                        item.storeId &&
+                                    customerProvider.cart != null) {
+                                  final storeName = customerProvider.stores
+                                      .firstWhere(
+                                        (store) => store.id == item.storeId,
+                                      )
+                                      .name;
+                                  final l10 = AppLocalizations.of(context);
+                                  showCustomDialog(
+                                    context,
+                                    title: "Start a new cart?",
+                                    content:
+                                        'A new order will clear your cart with "$storeName"',
+                                    confirmText: "Start",
+                                    cancelText: l10.confirmCancel,
+                                    onConfirmAsync: () async {
+                                      customerProvider.addToCart(item: item);
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
+                                  return;
+                                }
+                                customerProvider.addToCart(item: item);
+                              }
 
-                        Navigator.of(context).pop();
-                      },
+                              Navigator.of(context).pop();
+                            },
                       innerHorizontalPadding: 20,
                       content: Row(
                         children: [
                           Text(
                             widget.isInCart ? l10.update : l10.addItem,
                             style: TextStyle(
-                              color: colors.onPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: 15.5,
                             ),
                           ),
-                          Spacer(),
-                          Text(
-                            '${l10.jod} ${(product.price * quantity).toString()}',
-                            style: TextStyle(
-                              color: colors.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.5,
+                          Expanded(
+                            child: Text(
+                              '${(product.price * quantity).toStringAsFixed(2)} ${l10.jod}',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.5,
+                              ),
                             ),
                           ),
                         ],

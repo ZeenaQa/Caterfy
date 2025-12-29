@@ -11,10 +11,16 @@ import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CartItem extends StatelessWidget {
-  const CartItem({super.key, required this.orderItem, this.isLastItem = false});
+  const CartItem({
+    super.key,
+    required this.orderItem,
+    this.isLastItem = false,
+    this.isStoreOpen = true,
+  });
 
   final OrderItem orderItem;
   final bool isLastItem;
+  final bool isStoreOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +48,7 @@ class CartItem extends StatelessWidget {
             ),
             isInCart: true,
             orderItem: orderItem,
+            isStoreOpen: true,
           ),
         );
       },
@@ -119,7 +126,7 @@ class CartItem extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: (orderItem.price * orderItem.quantity)
-                                  .toString(),
+                                  .toStringAsFixed(2),
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],

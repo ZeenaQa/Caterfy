@@ -43,7 +43,6 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
   @override
   Widget build(BuildContext context) {
     final List<Product> products = widget.products;
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     // Group items
     final grouped = <String, List<Product>>{};
@@ -98,6 +97,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
 
                       return ProductItem(
                         product: product,
+                        isStoreOpen: widget.store.isOpen,
                         isLastItem: index == items.length - 1,
                       );
                     }),

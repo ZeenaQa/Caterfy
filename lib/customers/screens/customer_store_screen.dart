@@ -16,6 +16,34 @@ import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+const ColorFilter blackAndWhite = ColorFilter.matrix(<double>[
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  0,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  0,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  0,
+]);
+
+const ColorFilter noFilter = ColorFilter.mode(
+  Colors.transparent,
+  BlendMode.dst,
+);
+
 class CustomerStoreScreen extends StatefulWidget {
   const CustomerStoreScreen({super.key, required this.store});
 
@@ -100,14 +128,19 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                               return const Icon(Icons.broken_image);
                             },
                           ),
-                          child: Image.network(
-                            widget.store.bannerUrl ?? '',
-                            height: 218,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(Icons.broken_image);
-                            },
+                          child: ColorFiltered(
+                            colorFilter: widget.store.isOpen
+                                ? noFilter
+                                : blackAndWhite,
+                            child: Image.network(
+                              widget.store.bannerUrl ?? '',
+                              height: 218,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.broken_image);
+                              },
+                            ),
                           ),
                         ),
                         SafeArea(
@@ -135,54 +168,84 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                           CrossAxisAlignment.start,
                                       spacing: 11,
                                       children: [
-                                        Container(
-                                          width: 65,
-                                          height: 65,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFF1F1F1),
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                            child: Skeleton.replace(
-                                              replacement: Image.asset(
-                                                'assets/images/app_icon.png',
-                                                fit: BoxFit.cover,
-                                                errorBuilder:
-                                                    (
-                                                      context,
-                                                      error,
-                                                      stackTrace,
-                                                    ) {
-                                                      return Icon(
-                                                        Icons.store,
-                                                        size: 30,
-                                                        color: Colors.grey[400],
-                                                      );
-                                                    },
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 65,
+                                              height: 65,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFFF1F1F1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
-                                              child: Image.network(
-                                                widget.store.logoUrl ?? "",
-                                                fit: BoxFit.cover,
-                                                errorBuilder:
-                                                    (
-                                                      context,
-                                                      error,
-                                                      stackTrace,
-                                                    ) {
-                                                      return Icon(
-                                                        Icons.store,
-                                                        size: 30,
-                                                        color: Colors.grey[400],
-                                                      );
-                                                    },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Skeleton.replace(
+                                                  replacement: Image.asset(
+                                                    'assets/images/app_icon.png',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) {
+                                                          return Icon(
+                                                            Icons.store,
+                                                            size: 30,
+                                                            color: Colors
+                                                                .grey[400],
+                                                          );
+                                                        },
+                                                  ),
+                                                  child: Image.network(
+                                                    widget.store.logoUrl ?? "",
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) {
+                                                          return Icon(
+                                                            Icons.store,
+                                                            size: 30,
+                                                            color: Colors
+                                                                .grey[400],
+                                                          );
+                                                        },
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                            if (!widget.store.isOpen)
+                                              Skeleton.ignore(
+                                                child: Container(
+                                                  width: 65,
+                                                  height: 65,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          10,
+                                                        ),
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      l10.closed,
+                                                      style: TextStyle(
+                                                        color: colors.onPrimary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
                                         ),
                                         Expanded(
                                           child: Column(
@@ -254,7 +317,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   ),
                                                   SizedBox(width: 6),
                                                   Text(
-                                                    '4.3',
+                                                    '5',
                                                     style: TextStyle(
                                                       fontSize: 13,
                                                       fontWeight:
@@ -296,7 +359,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   baselineType:
                                                       TextBaseline.alphabetic,
                                                   child: Text(
-                                                    "15-20 mins",
+                                                    "15-20 ${l10.min}",
                                                     style: TextStyle(
                                                       fontSize: 12.5,
                                                       fontWeight:
@@ -523,6 +586,8 @@ class BottomNav extends StatelessWidget {
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
+    final bool isStoreOpen = store.isOpen;
+
     return Skeleton.ignore(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
@@ -540,7 +605,7 @@ class BottomNav extends StatelessWidget {
         child: SafeArea(
           top: false,
           child: FilledBtn(
-            onPressed: () {
+            onPressed: !isStoreOpen? null :  () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CustomerCart()),
@@ -561,7 +626,6 @@ class BottomNav extends StatelessWidget {
                     child: Text(
                       customerProvider.totalCartQuantity.toString(),
                       style: TextStyle(
-                        color: colors.onPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -572,7 +636,6 @@ class BottomNav extends StatelessWidget {
                 Text(
                   l10.viewCart,
                   style: TextStyle(
-                    color: colors.onPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -581,7 +644,6 @@ class BottomNav extends StatelessWidget {
                 Text(
                   '${l10.jod} ${customerProvider.totalCartPrice.toString()}',
                   style: TextStyle(
-                    color: colors.onPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),

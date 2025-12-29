@@ -7,6 +7,7 @@
   "or": "OR",
   "login": "Log in",
   "signup": "Sign Up",
+  "submitApplication": "Submit Application",
   "email": "Email",
   "password": "Password",
   "phoneNumber": "Phone Number",
@@ -231,5 +232,7 @@
   "emailSentSuccessfully": "Email sent successfully",
   "editAccountInfo": "Edit account info",
   "updatedSuccessfully": "Updated successfully!",
-  "more": "More"
+  "more": "More",
+  "min": "min",
+  "checkoutStoreClosed": "Sorry, the store is closed. Checkout is unavailable"
 }    

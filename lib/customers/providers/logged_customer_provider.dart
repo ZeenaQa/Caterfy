@@ -133,6 +133,14 @@ class LoggedCustomerProvider with ChangeNotifier {
         storeId: item.storeId,
         storeName: storeName,
       );
+    } else if (_cart?.storeId != item.storeId) {
+      _cart = null;
+      deleteCart();
+      _cart = Cart(
+        customerId: customerId,
+        storeId: item.storeId,
+        storeName: storeName,
+      );
     }
 
     _cart!.addItem(item: item);
@@ -208,57 +216,52 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
-Future<void> fetchProducts({
-  required String storeId,
-  required BuildContext context,
-}) async {
-  final l10 = AppLocalizations.of(context);
-  final isArabic = l10.localeName == 'ar';
+  Future<void> fetchProducts({
+    required String storeId,
+    required BuildContext context,
+  }) async {
+    final l10 = AppLocalizations.of(context);
+    final isArabic = l10.localeName == 'ar';
 
-  try {
-    _isProductsLoading = true;
-    notifyListeners();
+    try {
+      _isProductsLoading = true;
+      notifyListeners();
 
-    final data = await supabase
-        .from('products')
-        .select('*, sub_categories(name, name_ar)')
-        .eq('store_id', storeId);
+      final data = await supabase
+          .from('products')
+          .select('*, sub_categories(name, name_ar)')
+          .eq('store_id', storeId);
 
-    final Map<String, Product> productsMap = {};
+      final Map<String, Product> productsMap = {};
 
-    for (final e in data) {
-      final subcat = e['sub_categories'];
+      for (final e in data) {
+        final subcat = e['sub_categories'];
 
-      final subCategoryName = (subcat is Map)
-          ? (isArabic &&
-                  (subcat['name_ar']?.toString().isNotEmpty ?? false)
-              ? subcat['name_ar']
-              : subcat['name'])
-          : '';
+        final subCategoryName = (subcat is Map)
+            ? (isArabic && (subcat['name_ar']?.toString().isNotEmpty ?? false)
+                  ? subcat['name_ar']
+                  : subcat['name'])
+            : '';
 
-      final productObject = {
-        ...e,
-        'sub_categories': subCategoryName,
-      };
+        final productObject = {...e, 'sub_categories': subCategoryName};
 
-      productsMap[e['id']] = Product.fromMap(productObject);
+        productsMap[e['id']] = Product.fromMap(productObject);
+      }
+
+      _products = productsMap.values.toList();
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isProductsLoading = false;
+      notifyListeners();
     }
-
-    _products = productsMap.values.toList();
-  } catch (e) {
-    if (context.mounted) {
-      showCustomToast(
-        context: context,
-        type: ToastificationType.error,
-        message: l10.somethingWentWrong,
-      );
-    }
-  } finally {
-    _isProductsLoading = false;
-    notifyListeners();
   }
-}
-
 
   Future<void> toggleFavorite(String customerId, Store store) async {
     final isCurrentlyFavorite = _favoriteStores.containsKey(store.id);
@@ -297,7 +300,6 @@ Future<void> fetchProducts({
     required BuildContext context,
   }) async {
     final l10 = AppLocalizations.of(context);
-    
 
     try {
       _isCategoryLoading = true;

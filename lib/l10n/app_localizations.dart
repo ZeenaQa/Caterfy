@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Sign Up'**
   String get signup;
 
+  /// No description provided for @submitApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Application'**
+  String get submitApplication;
+
   /// No description provided for @email.
   ///
   /// In en, this message translates to:
@@ -1477,6 +1483,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get more;
+
+  /// No description provided for @min.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get min;
+
+  /// No description provided for @checkoutStoreClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, the store is closed. Checkout is unavailable'**
+  String get checkoutStoreClosed;
 }
 
 class _AppLocalizationsDelegate

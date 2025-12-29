@@ -52,7 +52,12 @@ class _CustomerCartState extends State<CustomerCart> {
     final items = customerProvider.cart?.items ?? const [];
     final bool isLoading = customerProvider.isCartLoading;
     final bool isCartEmpty = customerProvider.cart?.items.isEmpty ?? true;
-    final storeNameToShow = store == null ? '' : (Localizations.localeOf(context).languageCode == 'ar' && store!.name_ar.isNotEmpty ? store!.name_ar : store!.name);
+    final storeNameToShow = store == null
+        ? ''
+        : (Localizations.localeOf(context).languageCode == 'ar' &&
+                  store!.name_ar.isNotEmpty
+              ? store!.name_ar
+              : store!.name);
 
     return Scaffold(
       bottomNavigationBar: isLoading || isCartEmpty
@@ -121,6 +126,7 @@ class _CustomerCartState extends State<CustomerCart> {
                               : items[index],
                           isLastItem:
                               index == (isLoading ? 1 : items.length - 1),
+                          isStoreOpen: store?.isOpen ?? true,
                         );
                       },
                     ),
@@ -194,12 +200,13 @@ class BottomNav extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final l10 = AppLocalizations.of(context);
+    final bool isStoreOpen = store?.isOpen ?? true;
 
     return IntrinsicHeight(
       child: Container(
         padding: const EdgeInsets.only(
           bottom: 18,
-          top: 25,
+          // top: 25,
           left: 14,
           right: 14,
         ),
@@ -216,37 +223,51 @@ class BottomNav extends StatelessWidget {
         ),
         child: SafeArea(
           top: false,
-          child: Row(
-            spacing: 18,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                child: OutlinedBtn(
-                  onPressed: () {
-                    if (store == null) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CustomerStoreScreen(store: store!),
-                      ),
-                    );
-                  },
-                  title: l10.addItems,
-                  titleSize: 15,
-                  innerVerticalPadding: 15,
-                ),
-              ),
-              Expanded(
-                child: FilledBtn(
-                  loadingSize: 15,
-                  isLoading: customerProvider.isPlaceOrderLoading,
-                  onPressed: () async {
-                    await customerProvider.placeOrder(context: context);
-                    if (context.mounted) Navigator.of(context).pop();
-                  },
-                  title: l10.checkout,
-                  titleSize: 15,
-                  innerVerticalPadding: 15,
-                ),
+              if (!isStoreOpen) ...[
+                SizedBox(height: 12),
+                Text(l10.checkoutStoreClosed, style: TextStyle(fontSize: 13)),
+              ],
+              SizedBox(height: !isStoreOpen ? 13 : 25),
+              Row(
+                spacing: 18,
+                children: [
+                  Expanded(
+                    child: OutlinedBtn(
+                      onPressed: () {
+                        if (store == null) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CustomerStoreScreen(store: store!),
+                          ),
+                        );
+                      },
+                      title: l10.addItems,
+                      titleSize: 15,
+                      innerVerticalPadding: 15,
+                    ),
+                  ),
+                  Expanded(
+                    child: FilledBtn(
+                      loadingSize: 15,
+                      isLoading: customerProvider.isPlaceOrderLoading,
+                      onPressed: !isStoreOpen
+                          ? null
+                          : () async {
+                              await customerProvider.placeOrder(
+                                context: context,
+                              );
+                              if (context.mounted) Navigator.of(context).pop();
+                            },
+                      title: l10.checkout,
+                      titleSize: 15,
+                      innerVerticalPadding: 15,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -42,8 +42,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   image_cropper: ^11.0.0
-
-
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -68,3 +67,13 @@ flutter:
     - assets/icons/
     - assets/fonts/
     - assets/map_style_dark.json
+
+flutter_native_splash:
+  color: "#6e44d2"
+  image: assets/images/splash.png
+  android: true
+  ios: true
+
+  android_12:
+    color: "#6e44d2"
+    image: assets/images/splash.png

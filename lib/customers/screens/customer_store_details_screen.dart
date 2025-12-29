@@ -13,7 +13,11 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
-    final storeNameToShow = Localizations.localeOf(context).languageCode == 'ar' && (store.name_ar.isNotEmpty) ? store.name_ar : store.name;
+    final storeNameToShow =
+        Localizations.localeOf(context).languageCode == 'ar' &&
+            (store.name_ar.isNotEmpty)
+        ? store.name_ar
+        : store.name;
 
     return Scaffold(
       appBar: CustomAppBar(title: l10n.storeDetails),
@@ -139,7 +143,7 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       leftText: l10n.deliveryTime,
-                      rightText: "25-30 mins",
+                      rightText: "25-30 ${l10n.min}",
                     ),
                     InfoItem(
                       leftContent: SizedBox(

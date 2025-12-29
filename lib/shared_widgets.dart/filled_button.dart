@@ -2,7 +2,7 @@ import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
 import 'package:flutter/material.dart';
 
 class FilledBtn extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
   final bool stretch;
   final String title;
@@ -43,6 +43,7 @@ class FilledBtn extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: colors.primary,
+            foregroundColor: colors.onPrimary,
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
@@ -65,7 +66,6 @@ class FilledBtn extends StatelessWidget {
                       title,
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
-                        color: colors.onPrimary,
                         fontSize: titleSize,
                       ),
                     ),

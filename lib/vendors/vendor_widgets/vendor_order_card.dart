@@ -139,7 +139,7 @@ class VendorOrderCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: getTotalPrice().toString(),
+                              text: getTotalPrice().toStringAsFixed(2),
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],

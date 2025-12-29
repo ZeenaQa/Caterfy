@@ -31,6 +31,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signup => 'إنشاء حساب';
 
   @override
+  String get submitApplication => 'إرسال الطلب';
+
+  @override
   String get email => 'البريد الإلكتروني';
 
   @override
@@ -711,4 +714,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get more => 'المزيد';
+
+  @override
+  String get min => 'دقيقة';
+
+  @override
+  String get checkoutStoreClosed =>
+      'عذرًا، المتجر مغلق حاليًا. لا يمكن إتمام الطلب الآن';
 }

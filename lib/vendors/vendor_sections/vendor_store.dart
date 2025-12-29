@@ -1,3 +1,5 @@
+import 'package:caterfy/customers/utils/dotted_border_painter.dart';
+import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
@@ -14,6 +16,7 @@ import 'package:caterfy/vendors/screens/app_screens/edit_store.screen.dart';
 import 'package:caterfy/shared_widgets.dart/three_bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class VendorStoreSection extends StatefulWidget {
   const VendorStoreSection({super.key});
@@ -197,12 +200,13 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
     final provider = context.watch<LoggedVendorProvider>();
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
+    final bool isStoreLoading = provider.isStoreLoading;
 
     if (provider.isLoading) {
       return const Center(child: ThreeBounce());
     }
 
-    if (provider.store == null) {
+    if (provider.store == null && !isStoreLoading) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -241,12 +245,13 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
       );
     }
 
-    final store = provider.store!;
+    final store = provider.store;
     final storeNameToShow =
-        Localizations.localeOf(context).languageCode == 'ar' &&
+        store != null &&
+            Localizations.localeOf(context).languageCode == 'ar' &&
             (store.name_ar.isNotEmpty)
         ? store.name_ar
-        : store.name;
+        : store?.name;
     String catLabel(Map<String, dynamic> cat) {
       return Localizations.localeOf(context).languageCode == 'ar' &&
               (cat['name_ar']?.isNotEmpty ?? false)
@@ -255,135 +260,211 @@ class _VendorStoreSectionState extends State<VendorStoreSection> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PhysicalShape(
-            clipper: WavyClipper(waveHeight: 6),
-            clipBehavior: Clip.antiAlias,
-            color: Colors.transparent,
-            child: Image.network(
-              store.bannerUrl ?? '',
-              height: 218,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          /// ===== STORE HEADER =====
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    store.logoUrl ?? '',
-                    width: 65,
-                    height: 65,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) =>
-                        Icon(Icons.store, color: Colors.grey[400]),
-                  ),
+      child: Skeletonizer(
+        enabled: isStoreLoading,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PhysicalShape(
+              clipper: WavyClipper(waveHeight: 6),
+              clipBehavior: Clip.antiAlias,
+              color: Colors.transparent,
+              child: Skeleton.replace(
+                replacement: Image.asset(
+                  'assets/images/app_icon.png',
+                  height: 218,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.broken_image);
+                  },
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        storeNameToShow,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
+                child: Image.network(
+                  store?.bannerUrl ?? '',
+                  height: 218,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            /// ===== STORE HEADER =====
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Skeleton.replace(
+                      replacement: Image.asset(
+                        'assets/images/app_icon.png',
+                        width: 65,
+                        height: 65,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.store,
+                            size: 30,
+                            color: Colors.grey[400],
+                          );
+                        },
                       ),
-                      if (store.tags != null && store.tags!.isNotEmpty)
+                      child: Image.network(
+                        store?.logoUrl ?? '',
+                        width: 65,
+                        height: 65,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          store.tags!.join(', '),
-                          maxLines: 1,
+                          storeNameToShow ?? 'Store name here',
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Skeleton.replace(
+                          replacement: Text(
+                            "Drinks, food, etcetc",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: colors.onSurfaceVariant,
+                              fontSize: 12.5,
+                            ),
+                          ),
+                          child: Text(
+                            (store?.tags != null && store!.tags!.isNotEmpty)
+                                ? store.tags!.join(', ')
+                                : '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: colors.onSurfaceVariant,
+                              fontSize: 12.5,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          store?.storeArea ?? l10.storeLocation,
                           style: TextStyle(
                             color: colors.onSurfaceVariant,
                             fontSize: 12.5,
                           ),
                         ),
-                      Text(
-                        store.storeArea ?? l10.storeLocation,
-                        style: TextStyle(
-                          color: colors.onSurfaceVariant,
-                          fontSize: 12.5,
+                      ],
+                    ),
+                  ),
+                  OutlinedBtn(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const EditStoreScreen(),
+                        ),
+                      );
+                    },
+                    title: l10.edit,
+                    innerHorizontalPadding: 20,
+                    innerVerticalPadding: 10,
+                    titleSize: 15,
+                    lighterBorder: true,
+                    borderRadius: 13,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            SizedBox(
+              width: double.infinity,
+              child: Center(
+                child: GestureDetector(
+                  onTap: () => _openAddCategoryDrawer(context, provider),
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: CustomPaint(
+                      painter: DottedBorderPainter(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0,
+                          vertical: 9,
+                        ),
+                        child: Text(
+                          l10.addCategory,
+                          style: TextStyle(color: colors.onSecondary),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-                OutlinedBtn(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const EditStoreScreen(),
-                      ),
-                    );
-                  },
-                  title: l10.edit,
-                  innerHorizontalPadding: 20,
-                  innerVerticalPadding: 10,
-                  titleSize: 15,
-                  lighterBorder: true,
-                  borderRadius: 13,
-                ),
-              ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 30),
-          GestureDetector(
-            onTap: () {
-              _openAddCategoryDrawer(context, provider);
-            },
-            child: Icon(Icons.add_circle_outline),
-          ),
+            /// ===== CATEGORIES =====
+            if (!isStoreLoading)
+              Skeleton.ignore(
+                child: Column(
+                  children: provider.subCategories.asMap().entries.map((entry) {
+                    final cat = entry.value;
+                    final index = entry.key;
 
-          /// ===== CATEGORIES =====
-          Column(
-            children: provider.subCategories.asMap().entries.map((entry) {
-              final cat = entry.value;
-              final index = entry.key;
+                    final products = provider.products
+                        .where((p) => p.subCategoryId == cat['id'])
+                        .toList();
 
-              final products = provider.products
-                  .where((p) => p.subCategoryId == cat['id'])
-                  .toList();
+                    return MenuCategory(
+                      cat: cat,
+                      products: products,
+                      isFirstCategory: index == 0,
+                      isLastCategory:
+                          index == provider.subCategories.length - 1,
+                      onAddPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AddProductScreen(
+                              categoryId: cat['id'],
+                              categoryName: catLabel(cat),
+                            ),
+                          ),
+                        ).then((_) {
+                          setState(() {});
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
 
-              return MenuCategory(
-                cat: cat,
-                products: products,
-                isFirstCategory: index == 0,
-                isLastCategory: index == provider.subCategories.length - 1,
-                onAddPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AddProductScreen(
-                        categoryId: cat['id'],
-                        categoryName: catLabel(cat),
-                      ),
-                    ),
-                  ).then((_) {
-                    setState(() {});
-                  });
-                },
-              );
-            }).toList(),
-          ),
-        ],
+            if (isStoreLoading)
+              MenuCategory(
+                cat: {'id': '1', 'name': "Meals", 'name_ar': "الوجبات"},
+                products: dummyProducts,
+                isFirstCategory: true,
+                isLastCategory: false,
+                onAddPressed: () {},
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -449,7 +530,7 @@ class MenuCategory extends StatelessWidget {
 
               /// CATEGORY HEADER
               Padding(
-                padding: const EdgeInsets.only(left: 21, right: 5),
+                padding: const EdgeInsetsDirectional.only(start: 21, end: 5),
                 child: Row(
                   children: [
                     Expanded(
@@ -470,6 +551,7 @@ class MenuCategory extends StatelessWidget {
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
+                              spacing: 4,
                               children: [
                                 Text(
                                   catLabel(),
@@ -579,12 +661,23 @@ class StoreProductItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(9),
-              child: Image.network(
-                product.imageUrl ?? '',
-                width: 55,
-                height: 55,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+              child: Skeleton.replace(
+                replacement: Image.asset(
+                  'assets/images/app_icon.png',
+                  width: 55,
+                  height: 55,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.store, size: 30, color: Colors.grey[400]);
+                  },
+                ),
+                child: Image.network(
+                  product.imageUrl ?? '',
+                  width: 55,
+                  height: 55,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                ),
               ),
             ),
             const SizedBox(width: 20),
@@ -615,7 +708,7 @@ class StoreProductItem extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: product.price.toString(),
+                                text: product.price.toStringAsFixed(2),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),

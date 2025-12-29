@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class GlobalProvider extends ChangeNotifier {
   dynamic user;
 
-  String deliveryLocation = 'Pick a Location';
+  String? deliveryLocation;
   LatLng? lastPickedLocation;
   bool _notificationsEnabled = true;
 
@@ -31,7 +31,7 @@ class GlobalProvider extends ChangeNotifier {
 
   Future<void> loadLastLocation() async {
     final prefs = await SharedPreferences.getInstance();
-    deliveryLocation = prefs.getString('deliveryLocation') ?? 'Pick a Location';
+    deliveryLocation = prefs.getString('deliveryLocation');
 
     final lat = prefs.getDouble('last_latitude');
     final lng = prefs.getDouble('last_longitude');

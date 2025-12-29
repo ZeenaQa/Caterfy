@@ -10,9 +10,11 @@ class LoggedVendorProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;
 
   bool _isLoading = false;
+  bool _isStoreLoading = false;
   bool _isOrdersLoading = false;
 
   bool get isLoading => _isLoading;
+  bool get isStoreLoading => _isStoreLoading;
   bool get isOrdersLoading => _isOrdersLoading;
 
   Store? store;
@@ -22,7 +24,7 @@ class LoggedVendorProvider extends ChangeNotifier {
   /* ===================== STORE ===================== */
 
   Future<void> checkVendorStore() async {
-    _isLoading = true;
+    _isStoreLoading = true;
     notifyListeners();
 
     try {
@@ -48,7 +50,7 @@ class LoggedVendorProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('checkVendorStore error: $e');
     } finally {
-      _isLoading = false;
+      _isStoreLoading = false;
       notifyListeners();
     }
   }

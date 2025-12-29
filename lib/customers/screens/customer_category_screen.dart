@@ -86,19 +86,27 @@ class _CategoryScreenState extends State<CategoryScreen> {
           child: Row(
             children: [
               Expanded(
-                child: RichText(
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    style: TextStyle(fontSize: 15, color: colors.onSurface),
-                    children: [
-                      TextSpan(text: '${l10.deliverTo} '),
-                      TextSpan(
-                        text: provider.deliveryLocation,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                child: Consumer<GlobalProvider>(
+                  builder: (_, provider, __) {
+                    return RichText(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        style: TextStyle(fontSize: 15, color: colors.onSurface),
+                        children: [
+                          TextSpan(
+                            text: provider.deliveryLocation != null
+                                ? '${l10.deliverTo} '
+                                : '',
+                          ),
+                          TextSpan(
+                            text: l10.pickLocation,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
               SizedBox(width: 10),
@@ -158,7 +166,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 borderRadius: BorderRadius.circular(50),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
+                    hintText:
+                        '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
                     hintStyle: TextStyle(fontSize: 15),
                     filled: true,
                     fillColor: colors.surfaceContainer,

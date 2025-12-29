@@ -105,7 +105,7 @@ class VendorSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: locale.languageCode == "ar",
                   colors: colors,
-                  title: l10.arabic,
+                  title: "العربية",
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('en'));
                     context.read<LocaleProvider>().toggleLocale();
@@ -114,7 +114,7 @@ class VendorSettingsScreen extends StatelessWidget {
                 DrawerBtn(
                   isSelected: locale.languageCode == "en",
                   colors: colors,
-                  title: l10.english,
+                  title: "English",
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('ar'));
                     context.read<LocaleProvider>().toggleLocale();

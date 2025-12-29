@@ -2,7 +2,6 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -74,32 +73,14 @@ class _SetPasswordState extends State<SetPassword> {
                 errorText: auth.confirmPasswordError,
               ),
               FilledBtn(
-                title: l10.signup,
+                title: l10.submitApplication,
                 onPressed: () async {
                   if (auth.validatePasswordInfo(
                     password: password,
                     confirmPassword: confirmPassword,
                     l10: AppLocalizations.of(context),
                   )) {
-                    final success = await auth.signUp(
-                      onlyPassword: true,
-                      email: widget.email,
-                      name: widget.name,
-                      password: password,
-                      confirmPassword: confirmPassword,
-                      phoneNumber: widget.phoneNumber,
-                      businessName: widget.businessName,
-                      businessType: widget.selectedBusiness,
-                      context: context,
-                    );
-                    if (success && context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AuthenticatedVendor(),
-                        ),
-                      );
-                    }
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   }
                 },
                 isLoading: auth.isLoading,

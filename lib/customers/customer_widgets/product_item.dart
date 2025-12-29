@@ -10,10 +10,12 @@ class ProductItem extends StatelessWidget {
     super.key,
     required this.product,
     this.isLastItem = false,
+    this.isStoreOpen = true,
   });
 
   final Product product;
   final bool isLastItem;
+  final bool isStoreOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ProductItem extends StatelessWidget {
         context,
         padding: EdgeInsets.only(bottom: 0),
         isStack: true,
-        child: ProductDrawerContent(product: product),
+        child: ProductDrawerContent(product: product, isStoreOpen: isStoreOpen),
       ),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
@@ -70,7 +72,7 @@ class ProductItem extends StatelessWidget {
                       Spacer(),
                       RichText(
                         text: TextSpan(
-                          text: '${product.price.toString()} ',
+                          text: '${product.price.toStringAsFixed(2)} ',
                           style: TextStyle(
                             color: colors.onSurface,
                             fontWeight: FontWeight.normal,

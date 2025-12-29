@@ -31,6 +31,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signup => 'Sign Up';
 
   @override
+  String get submitApplication => 'Submit Application';
+
+  @override
   String get email => 'Email';
 
   @override
@@ -714,4 +717,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get more => 'More';
+
+  @override
+  String get min => 'min';
+
+  @override
+  String get checkoutStoreClosed =>
+      'Sorry, the store is closed. Checkout is unavailable';
 }

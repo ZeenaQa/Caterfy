@@ -7,6 +7,7 @@
   "or": "أو",
   "login": "تسجيل الدخول",
   "signup": "إنشاء حساب",
+  "submitApplication": "إرسال الطلب",
   "email": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "phoneNumber": "رقم الهاتف",
@@ -229,6 +230,7 @@
   "emailSentSuccessfully": "تم إرسال البريد الإلكتروني بنجاح",
   "editAccountInfo": "تعديل معلومات الحساب",
   "updatedSuccessfully": "تم التعديل بنجاح!",
-  "more": "المزيد"
-
+  "more": "المزيد",
+  "min": "دقيقة",
+  "checkoutStoreClosed": "عذرًا، المتجر مغلق حاليًا. لا يمكن إتمام الطلب الآن"
 }    
