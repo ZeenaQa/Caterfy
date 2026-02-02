@@ -23,7 +23,6 @@ class CustomerStoreListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final globalProvider = Provider.of<GlobalProvider>(context);
     final customerId = Supabase.instance.client.auth.currentUser?.id;
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
@@ -220,22 +219,62 @@ class CustomerStoreListItem extends StatelessWidget {
                     ),
                   const SizedBox(height: 2),
                   Flexible(
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.solidStar,
-                          size: 13,
-                          color: colors.secondaryContainer,
-                        ),
-                        SizedBox(width: 6),
-                        Text('5.3 (1k+) ', style: TextStyle(fontSize: 12)),
-                        Text(
-                          '• ${globalProvider.getDeliveryTime(store.latitude, store.longitude)} ${l10n.min} • ${l10n.jod} ${globalProvider.getDeliveryPrice(store.latitude, store.longitude)}',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
+                    child: Consumer<GlobalProvider>(
+                      builder: (context, provider, child) {
+                        final cached = provider.getCachedStoreRating(store.id);
+                        if (cached != null) {
+                          final avgRating = cached['average'] ?? 0;
+                          final count = cached['count'] ?? 0;
+                          final countDisplay = count > 999 ? '${(count / 1000).toStringAsFixed(1)}k+' : '$count';
+                          return Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.solidStar,
+                                size: 13,
+                                color: colors.secondaryContainer,
+                              ),
+                              SizedBox(width: 6),
+                              Text('$avgRating ($countDisplay) ', style: TextStyle(fontSize: 12)),
+                              Text(
+                                '• ${provider.getDeliveryTime(store.latitude, store.longitude)} ${l10n.min} • ${l10n.jod} ${provider.getDeliveryPrice(store.latitude, store.longitude)}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          );
+                        }
+
+                        return FutureBuilder<Map<String, dynamic>>(
+                          future: provider.getStoreRatingDetails(store.id),
+                          builder: (context, snapshot) {
+                            double avgRating = 0;
+                            int count = 0;
+                            if (snapshot.hasData) {
+                              avgRating = snapshot.data?['average'] ?? 0;
+                              count = snapshot.data?['count'] ?? 0;
+                            }
+                            String countDisplay = count > 999 ? '${(count / 1000).toStringAsFixed(1)}k+' : '$count';
+                            return Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  size: 13,
+                                  color: colors.secondaryContainer,
+                                ),
+                                SizedBox(width: 6),
+                                Text('$avgRating ($countDisplay) ', style: TextStyle(fontSize: 12)),
+                                Text(
+                                  '• ${provider.getDeliveryTime(store.latitude, store.longitude)} ${l10n.min} • ${l10n.jod} ${provider.getDeliveryPrice(store.latitude, store.longitude)}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ],

@@ -310,32 +310,76 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   ),
                                                 ),
                                               SizedBox(height: 4),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    FontAwesomeIcons.solidStar,
-                                                    size: 13,
-                                                    color: colors
-                                                        .secondaryContainer,
-                                                  ),
-                                                  SizedBox(width: 6),
-                                                  Text(
-                                                    '5',
-                                                    style: TextStyle(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    ' (1k+)',
-                                                    style: TextStyle(
-                                                      color: colors
-                                                          .onSurfaceVariant,
-                                                      fontSize: 13,
-                                                    ),
-                                                  ),
-                                                ],
+                                              Consumer<GlobalProvider>(
+                                                builder: (context, provider, child) {
+                                                  final cached = provider.getCachedStoreRating(widget.store.id);
+                                                  if (cached != null) {
+                                                    final avgRating = cached['average'] ?? 0;
+                                                    final count = cached['count'] ?? 0;
+                                                    final countDisplay = count > 999 ? '${(count / 1000).toStringAsFixed(1)}k+' : '$count';
+                                                    return Row(
+                                                      children: [
+                                                        Icon(
+                                                          FontAwesomeIcons.solidStar,
+                                                          size: 13,
+                                                          color: colors.secondaryContainer,
+                                                        ),
+                                                        SizedBox(width: 6),
+                                                        Text(
+                                                          '$avgRating',
+                                                          style: TextStyle(
+                                                            fontSize: 13,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          ' ($countDisplay)',
+                                                          style: TextStyle(
+                                                            color: colors.onSurfaceVariant,
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+
+                                                  return FutureBuilder<Map<String, dynamic>>(
+                                                    future: provider.getStoreRatingDetails(widget.store.id),
+                                                    builder: (context, snapshot) {
+                                                      double avgRating = 0;
+                                                      int count = 0;
+                                                      if (snapshot.hasData) {
+                                                        avgRating = snapshot.data?['average'] ?? 0;
+                                                        count = snapshot.data?['count'] ?? 0;
+                                                      }
+                                                      final countDisplay = count > 999 ? '${(count / 1000).toStringAsFixed(1)}k+' : '$count';
+                                                      return Row(
+                                                        children: [
+                                                          Icon(
+                                                            FontAwesomeIcons.solidStar,
+                                                            size: 13,
+                                                            color: colors.secondaryContainer,
+                                                          ),
+                                                          SizedBox(width: 6),
+                                                          Text(
+                                                            '$avgRating',
+                                                            style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            ' ($countDisplay)',
+                                                            style: TextStyle(
+                                                              color: colors.onSurfaceVariant,
+                                                              fontSize: 13,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
                                               ),
                                             ],
                                           ),
