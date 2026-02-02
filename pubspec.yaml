@@ -70,10 +70,10 @@ flutter:
 
 flutter_native_splash:
   color: "#6e44d2"
-  image: assets/images/splash.png
+  image: assets/images/caterfy_splash.png
   android: true
   ios: true
 
   android_12:
     color: "#6e44d2"
-    image: assets/images/splash.png
+    image: assets/images/caterfy_splash.png

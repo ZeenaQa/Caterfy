@@ -78,7 +78,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final colors = Theme.of(context).colorScheme;
-    final provider = context.watch<GlobalProvider>();
+    final globalProvider = context.watch<GlobalProvider>();
     final l10 = AppLocalizations.of(context);
     final isLoading = customerProvider.isCategoryLoading;
 
@@ -106,7 +106,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 : '',
                           ),
                           TextSpan(
-                            text: l10.pickLocation,
+                            text: globalProvider.deliveryLocation ?? l10.pickLocation,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
