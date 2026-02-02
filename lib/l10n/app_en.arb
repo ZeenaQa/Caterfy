@@ -221,7 +221,7 @@
   "checkout": "Checkout",
   "enterCouponCode": "Enter coupon code",
   "submit": "Submit",
-  "pickLocation": "Pick a Location",
+  "pickLocation": "Pick a location",
   "update": "Update",
   "addItem": "Add item",
   "delivered": "Delivered",
@@ -234,5 +234,6 @@
   "updatedSuccessfully": "Updated successfully!",
   "more": "More",
   "min": "min",
-  "checkoutStoreClosed": "Sorry, the store is closed. Checkout is unavailable"
+  "checkoutStoreClosed": "Sorry, the store is closed. Checkout is unavailable",
+  "pickLocationRequired": "You need to pick a delivery address in order to proceed"
 }    

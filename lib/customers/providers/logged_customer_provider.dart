@@ -440,7 +440,10 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> placeOrder({required BuildContext context}) async {
+  Future<void> placeOrder({
+    required BuildContext context,
+    required double deliveryPrice,
+  }) async {
     if (_cart?.storeId == null || _cart!.items.isEmpty) return;
     final l10 = AppLocalizations.of(context);
     try {
@@ -449,7 +452,10 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       final mapCart = _cart!.toMap();
 
-      await supabase.from('orders').insert(mapCart);
+      await supabase.from('orders').insert({
+        ...mapCart,
+        'delivery_price': deliveryPrice,
+      });
 
       _cart = null;
       deleteCart();

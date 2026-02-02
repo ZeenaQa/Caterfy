@@ -683,7 +683,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submit => 'Submit';
 
   @override
-  String get pickLocation => 'Pick a Location';
+  String get pickLocation => 'Pick a location';
 
   @override
   String get update => 'Update';
@@ -724,4 +724,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get checkoutStoreClosed =>
       'Sorry, the store is closed. Checkout is unavailable';
+
+  @override
+  String get pickLocationRequired =>
+      'You need to pick a delivery address in order to proceed';
 }

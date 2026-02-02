@@ -33,6 +33,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void initState() {
     super.initState();
 
+    final location = context.read<GlobalProvider>().lastPickedLocation;
+
+    if (location == null) {
+      Navigator.of(context).pop();
+    }
+
     _scrollController = ScrollController();
 
     _scrollController.addListener(() {

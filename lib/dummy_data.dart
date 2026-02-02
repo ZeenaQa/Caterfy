@@ -206,6 +206,7 @@ final List<Order> dummyOrders = [
     storeName: "Burger King",
     createdAt: DateTime.now().toString(),
     items: dummyOrderItems,
+    deliveryPrice: 1.00,
   ),
   Order(
     customerId: "1",
@@ -213,6 +214,7 @@ final List<Order> dummyOrders = [
     storeName: "Burger King",
     createdAt: DateTime.now().toString(),
     items: dummyOrderItems,
+    deliveryPrice: 1.00,
   ),
   Order(
     customerId: "1",
@@ -220,6 +222,7 @@ final List<Order> dummyOrders = [
     storeName: "Burger King",
     createdAt: DateTime.now().toString(),
     items: dummyOrderItems,
+    deliveryPrice: 1.00,
   ),
   Order(
     customerId: "1",
@@ -227,6 +230,7 @@ final List<Order> dummyOrders = [
     storeName: "Burger King",
     createdAt: DateTime.now().toString(),
     items: dummyOrderItems,
+    deliveryPrice: 1.00,
   ),
   Order(
     customerId: "1",
@@ -234,6 +238,7 @@ final List<Order> dummyOrders = [
     storeName: "Burger King",
     createdAt: DateTime.now().toString(),
     items: dummyOrderItems,
+    deliveryPrice: 1.00,
   ),
 ];
 

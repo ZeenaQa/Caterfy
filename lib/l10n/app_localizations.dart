@@ -1415,7 +1415,7 @@ abstract class AppLocalizations {
   /// No description provided for @pickLocation.
   ///
   /// In en, this message translates to:
-  /// **'Pick a Location'**
+  /// **'Pick a location'**
   String get pickLocation;
 
   /// No description provided for @update.
@@ -1495,6 +1495,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sorry, the store is closed. Checkout is unavailable'**
   String get checkoutStoreClosed;
+
+  /// No description provided for @pickLocationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to pick a delivery address in order to proceed'**
+  String get pickLocationRequired;
 }
 
 class _AppLocalizationsDelegate

@@ -38,7 +38,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     return Scaffold(
       appBar: CustomAppBar(title: l10.pickLocation),
       body: Column(
-        children: [ 
+        children: [
           /// ===== MAP =====
           Expanded(
             child: MapPicker(

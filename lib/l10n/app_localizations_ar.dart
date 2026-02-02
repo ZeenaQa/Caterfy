@@ -721,4 +721,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get checkoutStoreClosed =>
       'عذرًا، المتجر مغلق حاليًا. لا يمكن إتمام الطلب الآن';
+
+  @override
+  String get pickLocationRequired => 'يجب اختيار عنوان التوصيل للمتابعة';
 }

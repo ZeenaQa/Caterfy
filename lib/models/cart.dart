@@ -4,6 +4,7 @@ class Cart {
   final String customerId;
   final String storeId;
   final String storeName;
+  final double deliveryPrice;
   List<OrderItem> items;
   String _note = '';
 
@@ -11,6 +12,7 @@ class Cart {
     required this.customerId,
     required this.storeId,
     required this.storeName,
+    this.deliveryPrice = 1.00,
     List<OrderItem>? items,
   }) : items = List.from(items ?? []);
 
@@ -83,6 +85,7 @@ class Cart {
       'store_name': storeName,
       'note': _note,
       'items': items.map((e) => e.toMap()).toList(),
+      'delivery_price': deliveryPrice,
     };
   }
 
@@ -91,6 +94,7 @@ class Cart {
       customerId: map['customer_id'],
       storeId: map['store_id'],
       storeName: map['store_name'] ?? "",
+      deliveryPrice: map['delivery_price'],
     );
 
     cart._note = map['note'] ?? '';

@@ -6,6 +6,7 @@ import 'package:caterfy/customers/screens/customer_store_menu_layout.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/favorite_toast.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -101,6 +102,8 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
         customerProvider.isCategoryLoading;
 
     final bool showCart = customerProvider.cart?.storeId == widget.store.id;
+    final String deliveryPrice =
+        '${context.read<GlobalProvider>().getDeliveryPrice(widget.store.latitude, widget.store.longitude)} ${l10.jod}';
 
     return Scaffold(
       bottomNavigationBar: (!showCart || isLoading)
@@ -359,7 +362,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   baselineType:
                                                       TextBaseline.alphabetic,
                                                   child: Text(
-                                                    "15-20 ${l10.min}",
+                                                    "${context.read<GlobalProvider>().getDeliveryTime(widget.store.latitude, widget.store.longitude)} ${l10.min}",
                                                     style: TextStyle(
                                                       fontSize: 12.5,
                                                       fontWeight:
@@ -390,7 +393,7 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                   baselineType:
                                                       TextBaseline.alphabetic,
                                                   child: Text(
-                                                    '1.00 ${l10.jod}',
+                                                    deliveryPrice,
                                                     style: TextStyle(
                                                       fontSize: 12.5,
                                                       fontWeight:
@@ -605,12 +608,14 @@ class BottomNav extends StatelessWidget {
         child: SafeArea(
           top: false,
           child: FilledBtn(
-            onPressed: !isStoreOpen? null :  () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CustomerCart()),
-              );
-            },
+            onPressed: !isStoreOpen
+                ? null
+                : () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CustomerCart()),
+                    );
+                  },
             innerVerticalPadding: 9,
             innerHorizontalPadding: 10,
             content: Row(
@@ -635,18 +640,12 @@ class BottomNav extends StatelessWidget {
                 SizedBox(width: 13),
                 Text(
                   l10.viewCart,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Spacer(),
                 Text(
                   '${l10.jod} ${customerProvider.totalCartPrice.toString()}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 SizedBox(width: 10),
               ],

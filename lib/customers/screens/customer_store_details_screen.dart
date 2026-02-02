@@ -1,8 +1,10 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CustomerStoreDetailsScreen extends StatelessWidget {
   const CustomerStoreDetailsScreen({super.key, required this.store});
@@ -143,7 +145,8 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       leftText: l10n.deliveryTime,
-                      rightText: "25-30 ${l10n.min}",
+                      rightText:
+                          "${context.read<GlobalProvider>().getDeliveryTime(store.latitude, store.longitude)} ${l10n.min}",
                     ),
                     InfoItem(
                       leftContent: SizedBox(
@@ -156,7 +159,8 @@ class CustomerStoreDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       leftText: l10n.deliveryFee,
-                      rightText: '1.00 ${l10n.jod}',
+                      rightText:
+                          '${context.read<GlobalProvider>().getDeliveryPrice(store.latitude, store.longitude)} ${l10n.jod}',
                     ),
                     InfoItem(
                       leftContent: SizedBox(

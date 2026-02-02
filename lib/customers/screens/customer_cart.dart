@@ -5,6 +5,7 @@ import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -49,6 +50,9 @@ class _CustomerCartState extends State<CustomerCart> {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+    final double deliveryPrice = context
+        .read<GlobalProvider>()
+        .getDeliveryPrice(store?.latitude, store?.longitude);
     final items = customerProvider.cart?.items ?? const [];
     final bool isLoading = customerProvider.isCartLoading;
     final bool isCartEmpty = customerProvider.cart?.items.isEmpty ?? true;
@@ -154,9 +158,12 @@ class _CustomerCartState extends State<CustomerCart> {
                               PaymentRow(
                                 title: l10.subtotal,
                                 price: customerProvider.totalCartPrice
-                                    .toString(),
+                                    .toStringAsFixed(2),
                               ),
-                              PaymentRow(title: l10.deliveryFee, price: '1.00'),
+                              PaymentRow(
+                                title: l10.deliveryFee,
+                                price: deliveryPrice.toStringAsFixed(2),
+                              ),
                               PaymentRow(title: l10.serviceFee, price: '0.20'),
                               Row(
                                 children: [
@@ -169,7 +176,7 @@ class _CustomerCartState extends State<CustomerCart> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    '${l10.jod} ${(customerProvider.totalCartPrice + 1.00 + 0.20).toString()}',
+                                    '${l10.jod} ${(customerProvider.totalCartPrice + deliveryPrice + 0.20).toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -259,6 +266,12 @@ class BottomNav extends StatelessWidget {
                           : () async {
                               await customerProvider.placeOrder(
                                 context: context,
+                                deliveryPrice: context
+                                    .read<GlobalProvider>()
+                                    .getDeliveryPrice(
+                                      store?.latitude,
+                                      store?.longitude,
+                                    ),
                               );
                               if (context.mounted) Navigator.of(context).pop();
                             },

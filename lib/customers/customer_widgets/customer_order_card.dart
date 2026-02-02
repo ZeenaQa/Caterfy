@@ -40,7 +40,7 @@ class CustomerOrderCard extends StatelessWidget {
         final quantity = order.items[i].quantity;
         totalPrice += price * quantity;
       }
-      return totalPrice;
+      return totalPrice + order.deliveryPrice + 0.2;
     }
 
     return Container(

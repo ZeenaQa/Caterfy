@@ -2,6 +2,7 @@ import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/favorite_toast.dart';
 import 'package:caterfy/shared_widgets.dart/overlap_heart_button.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class CustomerStoreListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final globalProvider = Provider.of<GlobalProvider>(context);
     final customerId = Supabase.instance.client.auth.currentUser?.id;
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
@@ -90,7 +92,7 @@ class CustomerStoreListItem extends StatelessWidget {
                         style: TextStyle(
                           color: colors.onPrimary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16
+                          fontSize: 16,
                         ),
                       ),
                     ),
@@ -229,7 +231,7 @@ class CustomerStoreListItem extends StatelessWidget {
                         SizedBox(width: 6),
                         Text('5.3 (1k+) ', style: TextStyle(fontSize: 12)),
                         Text(
-                          '• 15-20 ${l10n.min} • ${l10n.jod} 1.0',
+                          '• ${globalProvider.getDeliveryTime(store.latitude, store.longitude)} ${l10n.min} • ${l10n.jod} ${globalProvider.getDeliveryPrice(store.latitude, store.longitude)}',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
