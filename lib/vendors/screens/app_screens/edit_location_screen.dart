@@ -98,6 +98,7 @@ class _EditStoreLocationScreenState extends State<EditStoreLocationScreen> {
                       vendorId: widget.store.vendorId,
                       name: widget.store.name,
                       name_ar: widget.store.name_ar,
+                      type: 'regular',
                       category: widget.store.category,
                       storeArea: area,
                       latitude: pickedLocation!.latitude,

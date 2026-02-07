@@ -2,6 +2,7 @@ class Store {
   final String id;
   final String name;
   final String name_ar;
+  final String type;
   final String category;
   final String vendorId;
   final String? logoUrl;
@@ -17,6 +18,7 @@ class Store {
     required this.vendorId,
     required this.name,
     required this.name_ar,
+    required this.type,
     required this.category,
     this.storeArea,
     this.logoUrl,
@@ -33,6 +35,7 @@ class Store {
       vendorId: map['vendor_id'],
       name: map['name'],
       name_ar: map['name_ar'],
+      type: map['type'],
       category: map['category'],
       storeArea: map['store_area'],
       logoUrl: map['logo_url'],
@@ -48,6 +51,7 @@ class Store {
     return {
       'name': name,
       'name_ar': name_ar,
+      'type': type,
       'category': category,
       'store_area': storeArea,
       'logo_url': logoUrl,
