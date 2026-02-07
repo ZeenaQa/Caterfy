@@ -4,7 +4,7 @@ import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/screens/vendor_signup/personal_info.dart';
+import 'package:caterfy/vendors/screens/vendor_signup/vendor_signup_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
@@ -92,7 +92,7 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const VendorPersonalInfo(),
+                                  builder: (_) => const VendorSignupCarousel(),
                                 ),
                               );
                             },

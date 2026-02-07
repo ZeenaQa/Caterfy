@@ -1501,6 +1501,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You need to pick a delivery address in order to proceed'**
   String get pickLocationRequired;
+
+  /// No description provided for @selectStoreType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Store Type'**
+  String get selectStoreType;
+
+  /// No description provided for @selectStoreTypeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'What type of store do you want to operate?'**
+  String get selectStoreTypeDesc;
+
+  /// No description provided for @regularStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular Store'**
+  String get regularStore;
+
+  /// No description provided for @regularStoreDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell physical products like food, groceries, etc.'**
+  String get regularStoreDesc;
+
+  /// No description provided for @serviceProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Service Provider'**
+  String get serviceProvider;
+
+  /// No description provided for @serviceProviderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide services like cleaning, repairs, training, etc.'**
+  String get serviceProviderDesc;
 }
 
 class _AppLocalizationsDelegate

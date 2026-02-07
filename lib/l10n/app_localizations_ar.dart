@@ -724,4 +724,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pickLocationRequired => 'يجب اختيار عنوان التوصيل للمتابعة';
+
+  @override
+  String get selectStoreType => 'اختر نوع المتجر';
+
+  @override
+  String get selectStoreTypeDesc => 'ما نوع المتجر الذي تريد تشغيله؟';
+
+  @override
+  String get regularStore => 'متجر عادي';
+
+  @override
+  String get regularStoreDesc =>
+      'بيع المنتجات الفعلية مثل الطعام والبقالة وغيرها.';
+
+  @override
+  String get serviceProvider => 'مزود خدمة';
+
+  @override
+  String get serviceProviderDesc =>
+      'تقديم الخدمات مثل التنظيف والإصلاح والتدريب وغيرها.';
 }

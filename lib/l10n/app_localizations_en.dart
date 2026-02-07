@@ -728,4 +728,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pickLocationRequired =>
       'You need to pick a delivery address in order to proceed';
+
+  @override
+  String get selectStoreType => 'Select Store Type';
+
+  @override
+  String get selectStoreTypeDesc =>
+      'What type of store do you want to operate?';
+
+  @override
+  String get regularStore => 'Regular Store';
+
+  @override
+  String get regularStoreDesc =>
+      'Sell physical products like food, groceries, etc.';
+
+  @override
+  String get serviceProvider => 'Service Provider';
+
+  @override
+  String get serviceProviderDesc =>
+      'Provide services like cleaning, repairs, training, etc.';
 }

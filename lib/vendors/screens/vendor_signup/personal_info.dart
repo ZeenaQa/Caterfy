@@ -11,7 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class VendorPersonalInfo extends StatefulWidget {
-  const VendorPersonalInfo({super.key});
+  const VendorPersonalInfo({
+    super.key,
+    required this.storeType,
+  });
+
+  final String storeType;
 
   @override
   State<VendorPersonalInfo> createState() => _VendorPersonalInfoState();
@@ -38,6 +43,7 @@ class _VendorPersonalInfoState extends State<VendorPersonalInfo> {
                 name: name,
                 email: email,
                 phoneNumber: phoneNumber,
+                storeType: widget.storeType,
               ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);

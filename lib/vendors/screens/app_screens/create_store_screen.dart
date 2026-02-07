@@ -6,6 +6,7 @@ import 'package:caterfy/vendors/screens/create_store_carousel/store_location_pag
 import 'package:caterfy/vendors/screens/create_store_carousel/store_tags_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -29,16 +30,29 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
   File? logoFile;
   File? bannerFile;
   late Store storeDraft;
+  late String storeType;
 
   @override
   void initState() {
     super.initState();
+    _initializeStoreType();
+  }
+
+  void _initializeStoreType() {
+    try {
+      final supabase = Supabase.instance.client;
+      final userMetadata = supabase.auth.currentUser?.userMetadata;
+      storeType = (userMetadata?['store_type'] as String?) ?? 'regular';
+    } catch (e) {
+      storeType = 'regular';
+    }
+
     storeDraft = Store(
       id: '',
       vendorId: '',
       name: '',
       name_ar: '',
-      type: 'regular',
+      type: storeType,
       category: '',
       storeArea: null,
       latitude: 0,

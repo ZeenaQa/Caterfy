@@ -233,5 +233,11 @@
   "more": "المزيد",
   "min": "دقيقة",
   "checkoutStoreClosed": "عذرًا، المتجر مغلق حاليًا. لا يمكن إتمام الطلب الآن",
-  "pickLocationRequired": "يجب اختيار عنوان التوصيل للمتابعة"
+  "pickLocationRequired": "يجب اختيار عنوان التوصيل للمتابعة",
+  "selectStoreType": "اختر نوع المتجر",
+  "selectStoreTypeDesc": "ما نوع المتجر الذي تريد تشغيله؟",
+  "regularStore": "متجر عادي",
+  "regularStoreDesc": "بيع المنتجات الفعلية مثل الطعام والبقالة وغيرها.",
+  "serviceProvider": "مزود خدمة",
+  "serviceProviderDesc": "تقديم الخدمات مثل التنظيف والإصلاح والتدريب وغيرها."
 }    

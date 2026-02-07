@@ -14,6 +14,7 @@ class SetPassword extends StatefulWidget {
     required this.phoneNumber,
     required this.selectedBusiness,
     required this.businessName,
+    required this.storeType,
   });
 
   final String name;
@@ -21,6 +22,7 @@ class SetPassword extends StatefulWidget {
   final String phoneNumber;
   final String selectedBusiness;
   final String businessName;
+  final String storeType;
 
   @override
   State<SetPassword> createState() => _SetPasswordState();
@@ -80,7 +82,21 @@ class _SetPasswordState extends State<SetPassword> {
                     confirmPassword: confirmPassword,
                     l10: AppLocalizations.of(context),
                   )) {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    final success = await auth.signUp(
+                      email: widget.email,
+                      name: widget.name,
+                      password: password,
+                      confirmPassword: confirmPassword,
+                      phoneNumber: widget.phoneNumber,
+                      businessName: widget.businessName,
+                      businessType: widget.selectedBusiness,
+                      storeType: widget.storeType,
+                      context: context,
+                    );
+
+                    if (success) {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    }
                   }
                 },
                 isLoading: auth.isLoading,

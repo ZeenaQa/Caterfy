@@ -235,5 +235,11 @@
   "more": "More",
   "min": "min",
   "checkoutStoreClosed": "Sorry, the store is closed. Checkout is unavailable",
-  "pickLocationRequired": "You need to pick a delivery address in order to proceed"
+  "pickLocationRequired": "You need to pick a delivery address in order to proceed",
+  "selectStoreType": "Select Store Type",
+  "selectStoreTypeDesc": "What type of store do you want to operate?",
+  "regularStore": "Regular Store",
+  "regularStoreDesc": "Sell physical products like food, groceries, etc.",
+  "serviceProvider": "Service Provider",
+  "serviceProviderDesc": "Provide services like cleaning, repairs, training, etc."
 }    

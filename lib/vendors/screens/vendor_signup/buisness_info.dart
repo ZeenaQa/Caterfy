@@ -13,11 +13,13 @@ class VendorBuisnessInfo extends StatefulWidget {
     required this.email,
     required this.name,
     required this.phoneNumber,
+    required this.storeType,
   });
 
   final String name;
   final String email;
   final String phoneNumber;
+  final String storeType;
 
   @override
   State<VendorBuisnessInfo> createState() => _VendorBuisnessInfoState();
@@ -66,6 +68,7 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
             phoneNumber: widget.phoneNumber,
             selectedBusiness: selectedBusiness,
             businessName: businessName,
+            storeType: widget.storeType,
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);

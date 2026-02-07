@@ -134,6 +134,7 @@ class VendorAuthProvider extends ChangeNotifier {
     required String phoneNumber,
     required String businessName,
     required String businessType,
+    required String storeType,
     required BuildContext context,
   }) async {
     final l10 = AppLocalizations.of(context);
@@ -175,6 +176,7 @@ class VendorAuthProvider extends ChangeNotifier {
           'role': 'vendor',
           'business_name': businessName,
           'business_type': businessType,
+          'store_type': storeType,
         },
       );
 
@@ -278,6 +280,20 @@ class VendorAuthProvider extends ChangeNotifier {
   void clearNameError() {
     if (nameError != null) {
       nameError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearPhoneError() {
+    if (phoneError != null) {
+      phoneError = null;
+      notifyListeners();
+    }
+  }
+
+  void clearBusinessNameError() {
+    if (businessNameError != null) {
+      businessNameError = null;
       notifyListeners();
     }
   }
