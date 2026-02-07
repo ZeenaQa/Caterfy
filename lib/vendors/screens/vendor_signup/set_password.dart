@@ -82,7 +82,7 @@ class _SetPasswordState extends State<SetPassword> {
                     confirmPassword: confirmPassword,
                     l10: AppLocalizations.of(context),
                   )) {
-                    final success = await auth.signUp(
+                    await auth.signUp(
                       email: widget.email,
                       name: widget.name,
                       password: password,
@@ -94,9 +94,9 @@ class _SetPasswordState extends State<SetPassword> {
                       context: context,
                     );
 
-                    if (success) {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    }
+                    // if (success) {
+                    //   Navigator.of(context).popUntil((route) => route.isFirst);
+                    // }
                   }
                 },
                 isLoading: auth.isLoading,
