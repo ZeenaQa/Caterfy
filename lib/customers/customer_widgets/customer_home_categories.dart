@@ -107,8 +107,7 @@ class CustomerHomeCategories extends StatelessWidget {
               // },
             ),
             SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            Center(
               child: Wrap(
                 spacing: 10,
                 runSpacing: 15,
