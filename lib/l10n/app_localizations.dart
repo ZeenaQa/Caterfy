@@ -1537,6 +1537,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Provide services like cleaning, repairs, training, etc.'**
   String get serviceProviderDesc;
+
+  /// No description provided for @yourEverythingApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Everything App'**
+  String get yourEverythingApp;
+
+  /// No description provided for @laundry.
+  ///
+  /// In en, this message translates to:
+  /// **'Laundry'**
+  String get laundry;
+
+  /// No description provided for @myHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'My House'**
+  String get myHouse;
+
+  /// No description provided for @myCar.
+  ///
+  /// In en, this message translates to:
+  /// **'My Car'**
+  String get myCar;
+
+  /// No description provided for @charity.
+  ///
+  /// In en, this message translates to:
+  /// **'Charity'**
+  String get charity;
+
+  /// No description provided for @eVouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'e-Vouchers'**
+  String get eVouchers;
+
+  /// No description provided for @categoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No stores available in this category'**
+  String get categoryEmpty;
 }
 
 class _AppLocalizationsDelegate

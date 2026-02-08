@@ -239,5 +239,12 @@
   "regularStore": "متجر عادي",
   "regularStoreDesc": "بيع المنتجات الفعلية مثل الطعام والبقالة وغيرها.",
   "serviceProvider": "مزود خدمة",
-  "serviceProviderDesc": "تقديم الخدمات مثل التنظيف والإصلاح والتدريب وغيرها."
+  "serviceProviderDesc": "تقديم الخدمات مثل التنظيف والإصلاح والتدريب وغيرها.",
+  "yourEverythingApp": "تطبيقك لكل شيء",
+  "laundry": "مغسلة",
+  "myHouse": "منزلي",
+  "myCar": "سيارتي",
+  "charity": "التبرع",
+  "eVouchers": "القسائم الإلكترونية",
+  "categoryEmpty": "لا توجد متاجر متاحة في هذه الفئة"
 }    

@@ -744,4 +744,25 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get serviceProviderDesc =>
       'تقديم الخدمات مثل التنظيف والإصلاح والتدريب وغيرها.';
+
+  @override
+  String get yourEverythingApp => 'تطبيقك لكل شيء';
+
+  @override
+  String get laundry => 'مغسلة';
+
+  @override
+  String get myHouse => 'منزلي';
+
+  @override
+  String get myCar => 'سيارتي';
+
+  @override
+  String get charity => 'التبرع';
+
+  @override
+  String get eVouchers => 'القسائم الإلكترونية';
+
+  @override
+  String get categoryEmpty => 'لا توجد متاجر متاحة في هذه الفئة';
 }

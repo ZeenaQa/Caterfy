@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/customer_widgets/customer_home_ads_carousel.dart';
 import 'package:caterfy/customers/screens/customer_category_screen.dart';
 import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -17,7 +18,55 @@ class CustomerHomeCategories extends StatelessWidget {
     final globalProvider = Provider.of<GlobalProvider>(context);
     final location = globalProvider.lastPickedLocation;
 
+    final List<Map> regularCategories = [
+      {'title': l10.food, 'image': 'burger_icon.png', 'category': "food"},
+      {
+        'title': l10.ceemart,
+        'image': 'caterfy_mart_icon.png',
+        'category': "ceemart",
+      },
+      {
+        'title': l10.groceries,
+        'image': 'grocery_icon.png',
+        'category': "groceries",
+      },
+      {
+        'title': l10.electronics,
+        'image': 'electronics_icon.png',
+        'category': "electronics",
+      },
+      {
+        'title': l10.pharmacy,
+        'image': 'pharmacy_icon.png',
+        'category': "pharmacy",
+      },
+      {
+        'title': l10.toysAndKids,
+        'image': 'toys2_icon.png',
+        'category': "toysAndKids",
+      },
+      {
+        'title': l10.healthAndBeauty,
+        'image': 'health_and_beauty_icon.png',
+        'category': "healthAndBeauty",
+      },
+      {'title': l10.pets, 'image': 'pets_icon.png', 'category': "pets"},
+    ];
+
+    final List<Map> serviceCategories = [
+      {
+        'title': l10.eVouchers,
+        'image': 'e_vouchers.png',
+        'category': "eVouchers",
+      },
+      {'title': l10.laundry, 'image': 'laundry.png', 'category': "laundry"},
+      {'title': l10.myHouse, 'image': 'my_house.png', 'category': "myHouse"},
+      {'title': l10.myCar, 'image': 'my_car.png', 'category': "myCar"},
+      {'title': l10.charity, 'image': 'charity.png', 'category': "charity"},
+    ];
+
     void navigateToCategory({required String category}) {
+      print(category);
       if (location == null) {
         showCustomDialog(
           context,
@@ -45,47 +94,66 @@ class CustomerHomeCategories extends StatelessWidget {
       padding: EdgeInsets.only(top: topMargin + 30),
       child: Align(
         alignment: Alignment.topCenter,
-        child: Wrap(
-          spacing: 10,
-          runSpacing: 15,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CategoryBox(
-              title: l10.food,
-              image: 'assets/images/burger_icon.png',
-              onTap: () => navigateToCategory(category: "food"),
+            HomeAdsCarousel(
+              // onTap: (banner) {
+              //   Navigator.pushNamed(
+              //     context,
+              //     '/restaurant',
+              //     arguments: banner.restaurantId,
+              //   );
+              // },
             ),
-            CategoryBox(
-              title: l10.ceemart,
-              image: 'assets/images/caterfy_mart_icon.png',
-              onTap: () => navigateToCategory(category: "ceemart"),
+            SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 15,
+                children: regularCategories.map((item) {
+                  return CategoryBox(
+                    title: item['title'],
+                    image: 'assets/images/${item['image']}',
+                    onTap: () => navigateToCategory(category: item['category']),
+                  );
+                }).toList(),
+              ),
             ),
-            CategoryBox(
-              title: l10.groceries,
-              image: 'assets/images/grocery_icon.png',
-              onTap: () => navigateToCategory(category: "groceries"),
+            SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 20),
+              child: Text(
+                l10.yourEverythingApp,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.left,
+              ),
             ),
-            CategoryBox(
-              title: l10.electronics,
-              image: 'assets/images/electronics_icon.png',
-              onTap: () => navigateToCategory(category: "electronics"),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 130,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: serviceCategories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemBuilder: (context, index) {
+                  final item = serviceCategories[index];
+                  return Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: index == 0 ? 20.0 : 0.0,
+                      end: index == serviceCategories.length - 1 ? 20 : 0,
+                    ),
+                    child: CategoryBox(
+                      title: item['title'],
+                      image: 'assets/images/${item['image']}',
+                      onTap: () =>
+                          navigateToCategory(category: item['category']),
+                    ),
+                  );
+                },
+              ),
             ),
-            CategoryBox(
-              title: l10.pharmacy,
-              image: 'assets/images/pharmacy_icon.png',
-              onTap: () => navigateToCategory(category: "pharmacy"),
-            ),
-
-            CategoryBox(
-              title: l10.toysAndKids,
-              image: 'assets/images/toys2_icon.png',
-            ),
-
-            CategoryBox(
-              onTap: () => {},
-              title: l10.healthAndBeauty,
-              image: 'assets/images/health_and_beauty_icon.png',
-            ),
-            CategoryBox(title: l10.pets, image: 'assets/images/pets_icon.png'),
           ],
         ),
       ),

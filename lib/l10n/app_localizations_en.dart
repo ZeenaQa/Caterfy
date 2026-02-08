@@ -749,4 +749,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get serviceProviderDesc =>
       'Provide services like cleaning, repairs, training, etc.';
+
+  @override
+  String get yourEverythingApp => 'Your Everything App';
+
+  @override
+  String get laundry => 'Laundry';
+
+  @override
+  String get myHouse => 'My House';
+
+  @override
+  String get myCar => 'My Car';
+
+  @override
+  String get charity => 'Charity';
+
+  @override
+  String get eVouchers => 'e-Vouchers';
+
+  @override
+  String get categoryEmpty => 'No stores available in this category';
 }

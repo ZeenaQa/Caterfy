@@ -241,5 +241,12 @@
   "regularStore": "Regular Store",
   "regularStoreDesc": "Sell physical products like food, groceries, etc.",
   "serviceProvider": "Service Provider",
-  "serviceProviderDesc": "Provide services like cleaning, repairs, training, etc."
-}    
+  "serviceProviderDesc": "Provide services like cleaning, repairs, training, etc.",
+  "yourEverythingApp": "Your Everything App",
+  "laundry": "Laundry",
+  "myHouse": "My House",
+  "myCar": "My Car",
+  "charity": "Charity",
+  "eVouchers": "e-Vouchers",
+  "categoryEmpty": "No stores available in this category"
+}

@@ -3,6 +3,7 @@ import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/models/vendor_order.dart';
+import 'package:uuid/uuid.dart';
 
 final List<Product> dummyProducts = [
   Product(
@@ -59,7 +60,7 @@ final List<Product> dummyProducts = [
 
 final List<Store> dummyStores = [
   Store(
-    id: 'store1',
+    id:Uuid().v4(),
     vendorId: 'vendor1',
     name: 'FreshMart',
     name_ar: 'فريش مارت',
@@ -72,7 +73,7 @@ final List<Store> dummyStores = [
     longitude: 35.945,
   ),
   Store(
-    id: 'store2',
+    id:Uuid().v4(),
     vendorId: 'vendor2',
     name: 'Burger House',
     name_ar: 'برجر هاوس',
@@ -85,7 +86,7 @@ final List<Store> dummyStores = [
     longitude: 35.850,
   ),
   Store(
-    id: 'store3',
+    id:Uuid().v4(),
     vendorId: 'vendor3',
     name: 'TechWorld',
     name_ar: 'تكنولوجي وورلد',
@@ -98,7 +99,7 @@ final List<Store> dummyStores = [
     longitude: 36.086,
   ),
   Store(
-    id: 'store4',
+    id:Uuid().v4(),
     vendorId: 'vendor4',
     name: 'Book Haven',
     name_ar: 'جنة الكتب',
@@ -111,7 +112,7 @@ final List<Store> dummyStores = [
     longitude: 35.930,
   ),
   Store(
-    id: 'store5',
+    id:Uuid().v4(),
     vendorId: 'vendor5',
     name: 'StylePoint',
     name_ar: 'ستايل بوينت',
@@ -124,7 +125,7 @@ final List<Store> dummyStores = [
     longitude: 35.007,
   ),
   Store(
-    id: 'store6',
+    id:Uuid().v4(),
     vendorId: 'vendor6',
     name: 'Home Comforts',
     name_ar: 'راحة المنزل',
@@ -137,7 +138,7 @@ final List<Store> dummyStores = [
     longitude: 35.792,
   ),
   Store(
-    id: 'store7',
+    id:Uuid().v4(),
     vendorId: 'vendor7',
     name: 'Sports Arena',
     name_ar: 'ساحة الرياضة',

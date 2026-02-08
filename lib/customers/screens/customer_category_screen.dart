@@ -10,6 +10,7 @@ import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_icon_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -106,7 +107,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 : '',
                           ),
                           TextSpan(
-                            text: globalProvider.deliveryLocation ?? l10.pickLocation,
+                            text:
+                                globalProvider.deliveryLocation ??
+                                l10.pickLocation,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -133,70 +136,93 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          Skeletonizer(
-            enabled: isLoading,
-            child: ListView.separated(
-              controller: _scrollController,
-              padding: EdgeInsets.only(
-                left: 15,
-                right: 15,
-                top: searchBarHeight + 10,
-              ),
-              itemCount: isLoading ? dummyStores.length : stores.length,
-              itemBuilder: (context, index) {
-                final store = isLoading ? dummyStores[index] : stores[index];
-                return CustomerStoreListItem(
-                  store: store,
-                  dummyImage: isLoading,
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 10);
-              },
-            ),
-          ),
-
-          Transform.translate(
-            offset: Offset(0, currentSearchBarOffset),
-            child: Container(
-              color: colors.onInverseSurface,
-              padding: EdgeInsets.only(
-                left: 15,
-                right: 15,
-                top: 12,
-                bottom: 10,
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText:
-                        '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
-                    hintStyle: TextStyle(fontSize: 15),
-                    filled: true,
-                    fillColor: colors.surfaceContainer,
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    isCollapsed: true,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 7,
+      body: (stores.isNotEmpty || isLoading)
+          ? Stack(
+              children: [
+                Skeletonizer(
+                  enabled: isLoading,
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    padding: EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                      top: searchBarHeight + 10,
                     ),
-                    prefixIconConstraints: BoxConstraints(minHeight: 0),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 13.0, right: 5),
-                      child: Icon(Icons.search, size: 20),
+                    itemCount: isLoading ? dummyStores.length : stores.length,
+                    itemBuilder: (context, index) {
+                      final store = isLoading
+                          ? dummyStores[index]
+                          : stores[index];
+                      return CustomerStoreListItem(
+                        store: store,
+                        dummyImage: isLoading,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 10);
+                    },
+                  ),
+                ),
+
+                Transform.translate(
+                  offset: Offset(0, currentSearchBarOffset),
+                  child: Container(
+                    color: colors.onInverseSurface,
+                    padding: EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                      top: 12,
+                      bottom: 10,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText:
+                              '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
+                          hintStyle: TextStyle(fontSize: 15),
+                          filled: true,
+                          fillColor: colors.surfaceContainer,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 7,
+                          ),
+                          prefixIconConstraints: BoxConstraints(minHeight: 0),
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 13.0,
+                              right: 5,
+                            ),
+                            child: Icon(Icons.search, size: 20),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
+              ],
+            )
+          : Center(
+              child: Column(
+                spacing: 20,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(FontAwesomeIcons.store, size: 100, color: colors.outline),
+                  Text(
+                    l10.categoryEmpty,
+                    style: TextStyle(
+                      color: colors.onSurfaceVariant,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
     );
   }
 }
