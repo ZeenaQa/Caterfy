@@ -746,6 +746,30 @@ class AppLocalizationsAr extends AppLocalizations {
       'تقديم الخدمات مثل التنظيف والإصلاح والتدريب وغيرها.';
 
   @override
+  String get cleaning => 'تنظيف';
+
+  @override
+  String get laundryService => 'خدمة غسيل';
+
+  @override
+  String get maintenance => 'صيانة';
+
+  @override
+  String get carWash => 'غسيل سيارات';
+
+  @override
+  String get printing => 'طباعة';
+
+  @override
+  String get repair => 'إصلاح';
+
+  @override
+  String get deliveryService => 'خدمة التوصيل';
+
+  @override
+  String get beauty => 'تجميل';
+
+  @override
   String get yourEverythingApp => 'تطبيقك لكل شيء';
 
   @override

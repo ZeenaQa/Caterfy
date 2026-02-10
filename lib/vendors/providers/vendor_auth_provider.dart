@@ -18,10 +18,24 @@ class VendorAuthProvider extends ChangeNotifier {
   String? passwordError;
   String? confirmPasswordError;
   bool forgotPassLoading = false;
+  // Persisted selections during signup
+  String? storeType;
+  String? businessType;
 
   // ---------------- Setters ----------------
   void setLoading(bool value) {
     isLoading = value;
+    notifyListeners();
+  }
+
+  // ---------------- Selection setters ----------------
+  void setStoreType(String? value) {
+    storeType = value;
+    notifyListeners();
+  }
+
+  void setBusinessType(String? value) {
+    businessType = value;
     notifyListeners();
   }
 

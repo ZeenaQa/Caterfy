@@ -3,7 +3,6 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/vendor_order.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 const url =
     'https://marketplace.canva.com/EAGMppVJ_aY/1/0/1600w/canva-dark-green-cute-and-playful-kitchen-restaurant-logo-S2LGeYCK5eM.jpg';

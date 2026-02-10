@@ -30,6 +30,14 @@ class _VendorSignupCarouselState extends State<VendorSignupCarousel> {
   void initState() {
     super.initState();
     selectedBusiness = '';
+    // initialize from provider after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final auth = Provider.of<VendorAuthProvider>(context, listen: false);
+      setState(() {
+        storeType = auth.storeType ?? '';
+        selectedBusiness = auth.businessType ?? selectedBusiness;
+      });
+    });
   }
 
   bool get isStoreTypeValid => storeType.isNotEmpty;
@@ -247,7 +255,15 @@ class _VendorSignupCarouselState extends State<VendorSignupCarousel> {
               l10.regularStore,
               l10.regularStoreDesc,
               storeType == 'regular',
-              () => setState(() => storeType = 'regular'),
+              () {
+                final auth = Provider.of<VendorAuthProvider>(context, listen: false);
+                setState(() {
+                  storeType = 'regular';
+                  selectedBusiness = '';
+                });
+                auth.setStoreType('regular');
+                auth.setBusinessType('');
+              },
               colors,
             ),
             const SizedBox(height: 20),
@@ -257,7 +273,15 @@ class _VendorSignupCarouselState extends State<VendorSignupCarousel> {
               l10.serviceProvider,
               l10.serviceProviderDesc,
               storeType == 'service',
-              () => setState(() => storeType = 'service'),
+              () {
+                final auth = Provider.of<VendorAuthProvider>(context, listen: false);
+                setState(() {
+                  storeType = 'service';
+                  selectedBusiness = '';
+                });
+                auth.setStoreType('service');
+                auth.setBusinessType('');
+              },
               colors,
             ),
             const SizedBox(height: 50),
@@ -409,13 +433,28 @@ class _VendorSignupCarouselState extends State<VendorSignupCarousel> {
     VendorAuthProvider auth,
     ColorScheme colors,
   ) {
-    List<String> businessTypes = [
-      l10.restaurant,
-      l10.cafe,
-      l10.bakery,
-      l10.grocery,
-      l10.other,
-    ];
+    List<String> businessTypes;
+
+    if (storeType == 'service') {
+      businessTypes = [
+        l10.cleaning,
+        l10.laundryService,
+        l10.maintenance,
+        l10.carWash,
+        l10.printing,
+        l10.repair,
+        l10.deliveryService,
+        l10.beauty,
+      ];
+    } else {
+      businessTypes = [
+        l10.restaurant,
+        l10.cafe,
+        l10.bakery,
+        l10.grocery,
+        l10.other,
+      ];
+    }
 
     // Initialize selectedBusiness if empty
     String currentBusiness = selectedBusiness.isEmpty && businessTypes.isNotEmpty
@@ -468,7 +507,9 @@ class _VendorSignupCarouselState extends State<VendorSignupCarousel> {
                     .toList(),
                 onChanged: (value) {
                   if (value != null) {
+                    final auth = Provider.of<VendorAuthProvider>(context, listen: false);
                     setState(() => selectedBusiness = value);
+                    auth.setBusinessType(value);
                   }
                 },
                 decoration: InputDecoration(

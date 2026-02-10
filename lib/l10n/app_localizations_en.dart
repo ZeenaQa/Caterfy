@@ -751,6 +751,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'Provide services like cleaning, repairs, training, etc.';
 
   @override
+  String get cleaning => 'Cleaning';
+
+  @override
+  String get laundryService => 'Laundry Service';
+
+  @override
+  String get maintenance => 'Maintenance';
+
+  @override
+  String get carWash => 'Car Wash';
+
+  @override
+  String get printing => 'Printing';
+
+  @override
+  String get repair => 'Repair';
+
+  @override
+  String get deliveryService => 'Delivery Service';
+
+  @override
+  String get beauty => 'Beauty';
+
+  @override
   String get yourEverythingApp => 'Your Everything App';
 
   @override
