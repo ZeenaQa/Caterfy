@@ -765,4 +765,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get categoryEmpty => 'لا توجد متاجر متاحة في هذه الفئة';
+
+  @override
+  String get arrivingIn => 'سيصل خلال حوالي';
+
+  @override
+  String get delivery => 'التوصيل';
+
+  @override
+  String get useCaterfyPay => 'استخدم رصيد محفظة Caterfy';
+
+  @override
+  String get availableCredit => 'الرصيد المتوفر';
+
+  @override
+  String get addCard => 'أضف بطاقة جديدة';
+
+  @override
+  String get cash => 'نقداً';
+
+  @override
+  String get payWith => 'الدفع من خلال';
 }

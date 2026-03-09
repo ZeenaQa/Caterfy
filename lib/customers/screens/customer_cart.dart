@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/customer_widgets/add_note.dart';
 import 'package:caterfy/customers/customer_widgets/cart_item.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/customer_checkout.dart';
 import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -261,20 +262,12 @@ class BottomNav extends StatelessWidget {
                     child: FilledBtn(
                       loadingSize: 15,
                       isLoading: customerProvider.isPlaceOrderLoading,
-                      onPressed: !isStoreOpen
-                          ? null
-                          : () async {
-                              await customerProvider.placeOrder(
-                                context: context,
-                                deliveryPrice: context
-                                    .read<GlobalProvider>()
-                                    .getDeliveryPrice(
-                                      store?.latitude,
-                                      store?.longitude,
-                                    ),
-                              );
-                              if (context.mounted) Navigator.of(context).pop();
-                            },
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CustomerCheckout(store: store),
+                        ),
+                      ),
                       title: l10.checkout,
                       titleSize: 15,
                       innerVerticalPadding: 15,

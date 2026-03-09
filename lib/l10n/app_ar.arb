@@ -246,5 +246,12 @@
   "myCar": "سيارتي",
   "charity": "التبرع",
   "eVouchers": "القسائم الإلكترونية",
-  "categoryEmpty": "لا توجد متاجر متاحة في هذه الفئة"
+  "categoryEmpty": "لا توجد متاجر متاحة في هذه الفئة",
+  "arrivingIn": "سيصل خلال حوالي",
+  "delivery": "التوصيل",
+  "useCaterfyPay": "استخدم رصيد محفظة Caterfy",
+  "availableCredit": "الرصيد المتوفر",
+  "addCard": "أضف بطاقة جديدة",
+  "cash": "نقداً",
+  "payWith": "الدفع من خلال"
 }    

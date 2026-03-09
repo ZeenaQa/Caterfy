@@ -150,7 +150,7 @@ class CustomerAccountSection extends StatelessWidget {
                               ),
                               SizedBox(width: 15),
                               Text(
-                                "0.00 ${l10.jod}",
+                                '${user['wallet_balance']} ${l10.jod}',
                                 style: TextStyle(
                                   color: colors.primary,
                                   fontSize: 18,
@@ -166,13 +166,17 @@ class CustomerAccountSection extends StatelessWidget {
                             width: double.infinity,
                             child: Align(
                               alignment: Alignment.centerRight,
-                              child: Text(
-                                l10.viewDetails,
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: colors.onSurfaceVariant,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+                              child: GestureDetector(
+                                onTap: () {},
+                                behavior: HitTestBehavior.opaque,
+                                child: Text(
+                                  l10.viewDetails,
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: colors.onSurfaceVariant,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
                                 ),
                               ),
                             ),

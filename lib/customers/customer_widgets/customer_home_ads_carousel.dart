@@ -22,7 +22,7 @@ final List<AdBanner> banners = [
   ),
   AdBanner(
     imageUrl:
-        'https://scontent.famm10-1.fna.fbcdn.net/v/t39.30808-6/456962687_909906431180353_176107052498410797_n.png?_nc_cat=110&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=a7rF4d_wkZ8Q7kNvwE--sbh&_nc_oc=AdngXIytscvb_6CG-sVTv4kFiE2h86IFIekYfM_LatyWvVW6Hhvt8J1mssehPhCCerARoDSZnPr62jXEpnzRgpYz&_nc_zt=23&_nc_ht=scontent.famm10-1.fna&_nc_gid=BadW9B88QvE7_tcG9pKm4Q&oh=00_Afuz3DZsuiy5NCEUf-3S6-I7qyNFP0U_cXTWfNgIvhvNZg&oe=698EBC39',
+        'https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg',
     restaurantId: '3',
   ),
 ];

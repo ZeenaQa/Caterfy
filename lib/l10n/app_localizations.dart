@@ -1487,7 +1487,7 @@ abstract class AppLocalizations {
   /// No description provided for @min.
   ///
   /// In en, this message translates to:
-  /// **'min'**
+  /// **'mins'**
   String get min;
 
   /// No description provided for @checkoutStoreClosed.
@@ -1579,6 +1579,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No stores available in this category'**
   String get categoryEmpty;
+
+  /// No description provided for @arrivingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Arriving in approx.'**
+  String get arrivingIn;
+
+  /// No description provided for @delivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get delivery;
+
+  /// No description provided for @useCaterfyPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Caterfy Pay credit'**
+  String get useCaterfyPay;
+
+  /// No description provided for @availableCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Available credit'**
+  String get availableCredit;
+
+  /// No description provided for @addCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new card'**
+  String get addCard;
+
+  /// No description provided for @cash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get cash;
+
+  /// No description provided for @payWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with'**
+  String get payWith;
 }
 
 class _AppLocalizationsDelegate

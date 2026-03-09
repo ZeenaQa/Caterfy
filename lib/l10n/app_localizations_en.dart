@@ -719,7 +719,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get more => 'More';
 
   @override
-  String get min => 'min';
+  String get min => 'mins';
 
   @override
   String get checkoutStoreClosed =>
@@ -770,4 +770,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryEmpty => 'No stores available in this category';
+
+  @override
+  String get arrivingIn => 'Arriving in approx.';
+
+  @override
+  String get delivery => 'Delivery';
+
+  @override
+  String get useCaterfyPay => 'Use Caterfy Pay credit';
+
+  @override
+  String get availableCredit => 'Available credit';
+
+  @override
+  String get addCard => 'Add new card';
+
+  @override
+  String get cash => 'Cash';
+
+  @override
+  String get payWith => 'Pay with';
 }

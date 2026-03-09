@@ -233,7 +233,7 @@
   "editAccountInfo": "Edit account info",
   "updatedSuccessfully": "Updated successfully!",
   "more": "More",
-  "min": "min",
+  "min": "mins",
   "checkoutStoreClosed": "Sorry, the store is closed. Checkout is unavailable",
   "pickLocationRequired": "You need to pick a delivery address in order to proceed",
   "selectStoreType": "Select Store Type",
@@ -248,5 +248,12 @@
   "myCar": "My Car",
   "charity": "Charity",
   "eVouchers": "e-Vouchers",
-  "categoryEmpty": "No stores available in this category"
+  "categoryEmpty": "No stores available in this category",
+  "arrivingIn": "Arriving in approx.",
+  "delivery": "Delivery",
+  "useCaterfyPay": "Use Caterfy Pay credit",
+  "availableCredit": "Available credit",
+  "addCard": "Add new card",
+  "cash": "Cash",
+  "payWith": "Pay with"
 }
