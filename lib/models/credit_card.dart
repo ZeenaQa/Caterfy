@@ -1,13 +1,11 @@
-class Card {
-  final String id;
+class CreditCard {
   final String customerID;
   final String cardNumber;
   final int expMonth;
   final int expYear;
   final String brand;
 
-  Card({
-    required this.id,
+  CreditCard({
     required this.customerID,
     required this.cardNumber,
     required this.expMonth,
@@ -16,9 +14,8 @@ class Card {
   });
 
   // FROM SUPABASE (Map → Card)
-  factory Card.fromMap(Map<String, dynamic> map) {
-    return Card(
-      id: map['id'],
+  factory CreditCard.fromMap(Map<String, dynamic> map) {
+    return CreditCard(
       customerID: map['customer_id'],
       cardNumber: map['card_number'],
       expMonth: map['exp_month'],
@@ -30,7 +27,6 @@ class Card {
   // TO SUPABASE (Card → Map)
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'customer_id': customerID,
       'card_number': cardNumber,
       'exp_month': expMonth,

@@ -1,4 +1,5 @@
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/credit_card.dart';
 import 'package:caterfy/models/cart.dart';
 import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/order_item.dart';
@@ -59,10 +60,12 @@ class LoggedCustomerProvider with ChangeNotifier {
   List<Product> _products = [];
   List<Store> _stores = [];
   List<Order> _orderHistory = [];
+  List<CreditCard> _paymentMethods = [];
 
   List<Product> get products => _products;
   List<Store> get stores => _stores;
   List<Order> get orderHistory => _orderHistory;
+  List<CreditCard> get paymentMethods => _paymentMethods;
 
   bool _isCategoryLoading = false;
   bool _isProductsLoading = false;
@@ -70,6 +73,8 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool _isCartLoading = false;
   bool _isPlaceOrderLoading = false;
   bool _isOrderHistoryLoading = false;
+  bool _isAddCardLoading = false;
+  bool _isCheckoutLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
@@ -77,6 +82,8 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool get isCartLoading => _isCartLoading;
   bool get isPlaceOrderLoading => _isPlaceOrderLoading;
   bool get isOrderHistoryLoading => _isOrderHistoryLoading;
+  bool get isAddCardLoading => _isAddCardLoading;
+  bool get isCheckoutLoading => _isCheckoutLoading;
 
   int get totalCartQuantity {
     if (_cart?.storeId == null) return 0;
@@ -512,6 +519,66 @@ class LoggedCustomerProvider with ChangeNotifier {
       }
     } finally {
       _isOrderHistoryLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> AddCard({
+    required BuildContext context,
+    required CreditCard card,
+  }) async {
+    final l10 = AppLocalizations.of(context);
+    try {
+      _isAddCardLoading = true;
+      notifyListeners();
+
+      final mapCard = card.toMap();
+
+      await supabase.from('cards').insert(mapCard);
+
+      _paymentMethods.add(card);
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isAddCardLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchPaymentMethods({required BuildContext context}) async {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
+    final l10 = AppLocalizations.of(context);
+    if (customerId == null) return;
+    try {
+      _isCheckoutLoading = true;
+      notifyListeners();
+
+      final data = await supabase
+          .from('cards')
+          .select('*')
+          .eq('customer_id', customerId);
+      // .order('created_at', ascending: false);
+
+      _paymentMethods = data.map((card) => CreditCard.fromMap(card)).toList();
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isCheckoutLoading = false;
       notifyListeners();
     }
   }

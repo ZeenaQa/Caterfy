@@ -1,5 +1,6 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 //------------------- Custom Text Field -------------------
@@ -9,10 +10,13 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final Widget? suffix;
+  final Widget? prefix;
   final ValueChanged<String>? onChanged;
   final String? errorText;
   final bool readOnly;
   final int? maxLines;
+  final int? maxLength;
+  final bool digitsOnly;
 
   const CustomTextField({
     super.key,
@@ -21,10 +25,13 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.suffix,
+    this.prefix,
     this.onChanged,
     this.errorText,
     this.readOnly = false,
     this.maxLines = 1,
+    this.maxLength,
+    this.digitsOnly = false,
   });
 
   @override
@@ -41,19 +48,30 @@ class CustomTextField extends StatelessWidget {
           : null,
 
       obscureText: obscureText,
+      maxLength: maxLength,
       keyboardType: keyboardType,
       readOnly: readOnly,
+      inputFormatters: digitsOnly
+          ? [FilteringTextInputFormatter.digitsOnly]
+          : null,
       maxLines: maxLines,
       enableInteractiveSelection: !readOnly,
       onChanged: readOnly ? null : onChanged,
       focusNode: readOnly ? AlwaysDisabledFocusNode() : null,
       decoration: InputDecoration(
+        errorText: errorText,
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+        ),
+        counterText: "",
         contentPadding: const EdgeInsets.symmetric(
           vertical: 14,
           horizontal: 12,
         ),
         hintText: value == null ? hint : null,
         suffixIcon: suffix,
+        prefixIcon: prefix,
+        prefixIconConstraints: BoxConstraints(maxWidth: 100),
         filled: false,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -355,5 +373,106 @@ class LabeledPhoneField extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class ExpiryTextField extends StatefulWidget {
+  final String? value;
+  final String? hint;
+  final bool obscureText;
+  final TextInputType keyboardType;
+  final Widget? suffix;
+  final Widget? prefix;
+  final ValueChanged<String>? onChanged;
+  final String? errorText;
+  final bool readOnly;
+  final int? maxLines;
+
+  const ExpiryTextField({
+    super.key,
+    this.value,
+    this.hint = "MM/YY",
+    this.obscureText = false,
+    this.keyboardType = TextInputType.number,
+    this.suffix,
+    this.prefix,
+    this.onChanged,
+    this.errorText,
+    this.readOnly = false,
+    this.maxLines = 1,
+  });
+
+  @override
+  _ExpiryTextFieldState createState() => _ExpiryTextFieldState();
+}
+
+class _ExpiryTextFieldState extends State<ExpiryTextField> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value ?? '');
+  }
+
+  // Format MM/YY
+  String _formatExpiry(String input) {
+    String digits = input.replaceAll('/', '');
+    if (digits.length > 4) digits = digits.substring(0, 4);
+    if (digits.length > 2) {
+      return digits.substring(0, 2) + '/' + digits.substring(2);
+    }
+    return digits;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      style: const TextStyle(fontSize: 15),
+      obscureText: widget.obscureText,
+      maxLength: 5, // MM/YY
+      keyboardType: widget.keyboardType,
+      readOnly: widget.readOnly,
+      maxLines: widget.maxLines,
+      enableInteractiveSelection: !widget.readOnly,
+      onChanged: (val) {
+        String formatted = _formatExpiry(val);
+        if (formatted != val) {
+          _controller.value = TextEditingValue(
+            text: formatted,
+            selection: TextSelection.collapsed(offset: formatted.length),
+          );
+        }
+        widget.onChanged?.call(formatted);
+      },
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      decoration: InputDecoration(
+        errorText: widget.errorText,
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+        ),
+        counterText: "",
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 14,
+          horizontal: 12,
+        ),
+        hintText: widget.value == null ? widget.hint : null,
+        suffixIcon: widget.suffix,
+        prefixIcon: widget.prefix,
+        prefixIconConstraints: BoxConstraints(maxWidth: 100),
+        filled: false,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
