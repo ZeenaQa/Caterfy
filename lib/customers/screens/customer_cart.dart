@@ -1,5 +1,7 @@
 import 'package:caterfy/customers/customer_widgets/add_note.dart';
 import 'package:caterfy/customers/customer_widgets/cart_item.dart';
+import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
+import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_checkout.dart';
 import 'package:caterfy/customers/screens/customer_store_screen.dart';
@@ -206,7 +208,6 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final l10 = AppLocalizations.of(context);
     final bool isStoreOpen = store?.isOpen ?? true;
 
@@ -261,7 +262,6 @@ class BottomNav extends StatelessWidget {
                   Expanded(
                     child: FilledBtn(
                       loadingSize: 15,
-                      isLoading: customerProvider.isPlaceOrderLoading,
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -280,20 +280,6 @@ class BottomNav extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class PaymentRow extends StatelessWidget {
-  const PaymentRow({super.key, required this.title, required this.price});
-
-  final String title;
-  final String price;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10 = AppLocalizations.of(context);
-    // final colors = Theme.of(context).colorScheme;
-    return Row(children: [Text(title), Spacer(), Text('${l10.jod} $price')]);
   }
 }
 
@@ -424,41 +410,6 @@ class SaveOnOrder extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CartSection extends StatelessWidget {
-  const CartSection({
-    super.key,
-    required this.sectionTitle,
-    this.content = const [],
-  });
-
-  final String sectionTitle;
-  final List<Widget> content;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            sectionTitle,
-            style: TextStyle(
-              color: colors.onSecondary,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        SizedBox(height: 6),
-        ...content,
-        if (content.isNotEmpty) SizedBox(height: 20),
-      ],
     );
   }
 }

@@ -70,7 +70,7 @@ class FilledBtn extends StatelessWidget {
                       ),
                     ),
               ),
-              if (isLoading) ThreeBounce(size: loadingSize),
+              if (isLoading) SizedBox(height: 20 ,child: ThreeBounce(size: loadingSize)),
             ],
           ),
         ),

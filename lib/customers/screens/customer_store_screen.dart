@@ -312,30 +312,42 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                               SizedBox(height: 4),
                                               Consumer<GlobalProvider>(
                                                 builder: (context, provider, child) {
-                                                  final cached = provider.getCachedStoreRating(widget.store.id);
+                                                  final cached = provider
+                                                      .getCachedStoreRating(
+                                                        widget.store.id,
+                                                      );
                                                   if (cached != null) {
-                                                    final avgRating = cached['average'] ?? 0;
-                                                    final count = cached['count'] ?? 0;
-                                                    final countDisplay = count > 999 ? '${(count / 1000).toStringAsFixed(1)}k+' : '$count';
+                                                    final avgRating =
+                                                        cached['average'] ?? 0;
+                                                    final count =
+                                                        cached['count'] ?? 0;
+                                                    final countDisplay =
+                                                        count > 999
+                                                        ? '${(count / 1000).toStringAsFixed(1)}k+'
+                                                        : '$count';
                                                     return Row(
                                                       children: [
                                                         Icon(
-                                                          FontAwesomeIcons.solidStar,
+                                                          FontAwesomeIcons
+                                                              .solidStar,
                                                           size: 13,
-                                                          color: colors.secondaryContainer,
+                                                          color: colors
+                                                              .secondaryContainer,
                                                         ),
                                                         SizedBox(width: 6),
                                                         Text(
                                                           '$avgRating',
                                                           style: TextStyle(
                                                             fontSize: 13,
-                                                            fontWeight: FontWeight.bold,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           ),
                                                         ),
                                                         Text(
                                                           ' ($countDisplay)',
                                                           style: TextStyle(
-                                                            color: colors.onSurfaceVariant,
+                                                            color: colors
+                                                                .onSurfaceVariant,
                                                             fontSize: 13,
                                                           ),
                                                         ),
@@ -343,35 +355,54 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                                     );
                                                   }
 
-                                                  return FutureBuilder<Map<String, dynamic>>(
-                                                    future: provider.getStoreRatingDetails(widget.store.id),
+                                                  return FutureBuilder<
+                                                    Map<String, dynamic>
+                                                  >(
+                                                    future: provider
+                                                        .getStoreRatingDetails(
+                                                          widget.store.id,
+                                                        ),
                                                     builder: (context, snapshot) {
                                                       double avgRating = 0;
                                                       int count = 0;
                                                       if (snapshot.hasData) {
-                                                        avgRating = snapshot.data?['average'] ?? 0;
-                                                        count = snapshot.data?['count'] ?? 0;
+                                                        avgRating =
+                                                            snapshot
+                                                                .data?['average'] ??
+                                                            0;
+                                                        count =
+                                                            snapshot
+                                                                .data?['count'] ??
+                                                            0;
                                                       }
-                                                      final countDisplay = count > 999 ? '${(count / 1000).toStringAsFixed(1)}k+' : '$count';
+                                                      final countDisplay =
+                                                          count > 999
+                                                          ? '${(count / 1000).toStringAsFixed(1)}k+'
+                                                          : '$count';
                                                       return Row(
                                                         children: [
                                                           Icon(
-                                                            FontAwesomeIcons.solidStar,
+                                                            FontAwesomeIcons
+                                                                .solidStar,
                                                             size: 13,
-                                                            color: colors.secondaryContainer,
+                                                            color: colors
+                                                                .secondaryContainer,
                                                           ),
                                                           SizedBox(width: 6),
                                                           Text(
                                                             '$avgRating',
                                                             style: TextStyle(
                                                               fontSize: 13,
-                                                              fontWeight: FontWeight.bold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                             ),
                                                           ),
                                                           Text(
                                                             ' ($countDisplay)',
                                                             style: TextStyle(
-                                                              color: colors.onSurfaceVariant,
+                                                              color: colors
+                                                                  .onSurfaceVariant,
                                                               fontSize: 13,
                                                             ),
                                                           ),
@@ -637,7 +668,7 @@ class BottomNav extends StatelessWidget {
 
     return Skeleton.ignore(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 15),
         decoration: BoxDecoration(
           color: colors.surface,
           boxShadow: [

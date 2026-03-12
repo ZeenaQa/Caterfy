@@ -142,7 +142,15 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: FilledBtn(
-            onPressed: onAddCardPressed,
+            onPressed:
+                isCardNumValid &&
+                    isExpiryValid &&
+                    isCcvValid &&
+                    cardNumber.length >= 13 &&
+                    ccv.length == 3 &&
+                    expiry.length == 5
+                ? onAddCardPressed
+                : null,
             isLoading: customerProvider.isAddCardLoading,
             title: "Add card",
             titleSize: 15,
@@ -200,14 +208,14 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                       hint: "mm/yy",
                       errorText: isExpiryValid ? null : 'Invalid expiry date',
                       onChanged: (val) {
-                        expiry = val;
-                        if (val.length < 5 && !isExpiryValid) {
-                          setState(() => isExpiryValid = true);
-                        } else if (val.length == 5) {
-                          bool valid = validateExpiry(val);
-                          if (valid != isExpiryValid)
-                            setState(() => isExpiryValid = valid);
-                        }
+                        setState(() {
+                          expiry = val;
+                          if (val.length < 5 && !isExpiryValid) {
+                            isExpiryValid = true;
+                          } else if (val.length == 5) {
+                            isExpiryValid = validateExpiry(val);
+                          }
+                        });
                       },
                     ),
                   ),

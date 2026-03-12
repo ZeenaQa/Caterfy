@@ -1,3 +1,5 @@
+import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
+import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_add_card.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -5,6 +7,7 @@ import 'package:caterfy/models/credit_card.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +25,6 @@ class CustomerCheckout extends StatefulWidget {
 class _CustomerCheckoutState extends State<CustomerCheckout> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -40,8 +42,13 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
     final l10 = AppLocalizations.of(context);
 
     final globalProvider = Provider.of<GlobalProvider>(context);
+    final double deliveryPrice = globalProvider.getDeliveryPrice(
+      widget.store?.latitude,
+      widget.store?.longitude,
+    );
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final bool isLoading = customerProvider.isCheckoutLoading;
+    final bool isPlacingOrder = customerProvider.isPlaceOrderLoading;
 
     final String storeNameToShow = widget.store == null
         ? ''
@@ -49,6 +56,8 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                   widget.store!.name_ar.isNotEmpty
               ? widget.store!.name_ar
               : widget.store!.name);
+
+    final bool isStoreOpen = widget.store?.isOpen ?? true;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -66,54 +75,140 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
           ],
         ),
       ),
+      bottomNavigationBar: isLoading
+          ? null
+          : Container(
+              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+              decoration: BoxDecoration(
+                color: colors.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: colors.shadow,
+                    blurRadius: 6,
+                    offset: const Offset(0, 3.5),
+                  ),
+                ],
+              ),
+              width: double.infinity,
+              child: FilledBtn(
+                isLoading: isPlacingOrder,
+                onPressed: !isStoreOpen
+                    ? null
+                    : () async {
+                        await customerProvider.placeOrder(
+                          context: context,
+                          deliveryPrice: deliveryPrice,
+                        );
+                        if (context.mounted) {
+                          Navigator.of(
+                            context,
+                          ).popUntil((route) => route.isFirst);
+                        }
+                      },
+                title: "Place order",
+                titleSize: 15,
+              ),
+            ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-          child: Skeletonizer(
-            enabled: isLoading,
-            child: Column(
-              spacing: 25,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CheckoutContainer(
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                      18,
-                      10,
-                      16,
-                      10,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.delivery_dining_rounded,
-                          size: 23,
-                          color: colors.onSecondary,
+          child: ListView(
+            children: [
+              Skeletonizer(
+                enabled: isLoading,
+                child: Column(
+                  spacing: 25,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CheckoutContainer(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          18,
+                          10,
+                          16,
+                          10,
                         ),
-                        SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
                           children: [
-                            Text(
-                              l10.delivery,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            Icon(
+                              Icons.delivery_dining_rounded,
+                              size: 23,
+                              color: colors.onSecondary,
                             ),
-                            Text(
-                              '${l10.arrivingIn} ${globalProvider.getDeliveryTime(widget.store?.latitude, widget.store?.longitude)} ${l10.min}',
-                              style: TextStyle(
-                                color: colors.onSurfaceVariant,
-                                fontSize: 13,
-                              ),
+                            SizedBox(width: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l10.delivery,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '${l10.arrivingIn} ${globalProvider.getDeliveryTime(widget.store?.latitude, widget.store?.longitude)} ${l10.min}',
+                                  style: TextStyle(
+                                    color: colors.onSurfaceVariant,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    PayWith(),
+                    CartSection(
+                      sectionTitle: l10.paymentSummary,
+                      content: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12.0,
+                            left: 15,
+                            right: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 11,
+                            children: [
+                              PaymentRow(
+                                title: l10.subtotal,
+                                price: customerProvider.totalCartPrice
+                                    .toStringAsFixed(2),
+                              ),
+                              PaymentRow(
+                                title: l10.deliveryFee,
+                                price: deliveryPrice.toStringAsFixed(2),
+                              ),
+                              PaymentRow(title: l10.serviceFee, price: '0.20'),
+                              Row(
+                                children: [
+                                  Text(
+                                    l10.totalAmount,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    '${l10.jod} ${(customerProvider.totalCartPrice + deliveryPrice + 0.20).toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-                PayWith(),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
