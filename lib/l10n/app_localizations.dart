@@ -1400,6 +1400,12 @@ abstract class AppLocalizations {
   /// **'Checkout'**
   String get checkout;
 
+  /// No description provided for @continueToCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get continueToCheckout;
+
   /// No description provided for @enterCouponCode.
   ///
   /// In en, this message translates to:
@@ -1604,11 +1610,23 @@ abstract class AppLocalizations {
   /// **'Available credit'**
   String get availableCredit;
 
-  /// No description provided for @addCard.
+  /// No description provided for @addNewCard.
   ///
   /// In en, this message translates to:
   /// **'Add new card'**
+  String get addNewCard;
+
+  /// No description provided for @addCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Add card'**
   String get addCard;
+
+  /// No description provided for @enterCardDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter card details'**
+  String get enterCardDetails;
 
   /// No description provided for @cash.
   ///
@@ -1621,6 +1639,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pay with'**
   String get payWith;
+
+  /// No description provided for @cardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get cardNumber;
+
+  /// No description provided for @ccv.
+  ///
+  /// In en, this message translates to:
+  /// **'CCV code'**
+  String get ccv;
+
+  /// No description provided for @invalidExp.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid expiry date'**
+  String get invalidExp;
+
+  /// No description provided for @placeOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Place order'**
+  String get placeOrder;
+
+  /// No description provided for @cardCheckoutTos.
+  ///
+  /// In en, this message translates to:
+  /// **'By placing this order you agree to the Credit Card'**
+  String get cardCheckoutTos;
+
+  /// No description provided for @tos.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get tos;
 }
 
 class _AppLocalizationsDelegate

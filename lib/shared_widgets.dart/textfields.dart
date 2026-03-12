@@ -427,6 +427,8 @@ class _ExpiryTextFieldState extends State<ExpiryTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return TextField(
       controller: _controller,
       style: const TextStyle(fontSize: 15),
@@ -449,8 +451,10 @@ class _ExpiryTextFieldState extends State<ExpiryTextField> {
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
         errorText: widget.errorText,
+        errorStyle: TextStyle(color: colors.error),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: colors.error),
         ),
         counterText: "",
         contentPadding: const EdgeInsets.symmetric(

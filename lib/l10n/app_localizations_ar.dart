@@ -674,6 +674,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get checkout => 'الدفع';
 
   @override
+  String get continueToCheckout => 'تابع للدفع';
+
+  @override
   String get enterCouponCode => 'أدخل رمز القسيمة';
 
   @override
@@ -779,11 +782,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get availableCredit => 'الرصيد المتوفر';
 
   @override
-  String get addCard => 'أضف بطاقة جديدة';
+  String get addNewCard => 'أضف بطاقة جديدة';
+
+  @override
+  String get addCard => 'أضف البطاقة';
+
+  @override
+  String get enterCardDetails => 'أدخل بيانات البطاقة';
 
   @override
   String get cash => 'نقداً';
 
   @override
   String get payWith => 'الدفع من خلال';
+
+  @override
+  String get cardNumber => 'رقم البطاقة';
+
+  @override
+  String get ccv => 'رقم CCV';
+
+  @override
+  String get invalidExp => 'تاريخ انتهاء غير صالح';
+
+  @override
+  String get placeOrder => 'تنفيذ الطلب';
+
+  @override
+  String get cardCheckoutTos =>
+      'عند تنفيذ هذا الطلب عبر بطاقة الإتمان انت توافق على';
+
+  @override
+  String get tos => 'الشروط والاحكام';
 }

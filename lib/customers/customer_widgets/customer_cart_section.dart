@@ -4,11 +4,13 @@ class CartSection extends StatelessWidget {
   const CartSection({
     super.key,
     required this.sectionTitle,
+    this.titlePadding = true,
     this.content = const [],
   });
 
   final String sectionTitle;
   final List<Widget> content;
+  final bool titlePadding;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class CartSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: EdgeInsets.symmetric(horizontal: titlePadding ? 15 : 0),
           child: Text(
             sectionTitle,
             style: TextStyle(

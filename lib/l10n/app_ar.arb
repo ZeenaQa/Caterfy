@@ -217,6 +217,7 @@
   "totalAmount": "المبلغ الإجمالي",
   "addItems": "أضف عناصر",
   "checkout": "الدفع",
+  "continueToCheckout": "تابع للدفع",
   "enterCouponCode": "أدخل رمز القسيمة",
   "submit": "إرسال",
   "pickLocation": "اختر موقعًا",
@@ -251,7 +252,15 @@
   "delivery": "التوصيل",
   "useCaterfyPay": "استخدم رصيد محفظة Caterfy",
   "availableCredit": "الرصيد المتوفر",
-  "addCard": "أضف بطاقة جديدة",
+  "addNewCard": "أضف بطاقة جديدة",
+  "addCard": "أضف البطاقة",
+  "enterCardDetails": "أدخل بيانات البطاقة",
   "cash": "نقداً",
-  "payWith": "الدفع من خلال"
+  "payWith": "الدفع من خلال",
+  "cardNumber": "رقم البطاقة",
+  "ccv": "رقم CCV",
+  "invalidExp": "تاريخ انتهاء غير صالح",
+  "placeOrder": "تنفيذ الطلب",
+  "cardCheckoutTos": "عند تنفيذ هذا الطلب عبر بطاقة الإتمان انت توافق على",
+  "tos": "الشروط والاحكام"
 }    

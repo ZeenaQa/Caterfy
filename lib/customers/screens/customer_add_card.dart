@@ -130,7 +130,7 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
     return Scaffold(
       appBar: CustomAppBar(
         content: Text(
-          l10.addCard,
+          l10.addNewCard,
           style: TextStyle(fontSize: 16.5, fontWeight: FontWeight.bold),
         ),
       ),
@@ -152,7 +152,7 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                 ? onAddCardPressed
                 : null,
             isLoading: customerProvider.isAddCardLoading,
-            title: "Add card",
+            title: l10.addCard,
             titleSize: 15,
           ),
         ),
@@ -165,13 +165,13 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
             children: [
               SizedBox(height: 12),
               Text(
-                "Enter card details",
+                l10.enterCardDetails,
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 12),
               // Card number
               CustomTextField(
-                hint: "Card number",
+                hint: l10.cardNumber,
                 keyboardType: TextInputType.number,
                 onChanged: (val) {
                   cardNumber = val;
@@ -188,7 +188,6 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                 },
                 digitsOnly: true,
                 maxLength: 16,
-                errorText: isCardNumValid ? null : 'Invalid card number',
                 prefix: Padding(
                   padding: const EdgeInsetsDirectional.only(
                     start: 16.0,
@@ -206,7 +205,7 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                     child: ExpiryTextField(
                       keyboardType: TextInputType.number,
                       hint: "mm/yy",
-                      errorText: isExpiryValid ? null : 'Invalid expiry date',
+                      errorText: isExpiryValid ? null : l10.invalidExp,
                       onChanged: (val) {
                         setState(() {
                           expiry = val;
@@ -226,8 +225,7 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                       keyboardType: TextInputType.number,
                       digitsOnly: true,
                       maxLength: 3,
-                      hint: "CCV code",
-                      errorText: isCcvValid ? null : 'Invalid CCV',
+                      hint: l10.ccv,
                       onChanged: (val) {
                         ccv = val;
                         if (!isCcvValid && val.length == 3) {

@@ -268,7 +268,7 @@ class BottomNav extends StatelessWidget {
                           builder: (_) => CustomerCheckout(store: store),
                         ),
                       ),
-                      title: l10.checkout,
+                      title: l10.continueToCheckout,
                       titleSize: 15,
                       innerVerticalPadding: 15,
                     ),

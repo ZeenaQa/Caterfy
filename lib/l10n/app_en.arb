@@ -219,6 +219,7 @@
   "totalAmount": "Total amount",
   "addItems": "Add items",
   "checkout": "Checkout",
+  "continueToCheckout": "Checkout",
   "enterCouponCode": "Enter coupon code",
   "submit": "Submit",
   "pickLocation": "Pick a location",
@@ -253,7 +254,15 @@
   "delivery": "Delivery",
   "useCaterfyPay": "Use Caterfy Pay credit",
   "availableCredit": "Available credit",
-  "addCard": "Add new card",
+  "addNewCard": "Add new card",
+  "addCard": "Add card",
+  "enterCardDetails": "Enter card details",
   "cash": "Cash",
-  "payWith": "Pay with"
+  "payWith": "Pay with",
+  "cardNumber": "Card number",
+  "ccv": "CCV code",
+  "invalidExp": "Invalid expiry date",
+  "placeOrder": "Place order",
+  "cardCheckoutTos": "By placing this order you agree to the Credit Card",
+  "tos": "Terms & Conditions"
 }

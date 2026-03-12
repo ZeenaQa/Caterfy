@@ -105,7 +105,7 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                           ).popUntil((route) => route.isFirst);
                         }
                       },
-                title: "Place order",
+                title: l10.placeOrder,
                 titleSize: 15,
               ),
             ),
@@ -159,13 +159,13 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                     ),
                     PayWith(),
                     CartSection(
+                      titlePadding: false,
                       sectionTitle: l10.paymentSummary,
                       content: [
                         Padding(
                           padding: const EdgeInsets.only(
                             top: 12.0,
-                            left: 15,
-                            right: 15,
+                            bottom: 6,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,6 +199,22 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                                     ),
                                   ),
                                 ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(l10.cardCheckoutTos),
+                                    Text(
+                                      l10.tos,
+                                      style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -513,7 +529,7 @@ class AddCard extends StatelessWidget {
               spacing: 15,
               children: [
                 Icon(FontAwesomeIcons.plus, size: 16),
-                Text(l10.addCard),
+                Text(l10.addNewCard),
               ],
             ),
             IgnorePointer(

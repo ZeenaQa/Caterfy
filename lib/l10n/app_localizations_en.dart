@@ -677,6 +677,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkout => 'Checkout';
 
   @override
+  String get continueToCheckout => 'Checkout';
+
+  @override
   String get enterCouponCode => 'Enter coupon code';
 
   @override
@@ -784,11 +787,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get availableCredit => 'Available credit';
 
   @override
-  String get addCard => 'Add new card';
+  String get addNewCard => 'Add new card';
+
+  @override
+  String get addCard => 'Add card';
+
+  @override
+  String get enterCardDetails => 'Enter card details';
 
   @override
   String get cash => 'Cash';
 
   @override
   String get payWith => 'Pay with';
+
+  @override
+  String get cardNumber => 'Card number';
+
+  @override
+  String get ccv => 'CCV code';
+
+  @override
+  String get invalidExp => 'Invalid expiry date';
+
+  @override
+  String get placeOrder => 'Place order';
+
+  @override
+  String get cardCheckoutTos =>
+      'By placing this order you agree to the Credit Card';
+
+  @override
+  String get tos => 'Terms & Conditions';
 }
