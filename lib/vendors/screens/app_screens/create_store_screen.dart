@@ -12,7 +12,6 @@ import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
-import 'package:caterfy/vendors/vendor_sections/vendor_store.dart';
 import 'package:caterfy/models/store.dart';
 
 class CreateStoreCarousel extends StatefulWidget {
@@ -213,8 +212,10 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                       }
 
                       if (currentPage == 3) {
-                        if ((storeDraft.storeArea == null || storeDraft.storeArea!.isEmpty) ||
-                            (storeDraft.latitude == 0 && storeDraft.longitude == 0)) {
+                        if ((storeDraft.storeArea == null ||
+                                storeDraft.storeArea!.isEmpty) ||
+                            (storeDraft.latitude == 0 &&
+                                storeDraft.longitude == 0)) {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -225,7 +226,8 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                           return;
                         }
 
-                        if (storeDraft.tags == null || storeDraft.tags!.isEmpty) {
+                        if (storeDraft.tags == null ||
+                            storeDraft.tags!.isEmpty) {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -243,19 +245,10 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                         );
 
                         if (success && context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const VendorStoreSection(),
-                            ),
-                          );
+                          Navigator.of(context).pop();
                         } else if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                l10.somethingWentWrong,
-                              ),
-                            ),
+                            SnackBar(content: Text(l10.somethingWentWrong)),
                           );
                         }
                         return;
