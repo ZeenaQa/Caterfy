@@ -58,19 +58,6 @@ class _StoreLocationPageState extends State<StoreLocationPage> {
               },
             ),
           ),
-
-          /// ===== CONFIRM BUTTON =====
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: FilledBtn(
-              title: l10.confirmStoreLocation,
-              innerVerticalPadding: 18,
-              horizontalPadding: 10,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
         ],
       ),
     );

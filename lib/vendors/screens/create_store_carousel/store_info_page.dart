@@ -4,8 +4,10 @@ import 'package:caterfy/shared_widgets.dart/textfields.dart';
 
 class StoreInfoPage extends StatefulWidget {
   final void Function(String name, String nameAr, String category) onChanged;
+  final VoidCallback? onEdited;
 
   final bool showErrors;
+  final String storeType;
 
   final String initialName;
   final String initialNameAr;
@@ -14,20 +16,31 @@ class StoreInfoPage extends StatefulWidget {
   const StoreInfoPage({
     super.key,
     required this.onChanged,
+    this.onEdited,
     required this.showErrors,
+    required this.storeType,
     this.initialName = '',
     this.initialNameAr = '',
     this.initialCategory = '',
   });
 
-  static const categories = [
-    'electronics',
-    'food',
-    'groceries',
-    'pharmacy',
-    'toysAndKids',
-    'healthAndBeauty',
-  ];
+  List<String> get categories {
+    if (storeType == 'service') {
+      return [
+        'myCar',
+        'myHouse',
+      ];
+    }
+
+    return [
+      'electronics',
+      'food',
+      'groceries',
+      'pharmacy',
+      'toysAndKids',
+      'healthAndBeauty',
+    ];
+  }
 
   @override
   State<StoreInfoPage> createState() => _StoreInfoPageState();
@@ -68,6 +81,10 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
           return l10.toysAndKids;
         case 'healthAndBeauty':
           return l10.healthAndBeauty;
+        case 'myCar':
+          return l10.myCar;
+        case 'myHouse':
+          return l10.myHouse;
         default:
           return cat;
       }
@@ -92,6 +109,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
             onChanged: (val) {
               setState(() => _nameAr = val);
               _notifyParent();
+              widget.onEdited?.call();
             },
           ),
 
@@ -108,6 +126,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
             onChanged: (val) {
               setState(() => _name = val);
               _notifyParent();
+              widget.onEdited?.call();
             },
           ),
 
@@ -126,7 +145,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            items: StoreInfoPage.categories
+            items: widget.categories
                 .map(
                   (cat) =>
                       DropdownMenuItem(value: cat, child: Text(catLabel(cat))),
@@ -135,6 +154,7 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
             onChanged: (val) {
               setState(() => _category = val);
               _notifyParent();
+              widget.onEdited?.call();
             },
           ),
         ],

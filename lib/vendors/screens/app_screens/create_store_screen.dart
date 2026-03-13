@@ -25,6 +25,7 @@ class CreateStoreCarousel extends StatefulWidget {
 class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
   final PageController _controller = PageController();
   int currentPage = 0;
+  bool _showInfoErrors = false;
 
   /// ===== LOCAL STATE =====
   File? logoFile;
@@ -105,25 +106,35 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
         children: [
           /// ===== BRAND =====
           StoreBrandBannerPage(
-            onLogoSelected: (file) => logoFile = file,
-            onBannerSelected: (file) => bannerFile = file,
+            logoFile: logoFile,
+            bannerFile: bannerFile,
+            onLogoSelected: (file) => setState(() => logoFile = file),
+            onBannerSelected: (file) => setState(() => bannerFile = file),
           ),
 
           /// ===== INFO =====
           StoreInfoPage(
-            showErrors: currentPage == 1 && !isStoreInfoValid,
+            storeType: storeType,
+            showErrors: _showInfoErrors,
+            onEdited: () {
+              if (_showInfoErrors) {
+                setState(() => _showInfoErrors = false);
+              }
+            },
             onChanged: (name, nameAr, category) {
-              storeDraft = Store(
-                id: storeDraft.id,
-                vendorId: storeDraft.vendorId,
-                name: name,
-                name_ar: nameAr,
-                category: category,
-                storeArea: storeDraft.storeArea,
-                latitude: storeDraft.latitude,
-                longitude: storeDraft.longitude,
-                tags: storeDraft.tags,
-              );
+              setState(() {
+                storeDraft = Store(
+                  id: storeDraft.id,
+                  vendorId: storeDraft.vendorId,
+                  name: name,
+                  name_ar: nameAr,
+                  category: category,
+                  storeArea: storeDraft.storeArea,
+                  latitude: storeDraft.latitude,
+                  longitude: storeDraft.longitude,
+                  tags: storeDraft.tags,
+                );
+              });
             },
           ),
 
@@ -131,34 +142,38 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
           StoreTagsPage(
             selectedTags: storeDraft.tags ?? [],
             onTagsChanged: (tags) {
-              storeDraft = Store(
-                id: storeDraft.id,
-                vendorId: storeDraft.vendorId,
-                name: storeDraft.name,
-                name_ar: storeDraft.name_ar,
-                category: storeDraft.category,
-                storeArea: storeDraft.storeArea,
-                latitude: storeDraft.latitude,
-                longitude: storeDraft.longitude,
-                tags: tags,
-              );
+              setState(() {
+                storeDraft = Store(
+                  id: storeDraft.id,
+                  vendorId: storeDraft.vendorId,
+                  name: storeDraft.name,
+                  name_ar: storeDraft.name_ar,
+                  category: storeDraft.category,
+                  storeArea: storeDraft.storeArea,
+                  latitude: storeDraft.latitude,
+                  longitude: storeDraft.longitude,
+                  tags: tags,
+                );
+              });
             },
           ),
 
           /// ===== LOCATION =====
           StoreLocationPage(
             onLocationSelected: (area, lat, lng) {
-              storeDraft = Store(
-                id: storeDraft.id,
-                vendorId: storeDraft.vendorId,
-                name: storeDraft.name,
-                name_ar: storeDraft.name_ar,
-                category: storeDraft.category,
-                storeArea: area,
-                latitude: lat,
-                longitude: lng,
-                tags: storeDraft.tags,
-              );
+              setState(() {
+                storeDraft = Store(
+                  id: storeDraft.id,
+                  vendorId: storeDraft.vendorId,
+                  name: storeDraft.name,
+                  name_ar: storeDraft.name_ar,
+                  category: storeDraft.category,
+                  storeArea: area,
+                  latitude: lat,
+                  longitude: lng,
+                  tags: storeDraft.tags,
+                );
+              });
             },
           ),
         ],
@@ -192,9 +207,35 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                     title: currentPage == 3 ? l10.continueBtn : l10.next,
                     isLoading: provider.isLoading,
                     onPressed: () async {
-                      if (currentPage == 1 && !isStoreInfoValid) return;
+                      if (currentPage == 1) {
+                        setState(() => _showInfoErrors = true);
+                        if (!isStoreInfoValid) return;
+                      }
 
                       if (currentPage == 3) {
+                        if ((storeDraft.storeArea == null || storeDraft.storeArea!.isEmpty) ||
+                            (storeDraft.latitude == 0 && storeDraft.longitude == 0)) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please select a store location'),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+
+                        if (storeDraft.tags == null || storeDraft.tags!.isEmpty) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please select at least one tag'),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+
                         final success = await provider.createStore(
                           storeData: storeDraft,
                           logoFile: logoFile,
@@ -206,6 +247,14 @@ class _CreateStoreCarouselState extends State<CreateStoreCarousel> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => const VendorStoreSection(),
+                            ),
+                          );
+                        } else if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                l10.somethingWentWrong,
+                              ),
                             ),
                           );
                         }

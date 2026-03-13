@@ -52,7 +52,7 @@ class CustomTextField extends StatelessWidget {
           vertical: 14,
           horizontal: 12,
         ),
-        hintText: value == null ? hint : null,
+        hintText: hint,
         suffixIcon: suffix,
         filled: false,
         border: OutlineInputBorder(

@@ -36,19 +36,25 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
 
     final l10 = AppLocalizations.of(context);
 
-    // Initialize businessTypes and selectedBusiness once
+    // Initialize businessTypes and selectedBusiness based on the selected storeType
     if (businessTypes.isEmpty) {
-      businessTypes = [
-        l10.restaurant,
-        l10.cafe,
-        l10.bakery,
-        l10.grocery,
-        l10.other,
-      ];
-      selectedBusiness = businessTypes[0];
+      final bool isServiceProvider = widget.storeType == 'service';
 
-      // If you need to update the UI
-      // setState(() {});
+      if (isServiceProvider) {
+        // For service providers we don't show business type selection,
+        // but we still need a non-empty value for validation/backends.
+        selectedBusiness = 'service';
+      } else {
+        businessTypes = [
+          l10.restaurant,
+          l10.cafe,
+          l10.bakery,
+          l10.grocery,
+          l10.other,
+        ];
+
+        selectedBusiness = businessTypes[0];
+      }
     }
   }
 
@@ -116,42 +122,43 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
               errorText: auth.businessNameError,
             ),
             const SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, bottom: 6),
-                  child: Text(
-                    l10.businessType,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: colors.onSurface,
+            if (widget.storeType != 'service')
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, bottom: 6),
+                    child: Text(
+                      l10.businessType,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: colors.onSurface,
+                      ),
                     ),
                   ),
-                ),
-                DropdownButtonFormField<String>(
-                  initialValue: selectedBusiness.isEmpty
-                      ? null
-                      : selectedBusiness,
-                  items: businessTypes
-                      .map(
-                        (type) =>
-                            DropdownMenuItem(value: type, child: Text(type)),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        selectedBusiness = value;
-                      });
-                    }
-                  },
-                  decoration: const InputDecoration(filled: false),
-                  dropdownColor: colors.surface,
-                ),
-              ],
-            ),
+                  DropdownButtonFormField<String>(
+                    initialValue: selectedBusiness.isEmpty
+                        ? null
+                        : selectedBusiness,
+                    items: businessTypes
+                        .map(
+                          (type) =>
+                              DropdownMenuItem(value: type, child: Text(type)),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          selectedBusiness = value;
+                        });
+                      }
+                    },
+                    decoration: const InputDecoration(filled: false),
+                    dropdownColor: colors.surface,
+                  ),
+                ],
+              ),
             const SizedBox(height: 30),
             Align(
               alignment: Alignment.centerRight,
