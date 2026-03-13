@@ -47,29 +47,32 @@ class StoreBrandBannerPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: () => _pickImage(context, isLogo: false),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: bannerFile != null
-                      ? DecorationImage(
-                          image: FileImage(bannerFile!),
-                          fit: BoxFit.cover,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () => _pickImage(context, isLogo: false),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: bannerFile != null
+                        ? DecorationImage(
+                            image: FileImage(bannerFile!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: bannerFile == null
+                      ? Center(
+                          child: Icon(
+                            Icons.image_outlined,
+                            color: colors.primary.withOpacity(0.6),
+                            size: 44,
+                          ),
                         )
                       : null,
                 ),
-                child: bannerFile == null
-                    ? Center(
-                        child: Icon(
-                          Icons.image_outlined,
-                          color: colors.primary.withOpacity(0.6),
-                          size: 44,
-                        ),
-                      )
-                    : null,
               ),
             ),
           ),

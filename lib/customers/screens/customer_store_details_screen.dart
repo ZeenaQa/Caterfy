@@ -213,7 +213,7 @@ class _CustomerStoreDetailsScreenState
                             ),
                             leftText: "Store Rating",
                             rightText: count > 0
-                                ? '${count} ratings'
+                                ? '$count ratings'
                                 : 'No ratings yet',
                           );
                         },

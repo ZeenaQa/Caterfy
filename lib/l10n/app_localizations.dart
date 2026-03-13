@@ -1544,6 +1544,54 @@ abstract class AppLocalizations {
   /// **'Provide services like cleaning, repairs, training, etc.'**
   String get serviceProviderDesc;
 
+  /// No description provided for @cleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning'**
+  String get cleaning;
+
+  /// No description provided for @laundryService.
+  ///
+  /// In en, this message translates to:
+  /// **'Laundry Service'**
+  String get laundryService;
+
+  /// No description provided for @maintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenance;
+
+  /// No description provided for @carWash.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Wash'**
+  String get carWash;
+
+  /// No description provided for @printing.
+  ///
+  /// In en, this message translates to:
+  /// **'Printing'**
+  String get printing;
+
+  /// No description provided for @repair.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair'**
+  String get repair;
+
+  /// No description provided for @deliveryService.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Service'**
+  String get deliveryService;
+
+  /// No description provided for @beauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Beauty'**
+  String get beauty;
+
   /// No description provided for @yourEverythingApp.
   ///
   /// In en, this message translates to:

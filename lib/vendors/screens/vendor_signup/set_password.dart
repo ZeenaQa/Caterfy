@@ -2,6 +2,7 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
+import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -82,7 +83,7 @@ class _SetPasswordState extends State<SetPassword> {
                     confirmPassword: confirmPassword,
                     l10: AppLocalizations.of(context),
                   )) {
-                    await auth.signUp(
+                    final success = await auth.signUp(
                       email: widget.email,
                       name: widget.name,
                       password: password,
@@ -94,9 +95,20 @@ class _SetPasswordState extends State<SetPassword> {
                       context: context,
                     );
 
-                    // if (success) {
-                    //   Navigator.of(context).popUntil((route) => route.isFirst);
-                    // }
+                    if (success && context.mounted) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (_) => const AuthenticatedVendor(),
+                        ),
+                        (route) => false,
+                      );
+                    } else if (!success && context.mounted) {
+                      final errorMsg =
+                          auth.signUpError ?? l10.somethingWentWrong;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(errorMsg)),
+                      );
+                    }
                   }
                 },
                 isLoading: auth.isLoading,
