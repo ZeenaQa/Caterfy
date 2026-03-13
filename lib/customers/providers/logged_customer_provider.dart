@@ -450,9 +450,11 @@ class LoggedCustomerProvider with ChangeNotifier {
   Future<void> placeOrder({
     required BuildContext context,
     required double deliveryPrice,
+    required bool isUsingWallet,
   }) async {
     if (_cart?.storeId == null || _cart!.items.isEmpty) return;
     final l10 = AppLocalizations.of(context);
+    final userId = supabase.auth.currentUser!.id;
     try {
       _isPlaceOrderLoading = true;
       notifyListeners();
@@ -463,6 +465,16 @@ class LoggedCustomerProvider with ChangeNotifier {
         ...mapCart,
         'delivery_price': deliveryPrice,
       });
+
+      if (isUsingWallet) {
+        await supabase.rpc(
+          'subtract_wallet_balance',
+          params: {
+            'p_customer_id': userId,
+            'p_amount': totalCartPrice + deliveryPrice,
+          },
+        );
+      }
 
       _cart = null;
       deleteCart();
