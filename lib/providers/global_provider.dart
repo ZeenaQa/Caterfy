@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 class GlobalProvider extends ChangeNotifier {
   dynamic user;
   final supabase = Supabase.instance.client;
@@ -13,60 +12,79 @@ class GlobalProvider extends ChangeNotifier {
   bool _notificationsEnabled = true;
   final Map<String, Map<String, dynamic>> _storeRatingsCache = {};
 
+  bool _isFetchingUser = false;
+
   bool get notificationsEnabled => _notificationsEnabled;
+  bool get isFetchingUser => _isFetchingUser;
 
   GlobalProvider() {
     loadLastLocation();
     _loadNotificationsPreference();
     _loadNotificationsPreference();
   }
-  
-  Future<void> rateStore({
-  required String storeId,
-  required int rating,
-}) async {
-  try {
-    final currentUser = supabase.auth.currentUser;
 
-    if (currentUser == null) {
-      throw Exception("User not logged in");
-    }
+  Future<void> rateStore({required String storeId, required int rating}) async {
+    try {
+      final currentUser = supabase.auth.currentUser;
 
-    if (rating < 1 || rating > 5) {
-      throw Exception("Rating must be between 1 and 5");
-    }
+      if (currentUser == null) {
+        throw Exception("User not logged in");
+      }
 
-    final existing = await supabase
-        .from('store_ratings')
-        .select()
-        .eq('store_id', storeId)
-        .eq('id', currentUser.id);
+      if (rating < 1 || rating > 5) {
+        throw Exception("Rating must be between 1 and 5");
+      }
 
-    if (existing.isNotEmpty) {
-      // update rating
-      await supabase
+      final existing = await supabase
           .from('store_ratings')
-          .update({'rating': rating})
+          .select()
           .eq('store_id', storeId)
           .eq('id', currentUser.id);
-    } else {
-      // insert new rating
-      await supabase.from('store_ratings').insert({
-        'store_id': storeId,
-        'id': currentUser.id,
-        'rating': rating,
-      });
+
+      if (existing.isNotEmpty) {
+        // update rating
+        await supabase
+            .from('store_ratings')
+            .update({'rating': rating})
+            .eq('store_id', storeId)
+            .eq('id', currentUser.id);
+      } else {
+        // insert new rating
+        await supabase.from('store_ratings').insert({
+          'store_id': storeId,
+          'id': currentUser.id,
+          'rating': rating,
+        });
+      }
+
+      // refresh cache for this store so UI updates immediately
+      await _refreshStoreRatingCache(storeId);
+      notifyListeners();
+    } catch (e) {
+      print('Error rating store: $e');
+      rethrow;
     }
-
-    // refresh cache for this store so UI updates immediately
-    await _refreshStoreRatingCache(storeId);
-    notifyListeners();
-  } catch (e) {
-    print('Error rating store: $e');
-    rethrow;
   }
-}
 
+  Future<void> fetchUser() async {
+    try {
+      _isFetchingUser = true;
+      notifyListeners();
+      final userId = supabase.auth.currentUser!.id;
+      final fetchedUser = await supabase
+          .from('customers')
+          .select()
+          .eq('id', userId)
+          .maybeSingle();
+
+      setUser(fetchedUser);
+    } catch (e) {
+      return;
+    } finally {
+      _isFetchingUser = false;
+      notifyListeners();
+    }
+  }
 
   Future<Map<String, dynamic>> getStoreRatingDetails(String storeId) async {
     try {
@@ -133,7 +151,6 @@ class GlobalProvider extends ChangeNotifier {
       print('Error refreshing store rating cache: $e');
     }
   }
-
 
   // ---------- LOCATION ----------
   void setDeliveryLocation(String address, LatLng location) async {

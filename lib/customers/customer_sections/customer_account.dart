@@ -10,6 +10,7 @@ import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CustomerAccountSection extends StatelessWidget {
   const CustomerAccountSection({super.key});
@@ -23,6 +24,7 @@ class CustomerAccountSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final globalProvider = Provider.of<GlobalProvider>(context);
 
     final user = Provider.of<GlobalProvider>(context).user;
     final List<Widget> items = [
@@ -118,70 +120,77 @@ class CustomerAccountSection extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
-                    onTap: () => (),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: colors.primary),
-                      ),
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10.caterfyPay,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: colors.primary,
-                            ),
+                Skeletonizer(
+                  enabled: globalProvider.isFetchingUser,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: GestureDetector(
+                      onTap: () => (),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: globalProvider.isFetchingUser
+                                ? colors.outline
+                                : colors.primary,
                           ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.wallet,
-                                size: 36,
+                        ),
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10.caterfyPay,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                                 color: colors.primary,
                               ),
-                              SizedBox(width: 15),
-                              Text(
-                                '${user['wallet_balance']} ${l10.jod}',
-                                style: TextStyle(
+                            ),
+                            SizedBox(height: 15),
+                            Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.wallet,
+                                  size: 36,
                                   color: colors.primary,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 10),
-
-                          SizedBox(
-                            width: double.infinity,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: GestureDetector(
-                                onTap: () {},
-                                behavior: HitTestBehavior.opaque,
-                                child: Text(
-                                  l10.viewDetails,
+                                SizedBox(width: 15),
+                                Text(
+                                  '${user['wallet_balance']} ${l10.jod}',
                                   style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: colors.onSurfaceVariant,
+                                    color: colors.primary,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 10),
+
+                            SizedBox(
+                              width: double.infinity,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  behavior: HitTestBehavior.opaque,
+                                  child: Text(
+                                    l10.viewDetails,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: colors.onSurfaceVariant,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

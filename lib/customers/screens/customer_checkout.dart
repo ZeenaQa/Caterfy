@@ -28,11 +28,24 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = Provider.of<LoggedCustomerProvider>(
+      final customerProvider = Provider.of<LoggedCustomerProvider>(
         context,
         listen: false,
       );
-      await provider.fetchPaymentMethods(context: context);
+      final gloablProvider = Provider.of<GlobalProvider>(
+        context,
+        listen: false,
+      );
+      await customerProvider.fetchPaymentMethods(context: context);
+      await gloablProvider.fetchUser();
+    });
+  }
+
+  String payment = "cash";
+
+  void pickMethod(String val) {
+    setState(() {
+      payment = val;
     });
   }
 
@@ -47,7 +60,8 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
       widget.store?.longitude,
     );
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
-    final bool isLoading = customerProvider.isCheckoutLoading;
+    final bool isLoading =
+        customerProvider.isCheckoutLoading || globalProvider.isFetchingUser;
     final bool isPlacingOrder = customerProvider.isPlaceOrderLoading;
 
     final String storeNameToShow = widget.store == null
@@ -95,6 +109,15 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                 onPressed: !isStoreOpen
                     ? null
                     : () async {
+                        if (payment == "add") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CustomerAddCard(),
+                            ),
+                          );
+                          return;
+                        }
                         await customerProvider.placeOrder(
                           context: context,
                           deliveryPrice: deliveryPrice,
@@ -157,16 +180,13 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                         ),
                       ),
                     ),
-                    PayWith(),
+                    PayWith(payment: payment, pickMethod: pickMethod),
                     CartSection(
                       titlePadding: false,
                       sectionTitle: l10.paymentSummary,
                       content: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                            top: 12.0,
-                            bottom: 6,
-                          ),
+                          padding: const EdgeInsets.only(top: 12.0, bottom: 6),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             spacing: 11,
@@ -200,22 +220,24 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                                   ),
                                 ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(l10.cardCheckoutTos),
-                                    Text(
-                                      l10.tos,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.bold,
+                              if (payment != "cash")
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(l10.cardCheckoutTos),
+                                      Text(
+                                        l10.tos,
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -252,7 +274,10 @@ class CheckoutContainer extends StatelessWidget {
 }
 
 class PayWith extends StatefulWidget {
-  const PayWith({super.key});
+  const PayWith({super.key, required this.payment, required this.pickMethod});
+
+  final String payment;
+  final Function pickMethod;
 
   @override
   State<PayWith> createState() => _PayWithState();
@@ -260,13 +285,6 @@ class PayWith extends StatefulWidget {
 
 class _PayWithState extends State<PayWith> {
   bool useWallet = false;
-  String payment = "cash";
-
-  void pickMethod(String val) {
-    setState(() {
-      payment = val;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -295,77 +313,84 @@ class _PayWithState extends State<PayWith> {
           ),
           child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: colors.outline)),
-                ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                      18,
-                      10,
-                      16,
-                      10,
-                    ),
-                    foregroundColor: colors.secondary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
+              if (globalProvider.user["wallet_balance"] > 0)
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: colors.outline)),
                   ),
-                  onPressed: () => setState(() {
-                    useWallet = !useWallet;
-                  }),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10.useCaterfyPay,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            '${l10.availableCredit}: ${globalProvider.user["wallet_balance"]} ${l10.jod}',
-                            style: TextStyle(
-                              color: colors.onSurfaceVariant,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                        18,
+                        10,
+                        16,
+                        10,
                       ),
-                      IgnorePointer(
-                        child: Opacity(
-                          opacity: Skeletonizer.of(context).enabled ? 0 : 1,
-                          child: Switch(
-                            value: useWallet,
-                            onChanged: (_) {},
-                            activeThumbColor: colors.surface,
-                            activeTrackColor: colors.inverseSurface,
-                            inactiveThumbColor: colors.surface,
-                            inactiveTrackColor: colors.onSurfaceVariant,
-                            trackOutlineColor: WidgetStateProperty.resolveWith((
-                              states,
-                            ) {
-                              return Colors.transparent;
-                            }),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
+                      foregroundColor: colors.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: () => setState(() {
+                      useWallet = !useWallet;
+                      if (widget.payment == "cash") {
+                        if (paymentMethods.isEmpty) {
+                          widget.pickMethod("add");
+                          return;
+                        }
+                        widget.pickMethod(paymentMethods[0].cardNumber);
+                      }
+                    }),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10.useCaterfyPay,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              '${l10.availableCredit}: ${globalProvider.user["wallet_balance"]} ${l10.jod}',
+                              style: TextStyle(
+                                color: colors.onSurfaceVariant,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IgnorePointer(
+                          child: Opacity(
+                            opacity: Skeletonizer.of(context).enabled ? 0 : 1,
+                            child: Switch(
+                              value: useWallet,
+                              onChanged: (_) {},
+                              activeThumbColor: colors.surface,
+                              activeTrackColor: colors.inverseSurface,
+                              inactiveThumbColor: colors.surface,
+                              inactiveTrackColor: colors.onSurfaceVariant,
+                              trackOutlineColor:
+                                  WidgetStateProperty.resolveWith((states) {
+                                    return Colors.transparent;
+                                  }),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               RadioGroup<String>(
                 key: ValueKey(paymentMethods.length),
-                groupValue: payment,
+                groupValue: widget.payment,
                 onChanged: (String? value) {
-                  setState(() => payment = value!);
+                  widget.pickMethod(value!);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -378,17 +403,24 @@ class _PayWithState extends State<PayWith> {
                         if (index < paymentMethods.length) {
                           final paymentMethod = paymentMethods[index];
                           return PaymentMethod(
-                            value: 'card_$index',
-                            pickMethod: pickMethod,
+                            value: paymentMethod.cardNumber,
+                            pickMethod: widget.pickMethod,
                             card: paymentMethod,
                           );
                         }
 
                         if (index == paymentMethods.length) {
-                          return AddCard(value: "add", pickMethod: pickMethod);
+                          return AddCard(
+                            value: "add",
+                            pickMethod: widget.pickMethod,
+                          );
                         }
 
-                        return Cash(value: "cash", pickMethod: pickMethod);
+                        return Cash(
+                          value: "cash",
+                          pickMethod: widget.pickMethod,
+                          disabled: useWallet,
+                        );
                       },
                     ),
                   ],
@@ -552,46 +584,60 @@ class AddCard extends StatelessWidget {
 }
 
 class Cash extends StatelessWidget {
-  const Cash({super.key, required this.value, required this.pickMethod});
+  const Cash({
+    super.key,
+    required this.value,
+    required this.pickMethod,
+    this.disabled = false,
+  });
 
   final String value;
   final Function pickMethod;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
 
-    return TextButton(
-      style: TextButton.styleFrom(
-        padding: const EdgeInsetsDirectional.fromSTEB(18, 10, 16, 10),
-        foregroundColor: colors.secondary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
-      onPressed: () => pickMethod(value),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            spacing: 15,
-            children: [
-              Icon(FontAwesomeIcons.moneyBills, size: 16),
-              Text(l10.cash),
-            ],
-          ),
-          IgnorePointer(
-            child: Transform.scale(
-              scale: 1.1,
-              child: Opacity(
-                opacity: Skeletonizer.of(context).enabled ? 0 : 1,
-                child: Radio<String>(
-                  activeColor: colors.inverseSurface,
-                  value: value,
-                ),
-              ),
+    return Opacity(
+      opacity: disabled ? .4 : 1,
+      child: IgnorePointer(
+        ignoring: disabled,
+        child: TextButton(
+          style: TextButton.styleFrom(
+            padding: const EdgeInsetsDirectional.fromSTEB(18, 10, 16, 10),
+            foregroundColor: colors.secondary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
             ),
           ),
-        ],
+          onPressed: () => pickMethod(value),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                spacing: 15,
+                children: [
+                  Icon(FontAwesomeIcons.moneyBills, size: 16),
+                  Text(l10.cash),
+                ],
+              ),
+              IgnorePointer(
+                child: Transform.scale(
+                  scale: 1.1,
+                  child: Opacity(
+                    opacity: Skeletonizer.of(context).enabled ? 0 : 1,
+                    child: Radio<String>(
+                      activeColor: colors.inverseSurface,
+                      value: value,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

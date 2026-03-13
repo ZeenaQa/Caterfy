@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/util/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,6 +89,8 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                   context.read<LoggedCustomerProvider>().fetchOrderHistory(
                     context: context,
                   );
+                } else if (index == 2) {
+                  context.read<GlobalProvider>().fetchUser();
                 }
               }),
               items: [
