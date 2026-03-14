@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/customer_sections/customer_orders.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/customer_caterfy_pay.dart';
 
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
@@ -175,7 +176,15 @@ class CustomerAccountSection extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CustomerCaterfyPay(),
+                                      ),
+                                    );
+                                  },
                                   behavior: HitTestBehavior.opaque,
                                   child: Text(
                                     l10.viewDetails,

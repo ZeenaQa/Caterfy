@@ -1723,6 +1723,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms & Conditions'**
   String get tos;
+
+  /// No description provided for @expiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires in'**
+  String get expiresIn;
+
+  /// No description provided for @removeCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove card'**
+  String get removeCard;
+
+  /// No description provided for @removeCardWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this card?'**
+  String get removeCardWarning;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @caterfyCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Caterfy credit balance'**
+  String get caterfyCredit;
+
+  /// No description provided for @topUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get topUp;
+
+  /// No description provided for @topUp2.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get topUp2;
+
+  /// No description provided for @continuee.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continuee;
+
+  /// No description provided for @enterCreditAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount from'**
+  String get enterCreditAmount;
+
+  /// No description provided for @quicklyAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Or quickly select amount'**
+  String get quicklyAmount;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method'**
+  String get paymentMethod;
+
+  /// No description provided for @selectPaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred payment method'**
+  String get selectPaymentMethod;
 }
 
 class _AppLocalizationsDelegate

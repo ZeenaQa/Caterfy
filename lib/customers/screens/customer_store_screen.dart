@@ -719,7 +719,7 @@ class BottomNav extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  '${l10.jod} ${customerProvider.totalCartPrice.toString()}',
+                  '${l10.jod} ${customerProvider.totalCartPrice.toStringAsFixed(2)}',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 SizedBox(width: 10),

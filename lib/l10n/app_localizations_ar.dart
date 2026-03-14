@@ -838,4 +838,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tos => 'الشروط والاحكام';
+
+  @override
+  String get expiresIn => 'ينتهي';
+
+  @override
+  String get removeCard => 'إزالة البطاقة';
+
+  @override
+  String get removeCardWarning => 'هل أنت متأكد أنك تريد إزالة هذه البطاقة؟';
+
+  @override
+  String get remove => 'إزالة';
+
+  @override
+  String get caterfyCredit => 'رصيدك هو';
+
+  @override
+  String get topUp => 'إضافة الرصيد';
+
+  @override
+  String get topUp2 => 'اشحن رصيدك';
+
+  @override
+  String get continuee => 'استمر';
+
+  @override
+  String get enterCreditAmount => 'أدخل قيمة الرصيد من';
+
+  @override
+  String get quicklyAmount => 'أو اختر مبلغ بسرعة';
+
+  @override
+  String get paymentMethod => 'طريقة الدفع';
+
+  @override
+  String get selectPaymentMethod => 'اختر طريقة الدفع';
 }

@@ -31,7 +31,7 @@ class DrawerBtn extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-            padding: const EdgeInsets.only(left: 5),
+            padding: const EdgeInsetsDirectional.only(start: 5),
             child: Row(
               spacing: 12,
               children: [

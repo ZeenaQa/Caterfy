@@ -1,5 +1,4 @@
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/map_picker.dart';
 import 'package:caterfy/util/map_helper.dart';
 import 'package:flutter/material.dart';

@@ -594,4 +594,31 @@ class LoggedCustomerProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> removePaymentMethod({
+    required BuildContext context,
+    required String cardNumber,
+  }) async {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
+    final l10 = AppLocalizations.of(context);
+    if (customerId == null) return;
+    try {
+      await supabase
+          .from('cards')
+          .delete()
+          .eq('customer_id', customerId)
+          .eq('card_number', cardNumber);
+
+      paymentMethods.removeWhere((card) => card.cardNumber == cardNumber);
+      notifyListeners();
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    }
+  }
 }

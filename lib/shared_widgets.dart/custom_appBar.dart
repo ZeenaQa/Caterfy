@@ -4,7 +4,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     this.title = '',
-    this.titleSize = 20,
+    this.titleSize = 17.5,
     PreferredSize? bottom,
     this.onPressed,
     this.noBackButton = false,

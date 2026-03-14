@@ -521,7 +521,7 @@ class PaymentMethod extends StatelessWidget {
   Color? getCardColor() {
     final brand = card.brand;
     return brand == "visa"
-        ? Color(0xFF1A1F71)
+        ? Color(0xFF1435cb)
         : brand == "mastercard"
         ? Color(0xFFFF5F00)
         : brand == "amex"

@@ -272,5 +272,17 @@
   "invalidExp": "Invalid expiry date",
   "placeOrder": "Place order",
   "cardCheckoutTos": "By placing this order you agree to the Credit Card",
-  "tos": "Terms & Conditions"
+  "tos": "Terms & Conditions",
+  "expiresIn": "Expires in",
+  "removeCard": "Remove card",
+  "removeCardWarning": "Are you sure you want to remove this card?",
+  "remove": "Remove",
+  "caterfyCredit": "Caterfy credit balance",
+  "topUp": "Top up",
+  "topUp2": "Top up",
+  "continuee": "Continue",
+  "enterCreditAmount": "Enter an amount from",
+  "quicklyAmount": "Or quickly select amount",
+  "paymentMethod": "Payment method",
+  "selectPaymentMethod": "Select your preferred payment method"
 }

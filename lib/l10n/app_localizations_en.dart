@@ -843,4 +843,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tos => 'Terms & Conditions';
+
+  @override
+  String get expiresIn => 'Expires in';
+
+  @override
+  String get removeCard => 'Remove card';
+
+  @override
+  String get removeCardWarning => 'Are you sure you want to remove this card?';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get caterfyCredit => 'Caterfy credit balance';
+
+  @override
+  String get topUp => 'Top up';
+
+  @override
+  String get topUp2 => 'Top up';
+
+  @override
+  String get continuee => 'Continue';
+
+  @override
+  String get enterCreditAmount => 'Enter an amount from';
+
+  @override
+  String get quicklyAmount => 'Or quickly select amount';
+
+  @override
+  String get paymentMethod => 'Payment method';
+
+  @override
+  String get selectPaymentMethod => 'Select your preferred payment method';
 }

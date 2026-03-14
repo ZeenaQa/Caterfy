@@ -1,8 +1,11 @@
+import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:toastification/toastification.dart';
 
 class GlobalProvider extends ChangeNotifier {
   dynamic user;
@@ -13,9 +16,11 @@ class GlobalProvider extends ChangeNotifier {
   final Map<String, Map<String, dynamic>> _storeRatingsCache = {};
 
   bool _isFetchingUser = false;
+  bool _isAddingCredits = false;
 
   bool get notificationsEnabled => _notificationsEnabled;
   bool get isFetchingUser => _isFetchingUser;
+  bool get isAddingCredits => _isAddingCredits;
 
   GlobalProvider() {
     loadLastLocation();
@@ -82,6 +87,47 @@ class GlobalProvider extends ChangeNotifier {
       return;
     } finally {
       _isFetchingUser = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> addCredits({
+    required BuildContext context,
+    required int addition,
+  }) async {
+    try {
+      _isAddingCredits = true;
+      notifyListeners();
+
+      final userId = supabase.auth.currentUser!.id;
+
+      final fetched = await supabase
+          .from('customers')
+          .select('wallet_balance')
+          .eq('id', userId)
+          .single();
+
+      final currentBalance = fetched['wallet_balance'] as num;
+
+      final newBalance = currentBalance + addition;
+
+      await supabase
+          .from('customers')
+          .update({'wallet_balance': newBalance})
+          .eq('id', userId);
+
+      setUser({...user, 'wallet_balance': newBalance});
+    } catch (e) {
+      if (context.mounted) {
+        final l10 = AppLocalizations.of(context);
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _isAddingCredits = false;
       notifyListeners();
     }
   }

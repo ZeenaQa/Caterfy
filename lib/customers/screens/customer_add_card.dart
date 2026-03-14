@@ -38,7 +38,7 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
     if (number.length > 3) {
       if (RegExp(r'^4[0-9]{0,}$').hasMatch(number)) {
         icon = FontAwesomeIcons.ccVisa;
-        color = Color(0xFF1A1F71);
+        color = Color(0xFF1435cb);
         brand = "visa";
       } else if (RegExp(r'^5[1-5][0-9]{0,}$').hasMatch(number)) {
         icon = FontAwesomeIcons.ccMastercard;

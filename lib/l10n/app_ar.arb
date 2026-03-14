@@ -270,5 +270,17 @@
   "invalidExp": "تاريخ انتهاء غير صالح",
   "placeOrder": "تنفيذ الطلب",
   "cardCheckoutTos": "عند تنفيذ هذا الطلب عبر بطاقة الإتمان انت توافق على",
-  "tos": "الشروط والاحكام"
+  "tos": "الشروط والاحكام",
+  "expiresIn": "ينتهي",
+  "removeCard": "إزالة البطاقة",
+  "removeCardWarning": "هل أنت متأكد أنك تريد إزالة هذه البطاقة؟",
+  "remove": "إزالة",
+  "caterfyCredit": "رصيدك هو",
+  "topUp": "إضافة الرصيد",
+  "topUp2": "اشحن رصيدك",
+  "continuee": "استمر",
+  "enterCreditAmount": "أدخل قيمة الرصيد من",
+  "quicklyAmount": "أو اختر مبلغ بسرعة",
+  "paymentMethod": "طريقة الدفع",
+  "selectPaymentMethod": "اختر طريقة الدفع"
 }    
