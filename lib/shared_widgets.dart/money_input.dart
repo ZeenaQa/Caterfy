@@ -48,7 +48,6 @@ class _MoneyInputState extends State<MoneyInput> {
   void _onChanged(String value) {
     final cleaned = value.replaceAll(RegExp(r'[^0-9]'), '');
     final capped = cleaned.length > 4 ? cleaned.substring(0, 4) : cleaned;
-
     if (capped != _digits) {
       setState(() => _digits = capped);
       _controller.value = TextEditingValue(
@@ -65,29 +64,43 @@ class _MoneyInputState extends State<MoneyInput> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _focusNode.requestFocus(),
+      onTap: () {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _focusNode.requestFocus();
+          });
+        } else {
+          _focusNode.requestFocus();
+        }
+      },
       child: Stack(
         children: [
-          SizedBox(
-            width: 0,
-            height: 0,
-            child: TextField(
-              controller: _controller,
-              focusNode: _focusNode,
-              keyboardType: TextInputType.number,
-              maxLength: 4,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onChanged: _onChanged,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                isDense: true,
-                contentPadding: EdgeInsets.zero,
+          IgnorePointer(
+            child: Opacity(
+              opacity: 0,
+              child: SizedBox(
+                width: 1,
+                height: 1,
+                child: TextField(
+                  controller: _controller,
+                  focusNode: _focusNode,
+                  keyboardType: TextInputType.number,
+                  maxLength: 4,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  onChanged: _onChanged,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                    counterText: '',
+                  ),
+                  style: const TextStyle(fontSize: 1),
+                  cursorWidth: 0,
+                  showCursor: false,
+                  enableInteractiveSelection: false,
+                ),
               ),
-              style: const TextStyle(fontSize: 0, color: Colors.transparent),
-              cursorColor: Colors.transparent,
-              cursorWidth: 0,
-              showCursor: false,
-              enableInteractiveSelection: false,
             ),
           ),
           Text(
