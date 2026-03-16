@@ -29,6 +29,9 @@ class _MoneyInputState extends State<MoneyInput> {
     }
     _controller.addListener(_syncFromController);
     _focusNode.addListener(() => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
   }
 
   void _syncFromController() {

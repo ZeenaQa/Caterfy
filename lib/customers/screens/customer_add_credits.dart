@@ -54,6 +54,10 @@ class _CustomerAddCreditsState extends State<CustomerAddCredits> {
             onPressed: amount < 5 || amount > 50
                 ? null
                 : () {
+                    FocusManager.instance.primaryFocus?.unfocus(
+                      disposition: UnfocusDisposition.previouslyFocusedChild,
+                    );
+                    FocusScope.of(context).unfocus();
                     openDrawer(
                       context,
                       child: Column(
