@@ -27,6 +27,11 @@ class CustomerOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final storeNameToShow =
+        Localizations.localeOf(context).languageCode == 'ar' &&
+            (order.name_ar.isNotEmpty)
+        ? order.name_ar
+        : order.storeName;
     final orderDate = order.createdAt != null
         ? DateFormat(
             "MMM d - h:mm a",
@@ -114,7 +119,7 @@ class CustomerOrderCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            order.storeName,
+                            storeNameToShow,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

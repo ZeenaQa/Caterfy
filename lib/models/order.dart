@@ -4,6 +4,7 @@ class Order {
   final String customerId;
   final String storeId;
   final String storeName;
+  final String name_ar;
   final String storeLogo;
   final List<OrderItem> items;
   final String note;
@@ -15,6 +16,7 @@ class Order {
     required this.customerId,
     required this.storeId,
     required this.storeName,
+    required this.name_ar,
     required this.deliveryPrice,
     this.walletTransaction = 0.00,
     this.storeLogo = '',
@@ -28,6 +30,7 @@ class Order {
       'customer_id': customerId,
       'store_id': storeId,
       'store_name': storeName,
+      "name_ar": name_ar,
       'store_logo': storeLogo,
       'note': note,
       "delivery_price": deliveryPrice,
@@ -42,6 +45,7 @@ class Order {
       customerId: map['customer_id'],
       storeId: map['store_id'],
       storeName: map['store_name'] ?? "",
+      name_ar: map['name_ar'] ?? '',
       storeLogo: map['store_logo'] ?? "",
       createdAt: map['created_at'] ?? '',
       note: map['note'] ?? '',

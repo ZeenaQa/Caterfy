@@ -510,7 +510,7 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       final data = await supabase
           .from('orders')
-          .select('*, stores:store_id (logo_url)')
+          .select('*, stores:store_id (logo_url, name_ar)')
           .eq('customer_id', customerId)
           .order('created_at', ascending: false);
 
@@ -519,16 +519,20 @@ class LoggedCustomerProvider with ChangeNotifier {
             ? order['stores']['logo_url']
             : null;
 
+        final storeArName = order['stores']['name_ar'];
+
         if (storeLogo == null) {
           return order;
         }
 
-        return {...order, 'store_logo': storeLogo};
+        return {...order, 'store_logo': storeLogo, 'name_ar': storeArName};
       }
 
       _orderHistory = data
           .map((order) => Order.fromMap(checkStoreLogo(order)))
           .toList();
+
+      print(data);
     } catch (e) {
       if (context.mounted) {
         showCustomToast(
@@ -640,7 +644,7 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       final data = await supabase
           .from('orders')
-          .select('*, stores:store_id (logo_url)')
+          .select('*, stores:store_id (logo_url, name_ar)')
           .eq('customer_id', customerId)
           .gt('wallet_transaction', 0)
           .order('created_at', ascending: false);
@@ -650,11 +654,13 @@ class LoggedCustomerProvider with ChangeNotifier {
             ? order['stores']['logo_url']
             : null;
 
+        final storeArName = order['stores']['name_ar'];
+
         if (storeLogo == null) {
           return order;
         }
 
-        return {...order, 'store_logo': storeLogo};
+        return {...order, 'store_logo': storeLogo, 'name_ar': storeArName};
       }
 
       _transactions = data

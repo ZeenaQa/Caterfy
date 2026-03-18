@@ -204,6 +204,12 @@ class Transactions extends StatelessWidget {
 
                     final bool isLastItem = index == transactions.length - 1;
 
+                    final storeNameToShow =
+                        Localizations.localeOf(context).languageCode == 'ar' &&
+                            (transaction.name_ar.isNotEmpty)
+                        ? transaction.name_ar
+                        : transaction.storeName;
+
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 13),
                       child: Container(
@@ -248,7 +254,7 @@ class Transactions extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      transaction.storeName,
+                                      storeNameToShow,
                                       maxLines: 1,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
