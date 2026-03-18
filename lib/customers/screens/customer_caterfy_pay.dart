@@ -1,13 +1,16 @@
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_add_card.dart';
 import 'package:caterfy/customers/screens/customer_add_credits.dart';
+import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/credit_card.dart';
+import 'package:caterfy/models/order.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -31,8 +34,9 @@ class _CustomerCaterfyPayState extends State<CustomerCaterfyPay> {
         context,
         listen: false,
       );
-      await customerProvider.fetchPaymentMethods(context: context);
-      await gloablProvider.fetchUser();
+      customerProvider.fetchPaymentMethods(context: context);
+      customerProvider.fetchWalletTransactions(context: context);
+      gloablProvider.fetchUser();
     });
   }
 
@@ -52,101 +56,226 @@ class _CustomerCaterfyPayState extends State<CustomerCaterfyPay> {
       body: SafeArea(
         child: Skeletonizer(
           enabled: isLoading,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 20,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(17, 17, 17, 0),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 23, vertical: 20),
-                  width: double.infinity,
-                  // height: 100,
-                  decoration: BoxDecoration(
-                    color: isLoading ? colors.surfaceContainer : colors.primary,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 4,
-                        children: [
-                          Text(
-                            l10.caterfyCredit,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 20,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(17, 17, 17, 0),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 23, vertical: 20),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: isLoading
+                          ? colors.surfaceContainer
+                          : colors.primary,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 4,
+                          children: [
+                            Text(
+                              l10.caterfyCredit,
+                              style: TextStyle(
+                                color: colors.surface,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text:
+                                    "${globalProvider.user['wallet_balance']} ",
+                                style: TextStyle(
+                                  color: colors.surface,
+                                  fontSize: 17,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: l10.jod,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const CustomerAddCredits(),
+                              ),
+                            );
+                          },
+                          behavior: HitTestBehavior.opaque,
+                          child: Text(
+                            l10.topUp,
                             style: TextStyle(
                               color: colors.surface,
-                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold,
                               fontSize: 15,
                             ),
                           ),
-                          RichText(
-                            text: TextSpan(
-                              text: "${globalProvider.user['wallet_balance']} ",
-                              style: TextStyle(
-                                color: colors.surface,
-                                fontSize: 17,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: l10.jod,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const CustomerAddCredits(),
-                            ),
-                          );
-                        },
-                        behavior: HitTestBehavior.opaque,
-                        child: Text(
-                          l10.topUp,
-                          style: TextStyle(
-                            color: colors.surface,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              if (paymentMethods.isEmpty)
-                AddCard(isWide: true)
-              else
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 10,
-                    children: [
-                      AddCard(),
-                      ...List.generate(
-                        paymentMethods.length,
-                        (index) => PaymentMethod(
-                          paymentMethod: paymentMethods[index],
-                          isLastItem: index == paymentMethods.length - 1,
+                if (paymentMethods.isEmpty)
+                  AddCard(isWide: true)
+                else
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      spacing: 10,
+                      children: [
+                        AddCard(),
+                        ...List.generate(
+                          paymentMethods.length,
+                          (index) => PaymentMethod(
+                            paymentMethod: paymentMethods[index],
+                            isLastItem: index == paymentMethods.length - 1,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-            ],
+                Transactions(),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class Transactions extends StatelessWidget {
+  const Transactions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+    final List<Order> transactions = customerProvider.transactions;
+    final bool isLoading = customerProvider.transactionsLoading;
+
+    return transactions.isEmpty && !isLoading
+        ? SizedBox()
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 17),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10),
+                Text(
+                  "Caterfy credit transactions",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 25),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: isLoading
+                      ? dummyOrders.length
+                      : transactions.length,
+                  itemBuilder: (context, index) {
+                    final transaction = isLoading
+                        ? dummyOrders[index]
+                        : transactions[index];
+
+                    final orderDate = transaction.createdAt != null
+                        ? DateFormat("MMM d yyyy").format(
+                            DateTime.parse(transaction.createdAt!).toLocal(),
+                          )
+                        : '';
+
+                    final bool isLastItem = index == transactions.length - 1;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 13),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: isLastItem
+                                  ? Colors.transparent
+                                  : colors.outline,
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 18.0),
+                          child: Row(
+                            spacing: 20,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (isLoading)
+                                Image.asset(
+                                  width: 35,
+                                  height: 35,
+                                  'assets/images/app_icon.png',
+                                  fit: BoxFit.cover,
+                                )
+                              else
+                                Image.network(
+                                  width: 35,
+                                  height: 35,
+                                  transaction.storeLogo,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(
+                                      Icons.store,
+                                      size: 50,
+                                      color: Colors.grey[400],
+                                    );
+                                  },
+                                ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      transaction.storeName,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text(orderDate),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                '- ${transaction.walletTransaction.toString()} ${l10.jod}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
   }
 }
 

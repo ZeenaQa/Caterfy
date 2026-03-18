@@ -38,13 +38,12 @@ class _CustomerStoreDetailsScreenState
     final userRating = await globalProvider.getUserRatingForStore(
       widget.store.id,
     );
-
-    if (userRating != null) {
-      setState(() {
+    setState(() {
+      if (userRating != null) {
         selectedRating = userRating;
-        isLoading = false;
-      });
-    }
+      }
+      isLoading = false;
+    });
   }
 
   Future<void> submitRating(int rating) async {

@@ -9,12 +9,14 @@ class Order {
   final String note;
   final String? createdAt;
   final double deliveryPrice;
+  final double walletTransaction;
 
   Order({
     required this.customerId,
     required this.storeId,
     required this.storeName,
     required this.deliveryPrice,
+    this.walletTransaction = 0.00,
     this.storeLogo = '',
     List<OrderItem>? items,
     this.note = '',
@@ -29,6 +31,7 @@ class Order {
       'store_logo': storeLogo,
       'note': note,
       "delivery_price": deliveryPrice,
+      'wallet_transaction': walletTransaction,
       'items': items.map((e) => e.toMap()).toList(),
       'created_at': createdAt,
     };
@@ -43,6 +46,7 @@ class Order {
       createdAt: map['created_at'] ?? '',
       note: map['note'] ?? '',
       deliveryPrice: map['delivery_price'],
+      walletTransaction: map['wallet_transaction'],
     );
 
     order.items.addAll(

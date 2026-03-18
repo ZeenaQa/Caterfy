@@ -60,11 +60,13 @@ class LoggedCustomerProvider with ChangeNotifier {
   List<Product> _products = [];
   List<Store> _stores = [];
   List<Order> _orderHistory = [];
+  List<Order> _transactions = [];
   List<CreditCard> _paymentMethods = [];
 
   List<Product> get products => _products;
   List<Store> get stores => _stores;
   List<Order> get orderHistory => _orderHistory;
+  List<Order> get transactions => _transactions;
   List<CreditCard> get paymentMethods => _paymentMethods;
 
   bool _isCategoryLoading = false;
@@ -75,6 +77,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool _isOrderHistoryLoading = false;
   bool _isAddCardLoading = false;
   bool _isCheckoutLoading = false;
+  bool _transactionsLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
@@ -84,6 +87,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool get isOrderHistoryLoading => _isOrderHistoryLoading;
   bool get isAddCardLoading => _isAddCardLoading;
   bool get isCheckoutLoading => _isCheckoutLoading;
+  bool get transactionsLoading => _transactionsLoading;
 
   int get totalCartQuantity {
     if (_cart?.storeId == null) return 0;
@@ -450,6 +454,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   Future<void> placeOrder({
     required BuildContext context,
     required double deliveryPrice,
+    required double walletTransaction,
     required bool isUsingWallet,
   }) async {
     if (_cart?.storeId == null || _cart!.items.isEmpty) return;
@@ -464,6 +469,7 @@ class LoggedCustomerProvider with ChangeNotifier {
       await supabase.from('orders').insert({
         ...mapCart,
         'delivery_price': deliveryPrice,
+        'wallet_transaction': isUsingWallet ? walletTransaction : 0.00,
       });
 
       if (isUsingWallet) {
@@ -619,6 +625,50 @@ class LoggedCustomerProvider with ChangeNotifier {
           message: l10.somethingWentWrong,
         );
       }
+    }
+  }
+
+  Future<void> fetchWalletTransactions({required BuildContext context}) async {
+    final customerId = Supabase.instance.client.auth.currentUser?.id;
+    final l10 = AppLocalizations.of(context);
+    if (customerId == null) return;
+    try {
+      _transactionsLoading = true;
+      notifyListeners();
+
+      final data = await supabase
+          .from('orders')
+          .select('*, stores:store_id (logo_url)')
+          .eq('customer_id', customerId)
+          .gt('wallet_transaction', 0)
+          .order('created_at', ascending: false);
+
+      Map<String, dynamic> checkStoreLogo(order) {
+        final storeLogo = (order['stores'] is Map)
+            ? order['stores']['logo_url']
+            : null;
+
+        if (storeLogo == null) {
+          return order;
+        }
+
+        return {...order, 'store_logo': storeLogo};
+      }
+
+      _transactions = data
+          .map((order) => Order.fromMap(checkStoreLogo(order)))
+          .toList();
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+    } finally {
+      _transactionsLoading = false;
+      notifyListeners();
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
 import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
@@ -159,6 +161,15 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                           context: context,
                           deliveryPrice: deliveryPrice,
                           isUsingWallet: useWallet,
+                          walletTransaction: min(
+                            max(
+                              walletBalance.toDouble(),
+                              walletBalance.toDouble() -
+                                  customerProvider.totalCartPrice +
+                                  deliveryPrice,
+                            ),
+                            customerProvider.totalCartPrice + deliveryPrice,
+                          ),
                         );
                         if (context.mounted) {
                           Navigator.of(
