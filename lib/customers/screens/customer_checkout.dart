@@ -162,13 +162,10 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                           deliveryPrice: deliveryPrice,
                           isUsingWallet: useWallet,
                           walletTransaction: min(
-                            max(
-                              walletBalance.toDouble(),
-                              walletBalance.toDouble() -
-                                  customerProvider.totalCartPrice +
-                                  deliveryPrice,
-                            ),
-                            customerProvider.totalCartPrice + deliveryPrice,
+                            walletBalance.toDouble(),
+                            customerProvider.totalCartPrice +
+                                deliveryPrice +
+                                0.2,
                           ),
                         );
                         if (context.mounted) {

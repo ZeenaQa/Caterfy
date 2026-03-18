@@ -469,7 +469,9 @@ class LoggedCustomerProvider with ChangeNotifier {
       await supabase.from('orders').insert({
         ...mapCart,
         'delivery_price': deliveryPrice,
-        'wallet_transaction': isUsingWallet ? walletTransaction : 0.00,
+        'wallet_transaction': isUsingWallet
+            ? walletTransaction.toStringAsFixed(2)
+            : 0.00,
       });
 
       if (isUsingWallet) {

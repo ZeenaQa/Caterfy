@@ -20,11 +20,11 @@ final List<AdBanner> banners = [
         'https://leaders.jo/wp-content/uploads/2026/01/Tablets-Ar-27th-Jan.jpg',
     restaurantId: 'b',
   ),
-  AdBanner(
-    imageUrl:
-        'https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg',
-    restaurantId: '3',
-  ),
+  // AdBanner(
+  //   imageUrl:
+  //       'https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg',
+  //   restaurantId: '3',
+  // ),
 ];
 
 class HomeAdsCarousel extends StatefulWidget {
