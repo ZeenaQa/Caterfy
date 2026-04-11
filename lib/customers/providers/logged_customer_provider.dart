@@ -472,6 +472,7 @@ class LoggedCustomerProvider with ChangeNotifier {
         'wallet_transaction': isUsingWallet
             ? walletTransaction.toStringAsFixed(2)
             : 0.00,
+        'status': 'pending',
       });
 
       if (isUsingWallet) {

@@ -368,7 +368,7 @@ class LoggedVendorProvider extends ChangeNotifier {
 
       final PostgrestList data = await supabase
           .from('orders')
-          .select('*, customers:customer_id (name, email, phone)')
+          .select('id, status, *, customers:customer_id (name, email, phone)')
           .eq('store_id', storeId)
           .order('created_at', ascending: false);
 
@@ -408,6 +408,39 @@ class LoggedVendorProvider extends ChangeNotifier {
       .eq('id', storeId);
 }
 
-  
-}
+  Future<bool> updateOrderStatus({
+    required String orderId,
+    required String status,
+  }) async {
+    try {
+      final response = await supabase
+          .from('orders')
+          .update({'status': status})
+          .eq('id', orderId)
+          .select()
+          .single();
 
+      final index = _orders.indexWhere((order) => order.id == orderId);
+      if (index != -1) {
+        _orders[index] = VendorOrder(
+          id: _orders[index].id,
+          customerId: _orders[index].customerId,
+          customerName: _orders[index].customerName,
+          customerEmail: _orders[index].customerEmail,
+          customerPhone: _orders[index].customerPhone,
+          status: response['status'] as String?,
+          items: _orders[index].items,
+          note: _orders[index].note,
+          createdAt: _orders[index].createdAt,
+        );
+        notifyListeners();
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('updateOrderStatus error: $e');
+      return false;
+    }
+  }
+
+}

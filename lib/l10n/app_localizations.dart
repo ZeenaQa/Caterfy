@@ -836,6 +836,66 @@ abstract class AppLocalizations {
   /// **'When you place your order, we can show you where it is in real-time'**
   String get trackOrderDesc;
 
+  /// No description provided for @orderTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Order tracking'**
+  String get orderTracking;
+
+  /// No description provided for @orderReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Order received'**
+  String get orderReceived;
+
+  /// No description provided for @preparingOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get preparingOrder;
+
+  /// No description provided for @outForDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Out for delivery'**
+  String get outForDelivery;
+
+  /// No description provided for @deliveredDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your order has been delivered.'**
+  String get deliveredDesc;
+
+  /// No description provided for @orderReceivedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your order is received by the store.'**
+  String get orderReceivedDesc;
+
+  /// No description provided for @preparingOrderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The kitchen is preparing your order.'**
+  String get preparingOrderDesc;
+
+  /// No description provided for @outForDeliveryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your order is on the way.'**
+  String get outForDeliveryDesc;
+
+  /// No description provided for @refreshStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh status'**
+  String get refreshStatus;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
   /// No description provided for @onTimeDelivery.
   ///
   /// In en, this message translates to:
@@ -985,12 +1045,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change'**
   String get change;
-
-  /// No description provided for @back.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get back;
 
   /// No description provided for @deleteProduct.
   ///

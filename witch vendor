@@ -1,0 +1,146 @@
+[33m28d3b11[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Improve vendor features
+[33mad72cae[m[33m ([m[1;31morigin/testing[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m layout change to customer home
+[33m91d64ab[m add ad carousel to customer home screen, add services categories to home screen
+[33ma01c07b[m idk
+[33m9afc777[m enable sign up for vendor
+[33mb985688[m Add store type selection for vendor signup
+[33m2d0bac1[m add 'type' data field to store model
+[33m7c49d59[m[33m ([m[1;31morigin/ratings[m[33m)[m fix issues with context presence on submitting rating in store details, skeletonize store details screen
+[33m5d9f816[m Add store ratings feature
+[33ma763c87[m show selected location in category screen appbar
+[33m176f6df[m change splash image to the Caterfy initial
+[33m6731c5a[m show estimated wait time and delivery price dynamically for stores using latitude and longitude values
+[33m878bb41[m add new cart warning, better ui in vendor store, add splash screen, manage store status in customer
+[33m9d19cad[m Add store status and localized category names
+[33mf2e91c6[m merge latest vendor and customer changes
+[33ma51e111[m Merge branch 'vendor'
+[33m7821d9b[m fetch orders for vendor, create order-card for vendor
+[33mb41c194[m add translations for customer screens
+[33m57eed70[m enhancements to vendor store and other related screens
+[33m1ac0ee0[m Add image cropping
+[33md1f5ddd[m Add error handling for vendor
+[33m35eea76[m complete store, category, and product management
+[33mf3661e3[m refactor and redesign vendor store widget
+[33m6c69442[m re-design spinner, adjust order-card widget
+[33mc83515f[m merge customer and vendor changes
+[33m880dded[m create order history for customer, create order model, create past order card (unfinished)
+[33m4550292[m Add Arabic translations for vendor
+[33mfcaf308[m Add vendor profile and settings screens
+[33m054a595[m adjustments to cart-button, fix not loading customer's own cart no log-in, add empty-cart message in customer-cart
+[33m9216bc4[m show an enter-cart button in home screen/category screen when there's a cart
+[33m5c0ba52[m wrap log-out button with safe area in vendor account
+[33me6fdf9a[m Merge branch 'vendor' into testing
+[33m37293f4[m keep cart up-to-date with database, add ability to provide a note in cart, various UI/UX modifications for cart/store_screen
+[33m71cab48[m  improve edit store, category and product screens
+[33mfd7c15c[m save cart in memory, simplify order_item model, use fresh store data in cart
+[33m7fc751d[m modify cart/store_screen layout
+[33m8c83942[m finish cart layout
+[33m0d24038[m create order_item model, create cart model, create cart system, add ability to add items and edit them in cart (unfinished)
+[33m3c6ac2a[m fiii
+[33m5061577[m ....
+[33mc1ac146[m merge vendor into testing
+[33mcdc822e[m fetch products dynamically from db, create store details screen, update outdated models
+[33mf0486b6[m enable vendors to add products
+[33m4144ee8[m enable vendors to add products
+[33m0f5fa62[m enable adding store categories
+[33md3bfb7d[m Add vendor store creation feature
+[33mae6ac16[m[33m ([m[1;31morigin/location-feature[m[33m)[m merge latest changes in other branches
+[33me79c44c[m testing
+[33m4394d68[m Merge branch 'testing'
+[33m1b25018[m create product item menu, implement add to cart functionality (testing)
+[33m591422a[m Add edit account and change password features
+[33m9e7912b[m create store products menu, manage handle scroll scenarios inside store screen
+[33m79dee81[m[33m ([m[1;31morigin/food-category[m[33m)[m ui/ux enhancements to fav button
+[33m8ff6bff[m replce store fav button, add animation on interactions with fav button, show a toast on fav button interaction
+[33m1387609[m Add more stores
+[33m197aae5[m make category screen dynamic, general changes
+[33m7b7b36a[m refactor favorites logic across stores, fetch favorites on authenticatedCustomer mount
+[33me6bbd7b[m merge location-feature into main (favorites)
+[33m1ab4ebf[m Add favorite stores feature
+[33md8da6a3[m handle fall background if store logo doesn't have one
+[33mb1c1a61[m adjustments to info box in store screen, add logo image to store list item, handle missing logo/banner in store list item
+[33mba0353c[m finish info box in store page, create 'delivered by info' widget
+[33m1c2663a[m create store screen and ui (unfinished)
+[33mce0bd68[m Merge pull request #9 from ZeenaQa/testing
+[33me874d47[m Merge branch 'location-feature' into testing
+[33m6a17db0[m fetch restaurants from db, create customer provider, add loading skeleton for food category
+[33mae8af09[m Update notifications feature
+[33mc316861[m Merge pull request #8 from ZeenaQa/testing
+[33m8f0d83f[m change location picker styling
+[33mf232a78[m Enhance Google Map & add notification toggle
+[33m38e043e[m Merge pull request #7 from ZeenaQa/food-category
+[33mf4f45a1[m adjust overflow in store list itemm
+[33m4dc6a84[m Merge pull request #6 from ZeenaQa/food-category
+[33m1f856e6[m create store list items, optimize scrolling when it's needed
+[33m8129c09[m Merge branch 'testing'
+[33mc621270[m merge location-feature into testing
+[33m3135f16[m changes to pubspec.lock
+[33m7031e57[m Stop tracking generated plugin registration files
+[33m506755f[m location-feature gitignore update
+[33m97e8c60[m Merge pull request #5 from ZeenaQa/testing
+[33md38aba5[m update testing branch gitignore
+[33mb04aefb[m fix navigator key null on startup problem
+[33m6a1041b[m finish get location feature
+[33m8ab7750[m refactor custom_appBar, create food category widget, handle scrolling in customer home and food category
+[33m9b27a3d[m create models for product and store, change layout in customer home, add categories in customer home
+[33m98bbd26[m use L10n class from the l10n helper file across all files
+[33m4073070[m theme enhancements, create a global provider to include current user, fetch correct user based on role on sign in and on start up
+[33m527b6e2[m more arabic translation, ui changes in vendor
+[33m3f1f287[m remove auth screen mount animation
+[33m1e89f3c[m add arabic more arabic translations, create a smooth animation on auth screen mount
+[33m31368b5[m Add new translations
+[33m11f4cd5[m add translations
+[33mc132f6b[m[33m ([m[1;31morigin/waseem-branch[m[33m)[m fix issues alignment issues in arabic
+[33m7ed7e5c[m merge latest main changes
+[33mcfa7ada[m changes to latest commit
+[33mf9a7339[m create a reusable modern drawer, implement a language system, implement a theme system (both can be switched in auth settings)
+[33m2c4ce26[m set the correct  dark theme colors, replace 'welcome to caterfy' with background art in auth selection screen
+[33m56e4bc2[m fix sign up with vendor, fix sign up/login with phone number for customer
+[33m575f726[m add light theme & customer login with phone number
+[33mce2399f[m add custom light theme
+[33m58457dd[m edit the vendor login screen
+[33m13527a3[m add loading spinners when needed in customer auth, redesign ui for customer auth
+[33m0f683e6[m create reset password system (untested)
+[33medf1d2c[m create custom toast, create custom spinner, handle customer token verification scenarios
+[33me3be8a4[m idk what im doing
+[33m6738cb0[m resolve merge
+[33m3111109[m general ui changes, fix google augh SHA problem
+[33mfa74da3[m add dialog box file (unfinished), refactor customer sign up method, create verify email token screen for customer
+[33mf7d167e[m implement forgot password feature
+[33mafc753c[m small fixes
+[33m6f64be3[m modify auth button (renamed FilledBtn) it now takes has built in loading and has a few more props passed, remove setState where they aren't needed
+[33ma76b53c[m Fix merge conflicts
+[33m813b925[m Resolve merge conflicts
+[33ma854a05[m Implement Google Sign-In feature
+[33mab6d47e[m Implement Google Sign-In login feature
+[33mec02d8c[m Update buisness_info.dart
+[33m8a747a3[m refactor vendor pages and vendor provider
+[33mbe67288[m Merge branch 'main' of https://github.com/ZeenaQa/Caterfy
+[33m95a7245[m localize variables for customer auth (remove from provider)
+[33m16b41be[m create bottom navbar for customer (hard-coded), createpost-login screens for customers, setup the settings page for customer (hard-coded), create session file
+[33mc8417c5[m fix imports
+[33m9500a44[m Merge branch 'zeena-branch'
+[33mdd19c79[m Merge branch 'main' of https://github.com/ZeenaQa/Caterfy
+[33mbb8ef21[m[33m ([m[1;31morigin/zeena-branch[m[33m)[m vendors signup is finished ig
+[33mb0326a7[m general ui refinements
+[33m8eb1598[m create bottom navbar for customer (hard-coded), createpost-login screens for customers, setup the settings page for customer (hard-coded)
+[33m7b163b3[m vendor signup
+[33m9e68f97[m Merge remote-tracking branch 'origin/waseem-branch' into zeena-branch
+[33m076a6be[m customer signup functional, general enhancements to ui and theme
+[33m03ce08a[m additional renaming and refactoring
+[33m48239ab[m rename some folders/files, get rid of unnecessary folders/files
+[33mfc294fc[m Merge pull request #3 from ZeenaQa/waseem-branch
+[33m664f002[m small general changes
+[33m042bc97[m signup screens
+[33m8094d59[m redesign auth selection screen, create outlined_btn widget
+[33med2d52d[m customer sign up
+[33mcce2b22[m auth screens
+[33m443b033[m auth screens
+[33maae6839[m signup and login
+[33m1da3d51[m Merge pull request #2 from ZeenaQa/zeena-branch
+[33m7b3048d[m ss
+[33m6a70cc0[m me
+[33m5440ccd[m Merge pull request #1 from ZeenaQa/zeena-branch
+[33m3be6a0e[m ss
+[33m1e351b9[m شغلي الجديد
+[33me2984b3[m first commit

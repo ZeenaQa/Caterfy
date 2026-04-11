@@ -1,16 +1,46 @@
 import 'package:caterfy/customers/screens/customer_order_details_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/vendor_order.dart';
+import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 const url =
     'https://marketplace.canva.com/EAGMppVJ_aY/1/0/1600w/canva-dark-green-cute-and-playful-kitchen-restaurant-logo-S2LGeYCK5eM.jpg';
 
-class VendorOrderCard extends StatelessWidget {
+class VendorOrderCard extends StatefulWidget {
   const VendorOrderCard({super.key, required this.order});
 
   final VendorOrder order;
+
+  @override
+  State<VendorOrderCard> createState() => _VendorOrderCardState();
+}
+
+class _VendorOrderCardState extends State<VendorOrderCard> {
+  late String _selectedStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedStatus = widget.order.status ?? 'pending';
+  }
+
+  String getStatusText(String status) {
+    switch (status) {
+      case 'pending':
+        return 'Pending';
+      case 'preparing':
+        return 'Preparing';
+      case 'out_for_delivery':
+        return 'Out for Delivery';
+      case 'delivered':
+        return 'Delivered';
+      default:
+        return 'Pending';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +51,18 @@ class VendorOrderCard extends StatelessWidget {
 
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
-    final orderDate = order.createdAt != null
+    final vendorProvider = Provider.of<LoggedVendorProvider>(context, listen: false);
+    final orderDate = widget.order.createdAt != null
         ? DateFormat(
             "MMM d - h:mm a",
-          ).format(DateTime.parse(order.createdAt!).toLocal())
+          ).format(DateTime.parse(widget.order.createdAt!).toLocal())
         : '';
 
     double getTotalPrice() {
       double totalPrice = 0;
-      for (int i = 0; i < order.items.length; i++) {
-        final price = order.items[i].price;
-        final quantity = order.items[i].quantity;
+      for (int i = 0; i < widget.order.items.length; i++) {
+        final price = widget.order.items[i].price;
+        final quantity = widget.order.items[i].quantity;
         totalPrice += price * quantity;
       }
       return totalPrice;
@@ -39,7 +70,6 @@ class VendorOrderCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      // height: 100,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -57,7 +87,7 @@ class VendorOrderCard extends StatelessWidget {
               spacing: 13,
               children: [
                 Text(
-                  "Delivered",
+                  getStatusText(_selectedStatus),
                   style: TextStyle(
                     color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -92,7 +122,7 @@ class VendorOrderCard extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          getInitial(order.customerName ?? ''),
+                          getInitial(widget.order.customerName ?? ''),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -103,7 +133,7 @@ class VendorOrderCard extends StatelessWidget {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        order.customerName ?? "",
+                        widget.order.customerName ?? "",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -168,6 +198,46 @@ class VendorOrderCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
+                Flexible(
+                  child: DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    initialValue: _selectedStatus,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                    items: [
+                      DropdownMenuItem(value: 'pending', child: Text('Pending')),
+                      DropdownMenuItem(value: 'preparing', child: Text('Preparing')),
+                      DropdownMenuItem(value: 'out_for_delivery', child: Text('Out for Delivery')),
+                      DropdownMenuItem(value: 'delivered', child: Text('Delivered')),
+                    ],
+                    onChanged: (value) async {
+                      if (value != null) {
+                        final previousStatus = _selectedStatus;
+                        final messenger = ScaffoldMessenger.of(context);
+
+                        setState(() {
+                          _selectedStatus = value;
+                        });
+
+                        final success = await vendorProvider.updateOrderStatus(
+                          orderId: widget.order.id,
+                          status: value,
+                        );
+
+                        if (!success) {
+                          setState(() {
+                            _selectedStatus = previousStatus;
+                          });
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10.somethingWentWrong)),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
               ],
             ),
           ),

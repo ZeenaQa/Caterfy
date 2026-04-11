@@ -11,6 +11,7 @@ class Order {
   final String? createdAt;
   final double deliveryPrice;
   final double walletTransaction;
+  final String? status;
 
   Order({
     required this.customerId,
@@ -20,10 +21,21 @@ class Order {
     required this.deliveryPrice,
     this.walletTransaction = 0.00,
     this.storeLogo = '',
+    this.status,
     List<OrderItem>? items,
     this.note = '',
     this.createdAt,
   }) : items = List.from(items ?? []);
+
+  bool get isDelivered => status?.toLowerCase() == 'delivered';
+
+  bool get isActiveOrder {
+    if (isDelivered) return false;
+    if (createdAt == null || createdAt!.isEmpty) return true;
+    final date = DateTime.tryParse(createdAt!);
+    if (date == null) return true;
+    return DateTime.now().difference(date.toLocal()).inHours < 12;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -36,6 +48,7 @@ class Order {
       "delivery_price": deliveryPrice,
       'wallet_transaction': walletTransaction,
       'items': items.map((e) => e.toMap()).toList(),
+      'status': status ?? 'pending',
       'created_at': createdAt,
     };
   }
@@ -51,6 +64,7 @@ class Order {
       note: map['note'] ?? '',
       deliveryPrice: map['delivery_price'],
       walletTransaction: map['wallet_transaction'],
+      status: map['status'] as String?,
     );
 
     order.items.addAll(

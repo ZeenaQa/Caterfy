@@ -1,7 +1,11 @@
 import 'package:caterfy/customers/customer_widgets/customer_global_top_bar.dart';
 import 'package:caterfy/customers/customer_widgets/customer_home_categories.dart';
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/customer_order_tracking.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/util/wavy_clipper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomerHomeSection extends StatefulWidget {
   const CustomerHomeSection({super.key});
@@ -54,12 +58,91 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
 
   @override
   Widget build(BuildContext context) {
+    final l10 = AppLocalizations.of(context);
+    final customerProvider = Provider.of<LoggedCustomerProvider>(context);
+    final activeOrder = customerProvider.orderHistory.isNotEmpty
+        ? customerProvider.orderHistory.first
+        : null;
+    final hasActiveOrder = activeOrder?.isActiveOrder ?? false;
+
     return Scaffold(
       body: Stack(
         children: [
           ListView(
             padding: EdgeInsets.only(top: headerHeight),
-            children: [CustomerHomeCategories(topMargin: 0)],
+            children: [
+              if (hasActiveOrder)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CustomerOrderTracking(order: activeOrder),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withOpacity(0.12),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 18,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l10.trackYourOrder,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  activeOrder?.storeName ?? '',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.95),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              CustomerHomeCategories(topMargin: hasActiveOrder ? 0 : 0),
+            ],
           ),
           Transform.translate(
             offset: Offset(0, currentHeaderOffset),

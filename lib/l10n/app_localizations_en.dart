@@ -390,6 +390,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'When you place your order, we can show you where it is in real-time';
 
   @override
+  String get orderTracking => 'Order tracking';
+
+  @override
+  String get orderReceived => 'Order received';
+
+  @override
+  String get preparingOrder => 'Preparing';
+
+  @override
+  String get outForDelivery => 'Out for delivery';
+
+  @override
+  String get deliveredDesc => 'Your order has been delivered.';
+
+  @override
+  String get orderReceivedDesc => 'Your order is received by the store.';
+
+  @override
+  String get preparingOrderDesc => 'The kitchen is preparing your order.';
+
+  @override
+  String get outForDeliveryDesc => 'Your order is on the way.';
+
+  @override
+  String get refreshStatus => 'Refresh status';
+
+  @override
+  String get back => 'Back';
+
+  @override
   String get onTimeDelivery => 'On time delivery';
 
   @override
@@ -465,9 +495,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get change => 'Change';
-
-  @override
-  String get back => 'Back';
 
   @override
   String get deleteProduct => 'Delete product';

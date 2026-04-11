@@ -387,6 +387,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trackOrderDesc => 'يمكنك تتبّع موقع طلبك لحظة بلحظة عبر التطبيق';
 
   @override
+  String get orderTracking => 'تتبع الطلب';
+
+  @override
+  String get orderReceived => 'تم استلام الطلب';
+
+  @override
+  String get preparingOrder => 'قيد التجهيز';
+
+  @override
+  String get outForDelivery => 'خرج للاستلام';
+
+  @override
+  String get deliveredDesc => 'تم تسليم الطلب.';
+
+  @override
+  String get orderReceivedDesc => 'تم استلام طلبك من المتجر.';
+
+  @override
+  String get preparingOrderDesc => 'المطعم يحضر طلبك الآن.';
+
+  @override
+  String get outForDeliveryDesc => 'الطلب في الطريق إليك.';
+
+  @override
+  String get refreshStatus => 'تحديث الحالة';
+
+  @override
+  String get back => 'الرجوع';
+
+  @override
   String get onTimeDelivery => 'استلام طلبك في موعده';
 
   @override
@@ -462,9 +492,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get change => 'تغيير';
-
-  @override
-  String get back => 'الرجوع';
 
   @override
   String get deleteProduct => 'حذف المنتج';

@@ -4,6 +4,7 @@ import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
 import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_add_card.dart';
+import 'package:caterfy/customers/screens/customer_order_tracking.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/credit_card.dart';
 import 'package:caterfy/models/store.dart';
@@ -169,9 +170,13 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                           ),
                         );
                         if (context.mounted) {
-                          Navigator.of(
-                            context,
-                          ).popUntil((route) => route.isFirst);
+                          await customerProvider.fetchOrderHistory(context: context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => const CustomerOrderTracking(),
+                            ),
+                            (route) => route.isFirst,
+                          );
                         }
                       },
                 title: l10.placeOrder,

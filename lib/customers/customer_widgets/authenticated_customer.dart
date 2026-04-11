@@ -38,6 +38,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
       );
       final customerId = Supabase.instance.client.auth.currentUser?.id;
       await provider.fetchFavorites(customerId!, context);
+      await provider.fetchOrderHistory(context: context);
     });
   }
 
@@ -80,7 +81,13 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
               onTap: (index) => setState(() {
                 if (index == _currentIndex) return;
                 _currentIndex = index;
-                if (index == 1) {
+                if (index == 0) {
+                  if (!context.read<LoggedCustomerProvider>().isOrderHistoryLoading) {
+                    context.read<LoggedCustomerProvider>().fetchOrderHistory(
+                          context: context,
+                        );
+                  }
+                } else if (index == 1) {
                   if (context
                       .read<LoggedCustomerProvider>()
                       .isOrderHistoryLoading) {

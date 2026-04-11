@@ -420,7 +420,7 @@ class _ExpiryTextFieldState extends State<ExpiryTextField> {
     String digits = input.replaceAll('/', '');
     if (digits.length > 4) digits = digits.substring(0, 4);
     if (digits.length > 2) {
-      return digits.substring(0, 2) + '/' + digits.substring(2);
+      return '${digits.substring(0, 2)}/${digits.substring(2)}';
     }
     return digits;
   }
