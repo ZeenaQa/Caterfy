@@ -265,7 +265,7 @@
   "myCar": "سيارتي",
   "charity": "التبرع",
   "eVouchers": "القسائم الإلكترونية",
-  "categoryEmpty": "لا توجد متاجر متاحة في هذه الفئة",
+  "categoryEmpty": "لا توجد متاجر متاحة في ",
   "arrivingIn": "سيصل خلال حوالي",
   "delivery": "التوصيل",
   "useCaterfyPay": "استخدم رصيد محفظة Caterfy",
@@ -292,5 +292,17 @@
   "enterCreditAmount": "أدخل قيمة الرصيد من",
   "quicklyAmount": "أو اختر مبلغ بسرعة",
   "paymentMethod": "طريقة الدفع",
-  "selectPaymentMethod": "اختر طريقة الدفع"
+  "selectPaymentMethod": "اختر طريقة الدفع",
+  "fastAndEasyLaundry": "غسيل سهل وسريع",
+  "selectLaundry": "اختر خدمة واطلب خلال ثوانٍ",
+  "selectService": "اختار خدمة",
+  "address": "العنوان",
+  "phone": "رقم الهاتف",
+  "pickUp": "وقت الاستلام",
+  "washAndPress": "غسيل وكوي",
+  "washPressDetails": "غسيل آلي لطيف - مع كوي احترافي",
+  "dryClean": "دراي كلين (تنظيف جاف)",
+  "dryCleanDetails": "تنظيف بمذيب (بدون ماء) مع كوي - مثالي للحرير، الصوف، والملابس الرسمية",
+  "pressOnly": "كوي فقط",
+  "pressOnlyDetails": "كوي بالبخار لإزالة التجاعيد - للملابس النظيفة فقط"
 }    

@@ -1685,7 +1685,7 @@ abstract class AppLocalizations {
   /// No description provided for @categoryEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No stores available in this category'**
+  /// **'No stores available in '**
   String get categoryEmpty;
 
   /// No description provided for @arrivingIn.
@@ -1849,6 +1849,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select your preferred payment method'**
   String get selectPaymentMethod;
+
+  /// No description provided for @fastAndEasyLaundry.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast & Easy Laundry'**
+  String get fastAndEasyLaundry;
+
+  /// No description provided for @selectLaundry.
+  ///
+  /// In en, this message translates to:
+  /// **'Select one service and place your order in seconds'**
+  String get selectLaundry;
+
+  /// No description provided for @selectService.
+  ///
+  /// In en, this message translates to:
+  /// **'Select service'**
+  String get selectService;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @pickUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick-up'**
+  String get pickUp;
+
+  /// No description provided for @washAndPress.
+  ///
+  /// In en, this message translates to:
+  /// **'Wash & Press'**
+  String get washAndPress;
+
+  /// No description provided for @washPressDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle machine wash - Professional pressed'**
+  String get washPressDetails;
+
+  /// No description provided for @dryClean.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry Clean'**
+  String get dryClean;
+
+  /// No description provided for @dryCleanDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Solvent cleaning (no water) with pressing - Ideal for silk, wool, and formal wear'**
+  String get dryCleanDetails;
+
+  /// No description provided for @pressOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Press Only'**
+  String get pressOnly;
+
+  /// No description provided for @pressOnlyDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes wrinkles with steam pressing - For clean garments only'**
+  String get pressOnlyDetails;
 }
 
 class _AppLocalizationsDelegate

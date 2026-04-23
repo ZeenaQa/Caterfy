@@ -818,7 +818,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get eVouchers => 'القسائم الإلكترونية';
 
   @override
-  String get categoryEmpty => 'لا توجد متاجر متاحة في هذه الفئة';
+  String get categoryEmpty => 'لا توجد متاجر متاحة في ';
 
   @override
   String get arrivingIn => 'سيصل خلال حوالي';
@@ -901,4 +901,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectPaymentMethod => 'اختر طريقة الدفع';
+
+  @override
+  String get fastAndEasyLaundry => 'غسيل سهل وسريع';
+
+  @override
+  String get selectLaundry => 'اختر خدمة واطلب خلال ثوانٍ';
+
+  @override
+  String get selectService => 'اختار خدمة';
+
+  @override
+  String get address => 'العنوان';
+
+  @override
+  String get phone => 'رقم الهاتف';
+
+  @override
+  String get pickUp => 'وقت الاستلام';
+
+  @override
+  String get washAndPress => 'غسيل وكوي';
+
+  @override
+  String get washPressDetails => 'غسيل آلي لطيف - مع كوي احترافي';
+
+  @override
+  String get dryClean => 'دراي كلين (تنظيف جاف)';
+
+  @override
+  String get dryCleanDetails =>
+      'تنظيف بمذيب (بدون ماء) مع كوي - مثالي للحرير، الصوف، والملابس الرسمية';
+
+  @override
+  String get pressOnly => 'كوي فقط';
+
+  @override
+  String get pressOnlyDetails =>
+      'كوي بالبخار لإزالة التجاعيد - للملابس النظيفة فقط';
 }

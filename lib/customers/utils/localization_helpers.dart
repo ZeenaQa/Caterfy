@@ -17,6 +17,14 @@ String getLocalizedCategory(BuildContext context, String category) {
       return l10.pharmacy;
     case 'pets':
       return l10.pets;
+    case 'myHouse':
+      return l10.myHouse;
+    case 'laundry':
+      return l10.laundry;
+    case 'myCar':
+      return l10.myCar;
+    case 'charity':
+      return l10.charity;
     default:
       return category;
   }

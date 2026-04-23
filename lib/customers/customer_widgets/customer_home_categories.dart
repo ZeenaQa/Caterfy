@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/customer_widgets/customer_home_ads_carousel.dart';
 import 'package:caterfy/customers/screens/customer_category_screen.dart';
+import 'package:caterfy/customers/screens/laundry_screen.dart';
 import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -66,7 +67,6 @@ class CustomerHomeCategories extends StatelessWidget {
     ];
 
     void navigateToCategory({required String category}) {
-      print(category);
       if (location == null) {
         showCustomDialog(
           context,
@@ -80,6 +80,14 @@ class CustomerHomeCategories extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const LocationPickerScreen()),
             );
           },
+        );
+        return;
+      }
+
+      if (category == "laundry") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LaundryScreen()),
         );
         return;
       }

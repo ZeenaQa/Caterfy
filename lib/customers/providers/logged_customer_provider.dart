@@ -533,7 +533,6 @@ class LoggedCustomerProvider with ChangeNotifier {
           .map((order) => Order.fromMap(checkStoreLogo(order)))
           .toList();
 
-      print(data);
     } catch (e) {
       if (context.mounted) {
         showCustomToast(

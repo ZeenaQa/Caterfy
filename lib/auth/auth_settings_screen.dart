@@ -31,7 +31,6 @@ class AuthSettingsScreen extends StatelessWidget {
               children: [
                 DrawerBtn(
                   isSelected: locale.languageCode == "ar",
-                  colors: colors,
                   title: "العربية",
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('en'));
@@ -40,7 +39,6 @@ class AuthSettingsScreen extends StatelessWidget {
                 ),
                 DrawerBtn(
                   isSelected: locale.languageCode == "en",
-                  colors: colors,
                   title: "English",
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('ar'));
@@ -64,7 +62,6 @@ class AuthSettingsScreen extends StatelessWidget {
               children: [
                 DrawerBtn(
                   isSelected: !isDark,
-                  colors: colors,
                   title: l10.lightTheme,
                   icon: Icons.wb_sunny_outlined,
                   onPressed: () => Provider.of<ThemeController>(
@@ -74,7 +71,6 @@ class AuthSettingsScreen extends StatelessWidget {
                 ),
                 DrawerBtn(
                   isSelected: isDark,
-                  colors: colors,
                   title: l10.darkTheme,
                   icon: Icons.dark_mode_outlined,
                   onPressed: () => Provider.of<ThemeController>(

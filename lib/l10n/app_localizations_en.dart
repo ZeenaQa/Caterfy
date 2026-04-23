@@ -823,7 +823,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eVouchers => 'e-Vouchers';
 
   @override
-  String get categoryEmpty => 'No stores available in this category';
+  String get categoryEmpty => 'No stores available in ';
 
   @override
   String get arrivingIn => 'Arriving in approx.';
@@ -906,4 +906,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectPaymentMethod => 'Select your preferred payment method';
+
+  @override
+  String get fastAndEasyLaundry => 'Fast & Easy Laundry';
+
+  @override
+  String get selectLaundry =>
+      'Select one service and place your order in seconds';
+
+  @override
+  String get selectService => 'Select service';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get pickUp => 'Pick-up';
+
+  @override
+  String get washAndPress => 'Wash & Press';
+
+  @override
+  String get washPressDetails => 'Gentle machine wash - Professional pressed';
+
+  @override
+  String get dryClean => 'Dry Clean';
+
+  @override
+  String get dryCleanDetails =>
+      'Solvent cleaning (no water) with pressing - Ideal for silk, wool, and formal wear';
+
+  @override
+  String get pressOnly => 'Press Only';
+
+  @override
+  String get pressOnlyDetails =>
+      'Removes wrinkles with steam pressing - For clean garments only';
 }

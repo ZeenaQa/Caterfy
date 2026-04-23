@@ -89,7 +89,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                   isSelected: context
                       .read<GlobalProvider>()
                       .notificationsEnabled,
-                  colors: colors,
+                  
                   title: l10.enableNotifications,
                   onPressed: () {
                     context.read<GlobalProvider>().setNotificationsEnabled(
@@ -101,7 +101,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                   isSelected: !context
                       .read<GlobalProvider>()
                       .notificationsEnabled,
-                  colors: colors,
+                  
                   title: l10.disableNotifications,
                   onPressed: () {
                     context.read<GlobalProvider>().setNotificationsEnabled(
@@ -123,7 +123,7 @@ class CustomerSettingsScreen extends StatelessWidget {
               children: [
                 DrawerBtn(
                   isSelected: locale.languageCode == "ar",
-                  colors: colors,
+                  
                   title: "العربية",
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('en'));
@@ -132,7 +132,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 ),
                 DrawerBtn(
                   isSelected: locale.languageCode == "en",
-                  colors: colors,
+                  
                   title: "English",
                   onPressed: () {
                     context.read<LocaleProvider>().setLocale(Locale('ar'));
@@ -156,7 +156,7 @@ class CustomerSettingsScreen extends StatelessWidget {
               children: [
                 DrawerBtn(
                   isSelected: !isDark,
-                  colors: colors,
+                  
                   title: l10.lightTheme,
                   icon: Icons.wb_sunny_outlined,
                   onPressed: () => Provider.of<ThemeController>(
@@ -166,7 +166,7 @@ class CustomerSettingsScreen extends StatelessWidget {
                 ),
                 DrawerBtn(
                   isSelected: isDark,
-                  colors: colors,
+                  
                   title: l10.darkTheme,
                   icon: Icons.dark_mode_outlined,
                   onPressed: () => Provider.of<ThemeController>(

@@ -68,7 +68,7 @@ class CustomerOrderCard extends StatelessWidget {
               spacing: 13,
               children: [
                 Text(
-                  l10.delivered,
+                  order.status!,
                   style: TextStyle(
                     color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,

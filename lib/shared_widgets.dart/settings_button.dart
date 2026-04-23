@@ -8,6 +8,7 @@ class SettingsButton extends StatelessWidget {
     this.rightText,
     this.icon,
     this.isLastItem = false,
+    this.iconSize = 21,
   });
 
   final String title;
@@ -15,6 +16,7 @@ class SettingsButton extends StatelessWidget {
   final String? rightText;
   final IconData? icon;
   final bool isLastItem;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +33,20 @@ class SettingsButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: colors.onSurfaceVariant, size: 21),
+            Icon(icon, color: colors.onSurfaceVariant, size: iconSize),
             SizedBox(width: 20),
-            Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                color: colors.onSurface,
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: colors.onSurface,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-            Spacer(),
+            SizedBox(width: 20),
             if (rightText != null)
               Text(
                 rightText!,
@@ -50,6 +55,7 @@ class SettingsButton extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                   color: colors.onSurfaceVariant,
+                  // overflow: TextOverflow.ellipsis
                 ),
               ),
             if (rightText != null) SizedBox(width: 10),

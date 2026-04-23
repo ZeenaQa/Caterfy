@@ -267,7 +267,7 @@
   "myCar": "My Car",
   "charity": "Charity",
   "eVouchers": "e-Vouchers",
-  "categoryEmpty": "No stores available in this category",
+  "categoryEmpty": "No stores available in ",
   "arrivingIn": "Arriving in approx.",
   "delivery": "Delivery",
   "useCaterfyPay": "Use Caterfy Pay credit",
@@ -294,5 +294,17 @@
   "enterCreditAmount": "Enter an amount from",
   "quicklyAmount": "Or quickly select amount",
   "paymentMethod": "Payment method",
-  "selectPaymentMethod": "Select your preferred payment method"
+  "selectPaymentMethod": "Select your preferred payment method",
+  "fastAndEasyLaundry": "Fast & Easy Laundry",
+  "selectLaundry": "Select one service and place your order in seconds",
+  "selectService": "Select service",
+  "address": "Address",
+  "phone": "Phone",
+  "pickUp": "Pick-up",
+  "washAndPress": "Wash & Press",
+  "washPressDetails": "Gentle machine wash - Professional pressed",
+  "dryClean": "Dry Clean",
+  "dryCleanDetails": "Solvent cleaning (no water) with pressing - Ideal for silk, wool, and formal wear",
+  "pressOnly": "Press Only",
+  "pressOnlyDetails": "Removes wrinkles with steam pressing - For clean garments only"
 }

@@ -211,9 +211,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 spacing: 20,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(FontAwesomeIcons.store, size: 100, color: colors.outline),
+                  Icon(
+                    FontAwesomeIcons.store,
+                    size: 100,
+                    color: colors.outline,
+                  ),
                   Text(
-                    l10.categoryEmpty,
+                    l10.categoryEmpty +
+                        getLocalizedCategory(context, widget.category),
                     style: TextStyle(
                       color: colors.onSurfaceVariant,
                       fontSize: 18,
