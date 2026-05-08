@@ -31,10 +31,7 @@ class Order {
 
   bool get isActiveOrder {
     if (isDelivered) return false;
-    if (createdAt == null || createdAt!.isEmpty) return true;
-    final date = DateTime.tryParse(createdAt!);
-    if (date == null) return true;
-    return DateTime.now().difference(date.toLocal()).inHours < 12;
+    return true;
   }
 
   Map<String, dynamic> toMap() {

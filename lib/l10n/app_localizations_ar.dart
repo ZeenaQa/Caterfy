@@ -939,4 +939,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get pressOnlyDetails =>
       'كوي بالبخار لإزالة التجاعيد - للملابس النظيفة فقط';
+
+  @override
+  String get selectDeliveryTime => 'اختر وقت التوصيل';
 }

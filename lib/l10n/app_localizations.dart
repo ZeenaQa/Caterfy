@@ -1921,6 +1921,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Removes wrinkles with steam pressing - For clean garments only'**
   String get pressOnlyDetails;
+
+  /// No description provided for @selectDeliveryTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Select delivery time'**
+  String get selectDeliveryTime;
 }
 
 class _AppLocalizationsDelegate

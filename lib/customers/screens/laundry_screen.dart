@@ -6,10 +6,21 @@ import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/drawer_button.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
+import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:caterfy/util/WheelSelector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+final today = DateTime.now();
+
+final next7Days = List.generate(
+  7,
+  (i) => DateFormat(
+    "dd MMM, EEE",
+  ).format(DateTime(today.year, today.month, today.day + i + 1)),
+);
 
 class LaundryScreen extends StatefulWidget {
   const LaundryScreen({super.key});
@@ -23,6 +34,8 @@ class _LaundryScreenState extends State<LaundryScreen> {
   final phoneNum = navigatorKey.currentContext!
       .read<GlobalProvider>()
       .user['phone'];
+
+  String? selectedDelivery;
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +155,21 @@ class _LaundryScreenState extends State<LaundryScreen> {
                 // iconSize: 20,
               ),
               SettingsButton(
+                onTap: () => openDrawer(
+                  context,
+                  padding: EdgeInsets.only(top: 20),
+                  title: l10.phoneNumber,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Column(
+                      spacing: 20,
+                      children: [
+                        CustomPhoneField(onChanged: (s) {}),
+                        FilledBtn(onPressed: () {}, title: l10.confirm),
+                      ],
+                    ),
+                  ),
+                ),
                 title: phoneNum ?? l10.enterPhoneNumber,
                 rightText: l10.phone,
                 icon: Icons.phone,
@@ -155,7 +183,37 @@ class _LaundryScreenState extends State<LaundryScreen> {
                 iconSize: 25,
               ),
               SettingsButton(
-                title: "Wed, 23 Apr ~ 20 minutes",
+                onTap: () => openDrawer(
+                  context,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  title: l10.selectDeliveryTime,
+                  child: Column(
+                    spacing: 20,
+                    children: [
+                      WheelSelector<String>(
+                        items: next7Days,
+                        initialItem: selectedDelivery ?? next7Days[0],
+                        onChanged: (val) => setState(() {
+                          selectedDelivery = val;
+                        }),
+                        itemLabel: (item) => item,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: FilledBtn(
+                          onPressed: () {
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                          title: l10.confirm,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                title: selectedDelivery != null
+                    ? '$selectedDelivery, 1 PM - 10 PM'
+                    : l10.selectDeliveryTime,
                 rightText: l10.delivery,
                 icon: Icons.date_range,
                 iconSize: 25,

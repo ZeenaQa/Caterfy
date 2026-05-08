@@ -306,5 +306,6 @@
   "dryClean": "Dry Clean",
   "dryCleanDetails": "Solvent cleaning (no water) with pressing - Ideal for silk, wool, and formal wear",
   "pressOnly": "Press Only",
-  "pressOnlyDetails": "Removes wrinkles with steam pressing - For clean garments only"
+  "pressOnlyDetails": "Removes wrinkles with steam pressing - For clean garments only",
+  "selectDeliveryTime": "Select delivery time"
 }

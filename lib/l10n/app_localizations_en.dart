@@ -945,4 +945,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pressOnlyDetails =>
       'Removes wrinkles with steam pressing - For clean garments only';
+
+  @override
+  String get selectDeliveryTime => 'Select delivery time';
 }
