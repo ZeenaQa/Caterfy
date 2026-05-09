@@ -41,6 +41,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
       final customerId = Supabase.instance.client.auth.currentUser?.id;
       await provider.fetchFavorites(customerId!, context);
       await provider.fetchOrderHistory(context: context);
+      await provider.fetchLaundryOrders(context: context);
       provider.subscribeToOrderUpdates(customerId);
     });
   }

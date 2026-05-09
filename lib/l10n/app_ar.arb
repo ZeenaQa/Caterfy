@@ -305,5 +305,15 @@
   "dryCleanDetails": "تنظيف بمذيب (بدون ماء) مع كوي - مثالي للحرير، الصوف، والملابس الرسمية",
   "pressOnly": "كوي فقط",
   "pressOnlyDetails": "كوي بالبخار لإزالة التجاعيد - للملابس النظيفة فقط",
-  "selectDeliveryTime": "اختر وقت التوصيل"
-}    
+  "selectDeliveryTime": "اختر وقت التوصيل",
+  "laundryOrderPlaced": "مجدول",
+  "laundryOrderPlacedDesc": "سنأتي لاستلام ملابسك قريبًا.",
+  "laundryInCleaning": "في التنظيف",
+  "laundryInCleaningDesc": "جاري تنظيف وكوي ملابسك.",
+  "laundryOnTheWay": "في الطريق إليك",
+  "laundryOnTheWayDesc": "ملابسك النظيفة في طريقها إليك.",
+  "laundryDeliveredDesc": "تم إعادة ملابسك. استمتع!",
+  "deliveryDate": "تاريخ التوصيل",
+  "orderSummary": "ملخص الطلب",
+  "laundryPricingNote": "سيتم تأكيد السعر بعد الاستلام."
+}

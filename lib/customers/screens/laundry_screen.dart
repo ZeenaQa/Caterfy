@@ -1,12 +1,11 @@
+import 'package:caterfy/customers/screens/laundry_checkout_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/main.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
 import 'package:caterfy/shared_widgets.dart/drawer_button.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
-import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/util/WheelSelector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,11 +30,27 @@ class LaundryScreen extends StatefulWidget {
 
 class _LaundryScreenState extends State<LaundryScreen> {
   int selectedServiceIndex = 0;
-  final phoneNum = navigatorKey.currentContext!
-      .read<GlobalProvider>()
-      .user['phone'];
-
+  String? _phoneNum;
   String? selectedDelivery;
+  late final TextEditingController _phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneNum = context.read<GlobalProvider>().user?['phone'] as String?;
+    _phoneController = TextEditingController(text: _phoneNum ?? '');
+  }
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  bool _canCheckout(GlobalProvider globalProvider) =>
+      globalProvider.deliveryLocation != null &&
+      (_phoneNum != null && _phoneNum!.trim().isNotEmpty) &&
+      selectedDelivery != null;
 
   @override
   Widget build(BuildContext context) {
@@ -148,29 +163,49 @@ class _LaundryScreenState extends State<LaundryScreen> {
                 ),
               ),
               SettingsButton(
-                title: globalProvider.deliveryLocation!,
+                title: globalProvider.deliveryLocation ?? l10.pickLocation,
                 rightText: l10.address,
                 icon: Icons.location_on_sharp,
                 iconSize: 25,
-                // iconSize: 20,
               ),
               SettingsButton(
-                onTap: () => openDrawer(
-                  context,
-                  padding: EdgeInsets.only(top: 20),
-                  title: l10.phoneNumber,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Column(
-                      spacing: 20,
-                      children: [
-                        CustomPhoneField(onChanged: (s) {}),
-                        FilledBtn(onPressed: () {}, title: l10.confirm),
-                      ],
+                onTap: () {
+                  _phoneController.text = _phoneNum ?? '';
+                  openDrawer(
+                    context,
+                    padding: EdgeInsets.only(top: 20),
+                    title: l10.phoneNumber,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: Column(
+                        spacing: 20,
+                        children: [
+                          TextField(
+                            controller: _phoneController,
+                            keyboardType: TextInputType.phone,
+                            autofocus: true,
+                            style: const TextStyle(fontSize: 15),
+                            decoration: InputDecoration(
+                              hintText: l10.enterPhoneNumber,
+                              prefixIcon: const Icon(Icons.phone_outlined),
+                            ),
+                          ),
+                          FilledBtn(
+                            onPressed: () {
+                              final val = _phoneController.text.trim();
+                              setState(() {
+                                _phoneNum = val.isEmpty ? null : val;
+                              });
+                              Navigator.pop(context);
+                            },
+                            title: l10.confirm,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                title: phoneNum ?? l10.enterPhoneNumber,
+                  );
+                },
+                title: _phoneNum ?? l10.enterPhoneNumber,
                 rightText: l10.phone,
                 icon: Icons.phone,
                 iconSize: 25,
@@ -237,8 +272,24 @@ class _LaundryScreenState extends State<LaundryScreen> {
         ),
         width: double.infinity,
         child: FilledBtn(
-          // isLoading: isPlacingOrder,
-          onPressed: () {},
+          onPressed: _canCheckout(globalProvider)
+              ? () {
+                  final pickupTime =
+                      '${DateFormat("EEE, dd MMM").format(DateTime.now())} ~ 20 ${l10.min}';
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => LaundryCheckoutScreen(
+                        service: services[selectedServiceIndex]['type'],
+                        address: globalProvider.deliveryLocation!,
+                        phone: _phoneNum!,
+                        pickupTime: pickupTime,
+                        deliveryDate: '$selectedDelivery, 1 PM - 10 PM',
+                      ),
+                    ),
+                  );
+                }
+              : null,
           title: l10.checkout,
           titleSize: 15,
         ),

@@ -1927,6 +1927,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select delivery time'**
   String get selectDeliveryTime;
+
+  /// No description provided for @laundryOrderPlaced.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get laundryOrderPlaced;
+
+  /// No description provided for @laundryOrderPlacedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll pick up your clothes shortly.'**
+  String get laundryOrderPlacedDesc;
+
+  /// No description provided for @laundryInCleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'In Cleaning'**
+  String get laundryInCleaning;
+
+  /// No description provided for @laundryInCleaningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clothes are being cleaned and pressed.'**
+  String get laundryInCleaningDesc;
+
+  /// No description provided for @laundryOnTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'On the Way Back'**
+  String get laundryOnTheWay;
+
+  /// No description provided for @laundryOnTheWayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clean clothes are on their way.'**
+  String get laundryOnTheWayDesc;
+
+  /// No description provided for @laundryDeliveredDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clothes have been returned. Enjoy!'**
+  String get laundryDeliveredDesc;
+
+  /// No description provided for @deliveryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery date'**
+  String get deliveryDate;
+
+  /// No description provided for @orderSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Order summary'**
+  String get orderSummary;
+
+  /// No description provided for @laundryPricingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Price will be confirmed after pickup.'**
+  String get laundryPricingNote;
 }
 
 class _AppLocalizationsDelegate

@@ -2,21 +2,21 @@ import 'dart:async';
 
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/models/order.dart';
+import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomerOrderTracking extends StatefulWidget {
+class LaundryOrderTracking extends StatefulWidget {
   final String orderId;
 
-  const CustomerOrderTracking({super.key, required this.orderId});
+  const LaundryOrderTracking({super.key, required this.orderId});
 
   @override
-  State<CustomerOrderTracking> createState() => _CustomerOrderTrackingState();
+  State<LaundryOrderTracking> createState() => _LaundryOrderTrackingState();
 }
 
-class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
+class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
   Timer? _pollTimer;
 
   @override
@@ -30,7 +30,7 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
         _pollTimer?.cancel();
         return;
       }
-      provider.silentFetchOrderStatus(widget.orderId);
+      provider.silentFetchLaundryOrderStatus(widget.orderId);
     });
   }
 
@@ -40,33 +40,23 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     super.dispose();
   }
 
-  Order? _findOrder(LoggedCustomerProvider provider) {
+  LaundryOrder? _findOrder(LoggedCustomerProvider provider) {
     try {
-      return provider.orderHistory.firstWhere((o) => o.id == widget.orderId);
+      return provider.laundryOrders.firstWhere((o) => o.id == widget.orderId);
     } catch (_) {
-      return provider.orderHistory.isNotEmpty
-          ? provider.orderHistory.first
+      return provider.laundryOrders.isNotEmpty
+          ? provider.laundryOrders.first
           : null;
     }
   }
 
   int _stepFor(String? status) {
     switch (status?.toLowerCase()) {
-      case 'preparing':
       case 'processing':
-      case 'accepted':
-      case 'confirmed':
         return 1;
       case 'out_for_delivery':
-      case 'out for delivery':
-      case 'on_the_way':
-      case 'picked_up':
-      case 'shipped':
-      case 'enroute':
-      case 'delivering':
         return 2;
       case 'delivered':
-      case 'completed':
         return 3;
       default:
         return 0;
@@ -76,13 +66,13 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
   IconData _iconFor(int step) {
     switch (step) {
       case 1:
-        return Icons.restaurant_outlined;
+        return Icons.local_laundry_service_outlined;
       case 2:
-        return Icons.delivery_dining;
+        return Icons.delivery_dining_outlined;
       case 3:
         return Icons.check_circle_outline;
       default:
-        return Icons.receipt_long_outlined;
+        return Icons.schedule_outlined;
     }
   }
 
@@ -94,26 +84,38 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     final order = _findOrder(provider);
 
     final step = _stepFor(order?.status);
-    final isDelivered = step == 3;
-
-    final subtotal = order?.subtotal ?? 0.0;
-    final deliveryFee = order?.deliveryPrice ?? 0.0;
-    const serviceFee = 0.2;
-    final total = subtotal + deliveryFee + serviceFee;
 
     final stepLabels = [
-      l10.orderReceived,
-      l10.preparingOrder,
-      l10.outForDelivery,
+      l10.laundryOrderPlaced,
+      l10.laundryInCleaning,
+      l10.laundryOnTheWay,
       l10.delivered,
+    ];
+
+    final stepDescs = [
+      l10.laundryOrderPlacedDesc,
+      l10.laundryInCleaningDesc,
+      l10.laundryOnTheWayDesc,
+      l10.laundryDeliveredDesc,
     ];
 
     return Scaffold(
       backgroundColor: colors.surface,
 
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: FilledBtn(
+            onPressed: () => Navigator.of(context).popUntil((r) => r.isFirst),
+            title: l10.back,
+            innerVerticalPadding: 15,
+          ),
+        ),
+      ),
+
       body: Column(
         children: [
-          // ── Top tinted area ─────────────────────────────────────────────────
+          // ── Top tinted area ──────────────────────────────────────────────────
           Container(
             color: colors.onPrimaryFixedVariant,
             child: SafeArea(
@@ -121,12 +123,11 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back button
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 4, bottom: 4),
                     child: IconButton(
                       icon: Icon(
-                        Icons.close,
+                        Icons.arrow_back,
                         color: colors.onSurface,
                         size: 20,
                       ),
@@ -134,14 +135,12 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                       style: IconButton.styleFrom(
                         backgroundColor: colors.surface,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         fixedSize: const Size(38, 38),
                       ),
                     ),
                   ),
-
-                  // Animated status icon
                   SizedBox(
                     height: 150,
                     child: Center(
@@ -165,16 +164,15 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
             ),
           ),
 
-          // ── Scrollable white content ─────────────────────────────────────────
+          // ── Scrollable content ───────────────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Step circles — outside the colored area
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 18, 12, 4),
-                    child: _TrackingSteps(
+                    child: _LaundryTrackingSteps(
                       currentStep: step,
                       activeColor: colors.primary,
                       labels: stepLabels,
@@ -184,7 +182,7 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                   const SizedBox(height: 4),
                   _Divider(colors),
 
-                  // Status title + subtitle
+                  // Status title + description
                   _Section(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
@@ -204,12 +202,7 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              [
-                                l10.orderReceivedDesc,
-                                l10.preparingOrderDesc,
-                                l10.outForDeliveryDesc,
-                                l10.deliveredDesc,
-                              ][step],
+                              stepDescs[step],
                               style: TextStyle(
                                 fontSize: 13,
                                 color: colors.onSurfaceVariant,
@@ -224,141 +217,46 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
 
                   _Divider(colors),
 
-                  // Store + items
+                  // Order details
                   if (order != null)
                     _Section(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Your order from',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: colors.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  order.storeName,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                    color: colors.onSurface,
-                                  ),
-                                ),
-                              ),
-                              if (order.storeLogo.isNotEmpty)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    order.storeLogo,
-                                    width: 48,
-                                    height: 48,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) =>
-                                        _StoreFallback(colors),
-                                  ),
-                                )
-                              else
-                                _StoreFallback(colors),
-                            ],
-                          ),
-                          const SizedBox(height: 14),
-                          ...order.items.map(
-                            (item) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 26,
-                                    height: 26,
-                                    decoration: BoxDecoration(
-                                      color: colors.primary.withAlpha(26),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '${item.quantity}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                          color: colors.primary,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      item.name,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: colors.onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    '${l10.jod} ${(item.price * item.quantity).toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: colors.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  _Divider(colors),
-
-                  // Payment summary
-                  if (order != null)
-                    _Section(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10.paymentSummary,
+                            l10.orderSummary,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: colors.onSurface,
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          _PaymentRow(
-                            label: l10.subtotal,
-                            value: '${l10.jod} ${subtotal.toStringAsFixed(2)}',
+                          const SizedBox(height: 14),
+                          _OrderDetailRow(
+                            icon: Icons.local_laundry_service_outlined,
+                            label: l10.selectService,
+                            value: order.service,
                             colors: colors,
                           ),
-                          const SizedBox(height: 6),
-                          _PaymentRow(
-                            label: l10.deliveryFee,
-                            value:
-                                '${l10.jod} ${deliveryFee.toStringAsFixed(2)}',
+                          const SizedBox(height: 10),
+                          _OrderDetailRow(
+                            icon: Icons.location_on_outlined,
+                            label: l10.address,
+                            value: order.address,
                             colors: colors,
                           ),
-                          const SizedBox(height: 6),
-                          _PaymentRow(
-                            label: l10.serviceFee,
-                            value:
-                                '${l10.jod} ${serviceFee.toStringAsFixed(2)}',
+                          const SizedBox(height: 10),
+                          _OrderDetailRow(
+                            icon: Icons.schedule_outlined,
+                            label: l10.pickUp,
+                            value: order.pickupTime,
                             colors: colors,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Divider(height: 1, color: colors.outline),
-                          ),
-                          _PaymentRow(
-                            label: l10.totalAmount,
-                            value: '${l10.jod} ${total.toStringAsFixed(2)}',
-                            bold: true,
+                          const SizedBox(height: 10),
+                          _OrderDetailRow(
+                            icon: Icons.calendar_month_outlined,
+                            label: l10.deliveryDate,
+                            value: order.deliveryDate,
                             colors: colors,
                           ),
                         ],
@@ -376,24 +274,24 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
   }
 }
 
-// ── Step circles (below top area) ─────────────────────────────────────────────
+// ── Laundry-specific tracking steps ──────────────────────────────────────────
 
-class _TrackingSteps extends StatefulWidget {
+class _LaundryTrackingSteps extends StatefulWidget {
   final int currentStep;
   final Color activeColor;
   final List<String> labels;
 
-  const _TrackingSteps({
+  const _LaundryTrackingSteps({
     required this.currentStep,
     required this.activeColor,
     required this.labels,
   });
 
   @override
-  State<_TrackingSteps> createState() => _TrackingStepsState();
+  State<_LaundryTrackingSteps> createState() => _LaundryTrackingStepsState();
 }
 
-class _TrackingStepsState extends State<_TrackingSteps>
+class _LaundryTrackingStepsState extends State<_LaundryTrackingSteps>
     with SingleTickerProviderStateMixin {
   late final AnimationController _pulseCtrl;
   late final Animation<double> _glowAnim;
@@ -401,8 +299,8 @@ class _TrackingStepsState extends State<_TrackingSteps>
   static const _nodeSize = 44.0;
   static const _circleSize = 32.0;
   static const _icons = [
-    Icons.receipt_long_outlined,
-    Icons.restaurant_outlined,
+    Icons.schedule_outlined,
+    Icons.local_laundry_service_outlined,
     Icons.delivery_dining_outlined,
     Icons.home_outlined,
   ];
@@ -414,10 +312,8 @@ class _TrackingStepsState extends State<_TrackingSteps>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
-    _glowAnim = Tween<double>(
-      begin: 0.10,
-      end: 0.32,
-    ).animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
+    _glowAnim = Tween<double>(begin: 0.10, end: 0.32)
+        .animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -463,9 +359,7 @@ class _TrackingStepsState extends State<_TrackingSteps>
           height: _nodeSize,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.activeColor.withAlpha(
-              (_glowAnim.value * 255).round(),
-            ),
+            color: widget.activeColor.withAlpha((_glowAnim.value * 255).round()),
           ),
           child: Center(child: child),
         ),
@@ -531,32 +425,11 @@ class _TrackingStepsState extends State<_TrackingSteps>
       }
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: children,
-    );
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: children);
   }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-class _StoreFallback extends StatelessWidget {
-  final ColorScheme colors;
-  const _StoreFallback(this.colors);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: colors.onPrimaryFixedVariant,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Icon(Icons.storefront_outlined, color: colors.primary),
-    );
-  }
-}
 
 class _Section extends StatelessWidget {
   final Widget child;
@@ -581,31 +454,48 @@ class _Divider extends StatelessWidget {
   }
 }
 
-class _PaymentRow extends StatelessWidget {
+class _OrderDetailRow extends StatelessWidget {
+  final IconData icon;
   final String label;
   final String value;
-  final bool bold;
   final ColorScheme colors;
 
-  const _PaymentRow({
+  const _OrderDetailRow({
+    required this.icon,
     required this.label,
     required this.value,
     required this.colors,
-    this.bold = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final style = TextStyle(
-      fontSize: bold ? 15 : 13,
-      fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
-      color: bold ? colors.onSurface : colors.onSurfaceVariant,
-    );
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: style),
-        Text(value, style: style),
+        Icon(icon, size: 18, color: colors.primary),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: colors.onSurfaceVariant,
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: colors.onSurface,
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

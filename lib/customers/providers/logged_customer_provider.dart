@@ -1,6 +1,7 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/credit_card.dart';
 import 'package:caterfy/models/cart.dart';
+import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
@@ -117,12 +118,16 @@ class LoggedCustomerProvider with ChangeNotifier {
   List<Order> _orderHistory = [];
   List<Order> _transactions = [];
   List<CreditCard> _paymentMethods = [];
+  List<LaundryOrder> _laundryOrders = [];
 
   List<Product> get products => _products;
   List<Store> get stores => _stores;
   List<Order> get orderHistory => _orderHistory;
   List<Order> get transactions => _transactions;
   List<CreditCard> get paymentMethods => _paymentMethods;
+  List<LaundryOrder> get laundryOrders => _laundryOrders;
+  List<LaundryOrder> get activeLaundryOrders =>
+      _laundryOrders.where((o) => o.isActive).toList();
 
   bool _isCategoryLoading = false;
   bool _isProductsLoading = false;
@@ -133,6 +138,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool _isAddCardLoading = false;
   bool _isCheckoutLoading = false;
   bool _transactionsLoading = false;
+  bool _isLaundryOrdersLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
@@ -143,6 +149,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool get isAddCardLoading => _isAddCardLoading;
   bool get isCheckoutLoading => _isCheckoutLoading;
   bool get transactionsLoading => _transactionsLoading;
+  bool get isLaundryOrdersLoading => _isLaundryOrdersLoading;
 
   int get totalCartQuantity {
     if (_cart?.storeId == null) return 0;
@@ -693,6 +700,82 @@ class LoggedCustomerProvider with ChangeNotifier {
         );
       }
     }
+  }
+
+  // ===== Laundry Orders =====
+
+  Future<String?> placeLaundryOrder({
+    required BuildContext context,
+    required String service,
+    required String address,
+    required String phone,
+    required String pickupTime,
+    required String deliveryDate,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) return null;
+    final l10 = AppLocalizations.of(context);
+    try {
+      final result = await supabase
+          .from('laundry_orders')
+          .insert({
+            'customer_id': userId,
+            'service': service,
+            'address': address,
+            'phone': phone,
+            'pickup_time': pickupTime,
+            'delivery_date': deliveryDate,
+            'status': 'scheduled',
+          })
+          .select('id')
+          .single();
+      return result['id'] as String?;
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+      return null;
+    }
+  }
+
+  Future<void> fetchLaundryOrders({required BuildContext context}) async {
+    final customerId = supabase.auth.currentUser?.id;
+    if (customerId == null) return;
+    try {
+      _isLaundryOrdersLoading = true;
+      notifyListeners();
+      final data = await supabase
+          .from('laundry_orders')
+          .select()
+          .eq('customer_id', customerId)
+          .order('created_at', ascending: false);
+      _laundryOrders = data.map((e) => LaundryOrder.fromMap(e)).toList();
+    } catch (_) {
+    } finally {
+      _isLaundryOrdersLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> silentFetchLaundryOrderStatus(String orderId) async {
+    try {
+      final data = await supabase
+          .from('laundry_orders')
+          .select('id, status')
+          .eq('id', orderId)
+          .single();
+      final newStatus = data['status'] as String?;
+      if (newStatus == null) return;
+      final idx = _laundryOrders.indexWhere((o) => o.id == orderId);
+      if (idx != -1 && _laundryOrders[idx].status != newStatus) {
+        _laundryOrders[idx] = _laundryOrders[idx].copyWith(status: newStatus);
+        notifyListeners();
+      }
+    } catch (_) {}
   }
 
   Future<void> fetchWalletTransactions({required BuildContext context}) async {

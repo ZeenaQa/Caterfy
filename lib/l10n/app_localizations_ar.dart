@@ -942,4 +942,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectDeliveryTime => 'اختر وقت التوصيل';
+
+  @override
+  String get laundryOrderPlaced => 'مجدول';
+
+  @override
+  String get laundryOrderPlacedDesc => 'سنأتي لاستلام ملابسك قريبًا.';
+
+  @override
+  String get laundryInCleaning => 'في التنظيف';
+
+  @override
+  String get laundryInCleaningDesc => 'جاري تنظيف وكوي ملابسك.';
+
+  @override
+  String get laundryOnTheWay => 'في الطريق إليك';
+
+  @override
+  String get laundryOnTheWayDesc => 'ملابسك النظيفة في طريقها إليك.';
+
+  @override
+  String get laundryDeliveredDesc => 'تم إعادة ملابسك. استمتع!';
+
+  @override
+  String get deliveryDate => 'تاريخ التوصيل';
+
+  @override
+  String get orderSummary => 'ملخص الطلب';
+
+  @override
+  String get laundryPricingNote => 'سيتم تأكيد السعر بعد الاستلام.';
 }

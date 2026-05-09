@@ -948,4 +948,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectDeliveryTime => 'Select delivery time';
+
+  @override
+  String get laundryOrderPlaced => 'Scheduled';
+
+  @override
+  String get laundryOrderPlacedDesc => 'We\'ll pick up your clothes shortly.';
+
+  @override
+  String get laundryInCleaning => 'In Cleaning';
+
+  @override
+  String get laundryInCleaningDesc =>
+      'Your clothes are being cleaned and pressed.';
+
+  @override
+  String get laundryOnTheWay => 'On the Way Back';
+
+  @override
+  String get laundryOnTheWayDesc => 'Your clean clothes are on their way.';
+
+  @override
+  String get laundryDeliveredDesc => 'Your clothes have been returned. Enjoy!';
+
+  @override
+  String get deliveryDate => 'Delivery date';
+
+  @override
+  String get orderSummary => 'Order summary';
+
+  @override
+  String get laundryPricingNote => 'Price will be confirmed after pickup.';
 }

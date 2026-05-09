@@ -307,5 +307,15 @@
   "dryCleanDetails": "Solvent cleaning (no water) with pressing - Ideal for silk, wool, and formal wear",
   "pressOnly": "Press Only",
   "pressOnlyDetails": "Removes wrinkles with steam pressing - For clean garments only",
-  "selectDeliveryTime": "Select delivery time"
+  "selectDeliveryTime": "Select delivery time",
+  "laundryOrderPlaced": "Scheduled",
+  "laundryOrderPlacedDesc": "We'll pick up your clothes shortly.",
+  "laundryInCleaning": "In Cleaning",
+  "laundryInCleaningDesc": "Your clothes are being cleaned and pressed.",
+  "laundryOnTheWay": "On the Way Back",
+  "laundryOnTheWayDesc": "Your clean clothes are on their way.",
+  "laundryDeliveredDesc": "Your clothes have been returned. Enjoy!",
+  "deliveryDate": "Delivery date",
+  "orderSummary": "Order summary",
+  "laundryPricingNote": "Price will be confirmed after pickup."
 }
