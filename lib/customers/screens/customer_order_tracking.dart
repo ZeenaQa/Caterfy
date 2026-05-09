@@ -1,32 +1,57 @@
+import 'dart:async';
+
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/order.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomerOrderTracking extends StatefulWidget {
-  final Order? order;
-  final String? initialStatus;
+  final String orderId;
 
-  const CustomerOrderTracking({super.key, this.order, this.initialStatus});
+  const CustomerOrderTracking({super.key, required this.orderId});
 
   @override
   State<CustomerOrderTracking> createState() => _CustomerOrderTrackingState();
 }
 
 class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
-  static const _orange = Color(0xFFFF6B00);
-  static const _cream = Color(0xFFFFF0E6);
+  Timer? _pollTimer;
 
-  Future<void> _refreshOrders() async {
-    final provider = context.read<LoggedCustomerProvider>();
-    await provider.fetchOrderHistory(context: context);
+  @override
+  void initState() {
+    super.initState();
+    _pollTimer = Timer.periodic(const Duration(seconds: 8), (_) {
+      if (!mounted) return;
+      final provider = context.read<LoggedCustomerProvider>();
+      final order = _findOrder(provider);
+      if (order == null || order.isDelivered) {
+        _pollTimer?.cancel();
+        return;
+      }
+      provider.silentFetchOrderStatus(widget.orderId);
+    });
   }
 
-  int _currentStep(Order? order) {
-    final status = order?.status ?? widget.initialStatus;
-    if (status == null || status.isEmpty) return 0;
-    switch (status.toLowerCase()) {
+  @override
+  void dispose() {
+    _pollTimer?.cancel();
+    super.dispose();
+  }
+
+  Order? _findOrder(LoggedCustomerProvider provider) {
+    try {
+      return provider.orderHistory.firstWhere((o) => o.id == widget.orderId);
+    } catch (_) {
+      return provider.orderHistory.isNotEmpty
+          ? provider.orderHistory.first
+          : null;
+    }
+  }
+
+  int _stepFor(String? status) {
+    switch (status?.toLowerCase()) {
       case 'preparing':
       case 'processing':
       case 'accepted':
@@ -48,42 +73,61 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     }
   }
 
-  String _statusTitle(AppLocalizations l10, int step) {
+  IconData _iconFor(int step) {
     switch (step) {
-      case 0: return l10.orderReceived;       // e.g. "Order Placed! We're on it"
-      case 1: return l10.preparingOrder;
-      case 2: return l10.outForDelivery;      // e.g. "Your order on the way"
-      case 3: return l10.delivered;
-      default: return '';
-    }
-  }
-
-  String _statusSubtitle(AppLocalizations l10, int step) {
-    switch (step) {
-      case 0: return l10.orderReceivedDesc;   // e.g. "Your order is under approval"
-      case 1: return l10.preparingOrderDesc;
-      case 2: return l10.outForDeliveryDesc;  // e.g. "Omar has picked up your order..."
-      case 3: return l10.deliveredDesc;
-      default: return '';
+      case 1:
+        return Icons.restaurant_outlined;
+      case 2:
+        return Icons.delivery_dining;
+      case 3:
+        return Icons.check_circle_outline;
+      default:
+        return Icons.receipt_long_outlined;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10 = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     final provider = context.watch<LoggedCustomerProvider>();
-    final activeOrder = widget.order ??
-        (provider.orderHistory.isNotEmpty ? provider.orderHistory.first : null);
-    final step = _currentStep(activeOrder);
-    final isOutForDelivery = step == 2;
+    final order = _findOrder(provider);
+
+    final step = _stepFor(order?.status);
+    final isDelivered = step == 3;
+
+    final subtotal = order?.subtotal ?? 0.0;
+    final deliveryFee = order?.deliveryPrice ?? 0.0;
+    const serviceFee = 0.2;
+    final total = subtotal + deliveryFee + serviceFee;
+
+    final stepLabels = [
+      l10.orderReceived,
+      l10.preparingOrder,
+      l10.outForDelivery,
+      l10.delivered,
+    ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
+
+      // ── Fixed cancel / back button ─────────────────────────────────────────
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: FilledBtn(
+            onPressed: () => Navigator.of(context).popUntil((r) => r.isFirst),
+            title: isDelivered ? l10.back : l10.back,
+            innerVerticalPadding: 15,
+          ),
+        ),
+      ),
+
       body: Column(
         children: [
-          // ── Cream illustration area ────────────────────────────────────────
+          // ── Top tinted area ─────────────────────────────────────────────────
           Container(
-            color: _cream,
+            color: colors.onPrimaryFixedVariant,
             child: SafeArea(
               bottom: false,
               child: Column(
@@ -93,10 +137,14 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 4, bottom: 4),
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black87, size: 20),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: colors.onSurface,
+                        size: 20,
+                      ),
                       onPressed: () => Navigator.of(context).pop(),
                       style: IconButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: colors.surface,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -105,42 +153,23 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                     ),
                   ),
 
-                  // TODO: replace with your video/Lottie per-status animation
+                  // Animated status icon
                   SizedBox(
-                    height: 180,
+                    height: 150,
                     child: Center(
-                      child: Icon(
-                        isOutForDelivery
-                            ? Icons.delivery_dining
-                            : Icons.receipt_long_outlined,
-                        size: 100,
-                        color: _orange.withOpacity(0.22),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 450),
+                        transitionBuilder: (child, anim) => FadeTransition(
+                          opacity: anim,
+                          child: ScaleTransition(scale: anim, child: child),
+                        ),
+                        child: Icon(
+                          key: ValueKey(step),
+                          _iconFor(step),
+                          size: 90,
+                          color: colors.primary,
+                        ),
                       ),
-                    ),
-                  ),
-
-                  // ETA + segmented bar
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'l10.estimatedArrival',
-                          style: TextStyle(fontSize: 13, color: Colors.grey[500]),
-                        ),
-                        const SizedBox(height: 2),
-                        const Text(
-                          '22 mins',
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        _SegmentedBar(totalSteps: 4, currentStep: step, color: _orange),
-                      ],
                     ),
                   ),
                 ],
@@ -148,195 +177,146 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
             ),
           ),
 
-          // ── White scrollable content ───────────────────────────────────────
+          // ── Scrollable white content ─────────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Step circles — outside the colored area
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 18, 12, 4),
+                    child: _TrackingSteps(
+                      currentStep: step,
+                      activeColor: colors.primary,
+                      labels: stepLabels,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+                  _Divider(colors),
+
                   // Status title + subtitle
                   _Section(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _statusTitle(l10, step),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      child: SizedBox(
+                        key: ValueKey(step),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              stepLabels[step],
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                color: colors.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              [
+                                l10.orderReceivedDesc,
+                                l10.preparingOrderDesc,
+                                l10.outForDeliveryDesc,
+                                l10.deliveredDesc,
+                              ][step],
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: colors.onSurfaceVariant,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _statusSubtitle(l10, step),
-                          style: TextStyle(fontSize: 13, color: Colors.grey[500], height: 1.5),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
 
-                  _Divider(),
+                  _Divider(colors),
 
-                  // Delivery hero row (only when out for delivery)
-                  if (isOutForDelivery) ...[
-                    _Section(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Omar', // TODO: replace with driver name from order
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'is your delivery hero for today',
-                                  style: TextStyle(fontSize: 13, color: Colors.grey[500]),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // TODO: replace with driver avatar image
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              color: _cream,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.person, color: _orange, size: 28),
-                          ),
-                        ],
-                      ),
-                    ),
-                    _Divider(),
-                    // Contact row
-                    _Section(
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Contact',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const Spacer(),
-                          Icon(Icons.chevron_right, color: Colors.grey[400]),
-                        ],
-                      ),
-                    ),
-                    _Divider(),
-                  ],
-
-                  // Delivering to
-                  _Section(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Delivering to',
-                          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Home', // TODO: from order model
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Egypt, Cairo, Elmohandseen', // TODO: from order model
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                        ),
-                        Text(
-                          'Mobile Number: 01275318664', // TODO: from order model
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  _Divider(),
-
-                  // Your order from
-                  if (activeOrder != null)
+                  // Store + items
+                  if (order != null)
                     _Section(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Your order from',
-                            style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: colors.onSurfaceVariant,
+                            ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      activeOrder.storeName,
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Area: ${'activeOrder.storeArea' ?? ''}', // TODO: add storeArea to model if missing
-                                      style: TextStyle(fontSize: 13, color: Colors.grey[500]),
-                                    ),
-                                  ],
+                                child: Text(
+                                  order.storeName,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: colors.onSurface,
+                                  ),
                                 ),
                               ),
-                              // TODO: replace with store logo image
-                              Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: _cream,
+                              if (order.storeLogo.isNotEmpty)
+                                ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Icon(Icons.storefront_outlined, color: _orange),
-                              ),
+                                  child: Image.network(
+                                    order.storeLogo,
+                                    width: 48,
+                                    height: 48,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) =>
+                                        _StoreFallback(colors),
+                                  ),
+                                )
+                              else
+                                _StoreFallback(colors),
                             ],
                           ),
-                          const SizedBox(height: 12),
-                          // Order items
-                          ...activeOrder.items.map(
+                          const SizedBox(height: 14),
+                          ...order.items.map(
                             (item) => Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Row(
                                 children: [
-                                  Text(
-                                    '${item.quantity}',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black87,
+                                  Container(
+                                    width: 26,
+                                    height: 26,
+                                    decoration: BoxDecoration(
+                                      color: colors.primary.withAlpha(26),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${item.quantity}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          color: colors.primary,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
                                       item.name,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 14,
-                                        color: Colors.black87,
+                                        color: colors.onSurface,
                                       ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${l10.jod} ${(item.price * item.quantity).toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: colors.onSurfaceVariant,
                                     ),
                                   ),
                                 ],
@@ -347,74 +327,57 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                       ),
                     ),
 
-                  _Divider(),
+                  _Divider(colors),
 
                   // Payment summary
-                  if (activeOrder != null)
+                  if (order != null)
                     _Section(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Payment summary',
+                          Text(
+                            l10.paymentSummary,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
-                              color: Colors.black87,
+                              color: colors.onSurface,
                             ),
                           ),
                           const SizedBox(height: 12),
                           _PaymentRow(
-                            label: 'Subtotal',
-                            value: 'activeOrder.subtotal', // e.g. "EGP 120.00"
+                            label: l10.subtotal,
+                            value: '${l10.jod} ${subtotal.toStringAsFixed(2)}',
+                            colors: colors,
                           ),
                           const SizedBox(height: 6),
                           _PaymentRow(
-                            label: 'Delivery fee',
-                            value: activeOrder.deliveryPrice.toString(),
+                            label: l10.deliveryFee,
+                            value:
+                                '${l10.jod} ${deliveryFee.toStringAsFixed(2)}',
+                            colors: colors,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Divider(height: 1, color: Color(0xFFEEEEEE)),
+                          const SizedBox(height: 6),
+                          _PaymentRow(
+                            label: l10.serviceFee,
+                            value:
+                                '${l10.jod} ${serviceFee.toStringAsFixed(2)}',
+                            colors: colors,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Divider(height: 1, color: colors.outline),
                           ),
                           _PaymentRow(
-                            label: 'Total amount',
-                            value: 'activeOrder.totalAmount',
+                            label: l10.totalAmount,
+                            value: '${l10.jod} ${total.toStringAsFixed(2)}',
                             bold: true,
+                            colors: colors,
                           ),
                         ],
                       ),
                     ),
 
-                  const SizedBox(height: 8),
-
-                  // Cancel / back button
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.of(context).popUntil((r) => r.isFirst),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: step == 3 ? Colors.grey[300] : _orange,
-                          foregroundColor: step == 3 ? Colors.black54 : Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        child: Text(
-                          step == 3 ? l10.back : l10.cancel,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -425,7 +388,187 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
   }
 }
 
+// ── Step circles (below top area) ─────────────────────────────────────────────
+
+class _TrackingSteps extends StatefulWidget {
+  final int currentStep;
+  final Color activeColor;
+  final List<String> labels;
+
+  const _TrackingSteps({
+    required this.currentStep,
+    required this.activeColor,
+    required this.labels,
+  });
+
+  @override
+  State<_TrackingSteps> createState() => _TrackingStepsState();
+}
+
+class _TrackingStepsState extends State<_TrackingSteps>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulseCtrl;
+  late final Animation<double> _glowAnim;
+
+  static const _nodeSize = 44.0;
+  static const _circleSize = 32.0;
+  static const _icons = [
+    Icons.receipt_long_outlined,
+    Icons.restaurant_outlined,
+    Icons.delivery_dining_outlined,
+    Icons.home_outlined,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _glowAnim = Tween<double>(
+      begin: 0.10,
+      end: 0.32,
+    ).animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
+
+  Widget _buildNode(int i) {
+    final isCompleted = i < widget.currentStep;
+    final isCurrent = i == widget.currentStep;
+    final isActive = isCompleted || isCurrent;
+
+    final innerCircle = Container(
+      width: _circleSize,
+      height: _circleSize,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isActive ? widget.activeColor : Colors.grey.withAlpha(45),
+        boxShadow: isActive
+            ? [
+                BoxShadow(
+                  color: widget.activeColor.withAlpha(65),
+                  blurRadius: 6,
+                  spreadRadius: 1,
+                ),
+              ]
+            : null,
+      ),
+      child: Icon(
+        _icons[i],
+        size: 15,
+        color: isActive ? Colors.white : Colors.grey[500],
+      ),
+    );
+
+    Widget node;
+    if (isCurrent) {
+      node = AnimatedBuilder(
+        animation: _glowAnim,
+        builder: (_, child) => Container(
+          width: _nodeSize,
+          height: _nodeSize,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.activeColor.withAlpha(
+              (_glowAnim.value * 255).round(),
+            ),
+          ),
+          child: Center(child: child),
+        ),
+        child: innerCircle,
+      );
+    } else {
+      node = SizedBox(
+        width: _nodeSize,
+        height: _nodeSize,
+        child: Center(child: innerCircle),
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        node,
+        const SizedBox(height: 5),
+        SizedBox(
+          width: 58,
+          child: Text(
+            widget.labels[i],
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w400,
+              color: isActive ? widget.activeColor : Colors.grey[500],
+              height: 1.2,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const connectorTopPad = (_nodeSize - 2) / 2;
+    final children = <Widget>[];
+
+    for (int i = 0; i < 4; i++) {
+      children.add(_buildNode(i));
+      if (i < 3) {
+        children.add(
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: connectorTopPad),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 600),
+                height: 2,
+                decoration: BoxDecoration(
+                  color: i < widget.currentStep
+                      ? widget.activeColor
+                      : Colors.grey.withAlpha(80),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+  }
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+class _StoreFallback extends StatelessWidget {
+  final ColorScheme colors;
+  const _StoreFallback(this.colors);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: colors.onPrimaryFixedVariant,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(Icons.storefront_outlined, color: colors.primary),
+    );
+  }
+}
 
 class _Section extends StatelessWidget {
   final Widget child;
@@ -441,9 +584,12 @@ class _Section extends StatelessWidget {
 }
 
 class _Divider extends StatelessWidget {
+  final ColorScheme colors;
+  const _Divider(this.colors);
+
   @override
   Widget build(BuildContext context) {
-    return const Divider(height: 1, thickness: 1, color: Color(0xFFF2F2F2));
+    return Divider(height: 1, thickness: 1, color: colors.outline);
   }
 }
 
@@ -451,10 +597,12 @@ class _PaymentRow extends StatelessWidget {
   final String label;
   final String value;
   final bool bold;
+  final ColorScheme colors;
 
   const _PaymentRow({
     required this.label,
     required this.value,
+    required this.colors,
     this.bold = false,
   });
 
@@ -463,7 +611,7 @@ class _PaymentRow extends StatelessWidget {
     final style = TextStyle(
       fontSize: bold ? 15 : 13,
       fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
-      color: bold ? Colors.black87 : Colors.grey[600],
+      color: bold ? colors.onSurface : colors.onSurfaceVariant,
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -471,37 +619,6 @@ class _PaymentRow extends StatelessWidget {
         Text(label, style: style),
         Text(value, style: style),
       ],
-    );
-  }
-}
-
-// ── Segmented progress bar ────────────────────────────────────────────────────
-class _SegmentedBar extends StatelessWidget {
-  final int totalSteps;
-  final int currentStep;
-  final Color color;
-
-  const _SegmentedBar({
-    required this.totalSteps,
-    required this.currentStep,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(totalSteps, (i) {
-        return Expanded(
-          child: Container(
-            height: 4,
-            margin: EdgeInsets.only(right: i < totalSteps - 1 ? 4 : 0),
-            decoration: BoxDecoration(
-              color: i <= currentStep ? color : const Color(0xFFDDDDDD),
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
-        );
-      }),
     );
   }
 }

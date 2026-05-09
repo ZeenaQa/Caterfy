@@ -158,7 +158,7 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                           );
                           return;
                         }
-                        await customerProvider.placeOrder(
+                        final orderId = await customerProvider.placeOrder(
                           context: context,
                           deliveryPrice: deliveryPrice,
                           isUsingWallet: useWallet,
@@ -169,11 +169,11 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                                 0.2,
                           ),
                         );
-                        if (context.mounted) {
+                        if (context.mounted && orderId != null) {
                           await customerProvider.fetchOrderHistory(context: context);
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (_) => const CustomerOrderTracking(),
+                              builder: (_) => CustomerOrderTracking(orderId: orderId),
                             ),
                             (route) => route.isFirst,
                           );

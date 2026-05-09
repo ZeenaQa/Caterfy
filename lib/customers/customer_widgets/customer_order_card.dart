@@ -1,8 +1,9 @@
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_cart.dart';
-import 'package:caterfy/customers/screens/customer_order_details_screen.dart';
+import 'package:caterfy/customers/screens/customer_order_tracking.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/order.dart';
+import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -149,66 +150,56 @@ class CustomerOrderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      RichText(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(
-                          text: '${l10.jod} ',
-                          style: TextStyle(
-                            color: colors.onSurface,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: getTotalPrice().toStringAsFixed(2),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+                  child: RichText(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      text: '${l10.jod} ',
+                      style: TextStyle(
+                        color: colors.onSurface,
+                        fontWeight: FontWeight.normal,
                       ),
-                      SizedBox(height: 2),
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => CustomerOrderDetailScreen(),
-                          ),
+                      children: [
+                        TextSpan(
+                          text: getTotalPrice().toStringAsFixed(2),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        child: Text(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          l10.viewDetails,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: colors.onSurface,
-                            fontSize: 13.5,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(width: 10),
                 Skeleton.ignore(
-                  child: OutlinedBtn(
-                    onPressed: () {
-                      context.read<LoggedCustomerProvider>().orderAgain(
-                        order: order,
-                      );
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => CustomerCart()),
-                      );
-                    },
-                    title: l10.orderAgain,
-                    innerVerticalPadding: 10,
-                    innerHorizontalPadding: 18,
-                  ),
+                  child: order.isActiveOrder
+                      ? FilledBtn(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => CustomerOrderTracking(
+                                orderId: order.id,
+                              ),
+                            ),
+                          ),
+                          title: l10.orderTracking,
+                          stretch: false,
+                          titleSize: 13,
+                          innerVerticalPadding: 10,
+                          innerHorizontalPadding: 18,
+                        )
+                      : OutlinedBtn(
+                          onPressed: () {
+                            context.read<LoggedCustomerProvider>().orderAgain(
+                              order: order,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => CustomerCart()),
+                            );
+                          },
+                          title: l10.orderAgain,
+                          innerVerticalPadding: 10,
+                          innerHorizontalPadding: 18,
+                        ),
                 ),
               ],
             ),

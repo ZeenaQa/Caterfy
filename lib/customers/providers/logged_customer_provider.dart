@@ -17,6 +17,61 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   final box = Hive.box('cartBox');
 
+  RealtimeChannel? _ordersChannel;
+
+  void subscribeToOrderUpdates(String customerId) {
+    _ordersChannel?.unsubscribe();
+    _ordersChannel = supabase
+        .channel('customer_orders_$customerId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'orders',
+          callback: (payload) {
+            final newRecord = payload.newRecord;
+            // Filter client-side — only handle this customer's orders.
+            final recordCustomerId = newRecord['customer_id'] as String?;
+            if (recordCustomerId != customerId) return;
+
+            final orderId = newRecord['id'] as String?;
+            final newStatus = newRecord['status'] as String?;
+            if (orderId == null || newStatus == null) return;
+
+            final idx = _orderHistory.indexWhere((o) => o.id == orderId);
+            if (idx != -1 && _orderHistory[idx].status != newStatus) {
+              _orderHistory[idx] = _orderHistory[idx].copyWith(status: newStatus);
+              notifyListeners();
+            }
+          },
+        )
+        .subscribe();
+  }
+
+  void unsubscribeFromOrderUpdates() {
+    _ordersChannel?.unsubscribe();
+    _ordersChannel = null;
+  }
+
+  /// Lightweight single-order status poll — no loading state, silent.
+  Future<void> silentFetchOrderStatus(String orderId) async {
+    try {
+      final data = await supabase
+          .from('orders')
+          .select('id, status')
+          .eq('id', orderId)
+          .single();
+
+      final newStatus = data['status'] as String?;
+      if (newStatus == null) return;
+
+      final idx = _orderHistory.indexWhere((o) => o.id == orderId);
+      if (idx != -1 && _orderHistory[idx].status != newStatus) {
+        _orderHistory[idx] = _orderHistory[idx].copyWith(status: newStatus);
+        notifyListeners();
+      }
+    } catch (_) {}
+  }
+
   final debouncer = Debouncer(milliseconds: 300);
 
   Cart? _cart;
@@ -451,13 +506,13 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> placeOrder({
+  Future<String?> placeOrder({
     required BuildContext context,
     required double deliveryPrice,
     required double walletTransaction,
     required bool isUsingWallet,
   }) async {
-    if (_cart?.storeId == null || _cart!.items.isEmpty) return;
+    if (_cart?.storeId == null || _cart!.items.isEmpty) return null;
     final l10 = AppLocalizations.of(context);
     final userId = supabase.auth.currentUser!.id;
     try {
@@ -466,14 +521,18 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       final mapCart = _cart!.toMap();
 
-      await supabase.from('orders').insert({
-        ...mapCart,
-        'delivery_price': deliveryPrice,
-        'wallet_transaction': isUsingWallet
-            ? walletTransaction.toStringAsFixed(2)
-            : 0.00,
-        'status': 'pending',
-      });
+      final result = await supabase
+          .from('orders')
+          .insert({
+            ...mapCart,
+            'delivery_price': deliveryPrice,
+            'wallet_transaction': isUsingWallet
+                ? walletTransaction.toStringAsFixed(2)
+                : 0.00,
+            'status': 'pending',
+          })
+          .select('id')
+          .single();
 
       if (isUsingWallet) {
         await supabase.rpc(
@@ -487,6 +546,7 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       _cart = null;
       deleteCart();
+      return result['id'] as String?;
     } catch (e) {
       if (context.mounted) {
         showCustomToast(
@@ -495,6 +555,7 @@ class LoggedCustomerProvider with ChangeNotifier {
           message: l10.somethingWentWrong,
         );
       }
+      return null;
     } finally {
       _isPlaceOrderLoading = false;
       notifyListeners();

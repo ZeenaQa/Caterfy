@@ -20,6 +20,7 @@ class AuthenticatedCustomer extends StatefulWidget {
 
 class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
   int _currentIndex = 0;
+  LoggedCustomerProvider? _customerProvider;
 
   final List<Widget> _screens = [
     CustomerHomeSection(),
@@ -36,10 +37,18 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
         context,
         listen: false,
       );
+      _customerProvider = provider;
       final customerId = Supabase.instance.client.auth.currentUser?.id;
       await provider.fetchFavorites(customerId!, context);
       await provider.fetchOrderHistory(context: context);
+      provider.subscribeToOrderUpdates(customerId);
     });
+  }
+
+  @override
+  void dispose() {
+    _customerProvider?.unsubscribeFromOrderUpdates();
+    super.dispose();
   }
 
   @override

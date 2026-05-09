@@ -59,7 +59,6 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
 
   @override
   Widget build(BuildContext context) {
-    final l10 = AppLocalizations.of(context);
     final customerProvider = Provider.of<LoggedCustomerProvider>(context);
     final activeOrders = customerProvider.orderHistory
         .where((order) => order.isActiveOrder)
@@ -95,93 +94,220 @@ class _ScrollHideHeaderPageState extends State<CustomerHomeSection>
   }
 }
 
+// ── Ongoing orders strip ───────────────────────────────────────────────────────
+
 class OnGoingOrders extends StatelessWidget {
   const OnGoingOrders({super.key, required this.activeOrders});
 
   final List<Order> activeOrders;
 
+  static int stepFor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'preparing':
+      case 'processing':
+      case 'accepted':
+      case 'confirmed':
+        return 1;
+      case 'out_for_delivery':
+      case 'out for delivery':
+      case 'on_the_way':
+      case 'picked_up':
+      case 'shipped':
+      case 'enroute':
+      case 'delivering':
+        return 2;
+      case 'delivered':
+      case 'completed':
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l10 = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: SizedBox(
-        height: 130,
+        height: 148,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           itemCount: activeOrders.length,
           separatorBuilder: (_, __) => const SizedBox(width: 12),
           itemBuilder: (context, index) {
-            final activeOrder = activeOrders[index];
-
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => CustomerOrderTracking(order: activeOrder),
-                  ),
-                );
-              },
-              child: Container(
-                width: 300,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.shadow.withOpacity(0.12),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 18,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            l10.trackYourOrder,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            activeOrder.storeName,
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.95),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ),
-            );
+            final order = activeOrders[index];
+            return _ActiveOrderCard(order: order, step: stepFor(order.status));
           },
         ),
       ),
+    );
+  }
+}
+
+// ── Single active-order card ───────────────────────────────────────────────────
+
+class _ActiveOrderCard extends StatelessWidget {
+  final Order order;
+  final int step;
+
+  const _ActiveOrderCard({required this.order, required this.step});
+
+  static const _stageIcons = [
+    Icons.receipt_long_outlined,
+    Icons.restaurant_outlined,
+    Icons.delivery_dining_outlined,
+    Icons.check_circle_outline,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
+
+    final stageLabels = [
+      l10.orderReceived,
+      l10.preparingOrder,
+      l10.outForDelivery,
+      l10.delivered,
+    ];
+
+    final stageDescs = [
+      l10.orderReceivedDesc,
+      l10.preparingOrderDesc,
+      l10.outForDeliveryDesc,
+      l10.deliveredDesc,
+    ];
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => CustomerOrderTracking(orderId: order.id),
+        ),
+      ),
+      child: Container(
+        width: 300,
+        decoration: BoxDecoration(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: colors.primary.withAlpha(90), width: 1.5),
+        ),
+        padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── Top row: store logo + name + arrow ────────────────────────
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: order.storeLogo.isNotEmpty
+                      ? Image.network(
+                          order.storeLogo,
+                          width: 38,
+                          height: 38,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              _LogoFallback(colors: colors),
+                        )
+                      : _LogoFallback(colors: colors),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    order.storeName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: colors.onSurface,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 13,
+                  color: colors.onSurfaceVariant,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            // ── Stage label + description ──────────────────────────────────
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(_stageIcons[step], size: 16, color: colors.primary),
+                const SizedBox(width: 7),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        stageLabels[step],
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                      Text(
+                        stageDescs[step],
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: colors.onSurfaceVariant,
+                          height: 1.3,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const Spacer(),
+
+            // ── Mini segmented progress bar ────────────────────────────────
+            Row(
+              children: List.generate(4, (i) {
+                final isActive = i <= step;
+                return Expanded(
+                  child: Container(
+                    height: 3,
+                    margin: EdgeInsets.only(right: i < 3 ? 4 : 0),
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? colors.primary
+                          : colors.primary.withAlpha(30),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LogoFallback extends StatelessWidget {
+  final ColorScheme colors;
+  const _LogoFallback({required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 38,
+      height: 38,
+      color: colors.onPrimaryFixedVariant,
+      child: Icon(Icons.storefront_outlined, size: 20, color: colors.primary),
     );
   }
 }
