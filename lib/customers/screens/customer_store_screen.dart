@@ -5,6 +5,7 @@ import 'package:caterfy/customers/screens/customer_store_details_screen.dart';
 import 'package:caterfy/customers/screens/customer_store_menu_layout.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
@@ -56,23 +57,36 @@ class CustomerStoreScreen extends StatefulWidget {
 
 class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
   late ScrollController _scrollController;
+  late ScrollController _tabBarController;
+  late ScrollController _inlineTabController;
   double _appBarOpacity = 0.0;
+  int _selectedCategoryIndex = 0;
+  List<String> _categories = [];
+  final Map<String, GlobalKey> _categoryKeys = {};
+  final GlobalKey _inlineTabBarKey = GlobalKey();
+  bool _showStickyTabBar = false;
+  bool _isProgrammaticScroll = false;
+
+  static const double _kTabBarHeight = 48.0;
+  double _stickyTop = 0.0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _tabBarController = ScrollController();
+    _inlineTabController = ScrollController();
 
     _scrollController.addListener(() {
       final offset = _scrollController.offset;
 
       final newOpacity = ((offset - 50) / 70).clamp(0.0, 1.0);
-
       if (newOpacity != _appBarOpacity) {
-        setState(() {
-          _appBarOpacity = newOpacity;
-        });
+        setState(() => _appBarOpacity = newOpacity);
       }
+
+      _updateStickyTabBar();
+      _updateSelectedCategory();
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -87,7 +101,71 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _tabBarController.dispose();
+    _inlineTabController.dispose();
     super.dispose();
+  }
+
+  void _updateStickyTabBar() {
+    if (_inlineTabBarKey.currentContext == null) return;
+    final box =
+        _inlineTabBarKey.currentContext!.findRenderObject() as RenderBox;
+    final y = box.localToGlobal(Offset.zero).dy;
+    final shouldShow = y <= _stickyTop;
+    if (shouldShow != _showStickyTabBar) {
+      setState(() => _showStickyTabBar = shouldShow);
+    }
+  }
+
+  void _updateSelectedCategory() {
+    if (_isProgrammaticScroll || _categories.isEmpty) return;
+    int found = 0;
+    for (int i = 0; i < _categories.length; i++) {
+      final ctx = _categoryKeys[_categories[i]]?.currentContext;
+      if (ctx == null) continue;
+      final box = ctx.findRenderObject() as RenderBox?;
+      if (box == null) continue;
+      if (box.localToGlobal(Offset.zero).dy <= _stickyTop + 20.0) found = i;
+    }
+    if (found != _selectedCategoryIndex) {
+      setState(() => _selectedCategoryIndex = found);
+      _autoScrollTabBar(found);
+    }
+  }
+
+  void _scrollToCategory(String category) {
+    final key = _categoryKeys[category];
+    if (key?.currentContext == null) return;
+    final box = key!.currentContext!.findRenderObject() as RenderBox;
+    final screenY = box.localToGlobal(Offset.zero).dy;
+    final target = (_scrollController.offset - 45 + screenY - _stickyTop).clamp(
+      0.0,
+      _scrollController.position.maxScrollExtent,
+    );
+    _isProgrammaticScroll = true;
+    _scrollController
+        .animateTo(
+          target,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+        )
+        .whenComplete(() => _isProgrammaticScroll = false);
+  }
+
+  void _autoScrollTabBar(int index) {
+    const approxItemWidth = 100.0;
+    for (final ctrl in [_tabBarController, _inlineTabController]) {
+      if (!ctrl.hasClients) continue;
+      final target = ((index * approxItemWidth) - 40.0).clamp(
+        0.0,
+        ctrl.position.maxScrollExtent,
+      );
+      ctrl.animateTo(
+        target,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
@@ -104,6 +182,16 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
     final bool showCart = customerProvider.cart?.storeId == widget.store.id;
     final String deliveryPrice =
         '${context.read<GlobalProvider>().getDeliveryPrice(widget.store.latitude, widget.store.longitude)} ${l10.jod}';
+
+    _stickyTop = MediaQuery.of(context).padding.top + kToolbarHeight;
+
+    final products = isLoading ? dummyProducts : customerProvider.products;
+    final grouped = <String, List<Product>>{};
+    for (final p in products) {
+      grouped.putIfAbsent(p.subCategory, () => []).add(p);
+    }
+    _categories = grouped.keys.toList();
+    final showTabBar = _categories.length > 1;
 
     return Scaffold(
       bottomNavigationBar: (!showCart || isLoading)
@@ -553,16 +641,45 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                         ),
                       ],
                     ),
+                    if (showTabBar)
+                      KeyedSubtree(
+                        key: _inlineTabBarKey,
+                        child: _CategoryTabBar(
+                          categories: _categories,
+                          selectedIndex: _selectedCategoryIndex,
+                          controller: _inlineTabController,
+                          onTap: (i) {
+                            setState(() => _selectedCategoryIndex = i);
+                            _scrollToCategory(_categories[i]);
+                          },
+                        ),
+                      ),
                     StoreMenuLayout(
                       store: widget.store,
-                      products: isLoading
-                          ? dummyProducts
-                          : customerProvider.products,
+                      categoryKeys: _categoryKeys,
+                      products: products,
                     ),
                   ],
                 ),
               ),
             ),
+
+            if (showTabBar && _showStickyTabBar)
+              Positioned(
+                top: _stickyTop,
+                left: 0,
+                right: 0,
+                height: _kTabBarHeight + 0,
+                child: _CategoryTabBar(
+                  categories: _categories,
+                  selectedIndex: _selectedCategoryIndex,
+                  controller: _tabBarController,
+                  onTap: (i) {
+                    setState(() => _selectedCategoryIndex = i);
+                    _scrollToCategory(_categories[i]);
+                  },
+                ),
+              ),
 
             Positioned(
               top: 0,
@@ -574,11 +691,13 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
 
                   decoration: BoxDecoration(
                     color: colors.onInverseSurface.withOpacity(_appBarOpacity),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: colors.outline.withOpacity(_appBarOpacity),
-                      ),
-                    ),
+                    border: _showStickyTabBar
+                        ? null
+                        : Border(
+                            bottom: BorderSide(
+                              color: colors.outline.withOpacity(_appBarOpacity),
+                            ),
+                          ),
                   ),
                   child: SafeArea(
                     bottom: false,
@@ -649,6 +768,85 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CategoryTabBar extends StatelessWidget {
+  const _CategoryTabBar({
+    required this.categories,
+    required this.selectedIndex,
+    required this.controller,
+    required this.onTap,
+  });
+
+  final List<String> categories;
+  final int selectedIndex;
+  final ScrollController controller;
+  final void Function(int) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Material(
+      color: colors.surface,
+      elevation: 0,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 46,
+            child: ListView.builder(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              itemCount: categories.length,
+              itemBuilder: (context, i) {
+                final selected = i == selectedIndex;
+                return IntrinsicWidth(
+                  child: GestureDetector(
+                    onTap: () => onTap(i),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            categories[i],
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: selected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              color: selected
+                                  ? colors.primary
+                                  : colors.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            height: 2,
+                            decoration: BoxDecoration(
+                              color: selected
+                                  ? colors.primary
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Divider(height: 1, thickness: 1, color: colors.outline),
+        ],
       ),
     );
   }
