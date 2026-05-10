@@ -42,6 +42,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
       await provider.fetchFavorites(customerId!, context);
       await provider.fetchOrderHistory(context: context);
       await provider.fetchLaundryOrders(context: context);
+      await provider.fetchVoucherOrders(context: context);
       provider.subscribeToOrderUpdates(customerId);
     });
   }
@@ -103,9 +104,10 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                       .isOrderHistoryLoading) {
                     return;
                   }
-                  context.read<LoggedCustomerProvider>().fetchOrderHistory(
-                    context: context,
-                  );
+                  final p = context.read<LoggedCustomerProvider>();
+                  p.fetchOrderHistory(context: context);
+                  p.fetchLaundryOrders(context: context);
+                  p.fetchVoucherOrders(context: context);
                 } else if (index == 2) {
                   context.read<GlobalProvider>().fetchUser();
                 }

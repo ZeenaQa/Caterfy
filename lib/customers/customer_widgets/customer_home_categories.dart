@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/customer_widgets/customer_home_ads_carousel.dart';
 import 'package:caterfy/customers/screens/customer_category_screen.dart';
+import 'package:caterfy/customers/screens/evouchers_screen.dart';
 import 'package:caterfy/customers/screens/laundry_screen.dart';
 import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -88,6 +89,14 @@ class CustomerHomeCategories extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => LaundryScreen()),
+        );
+        return;
+      }
+
+      if (category == "eVouchers") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const EVouchersScreen()),
         );
         return;
       }
