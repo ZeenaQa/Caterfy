@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/customer_widgets/cart_button.dart';
+import 'package:caterfy/customers/screens/customer_global_search.dart';
 import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -71,27 +72,40 @@ class CustomerGlobalTopBar extends StatelessWidget {
               ],
             ),
             SizedBox(height: 19),
-            Container(
-              decoration: BoxDecoration(
-                color: colors.surface,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
-              width: double.infinity,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.search, color: Color(0xff9d9d9d), size: 21),
-                  SizedBox(width: 10),
-                  Text(
-                    l10.search,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff9d9d9d),
-                    ),
+            GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                    opacity: animation,
+                    child: const GlobalSearchScreen(),
                   ),
-                ],
+                  transitionDuration: const Duration(milliseconds: 180),
+                  reverseTransitionDuration: const Duration(milliseconds: 150),
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
+                width: double.infinity,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.search, color: Color(0xff9d9d9d), size: 21),
+                    SizedBox(width: 10),
+                    Text(
+                      l10.search,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff9d9d9d),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

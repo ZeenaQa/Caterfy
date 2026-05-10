@@ -3,6 +3,7 @@ import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_cart.dart';
 import 'package:caterfy/customers/screens/customer_store_details_screen.dart';
 import 'package:caterfy/customers/screens/customer_store_menu_layout.dart';
+import 'package:caterfy/customers/screens/store_search_screen.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/product.dart';
@@ -753,6 +754,25 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                         ),
                         Skeleton.ignore(
                           child: OutlinedIconBtn(
+                            onPressed: isLoading
+                                ? null
+                                : () => Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (_, animation, __) =>
+                                            FadeTransition(
+                                          opacity: animation,
+                                          child: StoreSearchScreen(
+                                            products: customerProvider.products,
+                                            store: widget.store,
+                                          ),
+                                        ),
+                                        transitionDuration: const Duration(
+                                            milliseconds: 180),
+                                        reverseTransitionDuration:
+                                            const Duration(milliseconds: 150),
+                                      ),
+                                    ),
                             child: Icon(
                               FontAwesomeIcons.magnifyingGlass,
                               size: 15,

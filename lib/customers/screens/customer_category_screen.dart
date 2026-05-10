@@ -1,6 +1,7 @@
 import 'package:caterfy/customers/customer_widgets/cart_button.dart';
 import 'package:caterfy/customers/customer_widgets/customer_store_list_item.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/category_search_screen.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -139,6 +140,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: (stores.isNotEmpty || isLoading)
           ? Stack(
               children: [
+                // ── Store list / skeleton ────────────────────────────────────
                 Skeletonizer(
                   enabled: isLoading,
                   child: ListView.separated(
@@ -150,9 +152,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                     itemCount: isLoading ? dummyStores.length : stores.length,
                     itemBuilder: (context, index) {
-                      final store = isLoading
-                          ? dummyStores[index]
-                          : stores[index];
+                      final store =
+                          isLoading ? dummyStores[index] : stores[index];
                       return CustomerStoreListItem(
                         store: store,
                         dummyImage: isLoading,
@@ -164,40 +165,65 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 ),
 
+                // ── Tappable search bar (slides with scroll) ─────────────────
                 Transform.translate(
                   offset: Offset(0, currentSearchBarOffset),
                   child: Container(
                     color: colors.onInverseSurface,
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 15,
                       right: 15,
                       top: 12,
                       bottom: 10,
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText:
-                              '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
-                          hintStyle: TextStyle(fontSize: 15),
-                          filled: true,
-                          fillColor: colors.surfaceContainer,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          isCollapsed: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 7,
-                          ),
-                          prefixIconConstraints: BoxConstraints(minHeight: 0),
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 13.0,
-                              right: 5,
+                    child: GestureDetector(
+                      onTap: isLoading
+                          ? null
+                          : () => Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (_, animation, __) =>
+                                      FadeTransition(
+                                        opacity: animation,
+                                        child: CategorySearchScreen(
+                                          stores: stores,
+                                          category: widget.category,
+                                        ),
+                                      ),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 180),
+                                  reverseTransitionDuration:
+                                      const Duration(milliseconds: 150),
+                                ),
+                              ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: TextField(
+                          enabled: false,
+                          decoration: InputDecoration(
+                            hintText:
+                                '${l10.searchAbout} ${getLocalizedCategory(context, widget.category)}',
+                            hintStyle: TextStyle(
+                              fontSize: 15,
+                              color: colors.onSurfaceVariant,
                             ),
-                            child: Icon(Icons.search, size: 20),
+                            filled: true,
+                            fillColor: colors.surfaceContainer,
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            isCollapsed: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 7,
+                            ),
+                            prefixIconConstraints:
+                                const BoxConstraints(minHeight: 0),
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(left: 13.0, right: 5),
+                              child: Icon(Icons.search, size: 20),
+                            ),
                           ),
                         ),
                       ),
@@ -224,7 +250,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                 ],
               ),
             ),
