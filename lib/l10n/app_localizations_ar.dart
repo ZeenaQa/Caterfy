@@ -972,4 +972,29 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get laundryPricingNote => 'سيتم تأكيد السعر بعد الاستلام.';
+
+  @override
+  String get supportChat => 'الدعم';
+
+  @override
+  String get supportChatTitle => 'نحن هنا للمساعدة';
+
+  @override
+  String get supportChatSubtitle =>
+      'أرسل لنا رسالة وسيرد عليك فريق الدعم في أقرب وقت ممكن.';
+
+  @override
+  String get ticketClosed => 'المحادثة مغلقة';
+
+  @override
+  String get agentConnected => 'تم الاتصال بالوكيل';
+
+  @override
+  String get waitingForAgent => 'في انتظار وكيل…';
+
+  @override
+  String get ticketClosedBanner => 'تم إغلاق هذه المحادثة.';
+
+  @override
+  String get newConversation => 'محادثة جديدة';
 }

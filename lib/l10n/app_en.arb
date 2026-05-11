@@ -317,5 +317,13 @@
   "laundryDeliveredDesc": "Your clothes have been returned. Enjoy!",
   "deliveryDate": "Delivery date",
   "orderSummary": "Order summary",
-  "laundryPricingNote": "Price will be confirmed after pickup."
+  "laundryPricingNote": "Price will be confirmed after pickup.",
+  "supportChat": "Support",
+  "supportChatTitle": "We're here to help",
+  "supportChatSubtitle": "Send us a message and our support team will get back to you as soon as possible.",
+  "ticketClosed": "Conversation closed",
+  "agentConnected": "Agent connected",
+  "waitingForAgent": "Waiting for an agent…",
+  "ticketClosedBanner": "This conversation has been closed.",
+  "newConversation": "New conversation"
 }

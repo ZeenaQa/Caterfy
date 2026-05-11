@@ -1,9 +1,9 @@
 import 'package:caterfy/customers/customer_sections/customer_orders.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_caterfy_pay.dart';
-
 import 'package:caterfy/customers/screens/customer_settings_screen.dart';
 import 'package:caterfy/customers/screens/favorite_stores_screen.dart';
+import 'package:caterfy/customers/screens/support_chat_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
@@ -62,7 +62,14 @@ class CustomerAccountSection extends StatelessWidget {
         },
       ),
 
-      AccountButton(title: l10.getHelp, icon: Icons.help_outline),
+      AccountButton(
+        title: l10.getHelp,
+        icon: Icons.help_outline,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SupportChatScreen()),
+        ),
+      ),
       AccountButton(title: l10.aboutApp, icon: Icons.info_outline),
     ];
     return SafeArea(

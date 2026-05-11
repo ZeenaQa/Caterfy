@@ -979,4 +979,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get laundryPricingNote => 'Price will be confirmed after pickup.';
+
+  @override
+  String get supportChat => 'Support';
+
+  @override
+  String get supportChatTitle => 'We\'re here to help';
+
+  @override
+  String get supportChatSubtitle =>
+      'Send us a message and our support team will get back to you as soon as possible.';
+
+  @override
+  String get ticketClosed => 'Conversation closed';
+
+  @override
+  String get agentConnected => 'Agent connected';
+
+  @override
+  String get waitingForAgent => 'Waiting for an agent…';
+
+  @override
+  String get ticketClosedBanner => 'This conversation has been closed.';
+
+  @override
+  String get newConversation => 'New conversation';
 }

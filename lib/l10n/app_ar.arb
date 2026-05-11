@@ -315,5 +315,13 @@
   "laundryDeliveredDesc": "تم إعادة ملابسك. استمتع!",
   "deliveryDate": "تاريخ التوصيل",
   "orderSummary": "ملخص الطلب",
-  "laundryPricingNote": "سيتم تأكيد السعر بعد الاستلام."
+  "laundryPricingNote": "سيتم تأكيد السعر بعد الاستلام.",
+  "supportChat": "الدعم",
+  "supportChatTitle": "نحن هنا للمساعدة",
+  "supportChatSubtitle": "أرسل لنا رسالة وسيرد عليك فريق الدعم في أقرب وقت ممكن.",
+  "ticketClosed": "المحادثة مغلقة",
+  "agentConnected": "تم الاتصال بالوكيل",
+  "waitingForAgent": "في انتظار وكيل…",
+  "ticketClosedBanner": "تم إغلاق هذه المحادثة.",
+  "newConversation": "محادثة جديدة"
 }

@@ -1987,6 +1987,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Price will be confirmed after pickup.'**
   String get laundryPricingNote;
+
+  /// No description provided for @supportChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get supportChat;
+
+  /// No description provided for @supportChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re here to help'**
+  String get supportChatTitle;
+
+  /// No description provided for @supportChatSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send us a message and our support team will get back to you as soon as possible.'**
+  String get supportChatSubtitle;
+
+  /// No description provided for @ticketClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation closed'**
+  String get ticketClosed;
+
+  /// No description provided for @agentConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent connected'**
+  String get agentConnected;
+
+  /// No description provided for @waitingForAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for an agent…'**
+  String get waitingForAgent;
+
+  /// No description provided for @ticketClosedBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation has been closed.'**
+  String get ticketClosedBanner;
+
+  /// No description provided for @newConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'New conversation'**
+  String get newConversation;
 }
 
 class _AppLocalizationsDelegate
