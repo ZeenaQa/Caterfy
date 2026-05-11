@@ -1004,4 +1004,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newConversation => 'New conversation';
+
+  @override
+  String get applicationSubmittedTitle => 'Application Submitted!';
+
+  @override
+  String get applicationSubmittedBody =>
+      'We\'ll review your application and get back to you via email. This usually takes 1–2 business days.';
+
+  @override
+  String get backToLogin => 'Back to Login';
+
+  @override
+  String get applicationPending =>
+      'Your application is still under review. We\'ll notify you once it\'s approved.';
+
+  @override
+  String get applicationDeclined =>
+      'Your application has been declined. Please contact support for more information.';
+
+  @override
+  String get soundsGood => 'Sounds good!';
 }

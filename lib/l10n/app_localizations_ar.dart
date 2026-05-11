@@ -997,4 +997,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get newConversation => 'محادثة جديدة';
+
+  @override
+  String get applicationSubmittedTitle => 'تم إرسال الطلب!';
+
+  @override
+  String get applicationSubmittedBody =>
+      'سنراجع طلبك ونتواصل معك عبر البريد الإلكتروني. يستغرق ذلك عادةً 1-2 يوم عمل.';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get applicationPending =>
+      'طلبك لا يزال قيد المراجعة. سنخطرك بمجرد الموافقة عليه.';
+
+  @override
+  String get applicationDeclined =>
+      'تم رفض طلبك. يرجى التواصل مع الدعم للمزيد من المعلومات.';
+
+  @override
+  String get soundsGood => '!رائع';
 }

@@ -323,5 +323,11 @@
   "agentConnected": "تم الاتصال بالوكيل",
   "waitingForAgent": "في انتظار وكيل…",
   "ticketClosedBanner": "تم إغلاق هذه المحادثة.",
-  "newConversation": "محادثة جديدة"
+  "newConversation": "محادثة جديدة",
+  "applicationSubmittedTitle": "تم إرسال الطلب!",
+  "applicationSubmittedBody": "سنراجع طلبك ونتواصل معك عبر البريد الإلكتروني. يستغرق ذلك عادةً 1-2 يوم عمل.",
+  "backToLogin": "العودة لتسجيل الدخول",
+  "applicationPending": "طلبك لا يزال قيد المراجعة. سنخطرك بمجرد الموافقة عليه.",
+  "applicationDeclined": "تم رفض طلبك. يرجى التواصل مع الدعم للمزيد من المعلومات.",
+  "soundsGood": "!رائع"
 }

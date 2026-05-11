@@ -2035,6 +2035,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New conversation'**
   String get newConversation;
+
+  /// No description provided for @applicationSubmittedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Submitted!'**
+  String get applicationSubmittedTitle;
+
+  /// No description provided for @applicationSubmittedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll review your application and get back to you via email. This usually takes 1–2 business days.'**
+  String get applicationSubmittedBody;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @applicationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is still under review. We\'ll notify you once it\'s approved.'**
+  String get applicationPending;
+
+  /// No description provided for @applicationDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application has been declined. Please contact support for more information.'**
+  String get applicationDeclined;
+
+  /// No description provided for @soundsGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds good!'**
+  String get soundsGood;
 }
 
 class _AppLocalizationsDelegate

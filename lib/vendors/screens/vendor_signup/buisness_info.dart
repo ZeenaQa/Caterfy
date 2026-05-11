@@ -1,6 +1,5 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
-
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/set_password.dart';
@@ -58,34 +57,33 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
     }
   }
 
-  void handleNext(auth, l10) async {
-    if (auth.validateBusinessInfo(
+  void handleNext(VendorAuthProvider auth, l10) {
+    if (!auth.validateBusinessInfo(
       businessName: businessName,
       businessType: selectedBusiness,
       l10: l10,
-    )) {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 300),
-          pageBuilder: (context, animation, secondaryAnimation) => SetPassword(
-            email: widget.email,
-            name: widget.name,
-            phoneNumber: widget.phoneNumber,
-            selectedBusiness: selectedBusiness,
-            businessName: businessName,
-            storeType: widget.storeType,
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            final tween = Tween(begin: begin, end: end);
-            final offsetAnimation = animation.drive(tween);
-            return SlideTransition(position: offsetAnimation, child: child);
-          },
+    )) return;
+
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (context, animation, secondaryAnimation) => SetPassword(
+          email: widget.email,
+          name: widget.name,
+          phoneNumber: widget.phoneNumber,
+          selectedBusiness: selectedBusiness,
+          businessName: businessName,
+          storeType: widget.storeType,
         ),
-      );
-    }
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          final tween = Tween(begin: begin, end: end);
+          return SlideTransition(position: animation.drive(tween), child: child);
+        },
+      ),
+    );
   }
 
   @override

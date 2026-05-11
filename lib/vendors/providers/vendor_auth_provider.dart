@@ -138,82 +138,34 @@ class VendorAuthProvider extends ChangeNotifier {
     return passwordError == null && confirmPasswordError == null;
   }
 
-  // ---------------- Sign Up ----------------
-  Future<bool> signUp({
-    bool onlyPassword = false,
+  // ---------------- Submit Application ----------------
+  Future<bool> submitApplication({
     required String email,
     required String name,
-    required String password,
-    required String confirmPassword,
     required String phoneNumber,
     required String businessName,
     required String businessType,
     required String storeType,
+    required String password,
     required BuildContext context,
   }) async {
     final l10 = AppLocalizations.of(context);
     try {
-      final isPasswordValid = validatePasswordInfo(
-        password: password,
-        confirmPassword: confirmPassword,
-        l10: l10,
-      );
-
-      final isPersonalInfoValid = validatePersonalInfo(
-        email: email,
-        name: name,
-        phoneNumber: phoneNumber,
-        l10: l10,
-      );
-
-      final isBusinessInfoValid = validateBusinessInfo(
-        businessName: businessName,
-        businessType: businessType,
-        l10: l10,
-      );
-
-      if (onlyPassword) {
-        if (!isPasswordValid) {
-          return false;
-        }
-      } else if (!isPersonalInfoValid ||
-          !isBusinessInfoValid ||
-          !isPasswordValid) {
-        return false;
-      }
       setLoading(true);
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
-        data: {
-          'name': name,
-          'role': 'vendor',
-          'business_name': businessName,
-          'business_type': businessType,
-          'store_type': storeType,
-        },
-      );
-
-      final userID = response.user?.id;
-
-      if (userID != null) {
-        await supabase
-            .from('vendors')
-            .update({'phone': phoneNumber})
-            .eq('id', userID);
-      }
-
+      await supabase.from('vendor_applications').insert({
+        'owner_name': name,
+        'email': email,
+        'phone': phoneNumber,
+        'store_name': businessName,
+        'business_type': businessType,
+        'store_type': storeType,
+        'password': password,
+        'status': 'pending',
+      });
       return true;
-    } on AuthException catch (e) {
-      if (e.code == 'user_already_exists') {
-        emailError = l10.emailInUse;
-        notifyListeners();
-      } else {
-        setSignUpError(e.message);
-      }
-      return false;
     } catch (e) {
-      setSignUpError(e.toString());
+      debugPrint('❌ submitApplication error: $e');
+      setSignUpError(l10.somethingWentWrong);
       return false;
     } finally {
       setLoading(false);

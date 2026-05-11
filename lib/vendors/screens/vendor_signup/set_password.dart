@@ -2,7 +2,8 @@ import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
-import 'package:caterfy/vendors/vendor_widgets/authenticated_vendor.dart';
+import 'package:caterfy/vendors/screens/vendor_signup/application_submitted_screen.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -83,11 +84,10 @@ class _SetPasswordState extends State<SetPassword> {
                     confirmPassword: confirmPassword,
                     l10: AppLocalizations.of(context),
                   )) {
-                    final success = await auth.signUp(
+                    final success = await auth.submitApplication(
                       email: widget.email,
                       name: widget.name,
                       password: password,
-                      confirmPassword: confirmPassword,
                       phoneNumber: widget.phoneNumber,
                       businessName: widget.businessName,
                       businessType: widget.selectedBusiness,
@@ -98,7 +98,7 @@ class _SetPasswordState extends State<SetPassword> {
                     if (success && context.mounted) {
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                          builder: (_) => const AuthenticatedVendor(),
+                          builder: (_) => const ApplicationSubmittedScreen(),
                         ),
                         (route) => false,
                       );

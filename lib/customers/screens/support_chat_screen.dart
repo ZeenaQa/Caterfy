@@ -54,7 +54,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           .from('chat_tickets')
           .select()
           .eq('user_id', userId)
-          .neq('status', 'closed')
+          .not('status', 'in', '("closed","resolved")')
           .order('created_at', ascending: false)
           .limit(1)
           .maybeSingle();
@@ -82,6 +82,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
     _channel?.unsubscribe();
     _channel = _supabase
         .channel('support_chat_${_ticket!['id']}')
+        // ── New messages ────────────────────────────────────────────────────
         .onPostgresChanges(
           event: PostgresChangeEvent.insert,
           schema: 'public',
@@ -99,6 +100,26 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
             }
           },
         )
+        // ── Ticket status changes (e.g. closed, claimed) ────────────────────
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'chat_tickets',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'id',
+            value: _ticket!['id'],
+          ),
+          callback: (payload) {
+            if (!mounted) return;
+            setState(() {
+              _ticket = {
+                ..._ticket!,
+                ...Map<String, dynamic>.from(payload.newRecord),
+              };
+            });
+          },
+        )
         .subscribe();
   }
 
@@ -106,7 +127,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
 
   Future<void> _send() async {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
+    if (text.isEmpty || _isClosed) return;
 
     final gp = context.read<GlobalProvider>();
     final userId = _supabase.auth.currentUser!.id;
@@ -227,7 +248,10 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
     });
   }
 
-  bool get _isClosed => _ticket?['status'] == 'closed';
+  bool get _isClosed {
+    final status = _ticket?['status'] as String?;
+    return status == 'closed' || status == 'resolved';
+  }
 
   bool get _isClaimed => _ticket?['claimed_by'] != null;
 
