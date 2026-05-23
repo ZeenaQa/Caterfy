@@ -29,7 +29,6 @@ class _WheelSelectorState<T> extends State<WheelSelector<T>> {
   @override
   void initState() {
     super.initState();
-    print(widget.initialItem);
     _selectedIndex = widget.items
         .indexOf(widget.initialItem)
         .clamp(0, widget.items.length - 1);

@@ -577,11 +577,6 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                                             const SizedBox(width: 8),
                                             GestureDetector(
                                               onTap: () {
-                                                print(
-                                                  customerProvider
-                                                      .cart
-                                                      ?.storeId,
-                                                );
                                                 openDrawer(
                                                   context,
                                                   padding: EdgeInsets.only(
@@ -757,22 +752,25 @@ class _CustomerStoreScreenState extends State<CustomerStoreScreen> {
                             onPressed: isLoading
                                 ? null
                                 : () => Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder: (_, animation, __) =>
-                                            FadeTransition(
-                                          opacity: animation,
-                                          child: StoreSearchScreen(
-                                            products: customerProvider.products,
-                                            store: widget.store,
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (_, animation, __) =>
+                                          FadeTransition(
+                                            opacity: animation,
+                                            child: StoreSearchScreen(
+                                              products:
+                                                  customerProvider.products,
+                                              store: widget.store,
+                                            ),
                                           ),
-                                        ),
-                                        transitionDuration: const Duration(
-                                            milliseconds: 180),
-                                        reverseTransitionDuration:
-                                            const Duration(milliseconds: 150),
+                                      transitionDuration: const Duration(
+                                        milliseconds: 180,
+                                      ),
+                                      reverseTransitionDuration: const Duration(
+                                        milliseconds: 150,
                                       ),
                                     ),
+                                  ),
                             child: Icon(
                               FontAwesomeIcons.magnifyingGlass,
                               size: 15,

@@ -390,7 +390,6 @@ class LoggedVendorProvider extends ChangeNotifier {
           .map((order) => VendorOrder.fromMap(setUpOrder(order)))
           .toList();
 
-      // print(_orders);
     } catch (e) {
       debugPrint('$e');
     } finally {

@@ -116,15 +116,3 @@ class _QuantitySelectorState extends State<QuantitySelector> {
     );
   }
 }
-
-// USAGE EXAMPLE:
-//
-// RollingQuantitySelector(
-//   initialValue: 1,
-//   minValue: 0,
-//   maxValue: 50,
-//   onChanged: (value) {
-//     print('Quantity changed to: $value');
-//     // Update your cart, state, etc.
-//   },
-// )
