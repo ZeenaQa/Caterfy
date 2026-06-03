@@ -340,6 +340,68 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
+  /// Fetches the single Ceemart store + its products.
+  /// Adds the store to [_stores] so [addToCart] can find it by ID.
+  /// Returns the store, or null if not found.
+  Future<Store?> fetchCeemartProducts(BuildContext context) async {
+    final l10 = AppLocalizations.of(context);
+    final isArabic = l10.localeName == 'ar';
+
+    try {
+      _isProductsLoading = true;
+      notifyListeners();
+
+      final storeData = await supabase
+          .from('stores')
+          .select()
+          .eq('category', 'ceemart')
+          .maybeSingle();
+
+      if (storeData == null) return null;
+
+      final ceemartStore = Store.fromMap(storeData);
+
+      // Upsert into _stores so addToCart lookup works
+      final idx = _stores.indexWhere((s) => s.id == ceemartStore.id);
+      if (idx >= 0) {
+        _stores[idx] = ceemartStore;
+      } else {
+        _stores.add(ceemartStore);
+      }
+
+      final data = await supabase
+          .from('products')
+          .select('*, sub_categories(name, name_ar)')
+          .eq('store_id', ceemartStore.id);
+
+      final Map<String, Product> productsMap = {};
+      for (final e in data) {
+        final subcat = e['sub_categories'];
+        final subCategoryName = (subcat is Map)
+            ? (isArabic && (subcat['name_ar']?.toString().isNotEmpty ?? false)
+                  ? subcat['name_ar']
+                  : subcat['name'])
+            : '';
+        productsMap[e['id']] = Product.fromMap({...e, 'sub_categories': subCategoryName});
+      }
+      _products = productsMap.values.toList();
+
+      return ceemartStore;
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+      return null;
+    } finally {
+      _isProductsLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> toggleFavorite(String customerId, Store store) async {
     final isCurrentlyFavorite = _favoriteStores.containsKey(store.id);
 

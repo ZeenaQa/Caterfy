@@ -1018,4 +1018,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get soundsGood => '!رائع';
+
+  @override
+  String get ceemartTagline => 'توصيل سريع';
+
+  @override
+  String get ceemartDeliveryNote => 'توصيل سريع · مباشرة إلى بابك';
+
+  @override
+  String get ceemartSearch => 'ابحث في Ceemart...';
+
+  @override
+  String get ceemartAll => 'الكل';
 }

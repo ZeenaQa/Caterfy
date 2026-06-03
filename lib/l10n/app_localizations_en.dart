@@ -1025,4 +1025,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get soundsGood => 'Sounds good!';
+
+  @override
+  String get ceemartTagline => 'Express delivery';
+
+  @override
+  String get ceemartDeliveryNote => 'Express delivery · Straight to your door';
+
+  @override
+  String get ceemartSearch => 'Search Ceemart...';
+
+  @override
+  String get ceemartAll => 'All';
 }

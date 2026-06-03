@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/customer_widgets/customer_home_ads_carousel.dart';
+import 'package:caterfy/customers/screens/ceemart/ceemart_screen.dart';
 import 'package:caterfy/customers/screens/customer_category_screen.dart';
 import 'package:caterfy/customers/screens/evouchers_screen.dart';
 import 'package:caterfy/customers/screens/laundry_screen.dart';
@@ -81,6 +82,14 @@ class CustomerHomeCategories extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const LocationPickerScreen()),
             );
           },
+        );
+        return;
+      }
+
+      if (category == "ceemart") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CeemartScreen()),
         );
         return;
       }

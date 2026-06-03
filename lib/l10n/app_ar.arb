@@ -329,5 +329,9 @@
   "backToLogin": "العودة لتسجيل الدخول",
   "applicationPending": "طلبك لا يزال قيد المراجعة. سنخطرك بمجرد الموافقة عليه.",
   "applicationDeclined": "تم رفض طلبك. يرجى التواصل مع الدعم للمزيد من المعلومات.",
-  "soundsGood": "!رائع"
+  "soundsGood": "!رائع",
+  "ceemartTagline": "توصيل سريع",
+  "ceemartDeliveryNote": "توصيل سريع · مباشرة إلى بابك",
+  "ceemartSearch": "ابحث في Ceemart...",
+  "ceemartAll": "الكل"
 }

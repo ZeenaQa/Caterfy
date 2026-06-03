@@ -331,5 +331,9 @@
   "backToLogin": "Back to Login",
   "applicationPending": "Your application is still under review. We'll notify you once it's approved.",
   "applicationDeclined": "Your application has been declined. Please contact support for more information.",
-  "soundsGood": "Sounds good!"
+  "soundsGood": "Sounds good!",
+  "ceemartTagline": "Express delivery",
+  "ceemartDeliveryNote": "Express delivery · Straight to your door",
+  "ceemartSearch": "Search Ceemart...",
+  "ceemartAll": "All"
 }

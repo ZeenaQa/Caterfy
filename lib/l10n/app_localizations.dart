@@ -2071,6 +2071,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sounds good!'**
   String get soundsGood;
+
+  /// No description provided for @ceemartTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Express delivery'**
+  String get ceemartTagline;
+
+  /// No description provided for @ceemartDeliveryNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Express delivery · Straight to your door'**
+  String get ceemartDeliveryNote;
+
+  /// No description provided for @ceemartSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Ceemart...'**
+  String get ceemartSearch;
+
+  /// No description provided for @ceemartAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get ceemartAll;
 }
 
 class _AppLocalizationsDelegate
