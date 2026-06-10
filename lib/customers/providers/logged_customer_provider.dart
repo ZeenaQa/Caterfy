@@ -435,11 +435,14 @@ class LoggedCustomerProvider with ChangeNotifier {
   }
 
   // ===== Fetch Stores =====
+  static const _serviceCategories = {'myCar', 'myHouse'};
+
   Future<void> fetchStores({
     required String category,
     required BuildContext context,
   }) async {
     final l10 = AppLocalizations.of(context);
+    final storeType = _serviceCategories.contains(category) ? 'service' : 'regular';
 
     try {
       _isCategoryLoading = true;
@@ -448,7 +451,8 @@ class LoggedCustomerProvider with ChangeNotifier {
       final data = await supabase
           .from('stores')
           .select()
-          .eq('category', category);
+          .eq('category', category)
+          .eq('type', storeType);
 
       _stores = data.map((item) => Store.fromMap(item)).toList();
     } catch (e) {
@@ -595,6 +599,10 @@ class LoggedCustomerProvider with ChangeNotifier {
       notifyListeners();
 
       final mapCart = _cart!.toMap();
+      final cartStoreType = _stores
+          .where((s) => s.id == _cart!.storeId)
+          .map((s) => s.type)
+          .firstOrNull ?? 'regular';
 
       final result = await supabase
           .from('orders')
@@ -605,6 +613,7 @@ class LoggedCustomerProvider with ChangeNotifier {
                 ? walletTransaction.toStringAsFixed(2)
                 : 0.00,
             'status': 'pending',
+            'store_type': cartStoreType,
           })
           .select('id')
           .single();
@@ -647,26 +656,27 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       final data = await supabase
           .from('orders')
-          .select('*, stores:store_id (logo_url, name_ar)')
+          .select('*, stores:store_id (logo_url, name_ar, type, category)')
           .eq('customer_id', customerId)
           .order('created_at', ascending: false);
 
-      Map<String, dynamic> checkStoreLogo(order) {
-        final storeLogo = (order['stores'] is Map)
-            ? order['stores']['logo_url']
-            : null;
-
-        final storeArName = order['stores']['name_ar'];
-
-        if (storeLogo == null) {
-          return order;
-        }
-
-        return {...order, 'store_logo': storeLogo, 'name_ar': storeArName};
+      Map<String, dynamic> enrichOrder(order) {
+        final store = order['stores'];
+        final storeLogo = (store is Map) ? store['logo_url'] : null;
+        final storeArName = (store is Map) ? store['name_ar'] : '';
+        final storeType = (store is Map) ? (store['type'] ?? 'regular') : (order['store_type'] ?? 'regular');
+        final storeCategory = (store is Map) ? (store['category'] ?? '') : '';
+        return {
+          ...order,
+          if (storeLogo != null) 'store_logo': storeLogo,
+          'name_ar': storeArName,
+          'store_type': storeType,
+          'store_category': storeCategory,
+        };
       }
 
       _orderHistory = data
-          .map((order) => Order.fromMap(checkStoreLogo(order)))
+          .map((order) => Order.fromMap(enrichOrder(order)))
           .toList();
 
     } catch (e) {

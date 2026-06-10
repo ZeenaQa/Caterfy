@@ -19,12 +19,14 @@ class ProductDrawerContent extends StatefulWidget {
     this.isInCart = false,
     this.orderItem,
     required this.isStoreOpen,
+    this.isService = false,
   });
 
   final Product product;
   final bool isInCart;
   final bool isStoreOpen;
   final OrderItem? orderItem;
+  final bool isService;
 
   @override
   State<ProductDrawerContent> createState() => ProductDrawerContentState();
@@ -160,13 +162,15 @@ class ProductDrawerContentState extends State<ProductDrawerContent> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Row(
                 children: [
-                  QuantitySelector(
-                    initialValue: widget.orderItem?.quantity ?? 1,
-                    onChanged: (value) => setState(() {
-                      quantity = value;
-                    }),
-                  ),
-                  SizedBox(width: 20),
+                  if (!widget.isService) ...[
+                    QuantitySelector(
+                      initialValue: widget.orderItem?.quantity ?? 1,
+                      onChanged: (value) => setState(() {
+                        quantity = value;
+                      }),
+                    ),
+                    SizedBox(width: 20),
+                  ],
                   Expanded(
                     child: FilledBtn(
                       onPressed: !widget.isStoreOpen

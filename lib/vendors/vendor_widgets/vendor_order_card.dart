@@ -27,18 +27,22 @@ class _VendorOrderCardState extends State<VendorOrderCard> {
     _selectedStatus = widget.order.status ?? 'pending';
   }
 
-  String getStatusText(String status) {
+  String getStatusText(String status, {bool isService = false, bool isFood = true}) {
+    if (isService) {
+      switch (status) {
+        case 'pending':          return 'Request Received';
+        case 'preparing':        return 'On the Way';
+        case 'out_for_delivery': return 'In Progress';
+        case 'delivered':        return 'All Done';
+        default:                 return 'Request Received';
+      }
+    }
     switch (status) {
-      case 'pending':
-        return 'Pending';
-      case 'preparing':
-        return 'Preparing';
-      case 'out_for_delivery':
-        return 'Out for Delivery';
-      case 'delivered':
-        return 'Delivered';
-      default:
-        return 'Pending';
+      case 'pending':          return 'Pending';
+      case 'preparing':        return isFood ? 'Preparing' : 'Processing';
+      case 'out_for_delivery': return 'Out for Delivery';
+      case 'delivered':        return 'Delivered';
+      default:                 return 'Pending';
     }
   }
 
@@ -52,6 +56,8 @@ class _VendorOrderCardState extends State<VendorOrderCard> {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final vendorProvider = Provider.of<LoggedVendorProvider>(context, listen: false);
+    final isService = vendorProvider.store?.type == 'service';
+    final isFood = vendorProvider.store?.category == 'food';
     final orderDate = widget.order.createdAt != null
         ? DateFormat(
             "MMM d - h:mm a",
@@ -87,7 +93,7 @@ class _VendorOrderCardState extends State<VendorOrderCard> {
               spacing: 13,
               children: [
                 Text(
-                  getStatusText(_selectedStatus),
+                  getStatusText(_selectedStatus, isService: isService, isFood: isFood),
                   style: TextStyle(
                     color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -206,12 +212,25 @@ class _VendorOrderCardState extends State<VendorOrderCard> {
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
-                    items: [
-                      DropdownMenuItem(value: 'pending', child: Text('Pending')),
-                      DropdownMenuItem(value: 'preparing', child: Text('Preparing')),
-                      DropdownMenuItem(value: 'out_for_delivery', child: Text('Out for Delivery')),
-                      DropdownMenuItem(value: 'delivered', child: Text('Delivered')),
-                    ],
+                    items: isService
+                        ? [
+                            DropdownMenuItem(value: 'pending',           child: Text('Request Received')),
+                            DropdownMenuItem(value: 'preparing',         child: Text('On the Way')),
+                            DropdownMenuItem(value: 'out_for_delivery',  child: Text('In Progress')),
+                            DropdownMenuItem(value: 'delivered',         child: Text('All Done')),
+                          ]
+                        : isFood
+                            ? [
+                                DropdownMenuItem(value: 'pending',           child: Text('Pending')),
+                                DropdownMenuItem(value: 'preparing',         child: Text('Preparing')),
+                                DropdownMenuItem(value: 'out_for_delivery',  child: Text('Out for Delivery')),
+                                DropdownMenuItem(value: 'delivered',         child: Text('Delivered')),
+                              ]
+                            : [
+                                DropdownMenuItem(value: 'pending',           child: Text('Pending')),
+                                DropdownMenuItem(value: 'out_for_delivery',  child: Text('Out for Delivery')),
+                                DropdownMenuItem(value: 'delivered',         child: Text('Delivered')),
+                              ],
                     onChanged: (value) async {
                       if (value != null) {
                         final previousStatus = _selectedStatus;

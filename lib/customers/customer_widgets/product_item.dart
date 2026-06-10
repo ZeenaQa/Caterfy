@@ -11,11 +11,13 @@ class ProductItem extends StatelessWidget {
     required this.product,
     this.isLastItem = false,
     this.isStoreOpen = true,
+    this.isService = false,
   });
 
   final Product product;
   final bool isLastItem;
   final bool isStoreOpen;
+  final bool isService;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class ProductItem extends StatelessWidget {
         context,
         padding: EdgeInsets.only(bottom: 0),
         isStack: true,
-        child: ProductDrawerContent(product: product, isStoreOpen: isStoreOpen),
+        child: ProductDrawerContent(product: product, isStoreOpen: isStoreOpen, isService: isService),
       ),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),

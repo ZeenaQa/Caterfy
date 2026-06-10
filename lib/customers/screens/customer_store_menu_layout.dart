@@ -58,6 +58,7 @@ class _StoreMenuLayoutState extends State<StoreMenuLayout> {
                     product: entry.value,
                     isStoreOpen: widget.store.isOpen,
                     isLastItem: entry.key == items.length - 1,
+                    isService: widget.store.type == 'service',
                   );
                 }),
               ],

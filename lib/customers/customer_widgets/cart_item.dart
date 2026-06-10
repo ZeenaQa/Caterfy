@@ -16,11 +16,13 @@ class CartItem extends StatelessWidget {
     required this.orderItem,
     this.isLastItem = false,
     this.isStoreOpen = true,
+    this.isService = false,
   });
 
   final OrderItem orderItem;
   final bool isLastItem;
   final bool isStoreOpen;
+  final bool isService;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class CartItem extends StatelessWidget {
             isInCart: true,
             orderItem: orderItem,
             isStoreOpen: true,
+            isService: isService,
           ),
         );
       },
@@ -176,20 +179,42 @@ class CartItem extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: Skeleton.ignore(
-                                child: CartQuantitySelector(
-                                  height: 40,
-                                  initialValue: orderItem.quantity,
-                                  deleteFunction: () =>
-                                      customerProvider.deleteItemFromCart(
-                                        orderItemId: orderItem.id,
+                                child: isService
+                                    ? GestureDetector(
+                                        onTap: () =>
+                                            customerProvider.deleteItemFromCart(
+                                              orderItemId: orderItem.id,
+                                            ),
+                                        child: Container(
+                                          height: 40,
+                                          width: 130,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.onInverseSurface,
+                                            border: Border.all(color: Theme.of(context).colorScheme.outline),
+                                            borderRadius: BorderRadius.circular(50),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            FontAwesomeIcons.solidTrashCan,
+                                            size: 16,
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                        ),
+                                      )
+                                    : CartQuantitySelector(
+                                        height: 40,
+                                        initialValue: orderItem.quantity,
+                                        deleteFunction: () =>
+                                            customerProvider.deleteItemFromCart(
+                                              orderItemId: orderItem.id,
+                                            ),
+                                        onChanged: (val) {
+                                          customerProvider.setItemQuantity(
+                                            item: orderItem,
+                                            newQuantity: val,
+                                          );
+                                        },
                                       ),
-                                  onChanged: (val) {
-                                    customerProvider.setItemQuantity(
-                                      item: orderItem,
-                                      newQuantity: val,
-                                    );
-                                  },
-                                ),
                               ),
                             ),
                           ),

@@ -11,6 +11,7 @@ class Store {
   final double latitude;
   final double longitude;
   final bool isOpen;
+  final String type;
 
   Store({
     required this.id,
@@ -25,6 +26,7 @@ class Store {
     this.latitude = 0,
     this.longitude = 0,
     this.isOpen = true,
+    this.type = 'regular',
   });
 
   factory Store.fromMap(Map<String, dynamic> map) {
@@ -41,6 +43,7 @@ class Store {
       latitude: (map['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (map['longitude'] as num?)?.toDouble() ?? 0,
       isOpen: map['is_open'] ?? true,
+      type: map['type'] ?? 'regular',
     );
   }
 

@@ -13,6 +13,8 @@ class Order {
   final double deliveryPrice;
   final double walletTransaction;
   final String? status;
+  final String storeType;
+  final String storeCategory;
 
   Order({
     this.id = '',
@@ -24,6 +26,8 @@ class Order {
     this.walletTransaction = 0.00,
     this.storeLogo = '',
     this.status,
+    this.storeType = 'regular',
+    this.storeCategory = '',
     List<OrderItem>? items,
     this.note = '',
     this.createdAt,
@@ -34,6 +38,12 @@ class Order {
       status?.toLowerCase() == 'completed';
 
   bool get isActiveOrder => !isDelivered;
+
+  bool get isService => storeType == 'service';
+
+  /// Food stores get the full 4-step flow including "Preparing".
+  /// All other regular stores skip that step.
+  bool get isFood => storeCategory == 'food';
 
   double get subtotal {
     double total = 0;
@@ -56,6 +66,8 @@ class Order {
       walletTransaction: walletTransaction,
       storeLogo: storeLogo,
       status: status ?? this.status,
+      storeType: storeType,
+      storeCategory: storeCategory,
       items: items,
       note: note,
       createdAt: createdAt,
@@ -75,6 +87,7 @@ class Order {
       'wallet_transaction': walletTransaction,
       'items': items.map((e) => e.toMap()).toList(),
       'status': status ?? 'pending',
+      'store_type': storeType,
       'created_at': createdAt,
     };
   }
@@ -92,6 +105,8 @@ class Order {
       deliveryPrice: (map['delivery_price'] as num).toDouble(),
       walletTransaction: (map['wallet_transaction'] as num).toDouble(),
       status: map['status'] as String?,
+      storeType: map['store_type'] ?? 'regular',
+      storeCategory: map['store_category'] ?? '',
     );
 
     order.items.addAll(

@@ -50,8 +50,32 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     }
   }
 
-  int _stepFor(String? status) {
-    switch (status?.toLowerCase()) {
+  int _stepFor(String? status, {bool isFood = true}) {
+    final s = status?.toLowerCase();
+    if (!isFood) {
+      // 3-step flow: Received(0) → Out for Delivery(1) → Delivered(2)
+      // "preparing" has no dedicated step — treat it same as received
+      switch (s) {
+        case 'out_for_delivery':
+        case 'out for delivery':
+        case 'on_the_way':
+        case 'picked_up':
+        case 'shipped':
+        case 'enroute':
+        case 'delivering':
+        case 'preparing':
+        case 'processing':
+        case 'accepted':
+        case 'confirmed':
+          return 1;
+        case 'delivered':
+        case 'completed':
+          return 2;
+        default:
+          return 0;
+      }
+    }
+    switch (s) {
       case 'preparing':
       case 'processing':
       case 'accepted':
@@ -73,16 +97,22 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     }
   }
 
-  IconData _iconFor(int step) {
+  IconData _iconFor(int step, {bool isService = false}) {
+    if (isService) {
+      switch (step) {
+        case 0: return Icons.check_circle_outline;        // Request Received
+        case 1: return Icons.directions_car_outlined;     // On the Way
+        case 2: return Icons.handyman_outlined;           // In Progress
+        case 3: return Icons.task_alt;                    // All Done
+        default: return Icons.check_circle_outline;
+      }
+    }
     switch (step) {
-      case 1:
-        return Icons.restaurant_outlined;
-      case 2:
-        return Icons.delivery_dining;
-      case 3:
-        return Icons.check_circle_outline;
-      default:
-        return Icons.receipt_long_outlined;
+      case 0: return Icons.receipt_long_outlined;         // Order Received
+      case 1: return Icons.restaurant_outlined;           // Preparing
+      case 2: return Icons.delivery_dining;               // Out for Delivery
+      case 3: return Icons.check_circle_outline;          // Delivered
+      default: return Icons.receipt_long_outlined;
     }
   }
 
@@ -93,20 +123,39 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     final provider = context.watch<LoggedCustomerProvider>();
     final order = _findOrder(provider);
 
-    final step = _stepFor(order?.status);
-    final isDelivered = step == 3;
+    final isService = order?.isService ?? false;
+    final isFood = order?.isFood ?? true; // default to food (4-step) if unknown
+
+    final step = _stepFor(order?.status, isFood: isService || isFood);
+    final isDelivered = isService ? step == 3 : (isFood ? step == 3 : step == 2);
 
     final subtotal = order?.subtotal ?? 0.0;
     final deliveryFee = order?.deliveryPrice ?? 0.0;
     const serviceFee = 0.2;
     final total = subtotal + deliveryFee + serviceFee;
 
-    final stepLabels = [
-      l10.orderReceived,
-      l10.preparingOrder,
-      l10.outForDelivery,
-      l10.delivered,
-    ];
+    final stepLabels = isService
+        ? ['Request Received', 'On the Way', 'In Progress', 'All Done']
+        : isFood
+            ? [l10.orderReceived, l10.preparingOrder, l10.outForDelivery, l10.delivered]
+            : [l10.orderReceived, l10.outForDelivery, l10.delivered];
+
+    final stepDescs = isService
+        ? [
+            'We\'ve received your request and will be with you shortly.',
+            'Your service provider is heading to you — they\'ll be there soon.',
+            'Your service is currently being carried out.',
+            'All done! We hope everything went smoothly.',
+          ]
+        : isFood
+            ? [l10.orderReceivedDesc, l10.preparingOrderDesc, l10.outForDeliveryDesc, l10.deliveredDesc]
+            : [l10.orderReceivedDesc, l10.outForDeliveryDesc, l10.deliveredDesc];
+
+    final stepIcons = isService
+        ? [Icons.check_circle_outline, Icons.directions_car_outlined, Icons.handyman_outlined, Icons.task_alt]
+        : isFood
+            ? [Icons.receipt_long_outlined, Icons.restaurant_outlined, Icons.delivery_dining_outlined, Icons.home_outlined]
+            : [Icons.receipt_long_outlined, Icons.delivery_dining_outlined, Icons.home_outlined];
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -153,7 +202,7 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                         ),
                         child: Icon(
                           key: ValueKey(step),
-                          _iconFor(step),
+                          stepIcons[step],
                           size: 90,
                           color: colors.primary,
                         ),
@@ -178,6 +227,7 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                       currentStep: step,
                       activeColor: colors.primary,
                       labels: stepLabels,
+                      icons: stepIcons,
                     ),
                   ),
 
@@ -204,12 +254,7 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              [
-                                l10.orderReceivedDesc,
-                                l10.preparingOrderDesc,
-                                l10.outForDeliveryDesc,
-                                l10.deliveredDesc,
-                              ][step],
+                              stepDescs[step],
                               style: TextStyle(
                                 fontSize: 13,
                                 color: colors.onSurfaceVariant,
@@ -382,11 +427,13 @@ class _TrackingSteps extends StatefulWidget {
   final int currentStep;
   final Color activeColor;
   final List<String> labels;
+  final List<IconData> icons;
 
   const _TrackingSteps({
     required this.currentStep,
     required this.activeColor,
     required this.labels,
+    required this.icons,
   });
 
   @override
@@ -400,12 +447,6 @@ class _TrackingStepsState extends State<_TrackingSteps>
 
   static const _nodeSize = 44.0;
   static const _circleSize = 32.0;
-  static const _icons = [
-    Icons.receipt_long_outlined,
-    Icons.restaurant_outlined,
-    Icons.delivery_dining_outlined,
-    Icons.home_outlined,
-  ];
 
   @override
   void initState() {
@@ -448,7 +489,7 @@ class _TrackingStepsState extends State<_TrackingSteps>
             : null,
       ),
       child: Icon(
-        _icons[i],
+        widget.icons[i],
         size: 15,
         color: isActive ? Colors.white : Colors.grey[500],
       ),
@@ -508,9 +549,10 @@ class _TrackingStepsState extends State<_TrackingSteps>
     const connectorTopPad = (_nodeSize - 2) / 2;
     final children = <Widget>[];
 
-    for (int i = 0; i < 4; i++) {
+    final count = widget.labels.length;
+    for (int i = 0; i < count; i++) {
       children.add(_buildNode(i));
-      if (i < 3) {
+      if (i < count - 1) {
         children.add(
           Expanded(
             child: Padding(

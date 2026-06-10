@@ -114,8 +114,30 @@ class OnGoingOrders extends StatelessWidget {
   final List<Order> activeOrders;
   final List<LaundryOrder> activeLaundryOrders;
 
-  static int stepFor(String? status) {
-    switch (status?.toLowerCase()) {
+  static int stepFor(String? status, {bool isFood = true}) {
+    final s = status?.toLowerCase();
+    if (!isFood) {
+      switch (s) {
+        case 'preparing':
+        case 'processing':
+        case 'accepted':
+        case 'confirmed':
+        case 'out_for_delivery':
+        case 'out for delivery':
+        case 'on_the_way':
+        case 'picked_up':
+        case 'shipped':
+        case 'enroute':
+        case 'delivering':
+          return 1;
+        case 'delivered':
+        case 'completed':
+          return 2;
+        default:
+          return 0;
+      }
+    }
+    switch (s) {
       case 'preparing':
       case 'processing':
       case 'accepted':
@@ -173,7 +195,7 @@ class OnGoingOrders extends StatelessWidget {
             final entry = combined[index];
             if (!entry.isLaundry) {
               final order = activeOrders[entry.idx];
-              return _ActiveOrderCard(order: order, step: stepFor(order.status));
+              return _ActiveOrderCard(order: order, step: stepFor(order.status, isFood: order.isService || order.isFood));
             } else {
               final laundryOrder = activeLaundryOrders[entry.idx];
               return _LaundryActiveCard(
@@ -196,31 +218,38 @@ class _ActiveOrderCard extends StatelessWidget {
 
   const _ActiveOrderCard({required this.order, required this.step});
 
-  static const _stageIcons = [
-    Icons.receipt_long_outlined,
-    Icons.restaurant_outlined,
-    Icons.delivery_dining_outlined,
-    Icons.check_circle_outline,
-  ];
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
 
-    final stageLabels = [
-      l10.orderReceived,
-      l10.preparingOrder,
-      l10.outForDelivery,
-      l10.delivered,
-    ];
+    final isService = order.isService;
+    final isFood = order.isFood;
 
-    final stageDescs = [
-      l10.orderReceivedDesc,
-      l10.preparingOrderDesc,
-      l10.outForDeliveryDesc,
-      l10.deliveredDesc,
-    ];
+    final stageIcons = isService
+        ? [Icons.check_circle_outline, Icons.directions_car_outlined, Icons.handyman_outlined, Icons.task_alt]
+        : isFood
+            ? [Icons.receipt_long_outlined, Icons.restaurant_outlined, Icons.delivery_dining_outlined, Icons.home_outlined]
+            : [Icons.receipt_long_outlined, Icons.delivery_dining_outlined, Icons.home_outlined];
+
+    final stageLabels = isService
+        ? ['Request Received', 'On the Way', 'In Progress', 'All Done']
+        : isFood
+            ? [l10.orderReceived, l10.preparingOrder, l10.outForDelivery, l10.delivered]
+            : [l10.orderReceived, l10.outForDelivery, l10.delivered];
+
+    final stageDescs = isService
+        ? [
+            'We\'ve received your request and will be with you shortly.',
+            'Your service provider is heading to you.',
+            'Your service is currently being carried out.',
+            'All done! We hope everything went smoothly.',
+          ]
+        : isFood
+            ? [l10.orderReceivedDesc, l10.preparingOrderDesc, l10.outForDeliveryDesc, l10.deliveredDesc]
+            : [l10.orderReceivedDesc, l10.outForDeliveryDesc, l10.deliveredDesc];
+
+    final stageCount = stageLabels.length;
 
     return GestureDetector(
       onTap: () => Navigator.push(
@@ -283,7 +312,7 @@ class _ActiveOrderCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(_stageIcons[step], size: 16, color: colors.primary),
+                Icon(stageIcons[step], size: 16, color: colors.primary),
                 const SizedBox(width: 7),
                 Expanded(
                   child: Column(
@@ -317,7 +346,7 @@ class _ActiveOrderCard extends StatelessWidget {
 
             // ── Mini segmented progress bar ────────────────────────────────
             Row(
-              children: List.generate(4, (i) {
+              children: List.generate(stageCount, (i) {
                 final isActive = i <= step;
                 return Expanded(
                   child: Container(

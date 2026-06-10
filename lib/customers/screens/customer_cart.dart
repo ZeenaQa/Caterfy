@@ -134,6 +134,7 @@ class _CustomerCartState extends State<CustomerCart> {
                           isLastItem:
                               index == (isLoading ? 1 : items.length - 1),
                           isStoreOpen: store?.isOpen ?? true,
+                          isService: store?.type == 'service',
                         );
                       },
                     ),
