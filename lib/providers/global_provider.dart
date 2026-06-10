@@ -40,27 +40,11 @@ class GlobalProvider extends ChangeNotifier {
         throw Exception("Rating must be between 1 and 5");
       }
 
-      final existing = await supabase
-          .from('store_ratings')
-          .select()
-          .eq('store_id', storeId)
-          .eq('id', currentUser.id);
-
-      if (existing.isNotEmpty) {
-        // update rating
-        await supabase
-            .from('store_ratings')
-            .update({'rating': rating})
-            .eq('store_id', storeId)
-            .eq('id', currentUser.id);
-      } else {
-        // insert new rating
-        await supabase.from('store_ratings').insert({
-          'store_id': storeId,
-          'id': currentUser.id,
-          'rating': rating,
-        });
-      }
+      await supabase.from('store_ratings').upsert({
+        'store_id': storeId,
+        'customer_id': currentUser.id,
+        'rating': rating,
+      }, onConflict: 'customer_id, store_id');
 
       // refresh cache for this store so UI updates immediately
       await _refreshStoreRatingCache(storeId);
@@ -175,7 +159,7 @@ class GlobalProvider extends ChangeNotifier {
           .from('store_ratings')
           .select('rating')
           .eq('store_id', storeId)
-          .eq('id', currentUser.id);
+          .eq('customer_id', currentUser.id);
 
       if (response.isEmpty) return null;
       return (response[0]['rating'] as int?);

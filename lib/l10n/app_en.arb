@@ -108,6 +108,7 @@
   "pharmacy": "Pharmacy",
   "toysAndKids": "Toys & Kids",
   "healthAndBeauty": "Health & Beauty",
+  "clothing": "Clothing",
   "pets": "Pets",
   "locationServicesDisabled": "Location Services Disabled",
   "enableGpsFromSettings": "Please enable location services (GPS) from your device settings.",

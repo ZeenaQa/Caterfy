@@ -746,6 +746,12 @@ abstract class AppLocalizations {
   /// **'Health & Beauty'**
   String get healthAndBeauty;
 
+  /// No description provided for @clothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing'**
+  String get clothing;
+
   /// No description provided for @pets.
   ///
   /// In en, this message translates to:

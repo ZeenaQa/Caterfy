@@ -7,6 +7,7 @@ class Product {
   final double price;
   final String subCategoryId;
   final String subCategory;
+  final String subCategoryEn;
 
   Product({
     required this.id,
@@ -17,7 +18,8 @@ class Product {
     this.imageUrl,
     required this.subCategoryId,
     required this.subCategory,
-  });
+    String? subCategoryEn,
+  }) : subCategoryEn = subCategoryEn ?? subCategory;
 
   // FROM SUPABASE (Map → Product)
   factory Product.fromMap(Map<String, dynamic> map) {
@@ -30,6 +32,7 @@ class Product {
       imageUrl: map['image_url'],
       subCategoryId: map['sub_category_id'],
       subCategory: map['sub_categories'] ?? '',
+      subCategoryEn: map['sub_categories_en'] ?? map['sub_categories'] ?? '',
     );
   }
 

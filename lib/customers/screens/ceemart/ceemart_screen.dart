@@ -113,14 +113,17 @@ class _CeemartScreenState extends State<CeemartScreen> {
                 p.description.toLowerCase().contains(query))
             .toList();
 
-    final cats = <String>[
-      'all',
-      ...{for (final p in searched) p.subCategory}.where((c) => c.isNotEmpty),
-    ];
+    // keys = English name (for emoji lookup), values = localised display name
+    final catLabels = <String, String>{
+      'all': l10.ceemartAll,
+      for (final p in searched)
+        if (p.subCategoryEn.isNotEmpty) p.subCategoryEn: p.subCategory,
+    };
+    final cats = catLabels.keys.toList();
     final effCat = cats.contains(_selectedCategory) ? _selectedCategory : 'all';
     final filtered = effCat == 'all'
         ? searched
-        : searched.where((p) => p.subCategory == effCat).toList();
+        : searched.where((p) => p.subCategoryEn == effCat).toList();
 
     final showCart = _store != null && provider.cart?.storeId == _store!.id;
 
@@ -146,6 +149,7 @@ class _CeemartScreenState extends State<CeemartScreen> {
           if (!isLoading && cats.length > 2)
             _ChipsBar(
               categories: cats,
+              catLabels: catLabels,
               selected: effCat,
               onTap: _pickCategory,
               chipScroll: _chipScroll,
@@ -346,6 +350,7 @@ class _HeaderBtn extends StatelessWidget {
 class _ChipsBar extends StatelessWidget {
   const _ChipsBar({
     required this.categories,
+    required this.catLabels,
     required this.selected,
     required this.onTap,
     required this.chipScroll,
@@ -354,13 +359,15 @@ class _ChipsBar extends StatelessWidget {
   });
 
   final List<String> categories;
+  final Map<String, String> catLabels;
   final String selected;
   final ValueChanged<String> onTap;
   final ScrollController chipScroll;
   final ColorScheme colors;
   final AppLocalizations l10;
 
-  String _label(String cat) => cat == 'all' ? l10.ceemartAll : cat;
+  // cat is always the English key
+  String _label(String cat) => catLabels[cat] ?? cat;
   String _emoji(String cat) => cat == 'all' ? '🛒' : (_catEmoji[cat] ?? '📦');
 
   @override
@@ -442,9 +449,9 @@ class _ProductCard extends StatelessWidget {
         .fold<int>(0, (s, i) => s + i.quantity);
 
     final placeholderColor =
-        _catColor[product.subCategory] ?? const Color(0xFFF5F5F5);
+        _catColor[product.subCategoryEn] ?? const Color(0xFFF5F5F5);
     final placeholderIcon =
-        _catIcon[product.subCategory] ?? Icons.shopping_bag_outlined;
+        _catIcon[product.subCategoryEn] ?? Icons.shopping_bag_outlined;
 
     final isOpen = store.isOpen;
 

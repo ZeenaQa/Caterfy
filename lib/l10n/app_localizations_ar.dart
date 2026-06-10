@@ -339,6 +339,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get healthAndBeauty => 'الجمال والصحة';
 
   @override
+  String get clothing => 'الملابس';
+
+  @override
   String get pets => 'الحيوانات الأليفة';
 
   @override

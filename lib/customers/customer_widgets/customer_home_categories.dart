@@ -53,6 +53,11 @@ class CustomerHomeCategories extends StatelessWidget {
         'image': 'health_and_beauty_icon.png',
         'category': "healthAndBeauty",
       },
+      {
+        'title': l10.clothing,
+        'image': 'clothing_icon.png',
+        'category': "clothing",
+      },
       {'title': l10.pets, 'image': 'pets_icon.png', 'category': "pets"},
     ];
 

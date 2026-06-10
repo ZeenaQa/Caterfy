@@ -313,14 +313,14 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       for (final e in data) {
         final subcat = e['sub_categories'];
-
+        final nameEn = (subcat is Map) ? (subcat['name'] ?? '') : '';
         final subCategoryName = (subcat is Map)
             ? (isArabic && (subcat['name_ar']?.toString().isNotEmpty ?? false)
                   ? subcat['name_ar']
                   : subcat['name'])
             : '';
 
-        final productObject = {...e, 'sub_categories': subCategoryName};
+        final productObject = {...e, 'sub_categories': subCategoryName, 'sub_categories_en': nameEn};
 
         productsMap[e['id']] = Product.fromMap(productObject);
       }
@@ -377,12 +377,13 @@ class LoggedCustomerProvider with ChangeNotifier {
       final Map<String, Product> productsMap = {};
       for (final e in data) {
         final subcat = e['sub_categories'];
+        final nameEn = (subcat is Map) ? (subcat['name'] ?? '') : '';
         final subCategoryName = (subcat is Map)
             ? (isArabic && (subcat['name_ar']?.toString().isNotEmpty ?? false)
                   ? subcat['name_ar']
                   : subcat['name'])
             : '';
-        productsMap[e['id']] = Product.fromMap({...e, 'sub_categories': subCategoryName});
+        productsMap[e['id']] = Product.fromMap({...e, 'sub_categories': subCategoryName, 'sub_categories_en': nameEn});
       }
       _products = productsMap.values.toList();
 
@@ -483,6 +484,7 @@ class LoggedCustomerProvider with ChangeNotifier {
       for (final e in data) {
         final productId = e['id'];
         final subcat = e['sub_categories'];
+        final nameEn = (subcat is Map) ? (subcat['name'] ?? '') : '';
         final subcatName = (subcat is Map)
             ? ((Localizations.localeOf(context).languageCode == 'ar' &&
                       (subcat['name_ar']?.toString().isNotEmpty ?? false))
@@ -490,7 +492,7 @@ class LoggedCustomerProvider with ChangeNotifier {
                   : subcat['name'])
             : (subcat?.toString() ?? '');
 
-        final productObject = {...e, 'sub_categories': subcatName};
+        final productObject = {...e, 'sub_categories': subcatName, 'sub_categories_en': nameEn};
 
         productsMap[productId] = Product.fromMap(productObject);
       }

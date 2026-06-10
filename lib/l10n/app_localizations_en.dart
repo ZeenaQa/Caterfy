@@ -340,6 +340,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get healthAndBeauty => 'Health & Beauty';
 
   @override
+  String get clothing => 'Clothing';
+
+  @override
   String get pets => 'Pets';
 
   @override
