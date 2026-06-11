@@ -5,45 +5,46 @@ import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_add_card.dart';
 import 'package:caterfy/customers/screens/customer_checkout.dart';
-import 'package:caterfy/customers/screens/evouchers_screen.dart';
+import 'package:caterfy/customers/screens/tickets_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/models/voucher_order.dart';
+import 'package:caterfy/models/ticket_order.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class EVoucherCheckoutScreen extends StatefulWidget {
-  const EVoucherCheckoutScreen({
+class TicketCheckoutScreen extends StatefulWidget {
+  const TicketCheckoutScreen({
     super.key,
-    required this.provider,
-    required this.denomination,
+    required this.event,
+    required this.tier,
   });
 
-  final VoucherProvider provider;
-  final VoucherDenomination denomination;
+  final EventItem event;
+  final TicketTier tier;
 
   @override
-  State<EVoucherCheckoutScreen> createState() => _EVoucherCheckoutScreenState();
+  State<TicketCheckoutScreen> createState() => _TicketCheckoutScreenState();
 }
 
-class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
+class _TicketCheckoutScreenState extends State<TicketCheckoutScreen> {
   String _payment = 'add';
   bool _useWallet = false;
   bool _isPlacing = false;
-  VoucherOrder? _completedOrder;
+  TicketOrder? _completedOrder;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final customerProvider = Provider.of<LoggedCustomerProvider>(context, listen: false);
-      final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
+      final customerProvider =
+          Provider.of<LoggedCustomerProvider>(context, listen: false);
+      final globalProvider =
+          Provider.of<GlobalProvider>(context, listen: false);
       await customerProvider.fetchPaymentMethods(context: context);
       await globalProvider.fetchUser();
     });
@@ -52,12 +53,14 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
   void _pickMethod(String val) => setState(() => _payment = val);
 
   bool _toggleWallet() {
-    final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
-    final walletBalance =
-        globalProvider.user != null ? (globalProvider.user['wallet_balance'] as num).toDouble() : 0.0;
+    final globalProvider =
+        Provider.of<GlobalProvider>(context, listen: false);
+    final walletBalance = globalProvider.user != null
+        ? (globalProvider.user['wallet_balance'] as num).toDouble()
+        : 0.0;
     bool willReturn = false;
     if (!_useWallet) {
-      if (walletBalance >= widget.denomination.priceJod) {
+      if (walletBalance >= widget.tier.priceJod) {
         willReturn = true;
         _pickMethod('wallet');
       }
@@ -71,27 +74,32 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
   Future<void> _confirmPurchase() async {
     setState(() => _isPlacing = true);
 
-    final activationCode = VoucherOrder.generateCode(widget.provider.codeFormat);
-    final globalProvider = Provider.of<GlobalProvider>(context, listen: false);
-    final walletBalance =
-        globalProvider.user != null ? (globalProvider.user['wallet_balance'] as num).toDouble() : 0.0;
+    final bookingRef = TicketOrder.generateBookingRef();
+    final globalProvider =
+        Provider.of<GlobalProvider>(context, listen: false);
+    final walletBalance = globalProvider.user != null
+        ? (globalProvider.user['wallet_balance'] as num).toDouble()
+        : 0.0;
 
-    final customerProvider = Provider.of<LoggedCustomerProvider>(context, listen: false);
-    final order = await customerProvider.placeVoucherOrder(
+    final customerProvider =
+        Provider.of<LoggedCustomerProvider>(context, listen: false);
+    final order = await customerProvider.placeTicketOrder(
       context: context,
-      provider: widget.provider.name,
-      providerCategory: widget.provider.category,
-      denominationLabel: widget.denomination.label,
-      priceJod: widget.denomination.priceJod,
-      activationCode: activationCode,
+      eventName: widget.event.name,
+      eventCategory: widget.event.category,
+      ticketType: widget.tier.name,
+      eventDate: widget.event.date,
+      venue: widget.event.venue,
+      priceJod: widget.tier.priceJod,
+      bookingRef: bookingRef,
       isUsingWallet: _useWallet,
-      walletTransaction: _useWallet ? min(walletBalance, widget.denomination.priceJod) : 0,
+      walletTransaction:
+          _useWallet ? min(walletBalance, widget.tier.priceJod) : 0,
     );
 
     if (!mounted) return;
 
     if (order != null && _useWallet) {
-      // Refresh wallet balance shown elsewhere in the app
       await globalProvider.fetchUser();
     }
 
@@ -115,10 +123,11 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
         ? (globalProvider.user['wallet_balance'] as num).toDouble()
         : 0.0;
 
-    final bool walletOnly = walletBalance >= widget.denomination.priceJod && _useWallet;
+    final bool walletOnly =
+        walletBalance >= widget.tier.priceJod && _useWallet;
 
     final priceStr =
-        '${widget.denomination.priceJod.toStringAsFixed(widget.denomination.priceJod % 1 == 0 ? 0 : 2)} ${l10.jod}';
+        '${widget.tier.priceJod.toStringAsFixed(widget.tier.priceJod % 1 == 0 ? 0 : 2)} ${l10.jod}';
 
     // ── Success screen ──────────────────────────────────────────────────────
     if (_completedOrder != null) {
@@ -127,9 +136,10 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
           content: Row(
             spacing: 10,
             children: [
-              SvgPicture.asset('assets/icons/rounded_logo.svg', height: 30, width: 30),
+              SvgPicture.asset('assets/icons/rounded_logo.svg',
+                  height: 30, width: 30),
               Text(
-                l10.yourVoucher,
+                l10.yourTicket,
                 style: const TextStyle(fontSize: 17.5, fontWeight: FontWeight.w600),
               ),
             ],
@@ -138,7 +148,8 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
-            child: _SuccessView(order: _completedOrder!, provider: widget.provider),
+            child: _SuccessView(
+                order: _completedOrder!, event: widget.event),
           ),
         ),
       );
@@ -150,7 +161,8 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
         content: Row(
           spacing: 10,
           children: [
-            SvgPicture.asset('assets/icons/rounded_logo.svg', height: 30, width: 30),
+            SvgPicture.asset('assets/icons/rounded_logo.svg',
+                height: 30, width: 30),
             Text(
               l10.checkout,
               style: const TextStyle(fontSize: 17.5, fontWeight: FontWeight.w600),
@@ -161,7 +173,8 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
       bottomNavigationBar: isPageLoading
           ? null
           : Container(
-              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
               decoration: BoxDecoration(
                 color: colors.surface,
                 boxShadow: [
@@ -180,7 +193,8 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
                         if (_payment == 'add') {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const CustomerAddCard()),
+                            MaterialPageRoute(
+                                builder: (_) => const CustomerAddCard()),
                           );
                           return;
                         }
@@ -196,8 +210,8 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
             children: [
-              // ── Provider banner ───────────────────────────────────────────
-              _ProviderBanner(provider: widget.provider),
+              // ── Event banner ──────────────────────────────────────────────
+              _EventBanner(event: widget.event, tier: widget.tier),
               const SizedBox(height: 25),
 
               // ── Pay with ──────────────────────────────────────────────────
@@ -223,9 +237,9 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         PaymentRow(
-                          title: widget.denomination.label,
-                          price: widget.denomination.priceJod.toStringAsFixed(
-                            widget.denomination.priceJod % 1 == 0 ? 0 : 2,
+                          title: '${widget.event.name} · ${widget.tier.name}',
+                          price: widget.tier.priceJod.toStringAsFixed(
+                            widget.tier.priceJod % 1 == 0 ? 0 : 2,
                           ),
                         ),
                         Row(
@@ -239,7 +253,7 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
                             ),
                             const Spacer(),
                             Text(
-                              '$priceStr',
+                              priceStr,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -274,54 +288,76 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
   }
 }
 
-// ── Provider banner ───────────────────────────────────────────────────────────
+// ── Event banner ──────────────────────────────────────────────────────────────
 
-class _ProviderBanner extends StatelessWidget {
-  const _ProviderBanner({required this.provider});
-  final VoucherProvider provider;
+class _EventBanner extends StatelessWidget {
+  const _EventBanner({required this.event, required this.tier});
+  final EventItem event;
+  final TicketTier tier;
 
   @override
   Widget build(BuildContext context) {
-    final p = provider;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 26),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [p.color, p.colorEnd],
+          colors: [event.color, event.colorEnd],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: p.color.withValues(alpha: 0.28),
+            color: event.color.withValues(alpha: 0.28),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 14,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (p.icon != null)
-            FaIcon(p.icon!, color: Colors.white, size: 30)
-          else
-            Text(
-              p.initials!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+          Row(
+            spacing: 12,
+            children: [
+              Icon(event.icon, color: Colors.white, size: 28),
+              Expanded(
+                child: Text(
+                  event.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 17,
+                  ),
+                ),
               ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
             ),
-          Text(
-            p.name,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 6,
+              children: [
+                _BannerRow(
+                  icon: Icons.confirmation_number_rounded,
+                  text: tier.name,
+                ),
+                _BannerRow(
+                  icon: Icons.calendar_today_rounded,
+                  text: event.date,
+                ),
+                _BannerRow(
+                  icon: Icons.location_on_rounded,
+                  text: event.venue,
+                ),
+              ],
             ),
           ),
         ],
@@ -330,12 +366,40 @@ class _ProviderBanner extends StatelessWidget {
   }
 }
 
+class _BannerRow extends StatelessWidget {
+  const _BannerRow({required this.icon, required this.text});
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 8,
+      children: [
+        Icon(icon, color: Colors.white.withValues(alpha: 0.85), size: 14),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 // ── Success view ──────────────────────────────────────────────────────────────
 
 class _SuccessView extends StatefulWidget {
-  const _SuccessView({required this.order, required this.provider});
-  final VoucherOrder order;
-  final VoucherProvider provider;
+  const _SuccessView({required this.order, required this.event});
+  final TicketOrder order;
+  final EventItem event;
 
   @override
   State<_SuccessView> createState() => _SuccessViewState();
@@ -354,7 +418,8 @@ class _SuccessViewState extends State<_SuccessView>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _checkScale = CurvedAnimation(parent: _checkController, curve: Curves.elasticOut);
+    _checkScale =
+        CurvedAnimation(parent: _checkController, curve: Curves.elasticOut);
     _checkController.forward();
   }
 
@@ -364,8 +429,9 @@ class _SuccessViewState extends State<_SuccessView>
     super.dispose();
   }
 
-  Future<void> _copyCode() async {
-    await Clipboard.setData(ClipboardData(text: widget.order.activationCode));
+  Future<void> _copyRef() async {
+    await Clipboard.setData(
+        ClipboardData(text: widget.order.bookingRef));
     if (!mounted) return;
     setState(() => _copied = true);
     Future.delayed(const Duration(seconds: 2), () {
@@ -378,7 +444,7 @@ class _SuccessViewState extends State<_SuccessView>
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
     final o = widget.order;
-    final p = widget.provider;
+    final e = widget.event;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -393,12 +459,13 @@ class _SuccessViewState extends State<_SuccessView>
               color: Colors.green.shade50,
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.check_circle_rounded, color: Colors.green, size: 52),
+            child: const Icon(Icons.check_circle_rounded,
+                color: Colors.green, size: 52),
           ),
         ),
         const SizedBox(height: 16),
         Text(
-          l10.purchaseSuccessful,
+          l10.bookingConfirmed,
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -407,31 +474,33 @@ class _SuccessViewState extends State<_SuccessView>
         ),
         const SizedBox(height: 6),
         Text(
-          '${p.name} · ${o.denominationLabel}',
+          '${e.name} · ${o.ticketType}',
           style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
 
-        // Activation code card
+        // Booking reference card
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(22),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                p.color.withValues(alpha: 0.12),
-                p.colorEnd.withValues(alpha: 0.06),
+                e.color.withValues(alpha: 0.12),
+                e.colorEnd.withValues(alpha: 0.06),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: p.color.withValues(alpha: 0.25), width: 1.5),
+            border: Border.all(
+                color: e.color.withValues(alpha: 0.25), width: 1.5),
           ),
           child: Column(
             children: [
               Text(
-                l10.yourActivationCode,
+                l10.bookingReference,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -440,24 +509,25 @@ class _SuccessViewState extends State<_SuccessView>
               ),
               const SizedBox(height: 14),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 16),
                 decoration: BoxDecoration(
                   color: colors.surface,
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: p.color.withValues(alpha: 0.12),
+                      color: e.color.withValues(alpha: 0.12),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
                 child: Text(
-                  o.activationCode,
+                  o.bookingRef,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
+                    letterSpacing: 2.5,
                     fontFamily: 'monospace',
                   ),
                   textAlign: TextAlign.center,
@@ -465,12 +535,13 @@ class _SuccessViewState extends State<_SuccessView>
               ),
               const SizedBox(height: 16),
               GestureDetector(
-                onTap: _copyCode,
+                onTap: _copyRef,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: _copied ? Colors.green : p.color,
+                    color: _copied ? Colors.green : e.color,
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Row(
@@ -478,12 +549,14 @@ class _SuccessViewState extends State<_SuccessView>
                     spacing: 8,
                     children: [
                       Icon(
-                        _copied ? Icons.check_rounded : Icons.copy_rounded,
+                        _copied
+                            ? Icons.check_rounded
+                            : Icons.copy_rounded,
                         color: Colors.white,
                         size: 16,
                       ),
                       Text(
-                        _copied ? l10.copiedLabel : l10.copyCode,
+                        _copied ? l10.copiedLabel : l10.copyReference,
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -500,10 +573,11 @@ class _SuccessViewState extends State<_SuccessView>
 
         const SizedBox(height: 20),
 
-        // Redemption note
+        // Info note
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: colors.onPrimaryFixedVariant,
             borderRadius: BorderRadius.circular(14),
@@ -511,11 +585,13 @@ class _SuccessViewState extends State<_SuccessView>
           child: Row(
             spacing: 10,
             children: [
-              Icon(Icons.info_outline_rounded, size: 18, color: colors.onSurfaceVariant),
+              Icon(Icons.info_outline_rounded,
+                  size: 18, color: colors.onSurfaceVariant),
               Expanded(
                 child: Text(
-                  l10.redeemNote(p.name),
-                  style: TextStyle(fontSize: 12.5, color: colors.onSurfaceVariant),
+                  l10.showBookingRefNote,
+                  style: TextStyle(
+                      fontSize: 12.5, color: colors.onSurfaceVariant),
                 ),
               ),
             ],
@@ -524,7 +600,7 @@ class _SuccessViewState extends State<_SuccessView>
 
         const SizedBox(height: 24),
 
-        // Summary
+        // Summary table
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(16),
@@ -535,11 +611,14 @@ class _SuccessViewState extends State<_SuccessView>
           child: Column(
             spacing: 8,
             children: [
-              _SummaryRow(label: l10.providerLabel, value: p.name),
-              _SummaryRow(label: l10.denominationLabel, value: o.denominationLabel),
+              _SummaryRow(label: l10.eventLabel, value: e.name),
+              _SummaryRow(label: l10.ticketLabel, value: o.ticketType),
+              _SummaryRow(label: l10.dateLabel, value: o.eventDate),
+              _SummaryRow(label: l10.venueLabel, value: o.venue),
               _SummaryRow(
                 label: l10.paidLabel,
-                value: '${o.priceJod.toStringAsFixed(o.priceJod % 1 == 0 ? 0 : 2)} ${l10.jod}',
+                value:
+                    '${o.priceJod.toStringAsFixed(o.priceJod % 1 == 0 ? 0 : 2)} ${l10.jod}',
                 bold: true,
               ),
             ],
@@ -551,7 +630,8 @@ class _SuccessViewState extends State<_SuccessView>
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.label, required this.value, this.bold = false});
+  const _SummaryRow(
+      {required this.label, required this.value, this.bold = false});
   final String label;
   final String value;
   final bool bold;
@@ -560,15 +640,25 @@ class _SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant)),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: bold ? FontWeight.bold : FontWeight.w600,
-            color: colors.onSurface,
+        SizedBox(
+          width: 70,
+          child: Text(
+            label,
+            style:
+                TextStyle(fontSize: 13.5, color: colors.onSurfaceVariant),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 13.5,
+              fontWeight: bold ? FontWeight.bold : FontWeight.w600,
+              color: colors.onSurface,
+            ),
+            textAlign: TextAlign.end,
           ),
         ),
       ],

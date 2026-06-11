@@ -3,6 +3,7 @@ import 'package:caterfy/models/credit_card.dart';
 import 'package:caterfy/models/cart.dart';
 import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/models/order.dart';
+import 'package:caterfy/models/ticket_order.dart';
 import 'package:caterfy/models/voucher_order.dart';
 import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
@@ -121,6 +122,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   List<CreditCard> _paymentMethods = [];
   List<LaundryOrder> _laundryOrders = [];
   List<VoucherOrder> _voucherOrders = [];
+  List<TicketOrder> _ticketOrders = [];
 
   List<Product> get products => _products;
   List<Store> get stores => _stores;
@@ -131,6 +133,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   List<LaundryOrder> get activeLaundryOrders =>
       _laundryOrders.where((o) => o.isActive).toList();
   List<VoucherOrder> get voucherOrders => _voucherOrders;
+  List<TicketOrder> get ticketOrders => _ticketOrders;
 
   bool _isCategoryLoading = false;
   bool _isProductsLoading = false;
@@ -143,6 +146,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool _transactionsLoading = false;
   bool _isLaundryOrdersLoading = false;
   bool _isVoucherOrdersLoading = false;
+  bool _isTicketOrdersLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
@@ -927,6 +931,86 @@ class LoggedCustomerProvider with ChangeNotifier {
     } catch (_) {
     } finally {
       _isVoucherOrdersLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // ===== Ticket Orders =====
+
+  Future<TicketOrder?> placeTicketOrder({
+    required BuildContext context,
+    required String eventName,
+    required String eventCategory,
+    required String ticketType,
+    required String eventDate,
+    required String venue,
+    required double priceJod,
+    required String bookingRef,
+    required bool isUsingWallet,
+    required double walletTransaction,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) return null;
+    final l10 = AppLocalizations.of(context);
+    try {
+      final result = await supabase
+          .from('ticket_orders')
+          .insert({
+            'customer_id': userId,
+            'event_name': eventName,
+            'event_category': eventCategory,
+            'ticket_type': ticketType,
+            'event_date': eventDate,
+            'venue': venue,
+            'price_jod': priceJod,
+            'booking_ref': bookingRef,
+            'quantity': 1,
+            'status': 'confirmed',
+          })
+          .select()
+          .single();
+
+      if (isUsingWallet) {
+        await supabase.rpc(
+          'subtract_wallet_balance',
+          params: {
+            'p_customer_id': userId,
+            'p_amount': walletTransaction,
+          },
+        );
+      }
+
+      final order = TicketOrder.fromMap(result);
+      _ticketOrders.insert(0, order);
+      notifyListeners();
+      return order;
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+      return null;
+    }
+  }
+
+  Future<void> fetchTicketOrders({required BuildContext context}) async {
+    final customerId = supabase.auth.currentUser?.id;
+    if (customerId == null) return;
+    try {
+      _isTicketOrdersLoading = true;
+      notifyListeners();
+      final data = await supabase
+          .from('ticket_orders')
+          .select()
+          .eq('customer_id', customerId)
+          .order('created_at', ascending: false);
+      _ticketOrders = data.map((e) => TicketOrder.fromMap(e)).toList();
+    } catch (_) {
+    } finally {
+      _isTicketOrdersLoading = false;
       notifyListeners();
     }
   }

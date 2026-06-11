@@ -43,6 +43,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
       await provider.fetchOrderHistory(context: context);
       await provider.fetchLaundryOrders(context: context);
       await provider.fetchVoucherOrders(context: context);
+      await provider.fetchTicketOrders(context: context);
       provider.subscribeToOrderUpdates(customerId);
     });
   }
@@ -108,6 +109,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
                   p.fetchOrderHistory(context: context);
                   p.fetchLaundryOrders(context: context);
                   p.fetchVoucherOrders(context: context);
+                  p.fetchTicketOrders(context: context);
                 } else if (index == 2) {
                   context.read<GlobalProvider>().fetchUser();
                 }

@@ -1682,6 +1682,12 @@ abstract class AppLocalizations {
   /// **'Charity'**
   String get charity;
 
+  /// No description provided for @ticketsAndEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Events & Tickets'**
+  String get ticketsAndEvents;
+
   /// No description provided for @eVouchers.
   ///
   /// In en, this message translates to:
@@ -2101,6 +2107,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get ceemartAll;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterGaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Gaming'**
+  String get filterGaming;
+
+  /// No description provided for @filterStreaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaming'**
+  String get filterStreaming;
+
+  /// No description provided for @filterShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get filterShopping;
+
+  /// No description provided for @filterMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get filterMusic;
+
+  /// No description provided for @filterCulture.
+  ///
+  /// In en, this message translates to:
+  /// **'Culture'**
+  String get filterCulture;
+
+  /// No description provided for @filterSports.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports'**
+  String get filterSports;
+
+  /// No description provided for @filterFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get filterFamily;
+
+  /// No description provided for @selectDenomination.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a denomination'**
+  String get selectDenomination;
+
+  /// No description provided for @selectTicketType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select ticket type'**
+  String get selectTicketType;
+
+  /// No description provided for @getTickets.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Tickets'**
+  String get getTickets;
+
+  /// No description provided for @fromPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get fromPrice;
+
+  /// No description provided for @yourVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Voucher'**
+  String get yourVoucher;
+
+  /// No description provided for @yourTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Ticket'**
+  String get yourTicket;
+
+  /// No description provided for @purchaseSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Successful!'**
+  String get purchaseSuccessful;
+
+  /// No description provided for @bookingConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking Confirmed!'**
+  String get bookingConfirmed;
+
+  /// No description provided for @yourActivationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Activation Code'**
+  String get yourActivationCode;
+
+  /// No description provided for @bookingReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking Reference'**
+  String get bookingReference;
+
+  /// No description provided for @copyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Code'**
+  String get copyCode;
+
+  /// No description provided for @copyReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Reference'**
+  String get copyReference;
+
+  /// No description provided for @copiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied!'**
+  String get copiedLabel;
+
+  /// No description provided for @redeemNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeem on the {provider} platform. This code is also saved in your order history.'**
+  String redeemNote(Object provider);
+
+  /// No description provided for @showBookingRefNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Show your booking reference at the venue entrance. This ticket is also saved in your order history.'**
+  String get showBookingRefNote;
+
+  /// No description provided for @showRefAtVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this reference at the {venue} entrance.'**
+  String showRefAtVenue(Object venue);
+
+  /// No description provided for @redeemOnPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeem on the {provider} platform.'**
+  String redeemOnPlatform(Object provider);
+
+  /// No description provided for @providerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get providerLabel;
+
+  /// No description provided for @denominationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Denomination'**
+  String get denominationLabel;
+
+  /// No description provided for @paidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paidLabel;
+
+  /// No description provided for @eventLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Event'**
+  String get eventLabel;
+
+  /// No description provided for @ticketLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket'**
+  String get ticketLabel;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get dateLabel;
+
+  /// No description provided for @venueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Venue'**
+  String get venueLabel;
+
+  /// No description provided for @orderCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get orderCompleted;
+
+  /// No description provided for @orderConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get orderConfirmed;
+
+  /// No description provided for @viewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'View Code'**
+  String get viewCode;
+
+  /// No description provided for @viewTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'View Ticket'**
+  String get viewTicket;
 }
 
 class _AppLocalizationsDelegate

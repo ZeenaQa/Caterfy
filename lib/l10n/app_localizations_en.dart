@@ -823,6 +823,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get charity => 'Charity';
 
   @override
+  String get ticketsAndEvents => 'Events & Tickets';
+
+  @override
   String get eVouchers => 'e-Vouchers';
 
   @override
@@ -1040,4 +1043,119 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ceemartAll => 'All';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterGaming => 'Gaming';
+
+  @override
+  String get filterStreaming => 'Streaming';
+
+  @override
+  String get filterShopping => 'Shopping';
+
+  @override
+  String get filterMusic => 'Music';
+
+  @override
+  String get filterCulture => 'Culture';
+
+  @override
+  String get filterSports => 'Sports';
+
+  @override
+  String get filterFamily => 'Family';
+
+  @override
+  String get selectDenomination => 'Select a denomination';
+
+  @override
+  String get selectTicketType => 'Select ticket type';
+
+  @override
+  String get getTickets => 'Get Tickets';
+
+  @override
+  String get fromPrice => 'From';
+
+  @override
+  String get yourVoucher => 'Your Voucher';
+
+  @override
+  String get yourTicket => 'Your Ticket';
+
+  @override
+  String get purchaseSuccessful => 'Purchase Successful!';
+
+  @override
+  String get bookingConfirmed => 'Booking Confirmed!';
+
+  @override
+  String get yourActivationCode => 'Your Activation Code';
+
+  @override
+  String get bookingReference => 'Booking Reference';
+
+  @override
+  String get copyCode => 'Copy Code';
+
+  @override
+  String get copyReference => 'Copy Reference';
+
+  @override
+  String get copiedLabel => 'Copied!';
+
+  @override
+  String redeemNote(Object provider) {
+    return 'Redeem on the $provider platform. This code is also saved in your order history.';
+  }
+
+  @override
+  String get showBookingRefNote =>
+      'Show your booking reference at the venue entrance. This ticket is also saved in your order history.';
+
+  @override
+  String showRefAtVenue(Object venue) {
+    return 'Show this reference at the $venue entrance.';
+  }
+
+  @override
+  String redeemOnPlatform(Object provider) {
+    return 'Redeem on the $provider platform.';
+  }
+
+  @override
+  String get providerLabel => 'Provider';
+
+  @override
+  String get denominationLabel => 'Denomination';
+
+  @override
+  String get paidLabel => 'Paid';
+
+  @override
+  String get eventLabel => 'Event';
+
+  @override
+  String get ticketLabel => 'Ticket';
+
+  @override
+  String get dateLabel => 'Date';
+
+  @override
+  String get venueLabel => 'Venue';
+
+  @override
+  String get orderCompleted => 'Completed';
+
+  @override
+  String get orderConfirmed => 'Confirmed';
+
+  @override
+  String get viewCode => 'View Code';
+
+  @override
+  String get viewTicket => 'View Ticket';
 }

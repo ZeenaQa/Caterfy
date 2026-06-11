@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/screens/evoucher_checkout_screen.dart';
+import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
@@ -200,13 +201,6 @@ class EVouchersScreen extends StatefulWidget {
 class _EVouchersScreenState extends State<EVouchersScreen> {
   String _filter = 'all';
 
-  static const _filters = [
-    ('all', 'All'),
-    (_kGaming, 'Gaming'),
-    (_kStreaming, 'Streaming'),
-    (_kShopping, 'Shopping'),
-  ];
-
   List<VoucherProvider> get _visible =>
       _filter == 'all' ? _providers : _providers.where((p) => p.category == _filter).toList();
 
@@ -222,6 +216,14 @@ class _EVouchersScreenState extends State<EVouchersScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
+
+    final filters = [
+      ('all', l10.filterAll),
+      (_kGaming, l10.filterGaming),
+      (_kStreaming, l10.filterStreaming),
+      (_kShopping, l10.filterShopping),
+    ];
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -229,9 +231,9 @@ class _EVouchersScreenState extends State<EVouchersScreen> {
           spacing: 10,
           children: [
             SvgPicture.asset('assets/icons/rounded_logo.svg', height: 30, width: 30),
-            const Text(
-              'E-Vouchers',
-              style: TextStyle(fontSize: 17.5, fontWeight: FontWeight.w600),
+            Text(
+              l10.eVouchers,
+              style: const TextStyle(fontSize: 17.5, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -246,12 +248,12 @@ class _EVouchersScreenState extends State<EVouchersScreen> {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
-                itemCount: _filters.length,
+                itemCount: filters.length,
                 itemBuilder: (context, i) {
-                  final (key, label) = _filters[i];
+                  final (key, label) = filters[i];
                   final selected = _filter == key;
                   return Padding(
-                    padding: EdgeInsets.only(right: i < _filters.length - 1 ? 8 : 0),
+                    padding: EdgeInsets.only(right: i < filters.length - 1 ? 8 : 0),
                     child: GestureDetector(
                       onTap: () => setState(() => _filter = key),
                       child: AnimatedContainer(
@@ -387,6 +389,7 @@ class _DenominationSheetState extends State<_DenominationSheet> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
     final p = widget.provider;
 
     return Container(
@@ -464,7 +467,7 @@ class _DenominationSheetState extends State<_DenominationSheet> {
                     ),
                   ),
                   Text(
-                    'Select a denomination',
+                    l10.selectDenomination,
                     style: TextStyle(fontSize: 13, color: colors.onSurfaceVariant),
                   ),
                 ],
@@ -545,8 +548,8 @@ class _DenominationSheetState extends State<_DenominationSheet> {
                   }
                 : null,
             title: _selected != null
-                ? 'Continue — ${_selected!.priceJod.toStringAsFixed(_selected!.priceJod % 1 == 0 ? 0 : 2)} JOD'
-                : 'Select a denomination',
+                ? '${l10.continueBtn} — ${_selected!.priceJod.toStringAsFixed(_selected!.priceJod % 1 == 0 ? 0 : 2)} ${l10.jod}'
+                : l10.selectDenomination,
             titleSize: 15,
           ),
         ],

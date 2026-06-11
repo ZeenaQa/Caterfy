@@ -818,6 +818,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get charity => 'التبرع';
 
   @override
+  String get ticketsAndEvents => 'الفعاليات والتذاكر';
+
+  @override
   String get eVouchers => 'القسائم الإلكترونية';
 
   @override
@@ -1033,4 +1036,119 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get ceemartAll => 'الكل';
+
+  @override
+  String get filterAll => 'الكل';
+
+  @override
+  String get filterGaming => 'ألعاب';
+
+  @override
+  String get filterStreaming => 'بث';
+
+  @override
+  String get filterShopping => 'تسوق';
+
+  @override
+  String get filterMusic => 'موسيقى';
+
+  @override
+  String get filterCulture => 'ثقافة';
+
+  @override
+  String get filterSports => 'رياضة';
+
+  @override
+  String get filterFamily => 'عائلة';
+
+  @override
+  String get selectDenomination => 'اختر الفئة';
+
+  @override
+  String get selectTicketType => 'اختر نوع التذكرة';
+
+  @override
+  String get getTickets => 'احجز تذكرة';
+
+  @override
+  String get fromPrice => 'من';
+
+  @override
+  String get yourVoucher => 'قسيمتك';
+
+  @override
+  String get yourTicket => 'تذكرتك';
+
+  @override
+  String get purchaseSuccessful => '!تمت عملية الشراء بنجاح';
+
+  @override
+  String get bookingConfirmed => '!تم تأكيد الحجز';
+
+  @override
+  String get yourActivationCode => 'رمز التفعيل';
+
+  @override
+  String get bookingReference => 'رقم الحجز';
+
+  @override
+  String get copyCode => 'نسخ الرمز';
+
+  @override
+  String get copyReference => 'نسخ الرقم';
+
+  @override
+  String get copiedLabel => '!تم النسخ';
+
+  @override
+  String redeemNote(Object provider) {
+    return 'استرد الرمز على منصة $provider. تم حفظ هذا الرمز أيضاً في سجل طلباتك.';
+  }
+
+  @override
+  String get showBookingRefNote =>
+      'أظهر رقم حجزك عند مدخل المكان. تم حفظ هذه التذكرة أيضاً في سجل طلباتك.';
+
+  @override
+  String showRefAtVenue(Object venue) {
+    return 'أظهر هذا الرقم عند مدخل $venue.';
+  }
+
+  @override
+  String redeemOnPlatform(Object provider) {
+    return 'استرد الرمز على منصة $provider.';
+  }
+
+  @override
+  String get providerLabel => 'المزود';
+
+  @override
+  String get denominationLabel => 'الفئة';
+
+  @override
+  String get paidLabel => 'المدفوع';
+
+  @override
+  String get eventLabel => 'الفعالية';
+
+  @override
+  String get ticketLabel => 'التذكرة';
+
+  @override
+  String get dateLabel => 'التاريخ';
+
+  @override
+  String get venueLabel => 'المكان';
+
+  @override
+  String get orderCompleted => 'مكتمل';
+
+  @override
+  String get orderConfirmed => 'مؤكد';
+
+  @override
+  String get viewCode => 'عرض الرمز';
+
+  @override
+  String get viewTicket => 'عرض التذكرة';
 }

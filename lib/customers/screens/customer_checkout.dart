@@ -338,6 +338,7 @@ class PayWith extends StatefulWidget {
     required this.useWallet,
     required this.toggleWallet,
     required this.walletOnly,
+    this.noCash = false,
   });
 
   final String payment;
@@ -345,6 +346,7 @@ class PayWith extends StatefulWidget {
   final Function toggleWallet;
   final bool useWallet;
   final bool walletOnly;
+  final bool noCash;
 
   @override
   State<PayWith> createState() => _PayWithState();
@@ -467,7 +469,7 @@ class _PayWithState extends State<PayWith> {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: paymentMethods.length + 2,
+                      itemCount: paymentMethods.length + (widget.noCash ? 1 : 2),
                       itemBuilder: (context, index) {
                         if (index < paymentMethods.length) {
                           final paymentMethod = paymentMethods[index];

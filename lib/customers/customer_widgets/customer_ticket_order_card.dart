@@ -1,20 +1,20 @@
 import 'package:caterfy/l10n/app_localizations.dart';
-import 'package:caterfy/models/voucher_order.dart';
+import 'package:caterfy/models/ticket_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class CustomerVoucherOrderCard extends StatelessWidget {
-  const CustomerVoucherOrderCard({super.key, required this.order});
+class CustomerTicketOrderCard extends StatelessWidget {
+  const CustomerTicketOrderCard({super.key, required this.order});
 
-  final VoucherOrder order;
+  final TicketOrder order;
 
-  void _showCodeDialog(BuildContext context) {
+  void _showTicketSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => _CodeSheet(order: order),
+      builder: (_) => _TicketSheet(order: order),
     );
   }
 
@@ -24,7 +24,8 @@ class CustomerVoucherOrderCard extends StatelessWidget {
     final l10 = AppLocalizations.of(context);
 
     final orderDate = order.createdAt != null
-        ? DateFormat("MMM d - h:mm a").format(DateTime.parse(order.createdAt!).toLocal())
+        ? DateFormat("MMM d - h:mm a")
+            .format(DateTime.parse(order.createdAt!).toLocal())
         : '';
 
     return Container(
@@ -47,7 +48,7 @@ class CustomerVoucherOrderCard extends StatelessWidget {
               spacing: 13,
               children: [
                 Text(
-                  l10.orderCompleted,
+                  l10.orderConfirmed,
                   style: TextStyle(
                     color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -68,7 +69,8 @@ class CustomerVoucherOrderCard extends StatelessWidget {
 
           // ── Body ───────────────────────────────────────────────────────────
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -77,11 +79,12 @@ class CustomerVoucherOrderCard extends StatelessWidget {
                   width: 55,
                   height: 55,
                   decoration: BoxDecoration(
-                    color: colors.primaryContainer.withValues(alpha: 0.4),
+                    color:
+                        colors.primaryContainer.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
-                    Icons.confirmation_number_rounded,
+                    Icons.local_activity_rounded,
                     color: colors.primary,
                     size: 26,
                   ),
@@ -92,7 +95,7 @@ class CustomerVoucherOrderCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        order.provider,
+                        order.eventName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -101,12 +104,32 @@ class CustomerVoucherOrderCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        order.denominationLabel,
+                        order.ticketType,
                         style: TextStyle(
                           height: 1.2,
                           color: colors.onSurfaceVariant,
                           fontSize: 13,
                         ),
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        spacing: 4,
+                        children: [
+                          Icon(Icons.calendar_today_rounded,
+                              size: 11,
+                              color: colors.onSurfaceVariant),
+                          Expanded(
+                            child: Text(
+                              order.eventDate,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                color: colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -121,7 +144,6 @@ class CustomerVoucherOrderCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Price
                 RichText(
                   text: TextSpan(
                     text: 'JOD ',
@@ -139,11 +161,11 @@ class CustomerVoucherOrderCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                // View Code button
                 GestureDetector(
-                  onTap: () => _showCodeDialog(context),
+                  onTap: () => _showTicketSheet(context),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
                     decoration: BoxDecoration(
                       border: Border.all(color: colors.outline),
                       borderRadius: BorderRadius.circular(30),
@@ -151,9 +173,10 @@ class CustomerVoucherOrderCard extends StatelessWidget {
                     child: Row(
                       spacing: 6,
                       children: [
-                        Icon(Icons.key_rounded, size: 14, color: colors.onSurface),
+                        Icon(Icons.local_activity_rounded,
+                            size: 14, color: colors.onSurface),
                         Text(
-                          l10.viewCode,
+                          l10.viewTicket,
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -173,21 +196,22 @@ class CustomerVoucherOrderCard extends StatelessWidget {
   }
 }
 
-// ── Code bottom sheet ─────────────────────────────────────────────────────────
+// ── Ticket bottom sheet ───────────────────────────────────────────────────────
 
-class _CodeSheet extends StatefulWidget {
-  const _CodeSheet({required this.order});
-  final VoucherOrder order;
+class _TicketSheet extends StatefulWidget {
+  const _TicketSheet({required this.order});
+  final TicketOrder order;
 
   @override
-  State<_CodeSheet> createState() => _CodeSheetState();
+  State<_TicketSheet> createState() => _TicketSheetState();
 }
 
-class _CodeSheetState extends State<_CodeSheet> {
+class _TicketSheetState extends State<_TicketSheet> {
   bool _copied = false;
 
   Future<void> _copy() async {
-    await Clipboard.setData(ClipboardData(text: widget.order.activationCode));
+    await Clipboard.setData(
+        ClipboardData(text: widget.order.bookingRef));
     if (!mounted) return;
     setState(() => _copied = true);
     Future.delayed(const Duration(seconds: 2), () {
@@ -204,7 +228,8 @@ class _CodeSheetState extends State<_CodeSheet> {
     return Container(
       decoration: BoxDecoration(
         color: colors.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(26)),
+        borderRadius:
+            const BorderRadius.vertical(top: Radius.circular(26)),
       ),
       padding: EdgeInsets.fromLTRB(
         20,
@@ -226,40 +251,68 @@ class _CodeSheetState extends State<_CodeSheet> {
             ),
           ),
 
-          // Provider + denomination
+          // Event name + ticket type
           Text(
-            o.provider,
+            o.eventName,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: colors.onSurface,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
           Text(
-            o.denominationLabel,
-            style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+            o.ticketType,
+            style: TextStyle(
+                fontSize: 14, color: colors.onSurfaceVariant),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 4,
+            children: [
+              Icon(Icons.calendar_today_rounded,
+                  size: 12, color: colors.onSurfaceVariant),
+              Text(
+                o.eventDate,
+                style: TextStyle(
+                    fontSize: 12, color: colors.onSurfaceVariant),
+              ),
+            ],
           ),
 
           const SizedBox(height: 24),
 
-          // Code box
+          // Booking ref box
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20, vertical: 18),
             decoration: BoxDecoration(
               color: colors.onPrimaryFixedVariant,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Text(
-              o.activationCode,
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.8,
-                fontFamily: 'monospace',
-              ),
-              textAlign: TextAlign.center,
+            child: Column(
+              children: [
+                Text(
+                  l10.bookingReference,
+                  style: TextStyle(
+                      fontSize: 12, color: colors.onSurfaceVariant),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  o.bookingRef,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.5,
+                    fontFamily: 'monospace',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
 
@@ -281,12 +334,14 @@ class _CodeSheetState extends State<_CodeSheet> {
                 spacing: 8,
                 children: [
                   Icon(
-                    _copied ? Icons.check_rounded : Icons.copy_rounded,
+                    _copied
+                        ? Icons.check_rounded
+                        : Icons.copy_rounded,
                     color: Colors.white,
                     size: 16,
                   ),
                   Text(
-                    _copied ? l10.copiedLabel : l10.copyCode,
+                    _copied ? l10.copiedLabel : l10.copyReference,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -300,8 +355,9 @@ class _CodeSheetState extends State<_CodeSheet> {
 
           const SizedBox(height: 10),
           Text(
-            l10.redeemOnPlatform(o.provider),
-            style: TextStyle(fontSize: 12.5, color: colors.onSurfaceVariant),
+            l10.showRefAtVenue(o.venue),
+            style: TextStyle(
+                fontSize: 12.5, color: colors.onSurfaceVariant),
             textAlign: TextAlign.center,
           ),
         ],
