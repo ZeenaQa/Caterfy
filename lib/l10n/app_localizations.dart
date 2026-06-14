@@ -752,6 +752,24 @@ abstract class AppLocalizations {
   /// **'Clothing'**
   String get clothing;
 
+  /// No description provided for @stationeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Stationeries'**
+  String get stationeries;
+
+  /// No description provided for @eventPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Planning'**
+  String get eventPlanning;
+
+  /// No description provided for @education.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get education;
+
   /// No description provided for @pets.
   ///
   /// In en, this message translates to:

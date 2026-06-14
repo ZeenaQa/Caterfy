@@ -76,6 +76,9 @@ class CustomerHomeCategories extends StatelessWidget {
       {'title': l10.laundry, 'image': 'laundry.png', 'category': "laundry"},
       {'title': l10.myHouse, 'image': 'my_house.png', 'category': "myHouse"},
       {'title': l10.myCar, 'image': 'my_car.png', 'category': "myCar"},
+      {'title': l10.stationeries, 'image': 'stationeries_icon.png', 'category': "stationeries"},
+      {'title': l10.eventPlanning, 'image': 'event_planning.png', 'category': "eventPlanning"},
+      {'title': l10.education, 'image': 'education_icon.png', 'category': "education"},
       {'title': l10.charity, 'image': 'charity.png', 'category': "charity"},
     ];
 

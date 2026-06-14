@@ -342,6 +342,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clothing => 'الملابس';
 
   @override
+  String get stationeries => 'مكاتب';
+
+  @override
+  String get eventPlanning => 'تنظيم الفعاليات';
+
+  @override
+  String get education => 'التعليم';
+
+  @override
   String get pets => 'الحيوانات الأليفة';
 
   @override

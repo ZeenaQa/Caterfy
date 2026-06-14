@@ -343,6 +343,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clothing => 'Clothing';
 
   @override
+  String get stationeries => 'Stationeries';
+
+  @override
+  String get eventPlanning => 'Event Planning';
+
+  @override
+  String get education => 'Education';
+
+  @override
   String get pets => 'Pets';
 
   @override

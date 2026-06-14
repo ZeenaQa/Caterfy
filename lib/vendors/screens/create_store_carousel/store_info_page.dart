@@ -85,6 +85,12 @@ class _StoreInfoPageState extends State<StoreInfoPage> {
           return l10.myCar;
         case 'myHouse':
           return l10.myHouse;
+        case "stationeries":
+          return l10.stationeries;
+        case "eventPlanning":
+          return l10.eventPlanning;
+        case "education":
+          return l10.education;
         default:
           return cat;
       }
