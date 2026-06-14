@@ -2323,6 +2323,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View Ticket'**
   String get viewTicket;
+
+  /// No description provided for @promoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo code'**
+  String get promoCode;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @discount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discount;
+
+  /// No description provided for @invalidDiscountCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or unavailable promo code'**
+  String get invalidDiscountCode;
+
+  /// No description provided for @discountCodeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This promo code has expired'**
+  String get discountCodeExpired;
+
+  /// No description provided for @discountMinOrderNotMet.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum order amount not reached for this code'**
+  String get discountMinOrderNotMet;
 }
 
 class _AppLocalizationsDelegate

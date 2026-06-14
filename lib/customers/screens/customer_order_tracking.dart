@@ -132,7 +132,8 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
     final subtotal = order?.subtotal ?? 0.0;
     final deliveryFee = order?.deliveryPrice ?? 0.0;
     const serviceFee = 0.2;
-    final total = subtotal + deliveryFee + serviceFee;
+    final discountAmount = order?.discountAmount ?? 0.0;
+    final total = subtotal + deliveryFee + serviceFee - discountAmount;
 
     final stepLabels = isService
         ? ['Request Received', 'On the Way', 'In Progress', 'All Done']
@@ -396,6 +397,15 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                                 '${l10.jod} ${serviceFee.toStringAsFixed(2)}',
                             colors: colors,
                           ),
+                          if (discountAmount > 0) ...[
+                            const SizedBox(height: 6),
+                            _PaymentRow(
+                              label: l10.discount,
+                              value: '- ${l10.jod} ${discountAmount.toStringAsFixed(2)}',
+                              colors: colors,
+                              isDiscount: true,
+                            ),
+                          ],
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Divider(height: 1, color: colors.outline),
@@ -627,6 +637,7 @@ class _PaymentRow extends StatelessWidget {
   final String label;
   final String value;
   final bool bold;
+  final bool isDiscount;
   final ColorScheme colors;
 
   const _PaymentRow({
@@ -634,14 +645,20 @@ class _PaymentRow extends StatelessWidget {
     required this.value,
     required this.colors,
     this.bold = false,
+    this.isDiscount = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final color = isDiscount
+        ? const Color(0xFF22C55E)
+        : bold
+            ? colors.onSurface
+            : colors.onSurfaceVariant;
     final style = TextStyle(
       fontSize: bold ? 15 : 13,
       fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
-      color: bold ? colors.onSurface : colors.onSurfaceVariant,
+      color: color,
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -69,8 +69,9 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
         widget.store?.longitude,
       );
 
+      final discounted = customerProvider.appliedDiscountAmount;
       if (globalProvider.user['wallet_balance'] >=
-          customerProvider.totalCartPrice + deliveryPrice) {
+          customerProvider.totalCartPrice + deliveryPrice - discounted) {
         willReturn = true;
         pickMethod('wallet');
       }
@@ -109,8 +110,10 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
 
     final bool isStoreOpen = widget.store?.isOpen ?? true;
     final walletBalance = globalProvider.user["wallet_balance"];
+    final double discountAmount = customerProvider.appliedDiscountAmount;
     final bool walletOnly =
-        walletBalance >= customerProvider.totalCartPrice + deliveryPrice &&
+        walletBalance >=
+            customerProvider.totalCartPrice + deliveryPrice - discountAmount &&
         useWallet;
 
     return Scaffold(
@@ -166,7 +169,8 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                             walletBalance.toDouble(),
                             customerProvider.totalCartPrice +
                                 deliveryPrice +
-                                0.2,
+                                0.2 -
+                                discountAmount,
                           ),
                         );
                         if (context.mounted && orderId != null) {
@@ -258,6 +262,14 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                                 price: deliveryPrice.toStringAsFixed(2),
                               ),
                               PaymentRow(title: l10.serviceFee, price: '0.20'),
+                              if (discountAmount > 0)
+                                PaymentRow(
+                                  title: customerProvider.appliedDiscount!.isPercentage
+                                      ? '${l10.discount} (${customerProvider.appliedDiscount!.discountValue.toStringAsFixed(0)}%)'
+                                      : l10.discount,
+                                  price: '-${discountAmount.toStringAsFixed(2)}',
+                                  isDiscount: true,
+                                ),
                               Row(
                                 children: [
                                   Text(
@@ -269,7 +281,7 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    '${l10.jod} ${(customerProvider.totalCartPrice + deliveryPrice + 0.20).toStringAsFixed(2)}',
+                                    '${l10.jod} ${(customerProvider.totalCartPrice + deliveryPrice + 0.20 - discountAmount).toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

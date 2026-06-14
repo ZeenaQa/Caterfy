@@ -15,6 +15,8 @@ class Order {
   final String? status;
   final String storeType;
   final String storeCategory;
+  final String? discountCode;
+  final double discountAmount;
 
   Order({
     this.id = '',
@@ -31,6 +33,8 @@ class Order {
     List<OrderItem>? items,
     this.note = '',
     this.createdAt,
+    this.discountCode,
+    this.discountAmount = 0,
   }) : items = List.from(items ?? []);
 
   bool get isDelivered =>
@@ -53,7 +57,7 @@ class Order {
     return total;
   }
 
-  double get totalAmount => subtotal + deliveryPrice + 0.2;
+  double get totalAmount => subtotal + deliveryPrice + 0.2 - discountAmount;
 
   Order copyWith({String? status}) {
     return Order(
@@ -71,6 +75,8 @@ class Order {
       items: items,
       note: note,
       createdAt: createdAt,
+      discountCode: discountCode,
+      discountAmount: discountAmount,
     );
   }
 
@@ -89,6 +95,8 @@ class Order {
       'status': status ?? 'pending',
       'store_type': storeType,
       'created_at': createdAt,
+      if (discountCode != null) 'discount_code': discountCode,
+      'discount_amount': discountAmount,
     };
   }
 
@@ -107,6 +115,8 @@ class Order {
       status: map['status'] as String?,
       storeType: map['store_type'] ?? 'regular',
       storeCategory: map['store_category'] ?? '',
+      discountCode: map['discount_code'] as String?,
+      discountAmount: (map['discount_amount'] as num?)?.toDouble() ?? 0,
     );
 
     order.items.addAll(

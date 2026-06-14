@@ -378,5 +378,12 @@
   "orderCompleted": "Completed",
   "orderConfirmed": "Confirmed",
   "viewCode": "View Code",
-  "viewTicket": "View Ticket"
+  "viewTicket": "View Ticket",
+
+  "promoCode": "Promo code",
+  "apply": "Apply",
+  "discount": "Discount",
+  "invalidDiscountCode": "Invalid or unavailable promo code",
+  "discountCodeExpired": "This promo code has expired",
+  "discountMinOrderNotMet": "Minimum order amount not reached for this code"
 }

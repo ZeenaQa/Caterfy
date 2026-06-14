@@ -1158,4 +1158,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewTicket => 'View Ticket';
+
+  @override
+  String get promoCode => 'Promo code';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get discount => 'Discount';
+
+  @override
+  String get invalidDiscountCode => 'Invalid or unavailable promo code';
+
+  @override
+  String get discountCodeExpired => 'This promo code has expired';
+
+  @override
+  String get discountMinOrderNotMet =>
+      'Minimum order amount not reached for this code';
 }

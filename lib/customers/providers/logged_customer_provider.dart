@@ -5,6 +5,7 @@ import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/ticket_order.dart';
 import 'package:caterfy/models/voucher_order.dart';
+import 'package:caterfy/models/discount_code.dart';
 import 'package:caterfy/models/order_item.dart';
 import 'package:caterfy/models/product.dart';
 import 'package:caterfy/models/store.dart';
@@ -76,6 +77,85 @@ class LoggedCustomerProvider with ChangeNotifier {
   }
 
   final debouncer = Debouncer(milliseconds: 300);
+
+  DiscountCode? _appliedDiscount;
+  bool _isApplyingDiscount = false;
+
+  DiscountCode? get appliedDiscount => _appliedDiscount;
+  bool get isApplyingDiscount => _isApplyingDiscount;
+
+  double get appliedDiscountAmount {
+    if (_appliedDiscount == null) return 0;
+    return _appliedDiscount!.computeDiscount(totalCartPrice);
+  }
+
+  Future<String?> applyDiscountCode({
+    required BuildContext context,
+    required String code,
+    required String storeId,
+  }) async {
+    final l10 = AppLocalizations.of(context);
+    _isApplyingDiscount = true;
+    notifyListeners();
+
+    try {
+      final trimmed = code.trim().toUpperCase();
+      final data = await supabase
+          .from('discount_codes')
+          .select()
+          .eq('code', trimmed)
+          .eq('is_active', true)
+          .maybeSingle();
+
+      if (data == null) {
+        _isApplyingDiscount = false;
+        notifyListeners();
+        return l10.invalidDiscountCode;
+      }
+
+      final discount = DiscountCode.fromMap(Map<String, dynamic>.from(data));
+
+      if (discount.expiresAt != null &&
+          discount.expiresAt!.isBefore(DateTime.now())) {
+        _isApplyingDiscount = false;
+        notifyListeners();
+        return l10.discountCodeExpired;
+      }
+
+      if (discount.maxUses != null &&
+          discount.usesCount >= discount.maxUses!) {
+        _isApplyingDiscount = false;
+        notifyListeners();
+        return l10.invalidDiscountCode;
+      }
+
+      if (discount.storeId != null && discount.storeId != storeId) {
+        _isApplyingDiscount = false;
+        notifyListeners();
+        return l10.invalidDiscountCode;
+      }
+
+      if (totalCartPrice < discount.minOrderAmount) {
+        _isApplyingDiscount = false;
+        notifyListeners();
+        return l10.discountMinOrderNotMet;
+      }
+
+      _appliedDiscount = discount;
+      _isApplyingDiscount = false;
+      notifyListeners();
+      return null;
+    } catch (_) {
+      _isApplyingDiscount = false;
+      notifyListeners();
+      return l10.somethingWentWrong;
+    }
+  }
+
+  void clearDiscount() {
+    _appliedDiscount = null;
+    notifyListeners();
+  }
 
   Cart? _cart;
 
@@ -598,6 +678,8 @@ class LoggedCustomerProvider with ChangeNotifier {
     if (_cart?.storeId == null || _cart!.items.isEmpty) return null;
     final l10 = AppLocalizations.of(context);
     final userId = supabase.auth.currentUser!.id;
+    final discount = _appliedDiscount;
+    final discountAmount = appliedDiscountAmount;
     try {
       _isPlaceOrderLoading = true;
       notifyListeners();
@@ -618,21 +700,31 @@ class LoggedCustomerProvider with ChangeNotifier {
                 : 0.00,
             'status': 'pending',
             'store_type': cartStoreType,
+            if (discount != null) 'discount_code': discount.code,
+            'discount_amount': discountAmount,
           })
           .select('id')
           .single();
+
+      if (discount != null) {
+        await supabase.rpc(
+          'redeem_discount_code',
+          params: {'p_code': discount.code},
+        );
+      }
 
       if (isUsingWallet) {
         await supabase.rpc(
           'subtract_wallet_balance',
           params: {
             'p_customer_id': userId,
-            'p_amount': totalCartPrice + deliveryPrice,
+            'p_amount': totalCartPrice + deliveryPrice - discountAmount,
           },
         );
       }
 
       _cart = null;
+      _appliedDiscount = null;
       deleteCart();
       return result['id'] as String?;
     } catch (e) {

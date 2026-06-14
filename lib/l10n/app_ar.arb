@@ -376,5 +376,12 @@
   "orderCompleted": "مكتمل",
   "orderConfirmed": "مؤكد",
   "viewCode": "عرض الرمز",
-  "viewTicket": "عرض التذكرة"
+  "viewTicket": "عرض التذكرة",
+
+  "promoCode": "رمز الخصم",
+  "apply": "تطبيق",
+  "discount": "خصم",
+  "invalidDiscountCode": "رمز الخصم غير صالح أو غير متاح",
+  "discountCodeExpired": "انتهت صلاحية رمز الخصم",
+  "discountMinOrderNotMet": "لم يتم بلوغ الحد الأدنى للطلب لهذا الرمز"
 }

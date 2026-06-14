@@ -1151,4 +1151,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get viewTicket => 'عرض التذكرة';
+
+  @override
+  String get promoCode => 'رمز الخصم';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
+  String get discount => 'خصم';
+
+  @override
+  String get invalidDiscountCode => 'رمز الخصم غير صالح أو غير متاح';
+
+  @override
+  String get discountCodeExpired => 'انتهت صلاحية رمز الخصم';
+
+  @override
+  String get discountMinOrderNotMet =>
+      'لم يتم بلوغ الحد الأدنى للطلب لهذا الرمز';
 }

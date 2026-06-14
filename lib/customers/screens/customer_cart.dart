@@ -144,7 +144,10 @@ class _CustomerCartState extends State<CustomerCart> {
                     ),
                     CartSection(
                       sectionTitle: l10.saveOnOrder,
-                      content: [SaveOnOrder(), SizedBox(height: 14)],
+                      content: [
+                        SaveOnOrder(storeId: store?.id ?? ''),
+                        SizedBox(height: 14),
+                      ],
                     ),
                     CartSection(
                       sectionTitle: l10.paymentSummary,
@@ -155,41 +158,52 @@ class _CustomerCartState extends State<CustomerCart> {
                             left: 15,
                             right: 15,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 11,
-                            children: [
-                              PaymentRow(
-                                title: l10.subtotal,
-                                price: customerProvider.totalCartPrice
-                                    .toStringAsFixed(2),
-                              ),
-                              PaymentRow(
-                                title: l10.deliveryFee,
-                                price: deliveryPrice.toStringAsFixed(2),
-                              ),
-                              PaymentRow(title: l10.serviceFee, price: '0.20'),
-                              Row(
-                                children: [
-                                  Text(
-                                    l10.totalAmount,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          child: Builder(builder: (context) {
+                            final discount = customerProvider.appliedDiscountAmount;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              spacing: 11,
+                              children: [
+                                PaymentRow(
+                                  title: l10.subtotal,
+                                  price: customerProvider.totalCartPrice
+                                      .toStringAsFixed(2),
+                                ),
+                                PaymentRow(
+                                  title: l10.deliveryFee,
+                                  price: deliveryPrice.toStringAsFixed(2),
+                                ),
+                                PaymentRow(title: l10.serviceFee, price: '0.20'),
+                                if (discount > 0)
+                                  PaymentRow(
+                                    title: customerProvider.appliedDiscount!.isPercentage
+                                        ? '${l10.discount} (${customerProvider.appliedDiscount!.discountValue.toStringAsFixed(0)}%)'
+                                        : l10.discount,
+                                    price: '-${discount.toStringAsFixed(2)}',
+                                    isDiscount: true,
                                   ),
-                                  Spacer(),
-                                  Text(
-                                    '${l10.jod} ${(customerProvider.totalCartPrice + deliveryPrice + 0.20).toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                Row(
+                                  children: [
+                                    Text(
+                                      l10.totalAmount,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                    Spacer(),
+                                    Text(
+                                      '${l10.jod} ${(customerProvider.totalCartPrice + deliveryPrice + 0.20 - discount).toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }),
                         ),
                       ],
                     ),
@@ -349,28 +363,70 @@ class SpecialRequest extends StatelessWidget {
   }
 }
 
-class SaveOnOrder extends StatelessWidget {
-  const SaveOnOrder({super.key});
+class SaveOnOrder extends StatefulWidget {
+  const SaveOnOrder({super.key, required this.storeId});
+
+  final String storeId;
+
+  @override
+  State<SaveOnOrder> createState() => _SaveOnOrderState();
+}
+
+class _SaveOnOrderState extends State<SaveOnOrder> {
+  final _controller = TextEditingController();
+  String? _error;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _apply() async {
+    final code = _controller.text.trim();
+    if (code.isEmpty) return;
+    final provider = context.read<LoggedCustomerProvider>();
+    final err = await provider.applyDiscountCode(
+      context: context,
+      code: code,
+      storeId: widget.storeId,
+    );
+    if (mounted) setState(() => _error = err);
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
+    final provider = context.watch<LoggedCustomerProvider>();
+    final applied = provider.appliedDiscount;
+
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
       borderSide: BorderSide(color: colors.outline, width: 1),
+    );
+    final greenBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color(0xFF22C55E), width: 1),
     );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 8),
           TextField(
+            controller: _controller,
+            enabled: applied == null,
+            textCapitalization: TextCapitalization.characters,
+            onSubmitted: (_) => _apply(),
             decoration: InputDecoration(
-              hintText: l10.enterCouponCode,
+              hintText: applied != null ? applied.code : l10.enterCouponCode,
               hintStyle: TextStyle(
-                color: colors.outlineVariant,
+                color: applied != null
+                    ? const Color(0xFF22C55E)
+                    : colors.outlineVariant,
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),
@@ -380,35 +436,66 @@ class SaveOnOrder extends StatelessWidget {
                   quarterTurns: 45,
                   child: Icon(
                     FontAwesomeIcons.ticket,
-                    color: colors.outlineVariant,
+                    color: applied != null
+                        ? const Color(0xFF22C55E)
+                        : colors.outlineVariant,
                     size: 18,
                   ),
                 ),
               ),
               suffixIconConstraints: const BoxConstraints(
                 minWidth: 0,
-                maxWidth: 70,
+                maxWidth: 80,
               ),
-              suffixIcon: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    l10.submit,
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: colors.secondary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              suffixIcon: provider.isApplyingDiscount
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: applied != null
+                              ? () {
+                                  provider.clearDiscount();
+                                  _controller.clear();
+                                  setState(() => _error = null);
+                                }
+                              : _apply,
+                          child: Text(
+                            applied != null ? l10.remove : l10.submit,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: applied != null
+                                  ? colors.error
+                                  : colors.secondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                      ],
                     ),
-                  ),
-                  SizedBox(width: 20),
-                ],
-              ),
-              border: border,
-              enabledBorder: border,
-              focusedBorder: border,
+              border: applied != null ? greenBorder : border,
+              enabledBorder: applied != null ? greenBorder : border,
+              focusedBorder: applied != null ? greenBorder : border,
+              disabledBorder: greenBorder,
             ),
           ),
+          if (_error != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 6, left: 4),
+              child: Text(
+                _error!,
+                style: TextStyle(color: colors.error, fontSize: 12),
+              ),
+            ),
         ],
       ),
     );
