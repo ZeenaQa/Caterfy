@@ -519,7 +519,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   }
 
   // ===== Fetch Stores =====
-  static const _serviceCategories = {'myCar', 'myHouse'};
+  static const _serviceCategories = {'myCar', 'myHouse', "eventPlanning", "education"};
 
   Future<void> fetchStores({
     required String category,

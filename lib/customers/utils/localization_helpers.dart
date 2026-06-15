@@ -25,6 +25,14 @@ String getLocalizedCategory(BuildContext context, String category) {
       return l10.myCar;
     case 'charity':
       return l10.charity;
+    case "stationeries":
+      return l10.stationeries;
+    case "eventPlanning":
+      return l10.eventPlanning;
+    case "clothing":
+      return l10.clothing;
+    case "education":
+      return l10.education;
     default:
       return category;
   }
