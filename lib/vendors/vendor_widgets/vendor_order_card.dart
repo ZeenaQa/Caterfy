@@ -5,6 +5,7 @@ import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 const url =
     'https://marketplace.canva.com/EAGMppVJ_aY/1/0/1600w/canva-dark-green-cute-and-playful-kitchen-restaurant-logo-S2LGeYCK5eM.jpg';
@@ -56,7 +57,9 @@ class _VendorOrderCardState extends State<VendorOrderCard> {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final vendorProvider = Provider.of<LoggedVendorProvider>(context, listen: false);
-    final isService = vendorProvider.store?.type == 'service';
+    final userMetadata = Supabase.instance.client.auth.currentUser?.userMetadata;
+    final isService = (userMetadata?['store_type'] as String?) == 'service'
+        || vendorProvider.store?.type == 'service';
     final isFood = vendorProvider.store?.category == 'food';
     final orderDate = widget.order.createdAt != null
         ? DateFormat(

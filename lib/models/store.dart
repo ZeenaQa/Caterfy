@@ -52,6 +52,7 @@ class Store {
       'name': name,
       'name_ar': name_ar,
       'category': category,
+      'type': type,
       'store_area': storeArea,
       'logo_url': logoUrl,
       'banner_url': bannerUrl,

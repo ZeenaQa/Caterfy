@@ -26,7 +26,7 @@ class StoreInfoPage extends StatefulWidget {
 
   List<String> get categories {
     if (storeType == 'service') {
-      return ['myCar', 'myHouse'];
+      return ['myCar', 'myHouse', 'eventPlanning', 'education'];
     }
 
     return [
@@ -37,6 +37,7 @@ class StoreInfoPage extends StatefulWidget {
       'toysAndKids',
       'healthAndBeauty',
       'clothing',
+      'stationeries'
     ];
   }
 
