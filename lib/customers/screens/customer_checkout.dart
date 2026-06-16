@@ -4,6 +4,7 @@ import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
 import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_add_card.dart';
+import 'package:caterfy/customers/screens/customer_addresses_screen.dart';
 import 'package:caterfy/customers/screens/customer_order_tracking.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/credit_card.dart';
@@ -199,6 +200,9 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                   spacing: 25,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (widget.store != null &&
+                        customerProvider.storeRequiresAddress(widget.store!))
+                      _AddressCard(store: widget.store!),
                     CheckoutContainer(
                       child: Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -314,6 +318,72 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                     ),
                   ],
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AddressCard extends StatelessWidget {
+  const _AddressCard({required this.store});
+  final Store store;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
+    final provider = context.watch<LoggedCustomerProvider>();
+    final selected = provider.selectedAddress;
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const CustomerAddressesScreen(selectionMode: true),
+        ),
+      ),
+      child: CheckoutContainer(
+        child: Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(18, 10, 16, 10),
+          child: Row(
+            children: [
+              Icon(
+                Icons.location_on_outlined,
+                size: 23,
+                color: selected != null ? colors.primary : colors.error,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      selected != null ? selected.typeLabel : l10.selectDeliveryAddress,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: selected != null ? colors.onSurface : colors.error,
+                      ),
+                    ),
+                    if (selected != null && selected.subtitle.isNotEmpty)
+                      Text(
+                        selected.subtitle,
+                        style: TextStyle(
+                          color: colors.onSurfaceVariant,
+                          fontSize: 13,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 18,
+                color: colors.onSurfaceVariant,
               ),
             ],
           ),

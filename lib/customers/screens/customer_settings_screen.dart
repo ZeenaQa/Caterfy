@@ -1,4 +1,5 @@
 import 'package:caterfy/customers/providers/customer_auth_provider.dart';
+import 'package:caterfy/customers/screens/customer_addresses_screen.dart';
 import 'package:caterfy/customers/screens/customer_settings/account_info.dart';
 import 'package:caterfy/customers/screens/customer_settings/change_password.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -59,6 +60,10 @@ class CustomerSettingsScreen extends StatelessWidget {
       SettingsButton(
         title: l10.savedAddresses,
         icon: Icons.location_on_outlined,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CustomerAddressesScreen()),
+        ),
       ),
       if (isEmailUser) ...[
         SettingsButton(

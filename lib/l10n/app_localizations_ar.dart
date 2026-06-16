@@ -215,6 +215,84 @@ class AppLocalizationsAr extends AppLocalizations {
   String get savedAddresses => 'العناوين المحفوظة';
 
   @override
+  String get addAddress => 'إضافة عنوان';
+
+  @override
+  String get saveAddress => 'حفظ العنوان';
+
+  @override
+  String get addressLabel => 'التصنيف';
+
+  @override
+  String get defaultLabel => 'افتراضي';
+
+  @override
+  String get setAsDefault => 'تعيين كافتراضي';
+
+  @override
+  String get deleteAddress => 'حذف العنوان';
+
+  @override
+  String get noSavedAddresses => 'لا توجد عناوين محفوظة';
+
+  @override
+  String get addAddressHint => 'أضف أول عنوان توصيل';
+
+  @override
+  String get deliveryAddress => 'عنوان التوصيل';
+
+  @override
+  String get selectDeliveryAddress => 'اختر عنوان التوصيل';
+
+  @override
+  String get selectAddressToCheckout => 'يرجى اختيار عنوان توصيل للمتابعة';
+
+  @override
+  String get moveMapToPickLocation => 'حرّك الخريطة لاختيار الموقع';
+
+  @override
+  String get pinYourLocation => 'حدد موقعك';
+
+  @override
+  String get confirmLocation => 'تأكيد الموقع';
+
+  @override
+  String get changeLocation => 'تغيير الموقع';
+
+  @override
+  String get addressDetails => 'تفاصيل العنوان';
+
+  @override
+  String get editAddress => 'تعديل العنوان';
+
+  @override
+  String get addressType => 'نوع العنوان';
+
+  @override
+  String get buildingVilla => 'المبنى / الفيلا';
+
+  @override
+  String get buildingVillaHint => 'مثال: مبنى النور';
+
+  @override
+  String get floor => 'الطابق';
+
+  @override
+  String get aptNumber => 'رقم الشقة';
+
+  @override
+  String get street => 'الشارع';
+
+  @override
+  String get streetHint => 'مثال: شارع الملك عبدالله';
+
+  @override
+  String get additionalDirections => 'تعليمات إضافية';
+
+  @override
+  String get additionalDirectionsHint => 'مثال: بجانب البوابة الزرقاء';
+
+  @override
   String get changeEmail => 'تغيير البريد الإلكتروني';
 
   @override
@@ -651,9 +729,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get store => 'المتجر';
-
-  @override
-  String get changeLocation => 'تغيير الموقع';
 
   @override
   String get location => 'الموقع';

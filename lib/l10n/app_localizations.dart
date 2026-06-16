@@ -500,6 +500,162 @@ abstract class AppLocalizations {
   /// **'Saved addresses'**
   String get savedAddresses;
 
+  /// No description provided for @addAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add address'**
+  String get addAddress;
+
+  /// No description provided for @saveAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Save address'**
+  String get saveAddress;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get addressLabel;
+
+  /// No description provided for @defaultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get defaultLabel;
+
+  /// No description provided for @setAsDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as default'**
+  String get setAsDefault;
+
+  /// No description provided for @deleteAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete address'**
+  String get deleteAddress;
+
+  /// No description provided for @noSavedAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved addresses'**
+  String get noSavedAddresses;
+
+  /// No description provided for @addAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first delivery address'**
+  String get addAddressHint;
+
+  /// No description provided for @deliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery address'**
+  String get deliveryAddress;
+
+  /// No description provided for @selectDeliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a delivery address'**
+  String get selectDeliveryAddress;
+
+  /// No description provided for @selectAddressToCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a delivery address to continue'**
+  String get selectAddressToCheckout;
+
+  /// No description provided for @moveMapToPickLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the map to pick a location'**
+  String get moveMapToPickLocation;
+
+  /// No description provided for @pinYourLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin your location'**
+  String get pinYourLocation;
+
+  /// No description provided for @confirmLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm location'**
+  String get confirmLocation;
+
+  /// No description provided for @changeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Change location'**
+  String get changeLocation;
+
+  /// No description provided for @addressDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Address details'**
+  String get addressDetails;
+
+  /// No description provided for @editAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit address'**
+  String get editAddress;
+
+  /// No description provided for @addressType.
+  ///
+  /// In en, this message translates to:
+  /// **'Address type'**
+  String get addressType;
+
+  /// No description provided for @buildingVilla.
+  ///
+  /// In en, this message translates to:
+  /// **'Building / Villa'**
+  String get buildingVilla;
+
+  /// No description provided for @buildingVillaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Al Noor Building'**
+  String get buildingVillaHint;
+
+  /// No description provided for @floor.
+  ///
+  /// In en, this message translates to:
+  /// **'Floor'**
+  String get floor;
+
+  /// No description provided for @aptNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Apt #'**
+  String get aptNumber;
+
+  /// No description provided for @street.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get street;
+
+  /// No description provided for @streetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. King Abdullah St.'**
+  String get streetHint;
+
+  /// No description provided for @additionalDirections.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional directions'**
+  String get additionalDirections;
+
+  /// No description provided for @additionalDirectionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Near the blue gate'**
+  String get additionalDirectionsHint;
+
   /// No description provided for @changeEmail.
   ///
   /// In en, this message translates to:
@@ -1357,12 +1513,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Store'**
   String get store;
-
-  /// No description provided for @changeLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Change location'**
-  String get changeLocation;
 
   /// No description provided for @location.
   ///

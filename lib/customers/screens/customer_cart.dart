@@ -3,6 +3,8 @@ import 'package:caterfy/customers/customer_widgets/cart_item.dart';
 import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
 import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/address_picker_screen.dart';
+import 'package:caterfy/customers/screens/customer_addresses_screen.dart';
 import 'package:caterfy/customers/screens/customer_checkout.dart';
 import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/dummy_data.dart';
@@ -138,6 +140,11 @@ class _CustomerCartState extends State<CustomerCart> {
                         );
                       },
                     ),
+                    if (store != null && customerProvider.storeRequiresAddress(store!))
+                      CartSection(
+                        sectionTitle: l10.deliveryAddress,
+                        content: [DeliveryAddressRow(store: store!)],
+                      ),
                     CartSection(
                       sectionTitle: l10.specialRequest,
                       content: [SpecialRequest()],
@@ -225,12 +232,16 @@ class BottomNav extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final l10 = AppLocalizations.of(context);
     final bool isStoreOpen = store?.isOpen ?? true;
+    final provider = context.watch<LoggedCustomerProvider>();
+    final bool needsAddress =
+        store != null && provider.storeRequiresAddress(store!);
+    final bool hasAddress = provider.selectedAddress != null;
+    final bool canCheckout = !needsAddress || hasAddress;
 
     return IntrinsicHeight(
       child: Container(
         padding: const EdgeInsets.only(
           bottom: 18,
-          // top: 25,
           left: 14,
           right: 14,
         ),
@@ -243,7 +254,6 @@ class BottomNav extends StatelessWidget {
               offset: const Offset(0, 3.5),
             ),
           ],
-          // border: Border(top: BorderSide(color: colors.outline)),
         ),
         child: SafeArea(
           top: false,
@@ -254,7 +264,14 @@ class BottomNav extends StatelessWidget {
                 SizedBox(height: 12),
                 Text(l10.checkoutStoreClosed, style: TextStyle(fontSize: 13)),
               ],
-              SizedBox(height: !isStoreOpen ? 13 : 25),
+              if (needsAddress && !hasAddress) ...[
+                SizedBox(height: 12),
+                Text(
+                  l10.selectAddressToCheckout,
+                  style: TextStyle(fontSize: 13, color: colors.error),
+                ),
+              ],
+              SizedBox(height: (!isStoreOpen || (needsAddress && !hasAddress)) ? 13 : 25),
               Row(
                 spacing: 18,
                 children: [
@@ -277,12 +294,14 @@ class BottomNav extends StatelessWidget {
                   Expanded(
                     child: FilledBtn(
                       loadingSize: 15,
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => CustomerCheckout(store: store),
-                        ),
-                      ),
+                      onPressed: canCheckout
+                          ? () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CustomerCheckout(store: store),
+                                ),
+                              )
+                          : null,
                       title: l10.continueToCheckout,
                       titleSize: 15,
                       innerVerticalPadding: 15,
@@ -297,6 +316,81 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
+
+// ── Delivery address row shown in cart ───────────────────────────────────────
+
+class DeliveryAddressRow extends StatelessWidget {
+  const DeliveryAddressRow({super.key, required this.store});
+  final Store store;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final l10 = AppLocalizations.of(context);
+    final provider = context.watch<LoggedCustomerProvider>();
+    final selected = provider.selectedAddress;
+
+    return TextButton(
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => provider.addresses.isEmpty
+              ? const AddressPickerScreen()
+              : const CustomerAddressesScreen(selectionMode: true),
+        ),
+      ),
+      style: TextButton.styleFrom(
+        foregroundColor: colors.secondary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7),
+        child: Row(
+          children: [
+            Icon(
+              Icons.location_on_outlined,
+              color: selected != null ? colors.primary : colors.error,
+              size: 20,
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    selected != null ? selected.typeLabel : l10.selectDeliveryAddress,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                      color: selected != null ? colors.onSurface : colors.error,
+                    ),
+                  ),
+                  if (selected != null && selected.subtitle.isNotEmpty)
+                    Text(
+                      selected.subtitle,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        color: colors.onSurfaceVariant,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 18,
+              color: colors.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Special request ───────────────────────────────────────────────────────────
 
 class SpecialRequest extends StatelessWidget {
   const SpecialRequest({super.key});

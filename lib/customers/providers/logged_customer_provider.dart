@@ -1,6 +1,7 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/credit_card.dart';
 import 'package:caterfy/models/cart.dart';
+import 'package:caterfy/models/customer_address.dart';
 import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/ticket_order.dart';
@@ -77,6 +78,166 @@ class LoggedCustomerProvider with ChangeNotifier {
   }
 
   final debouncer = Debouncer(milliseconds: 300);
+
+  // ── Addresses ───────────────────────────────────────────────────────────────
+
+  List<CustomerAddress> _addresses = [];
+  CustomerAddress? _selectedAddress;
+  bool _isAddressLoading = false;
+
+  List<CustomerAddress> get addresses => _addresses;
+  CustomerAddress? get selectedAddress => _selectedAddress;
+  bool get isAddressLoading => _isAddressLoading;
+
+  static const Set<String> _categoriesRequiringAddress = {
+    'food', 'ceemart', 'groceries', 'electronics', 'pharmacy',
+    'toysAndKids', 'healthAndBeauty', 'clothing', 'stationeries', 'pets',
+  };
+
+  bool storeRequiresAddress(Store store) {
+    return _categoriesRequiringAddress.contains(store.category) ||
+        store.type == 'regular';
+  }
+
+  Future<void> fetchAddresses() async {
+    _isAddressLoading = true;
+    notifyListeners();
+    try {
+      final userId = supabase.auth.currentUser!.id;
+      final data = await supabase
+          .from('customer_addresses')
+          .select()
+          .eq('customer_id', userId)
+          .order('is_default', ascending: false)
+          .order('created_at');
+      _addresses = (data as List).map((e) => CustomerAddress.fromMap(e)).toList();
+      if (_selectedAddress == null && _addresses.isNotEmpty) {
+        _selectedAddress = _addresses.firstWhere(
+          (a) => a.isDefault,
+          orElse: () => _addresses.first,
+        );
+      }
+    } catch (_) {
+    } finally {
+      _isAddressLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> addAddress({
+    required String type,
+    required String? building,
+    required String? floor,
+    required String? apartment,
+    required String? street,
+    required String? directions,
+    required String? area,
+    required double latitude,
+    required double longitude,
+  }) async {
+    final userId = supabase.auth.currentUser!.id;
+    final makeDefault = _addresses.isEmpty;
+    try {
+      final result = await supabase
+          .from('customer_addresses')
+          .insert({
+            'customer_id': userId,
+            'type': type,
+            if (building != null && building.isNotEmpty) 'building': building,
+            if (floor != null && floor.isNotEmpty) 'floor': floor,
+            if (apartment != null && apartment.isNotEmpty) 'apartment': apartment,
+            if (street != null && street.isNotEmpty) 'street': street,
+            if (directions != null && directions.isNotEmpty) 'directions': directions,
+            if (area != null && area.isNotEmpty) 'area': area,
+            'latitude': latitude,
+            'longitude': longitude,
+            'is_default': makeDefault,
+          })
+          .select()
+          .single();
+      final newAddr = CustomerAddress.fromMap(result);
+      _addresses.insert(0, newAddr);
+      if (_selectedAddress == null) _selectedAddress = newAddr;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('addAddress error: $e');
+    }
+  }
+
+  Future<void> updateAddress({
+    required String id,
+    required String type,
+    required String? building,
+    required String? floor,
+    required String? apartment,
+    required String? street,
+    required String? directions,
+    required double latitude,
+    required double longitude,
+    required String? area,
+  }) async {
+    try {
+      final result = await supabase
+          .from('customer_addresses')
+          .update({
+            'type': type,
+            'building': building?.isNotEmpty == true ? building : null,
+            'floor': floor?.isNotEmpty == true ? floor : null,
+            'apartment': apartment?.isNotEmpty == true ? apartment : null,
+            'street': street?.isNotEmpty == true ? street : null,
+            'directions': directions?.isNotEmpty == true ? directions : null,
+            'latitude': latitude,
+            'longitude': longitude,
+            'area': area?.isNotEmpty == true ? area : null,
+          })
+          .eq('id', id)
+          .select()
+          .single();
+      final updated = CustomerAddress.fromMap(result);
+      final idx = _addresses.indexWhere((a) => a.id == id);
+      if (idx != -1) _addresses[idx] = updated;
+      if (_selectedAddress?.id == id) _selectedAddress = updated;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('updateAddress error: $e');
+    }
+  }
+
+  Future<void> deleteAddress(String id) async {
+    try {
+      await supabase.from('customer_addresses').delete().eq('id', id);
+      _addresses.removeWhere((a) => a.id == id);
+      if (_selectedAddress?.id == id) {
+        _selectedAddress = _addresses.isNotEmpty ? _addresses.first : null;
+      }
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  Future<void> setDefaultAddress(String id) async {
+    final userId = supabase.auth.currentUser!.id;
+    try {
+      await supabase
+          .from('customer_addresses')
+          .update({'is_default': false})
+          .eq('customer_id', userId);
+      await supabase
+          .from('customer_addresses')
+          .update({'is_default': true})
+          .eq('id', id);
+      _addresses = _addresses
+          .map((a) => a.copyWith(isDefault: a.id == id))
+          .toList();
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  void selectAddress(CustomerAddress address) {
+    _selectedAddress = address;
+    notifyListeners();
+  }
+
+  // ── Discount ────────────────────────────────────────────────────────────────
 
   DiscountCode? _appliedDiscount;
   bool _isApplyingDiscount = false;
@@ -702,6 +863,7 @@ class LoggedCustomerProvider with ChangeNotifier {
             'store_type': cartStoreType,
             if (discount != null) 'discount_code': discount.code,
             'discount_amount': discountAmount,
+            if (_selectedAddress != null) 'delivery_address': _selectedAddress!.subtitle,
           })
           .select('id')
           .single();

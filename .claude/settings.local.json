@@ -4,7 +4,9 @@
       "Bash(dart analyze *)",
       "Bash(powershell -Command \"\\(Get-Content lib\\\\customers\\\\screens\\\\ceemart\\\\ceemart_screen.dart -Raw\\) -replace '\\\\.withOpacity\\\\\\(', '.withValues\\(alpha: ' | Set-Content lib\\\\customers\\\\screens\\\\ceemart\\\\ceemart_screen.dart -Encoding utf8\")",
       "Bash(flutter analyze *)",
-      "Bash(powershell -Command \"\\(Get-Content supabase\\\\seed_ceemart.sql -Raw\\) -replace ', is_available\\\\\\)', '\\)' -replace ', true\\\\\\)', '\\)' | Set-Content supabase\\\\seed_ceemart.sql -Encoding utf8\")"
+      "Bash(powershell -Command \"\\(Get-Content supabase\\\\seed_ceemart.sql -Raw\\) -replace ', is_available\\\\\\)', '\\)' -replace ', true\\\\\\)', '\\)' | Set-Content supabase\\\\seed_ceemart.sql -Encoding utf8\")",
+      "WebSearch",
+      "Bash(flutter gen-l10n *)"
     ]
   }
 }

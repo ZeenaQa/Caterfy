@@ -216,6 +216,85 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savedAddresses => 'Saved addresses';
 
   @override
+  String get addAddress => 'Add address';
+
+  @override
+  String get saveAddress => 'Save address';
+
+  @override
+  String get addressLabel => 'Label';
+
+  @override
+  String get defaultLabel => 'Default';
+
+  @override
+  String get setAsDefault => 'Set as default';
+
+  @override
+  String get deleteAddress => 'Delete address';
+
+  @override
+  String get noSavedAddresses => 'No saved addresses';
+
+  @override
+  String get addAddressHint => 'Add your first delivery address';
+
+  @override
+  String get deliveryAddress => 'Delivery address';
+
+  @override
+  String get selectDeliveryAddress => 'Select a delivery address';
+
+  @override
+  String get selectAddressToCheckout =>
+      'Please select a delivery address to continue';
+
+  @override
+  String get moveMapToPickLocation => 'Move the map to pick a location';
+
+  @override
+  String get pinYourLocation => 'Pin your location';
+
+  @override
+  String get confirmLocation => 'Confirm location';
+
+  @override
+  String get changeLocation => 'Change location';
+
+  @override
+  String get addressDetails => 'Address details';
+
+  @override
+  String get editAddress => 'Edit address';
+
+  @override
+  String get addressType => 'Address type';
+
+  @override
+  String get buildingVilla => 'Building / Villa';
+
+  @override
+  String get buildingVillaHint => 'e.g. Al Noor Building';
+
+  @override
+  String get floor => 'Floor';
+
+  @override
+  String get aptNumber => 'Apt #';
+
+  @override
+  String get street => 'Street';
+
+  @override
+  String get streetHint => 'e.g. King Abdullah St.';
+
+  @override
+  String get additionalDirections => 'Additional directions';
+
+  @override
+  String get additionalDirectionsHint => 'e.g. Near the blue gate';
+
+  @override
   String get changeEmail => 'Change email';
 
   @override
@@ -654,9 +733,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get store => 'Store';
-
-  @override
-  String get changeLocation => 'Change location';
 
   @override
   String get location => 'Location';

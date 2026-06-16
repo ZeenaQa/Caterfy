@@ -44,6 +44,7 @@ class AuthenticatedCustomerState extends State<AuthenticatedCustomer> {
       await provider.fetchLaundryOrders(context: context);
       await provider.fetchVoucherOrders(context: context);
       await provider.fetchTicketOrders(context: context);
+      await provider.fetchAddresses();
       provider.subscribeToOrderUpdates(customerId);
     });
   }

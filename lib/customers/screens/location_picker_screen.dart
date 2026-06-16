@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -17,18 +19,33 @@ class LocationPickerScreen extends StatefulWidget {
 
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
   LatLng? pickedLocation;
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _loadLastLocation();
-  }
-
-  void _loadLastLocation() {
     final provider = context.read<GlobalProvider>();
     if (provider.lastPickedLocation != null) {
       pickedLocation = provider.lastPickedLocation;
     }
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onLocationChanged(LatLng latLng) {
+    pickedLocation = latLng;
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 600), () async {
+      if (!mounted) return;
+      final l10 = AppLocalizations.of(context);
+      final address = await MapHelper.getAddressFromLatLng(latLng, l10.unknownArea);
+      if (!mounted) return;
+      context.read<GlobalProvider>().setDeliveryLocation(address, latLng);
+    });
   }
 
   @override
@@ -43,19 +60,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           Expanded(
             child: MapPicker(
               initialLocation: pickedLocation ?? const LatLng(31.9539, 35.9106),
-              onLocationChanged: (latLng) async {
-                pickedLocation = latLng;
-
-                final address = await MapHelper.getAddressFromLatLng(
-                  latLng,
-                  l10.unknownArea,
-                );
-
-                context.read<GlobalProvider>().setDeliveryLocation(
-                  address,
-                  latLng,
-                );
-              },
+              onLocationChanged: _onLocationChanged,
             ),
           ),
 
