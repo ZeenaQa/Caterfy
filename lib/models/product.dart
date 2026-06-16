@@ -8,6 +8,7 @@ class Product {
   final String subCategoryId;
   final String subCategory;
   final String subCategoryEn;
+  final DateTime? unavailableDate;
 
   Product({
     required this.id,
@@ -19,7 +20,16 @@ class Product {
     required this.subCategoryId,
     required this.subCategory,
     String? subCategoryEn,
+    this.unavailableDate,
   }) : subCategoryEn = subCategoryEn ?? subCategory;
+
+  bool get isUnavailableToday {
+    if (unavailableDate == null) return false;
+    final now = DateTime.now();
+    return unavailableDate!.year == now.year &&
+        unavailableDate!.month == now.month &&
+        unavailableDate!.day == now.day;
+  }
 
   // FROM SUPABASE (Map → Product)
   factory Product.fromMap(Map<String, dynamic> map) {
@@ -33,6 +43,9 @@ class Product {
       subCategoryId: map['sub_category_id'],
       subCategory: map['sub_categories'] ?? '',
       subCategoryEn: map['sub_categories_en'] ?? map['sub_categories'] ?? '',
+      unavailableDate: map['unavailable_date'] != null
+          ? DateTime.parse(map['unavailable_date'])
+          : null,
     );
   }
 

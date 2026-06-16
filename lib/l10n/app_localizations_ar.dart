@@ -512,6 +512,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get markUnavailableToday => 'اجعل المنتج غير متوفر اليوم';
 
   @override
+  String get markAvailable => 'اجعل المنتج متوفراً';
+
+  @override
+  String get unavailableToday => 'غير متوفر اليوم';
+
+  @override
+  String get unavailable => 'غير متوفر';
+
+  @override
   String get saveChanges => 'حفظ التغييرات';
 
   @override

@@ -1082,6 +1082,24 @@ abstract class AppLocalizations {
   /// **'Mark as unavailable today'**
   String get markUnavailableToday;
 
+  /// No description provided for @markAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as available'**
+  String get markAvailable;
+
+  /// No description provided for @unavailableToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable today'**
+  String get unavailableToday;
+
+  /// No description provided for @unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get unavailable;
+
   /// No description provided for @saveChanges.
   ///
   /// In en, this message translates to:

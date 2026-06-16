@@ -515,6 +515,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get markUnavailableToday => 'Mark as unavailable today';
 
   @override
+  String get markAvailable => 'Mark as available';
+
+  @override
+  String get unavailableToday => 'Unavailable today';
+
+  @override
+  String get unavailable => 'Unavailable';
+
+  @override
   String get saveChanges => 'Save changes';
 
   @override

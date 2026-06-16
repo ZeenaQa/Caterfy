@@ -18,6 +18,7 @@ class EditProductScreen extends StatefulWidget {
   final String description;
   final double price;
   final String imageUrl;
+  final bool isUnavailableToday;
 
   const EditProductScreen({
     super.key,
@@ -26,6 +27,7 @@ class EditProductScreen extends StatefulWidget {
     required this.description,
     required this.price,
     required this.imageUrl,
+    this.isUnavailableToday = false,
   });
 
   @override
@@ -41,6 +43,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   String? nameError;
   String? descriptionError;
   String? dinarsError;
+  late bool _unavailableToday;
 
   final ValueNotifier<File?> imageNotifier = ValueNotifier<File?>(null);
 
@@ -50,6 +53,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     productName = widget.name;
     productDescription = widget.description;
+    _unavailableToday = widget.isUnavailableToday;
 
     final priceParts = widget.price.toStringAsFixed(2).split('.');
     dinars = priceParts[0];
@@ -121,10 +125,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                  Icon(
+                    _unavailableToday ? Icons.cancel : Icons.check_circle,
+                    color: _unavailableToday ? Colors.red : Colors.green,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Text(
-                    l10.available,
+                    _unavailableToday ? l10.unavailable : l10.available,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -137,7 +145,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 l10.productAvailabilityInfo,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
-              OutlinedBtn(onPressed: () {}, title: l10.markUnavailableToday),
+              OutlinedBtn(
+                onPressed: () async {
+                  final newValue = !_unavailableToday;
+                  setState(() => _unavailableToday = newValue);
+                  await context
+                      .read<LoggedVendorProvider>()
+                      .setProductUnavailableToday(widget.productId, newValue);
+                },
+                title: _unavailableToday
+                    ? l10.markAvailable
+                    : l10.markUnavailableToday,
+              ),
               Divider(thickness: 4, color: colors.surfaceContainer),
 
               /// ================= NAME + IMAGE =================

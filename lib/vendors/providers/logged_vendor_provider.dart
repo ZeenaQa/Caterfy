@@ -320,6 +320,21 @@ class LoggedVendorProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> setProductUnavailableToday(String productId, bool unavailable) async {
+    try {
+      final date = unavailable
+          ? DateTime.now().toIso8601String().substring(0, 10)
+          : null;
+      await supabase
+          .from('products')
+          .update({'unavailable_date': date})
+          .eq('id', productId);
+      await fetchProducts();
+    } catch (e) {
+      debugPrint('setProductUnavailableToday error: $e');
+    }
+  }
+
   Future<void> deleteProduct(String productId) async {
     _isLoading = true;
     notifyListeners();

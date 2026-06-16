@@ -61,7 +61,6 @@ class CustomerSettingsScreen extends StatelessWidget {
         icon: Icons.location_on_outlined,
       ),
       if (isEmailUser) ...[
-        SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
         SettingsButton(
           title: l10.changePassword,
           icon: Icons.key_outlined,

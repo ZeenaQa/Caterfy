@@ -42,7 +42,6 @@ class VendorSettingsScreen extends StatelessWidget {
       SizedBox(height: 10),
 
       if (isEmailUser) ...[
-        SettingsButton(title: l10.changeEmail, icon: Icons.email_outlined),
         SettingsButton(
           title: l10.changePassword,
           icon: Icons.key_outlined,

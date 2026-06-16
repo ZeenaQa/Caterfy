@@ -110,17 +110,27 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
 
   Future<void> _searchStores(String q) async {
     try {
-      final data = await _supabase
-          .from('stores')
-          .select()
-          .or('name.ilike.%$q%,name_ar.ilike.%$q%')
-          .limit(10);
+      final results = await Future.wait<List<dynamic>>([
+        _supabase
+            .from('stores')
+            .select()
+            .or('name.ilike.%$q%,name_ar.ilike.%$q%')
+            .limit(10)
+            .then((v) => v as List<dynamic>),
+        _supabase
+            .rpc('search_stores_by_tag', params: {'search_term': q})
+            .then((v) => v as List<dynamic>),
+      ]);
       if (!mounted) return;
-      setState(
-        () => _storeResults = (data as List)
-            .map((e) => Store.fromMap(e))
-            .toList(),
-      );
+      final seen = <String>{};
+      final combined = <Store>[];
+      for (final list in results) {
+        for (final e in list) {
+          final store = Store.fromMap(e);
+          if (seen.add(store.id)) combined.add(store);
+        }
+      }
+      setState(() => _storeResults = combined);
     } catch (_) {}
   }
 

@@ -652,6 +652,7 @@ class StoreProductItem extends StatelessWidget {
                 description: product.description,
                 price: product.price,
                 imageUrl: product.imageUrl ?? '',
+                isUnavailableToday: product.isUnavailableToday,
               ),
             ),
           );
