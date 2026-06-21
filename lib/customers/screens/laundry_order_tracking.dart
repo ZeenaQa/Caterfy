@@ -102,17 +102,6 @@ class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
     return Scaffold(
       backgroundColor: colors.surface,
 
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: FilledBtn(
-            onPressed: () => Navigator.of(context).popUntil((r) => r.isFirst),
-            title: l10.back,
-            innerVerticalPadding: 15,
-          ),
-        ),
-      ),
-
       body: Column(
         children: [
           // ── Top tinted area ──────────────────────────────────────────────────
@@ -127,7 +116,7 @@ class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
                     padding: const EdgeInsets.only(left: 12, top: 4, bottom: 4),
                     child: IconButton(
                       icon: Icon(
-                        Icons.arrow_back,
+                        Icons.close,
                         color: colors.onSurface,
                         size: 20,
                       ),
@@ -135,7 +124,7 @@ class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
                       style: IconButton.styleFrom(
                         backgroundColor: colors.surface,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(50),
                         ),
                         fixedSize: const Size(38, 38),
                       ),
@@ -223,15 +212,61 @@ class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            l10.orderSummary,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: colors.onSurface,
-                            ),
+                          // Store header
+                          Row(
+                            spacing: 12,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: order.storeImageUrl.isNotEmpty
+                                    ? Image.network(
+                                        order.storeImageUrl,
+                                        width: 48,
+                                        height: 48,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => Container(
+                                          width: 48,
+                                          height: 48,
+                                          color: colors.surfaceContainer,
+                                          child: Icon(
+                                            Icons.local_laundry_service_rounded,
+                                            color: colors.onSurfaceVariant,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 48,
+                                        height: 48,
+                                        color: colors.surfaceContainer,
+                                        child: Icon(
+                                          Icons.local_laundry_service_rounded,
+                                          color: colors.onSurfaceVariant,
+                                        ),
+                                      ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    order.storeName,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: colors.onSurface,
+                                    ),
+                                  ),
+                                  Text(
+                                    l10.orderSummary,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: colors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 16),
                           _OrderDetailRow(
                             icon: Icons.local_laundry_service_outlined,
                             label: l10.selectService,
@@ -312,8 +347,10 @@ class _LaundryTrackingStepsState extends State<_LaundryTrackingSteps>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
-    _glowAnim = Tween<double>(begin: 0.10, end: 0.32)
-        .animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
+    _glowAnim = Tween<double>(
+      begin: 0.10,
+      end: 0.32,
+    ).animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -359,7 +396,9 @@ class _LaundryTrackingStepsState extends State<_LaundryTrackingSteps>
           height: _nodeSize,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.activeColor.withAlpha((_glowAnim.value * 255).round()),
+            color: widget.activeColor.withAlpha(
+              (_glowAnim.value * 255).round(),
+            ),
           ),
           child: Center(child: child),
         ),
@@ -425,7 +464,10 @@ class _LaundryTrackingStepsState extends State<_LaundryTrackingSteps>
       }
     }
 
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: children);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
   }
 }
 
@@ -480,10 +522,7 @@ class _OrderDetailRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: colors.onSurfaceVariant,
-                ),
+                style: TextStyle(fontSize: 11, color: colors.onSurfaceVariant),
               ),
               Text(
                 value,

@@ -1,12 +1,17 @@
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/customer_checkout.dart';
 import 'package:caterfy/customers/screens/laundry_order_tracking.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LaundryCheckoutScreen extends StatefulWidget {
+  final String storeName;
+  final String storeImageUrl;
   final String service;
   final String address;
   final String phone;
@@ -15,6 +20,8 @@ class LaundryCheckoutScreen extends StatefulWidget {
 
   const LaundryCheckoutScreen({
     super.key,
+    required this.storeName,
+    required this.storeImageUrl,
     required this.service,
     required this.address,
     required this.phone,
@@ -28,12 +35,34 @@ class LaundryCheckoutScreen extends StatefulWidget {
 
 class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
   bool _isPlacing = false;
+  String _payment = 'cash';
+  bool _useWallet = false;
+
+  void _pickMethod(String val) => setState(() => _payment = val);
+
+  bool _toggleWallet() {
+    bool willReturn = false;
+    if (!_useWallet) {
+      final walletBalance =
+          context.read<GlobalProvider>().user['wallet_balance'] as num;
+      if (walletBalance > 0) {
+        willReturn = true;
+        _pickMethod('wallet');
+      }
+    } else {
+      if (_payment == 'wallet') _pickMethod('cash');
+    }
+    setState(() => _useWallet = !_useWallet);
+    return willReturn;
+  }
 
   Future<void> _placeOrder() async {
     setState(() => _isPlacing = true);
     final provider = context.read<LoggedCustomerProvider>();
     final orderId = await provider.placeLaundryOrder(
       context: context,
+      storeName: widget.storeName,
+      storeImageUrl: widget.storeImageUrl,
       service: widget.service,
       address: widget.address,
       phone: widget.phone,
@@ -56,9 +85,20 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LoggedCustomerProvider>().fetchPaymentMethods(context: context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final globalProvider = context.watch<GlobalProvider>();
+    final walletBalance = globalProvider.user['wallet_balance'] as num;
+    final walletOnly = walletBalance > 0 && _useWallet;
 
     return Scaffold(
       appBar: CustomAppBar(title: l10.orderSummary),
@@ -81,33 +121,39 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
           titleSize: 15,
         ),
       ),
-      body: SingleChildScrollView(
+      body: Skeletonizer(
+        enabled: false,
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 20,
           children: [
-            // Header
+            // ── Store header ──────────────────────────────────────────────────
             Row(
+              spacing: 14,
               children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: colors.onPrimaryFixedVariant,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Icon(
-                    Icons.local_laundry_service_rounded,
-                    color: colors.primary,
-                    size: 28,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.network(
+                    widget.storeImageUrl,
+                    width: 52,
+                    height: 52,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 52,
+                      height: 52,
+                      color: colors.surfaceContainer,
+                      child: Icon(Icons.local_laundry_service_rounded,
+                          color: colors.primary, size: 28),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10.laundry,
+                      widget.storeName,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -127,9 +173,7 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
               ],
             ),
 
-            const SizedBox(height: 24),
-
-            // Details card
+            // ── Order details ─────────────────────────────────────────────────
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: colors.outline),
@@ -151,12 +195,6 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
                     colors: colors,
                   ),
                   _DetailRow(
-                    icon: Icons.phone_outlined,
-                    label: l10.phone,
-                    value: widget.phone,
-                    colors: colors,
-                  ),
-                  _DetailRow(
                     icon: Icons.schedule_outlined,
                     label: l10.pickUp,
                     value: widget.pickupTime,
@@ -173,9 +211,16 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            // ── Payment ───────────────────────────────────────────────────────
+            PayWith(
+              payment: _payment,
+              pickMethod: _pickMethod,
+              useWallet: _useWallet,
+              toggleWallet: _toggleWallet,
+              walletOnly: walletOnly,
+            ),
 
-            // Pricing note
+            // ── Pricing note ──────────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
@@ -185,11 +230,7 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.info_outline_rounded,
-                    size: 18,
-                    color: colors.primary,
-                  ),
+                  Icon(Icons.info_outline_rounded, size: 18, color: colors.primary),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -206,6 +247,7 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

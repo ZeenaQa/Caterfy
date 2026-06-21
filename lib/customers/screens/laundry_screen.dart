@@ -1,5 +1,6 @@
 import 'package:caterfy/customers/screens/laundry_checkout_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/laundry_store.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/custom_drawer.dart';
@@ -8,7 +9,6 @@ import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/settings_button.dart';
 import 'package:caterfy/util/WheelSelector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,9 @@ final next7Days = List.generate(
 );
 
 class LaundryScreen extends StatefulWidget {
-  const LaundryScreen({super.key});
+  const LaundryScreen({super.key, required this.store});
+
+  final LaundryStore store;
 
   @override
   State<LaundryScreen> createState() => _LaundryScreenState();
@@ -66,18 +68,23 @@ class _LaundryScreenState extends State<LaundryScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        // title: "Laundry",
         content: Row(
           spacing: 10,
           children: [
-            SvgPicture.asset(
-              'assets/icons/rounded_logo.svg',
-              height: 30,
-              width: 30,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                widget.store.imageUrl,
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) =>
+                    const Icon(Icons.local_laundry_service_rounded, size: 32),
+              ),
             ),
             Text(
-              l10.laundry,
-              style: TextStyle(
+              widget.store.name,
+              style: const TextStyle(
                 fontSize: 17.5,
                 fontWeight: FontWeight.w600,
                 overflow: TextOverflow.ellipsis,
@@ -93,24 +100,6 @@ class _LaundryScreenState extends State<LaundryScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(height: 20),
-              Image.asset('assets/images/laundry.png', width: 65, height: 65),
-              SizedBox(height: 20),
-              Center(
-                child: Text(
-                  l10.fastAndEasyLaundry,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Center(
-                child: Text(
-                  l10.selectLaundry,
-                  style: TextStyle(
-                    color: colors.onSurfaceVariant,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-              SizedBox(height: 30),
               SettingsButton(
                 title: services[selectedServiceIndex]['type'],
                 rightText: l10.selectService,
@@ -280,7 +269,10 @@ class _LaundryScreenState extends State<LaundryScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => LaundryCheckoutScreen(
+                        storeName: widget.store.name,
+                        storeImageUrl: widget.store.imageUrl,
                         service: services[selectedServiceIndex]['type'],
+
                         address: globalProvider.deliveryLocation!,
                         phone: _phoneNum!,
                         pickupTime: pickupTime,

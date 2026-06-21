@@ -3,7 +3,7 @@ import 'package:caterfy/customers/screens/ceemart/ceemart_screen.dart';
 import 'package:caterfy/customers/screens/customer_category_screen.dart';
 import 'package:caterfy/customers/screens/evouchers_screen.dart';
 import 'package:caterfy/customers/screens/tickets_screen.dart';
-import 'package:caterfy/customers/screens/laundry_screen.dart';
+import 'package:caterfy/customers/screens/laundry_stores_screen.dart';
 import 'package:caterfy/customers/screens/location_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
@@ -111,7 +111,7 @@ class CustomerHomeCategories extends StatelessWidget {
       if (category == "laundry") {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LaundryScreen()),
+          MaterialPageRoute(builder: (_) => const LaundryStoresScreen()),
         );
         return;
       }

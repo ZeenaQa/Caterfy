@@ -1042,6 +1042,8 @@ class LoggedCustomerProvider with ChangeNotifier {
 
   Future<String?> placeLaundryOrder({
     required BuildContext context,
+    required String storeName,
+    required String storeImageUrl,
     required String service,
     required String address,
     required String phone,
@@ -1056,6 +1058,8 @@ class LoggedCustomerProvider with ChangeNotifier {
           .from('laundry_orders')
           .insert({
             'customer_id': userId,
+            'store_name': storeName,
+            'store_image_url': storeImageUrl,
             'service': service,
             'address': address,
             'phone': phone,

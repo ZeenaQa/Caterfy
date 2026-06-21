@@ -1,6 +1,8 @@
 class LaundryOrder {
   final String id;
   final String customerId;
+  final String storeName;
+  final String storeImageUrl;
   final String service;
   final String address;
   final String phone;
@@ -12,6 +14,8 @@ class LaundryOrder {
   const LaundryOrder({
     this.id = '',
     required this.customerId,
+    this.storeName = 'Laundry Service',
+    this.storeImageUrl = '',
     required this.service,
     required this.address,
     required this.phone,
@@ -27,6 +31,8 @@ class LaundryOrder {
   LaundryOrder copyWith({String? status}) => LaundryOrder(
         id: id,
         customerId: customerId,
+        storeName: storeName,
+        storeImageUrl: storeImageUrl,
         service: service,
         address: address,
         phone: phone,
@@ -38,6 +44,8 @@ class LaundryOrder {
 
   Map<String, dynamic> toMap() => {
         'customer_id': customerId,
+        'store_name': storeName,
+        'store_image_url': storeImageUrl,
         'service': service,
         'address': address,
         'phone': phone,
@@ -49,6 +57,8 @@ class LaundryOrder {
   factory LaundryOrder.fromMap(Map<String, dynamic> map) => LaundryOrder(
         id: map['id'] ?? '',
         customerId: map['customer_id'] ?? '',
+        storeName: map['store_name'] ?? 'Laundry Service',
+        storeImageUrl: map['store_image_url'] ?? '',
         service: map['service'] ?? '',
         address: map['address'] ?? '',
         phone: map['phone'] ?? '',

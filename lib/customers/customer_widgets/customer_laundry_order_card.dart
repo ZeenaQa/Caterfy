@@ -73,28 +73,39 @@ class CustomerLaundryOrderCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Icon box
-                Container(
-                  width: 55,
-                  height: 55,
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    Icons.local_laundry_service_rounded,
-                    color: Colors.blue.shade400,
-                    size: 28,
-                  ),
+                // Store image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: order.storeImageUrl.isNotEmpty
+                      ? Image.network(
+                          order.storeImageUrl,
+                          width: 55,
+                          height: 55,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 55,
+                            height: 55,
+                            color: colors.surfaceContainer,
+                            child: Icon(Icons.local_laundry_service_rounded,
+                                color: colors.onSurfaceVariant, size: 26),
+                          ),
+                        )
+                      : Container(
+                          width: 55,
+                          height: 55,
+                          color: colors.surfaceContainer,
+                          child: Icon(Icons.local_laundry_service_rounded,
+                              color: colors.onSurfaceVariant, size: 26),
+                        ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Laundry Service',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                      Text(
+                        order.storeName,
+                        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         order.service,
@@ -118,6 +129,10 @@ class CustomerLaundryOrderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 4,
               children: [
+                _DetailChip(
+                  icon: Icons.location_on_outlined,
+                  label: order.address,
+                ),
                 _DetailChip(
                   icon: Icons.schedule_rounded,
                   label: 'Pickup: ${order.pickupTime}',
