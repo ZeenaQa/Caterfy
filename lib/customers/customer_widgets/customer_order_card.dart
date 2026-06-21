@@ -205,49 +205,6 @@ class CustomerOrderCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: colors.surfaceContainer,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
-            ),
-            child: Row(
-              spacing: 16,
-              children: [
-                Text("Rate", style: TextStyle(fontWeight: FontWeight.bold)),
-                Spacer(),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-                Icon(
-                  FontAwesomeIcons.star,
-                  size: 18,
-                  color: colors.outlineVariant,
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
