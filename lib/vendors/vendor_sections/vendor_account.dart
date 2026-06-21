@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/screens/support_chat_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/providers/global_provider.dart';
 import 'package:caterfy/vendors/providers/logged_vendor_provider.dart';
@@ -29,7 +30,16 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
     final vendorProvider = Provider.of<LoggedVendorProvider>(context);
     final store = vendorProvider.store;
     final List<Widget> items = [
-      AccountButton(title: l10.getHelp, icon: Icons.help_outline),
+      AccountButton(
+        title: l10.getHelp,
+        icon: Icons.help_outline,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const SupportChatScreen(senderType: 'vendor'),
+          ),
+        ),
+      ),
       AccountButton(title: l10.aboutApp, icon: Icons.info_outline),
     ];
 

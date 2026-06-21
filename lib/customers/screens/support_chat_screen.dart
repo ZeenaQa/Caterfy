@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupportChatScreen extends StatefulWidget {
-  const SupportChatScreen({super.key});
+  const SupportChatScreen({super.key, this.senderType = 'customer'});
+
+  final String senderType;
 
   @override
   State<SupportChatScreen> createState() => _SupportChatScreenState();
@@ -131,7 +133,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
 
     final gp = context.read<GlobalProvider>();
     final userId = _supabase.auth.currentUser!.id;
-    final userName = (gp.user?['name'] as String?) ?? 'Customer';
+    final userName = (gp.user?['name'] as String?) ?? 'User';
     final userEmail = _supabase.auth.currentUser?.email ?? '';
     final userAvatar = gp.user?['avatar_url'] as String?;
 
@@ -142,7 +144,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       'id': tempId,
       'ticket_id': _ticket?['id'] ?? '',
       'sender_id': userId,
-      'sender_type': 'user',
+      'sender_type': widget.senderType,
       'sender_name': userName,
       'content': text,
       'created_at': DateTime.now().toUtc().toIso8601String(),
@@ -162,6 +164,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
               'user_name': userName,
               'user_email': userEmail,
               'user_avatar': userAvatar,
+              'user_type': widget.senderType,
               'subject': 'Support Request',
               'status': 'open',
             })
@@ -185,7 +188,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           .insert({
             'ticket_id': _ticket!['id'],
             'sender_id': userId,
-            'sender_type': 'user',
+            'sender_type': widget.senderType,
             'sender_name': userName,
             'content': text,
           })
