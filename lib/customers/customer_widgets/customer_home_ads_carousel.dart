@@ -17,7 +17,7 @@ final List<AdBanner> banners = [
   ),
   AdBanner(
     imageUrl:
-        'https://leaders.jo/wp-content/uploads/2026/01/Tablets-Ar-27th-Jan.jpg',
+        'https://vnnjwcertgamqqlzygwd.supabase.co/storage/v1/object/public/store-images/ebe3bc9f-3e9c-464f-bf2c-8bbf1b598b4f.__CR30301617500_PT0_SX970_V1___.png',
     restaurantId: 'b',
   ),
 ];

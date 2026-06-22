@@ -60,6 +60,8 @@ class ProductItem extends StatelessWidget {
                       children: [
                         Text(
                           product.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: colors.onPrimaryFixed,
                             fontWeight: FontWeight.bold,
@@ -77,16 +79,18 @@ class ProductItem extends StatelessWidget {
                             ),
                           )
                         else
-                          Text(
-                            product.description,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            style: TextStyle(
-                              color: colors.secondary,
-                              fontSize: 12.5,
+                          Expanded(
+                            child: Text(
+                              product.description,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: TextStyle(
+                                color: colors.secondary,
+                                fontSize: 12.5,
+                              ),
                             ),
                           ),
-                        Spacer(),
+                        SizedBox(height: 4),
                         RichText(
                           text: TextSpan(
                             text: '${product.price.toStringAsFixed(2)} ',

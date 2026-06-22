@@ -344,6 +344,7 @@ class LoggedVendorProvider extends ChangeNotifier {
 
       products.removeWhere((p) => p.id == productId);
     } catch (e) {
+      print("ERRORRRRRRRRRRRRRRR $e");
       debugPrint('deleteProduct error: $e');
     } finally {
       _isLoading = false;

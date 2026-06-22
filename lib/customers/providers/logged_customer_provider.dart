@@ -4,6 +4,7 @@ import 'package:caterfy/models/cart.dart';
 import 'package:caterfy/models/customer_address.dart';
 import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/models/order.dart';
+import 'package:caterfy/models/charity_donation.dart';
 import 'package:caterfy/models/ticket_order.dart';
 import 'package:caterfy/models/voucher_order.dart';
 import 'package:caterfy/models/discount_code.dart';
@@ -362,6 +363,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   List<LaundryOrder> _laundryOrders = [];
   List<VoucherOrder> _voucherOrders = [];
   List<TicketOrder> _ticketOrders = [];
+  List<CharityDonation> _charityDonations = [];
 
   List<Product> get products => _products;
   List<Store> get stores => _stores;
@@ -373,6 +375,7 @@ class LoggedCustomerProvider with ChangeNotifier {
       _laundryOrders.where((o) => o.isActive).toList();
   List<VoucherOrder> get voucherOrders => _voucherOrders;
   List<TicketOrder> get ticketOrders => _ticketOrders;
+  List<CharityDonation> get charityDonations => _charityDonations;
 
   bool _isCategoryLoading = false;
   bool _isProductsLoading = false;
@@ -386,6 +389,7 @@ class LoggedCustomerProvider with ChangeNotifier {
   bool _isLaundryOrdersLoading = false;
   bool _isVoucherOrdersLoading = false;
   bool _isTicketOrdersLoading = false;
+  bool _isCharityDonationsLoading = false;
 
   bool get isProductsLoading => _isProductsLoading;
   bool get isCategoryLoading => _isCategoryLoading;
@@ -1261,6 +1265,78 @@ class LoggedCustomerProvider with ChangeNotifier {
     } catch (_) {
     } finally {
       _isTicketOrdersLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // ===== Charity Donations =====
+
+  Future<CharityDonation?> placeCharityDonation({
+    required BuildContext context,
+    required String orgName,
+    required String orgCategory,
+    required double amountJod,
+    required String reference,
+    required bool isUsingWallet,
+    required double walletTransaction,
+  }) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) return null;
+    final l10 = AppLocalizations.of(context);
+    try {
+      final result = await supabase
+          .from('charity_donations')
+          .insert({
+            'customer_id': userId,
+            'org_name': orgName,
+            'org_category': orgCategory,
+            'amount_jod': amountJod,
+            'reference': reference,
+          })
+          .select()
+          .single();
+
+      if (isUsingWallet) {
+        await supabase.rpc(
+          'subtract_wallet_balance',
+          params: {
+            'p_customer_id': userId,
+            'p_amount': walletTransaction,
+          },
+        );
+      }
+
+      final donation = CharityDonation.fromMap(result);
+      _charityDonations.insert(0, donation);
+      notifyListeners();
+      return donation;
+    } catch (e) {
+      if (context.mounted) {
+        showCustomToast(
+          context: context,
+          type: ToastificationType.error,
+          message: l10.somethingWentWrong,
+        );
+      }
+      return null;
+    }
+  }
+
+  Future<void> fetchCharityDonations({required BuildContext context}) async {
+    final customerId = supabase.auth.currentUser?.id;
+    if (customerId == null) return;
+    try {
+      _isCharityDonationsLoading = true;
+      notifyListeners();
+      final data = await supabase
+          .from('charity_donations')
+          .select()
+          .eq('customer_id', customerId)
+          .order('created_at', ascending: false);
+      _charityDonations = data.map((e) => CharityDonation.fromMap(e)).toList();
+    } catch (_) {
+    } finally {
+      _isCharityDonationsLoading = false;
       notifyListeners();
     }
   }

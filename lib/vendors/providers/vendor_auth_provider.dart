@@ -153,27 +153,16 @@ class VendorAuthProvider extends ChangeNotifier {
     final l10 = AppLocalizations.of(context);
     try {
       setLoading(true);
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: password,
-        data: {
-          'name': name,
-          'role': 'vendor',
-          'business_name': businessName,
-          'business_type': businessType,
-          'store_type': storeType,
-        },
-      );
-
-      final userID = response.user?.id;
-
-      if (userID != null) {
-        await supabase
-            .from('vendors')
-            .update({'phone': phoneNumber})
-            .eq('id', userID);
-      }
-
+      await supabase.from('vendor_applications').insert({
+        'owner_name': name,
+        'email': email,
+        'phone': phoneNumber,
+        'store_name': businessName,
+        'business_type': businessType,
+        'store_type': storeType,
+        'password': password,
+        'status': 'pending',
+      });
       return true;
     } catch (e) {
       debugPrint('❌ submitApplication error: $e');
@@ -315,7 +304,9 @@ class VendorAuthProvider extends ChangeNotifier {
     final l10 = AppLocalizations.of(context);
     try {
       passwordError = validatePassword(password, l10);
-      confirmPasswordError = password != confirmPassword ? l10.passwordsNoMatch : null;
+      confirmPasswordError = password != confirmPassword
+          ? l10.passwordsNoMatch
+          : null;
 
       if (passwordError != null || confirmPasswordError != null) {
         notifyListeners();

@@ -1,3 +1,4 @@
+import 'package:caterfy/customers/customer_widgets/customer_charity_order_card.dart';
 import 'package:caterfy/customers/customer_widgets/customer_laundry_order_card.dart';
 import 'package:caterfy/customers/customer_widgets/customer_no_orders.dart';
 import 'package:caterfy/customers/customer_widgets/customer_order_card.dart';
@@ -6,6 +7,7 @@ import 'package:caterfy/customers/customer_widgets/customer_voucher_order_card.d
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/dummy_data.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
+import 'package:caterfy/models/charity_donation.dart';
 import 'package:caterfy/models/laundry_order.dart';
 import 'package:caterfy/models/order.dart';
 import 'package:caterfy/models/ticket_order.dart';
@@ -22,6 +24,7 @@ class _OrderEntry {
   final LaundryOrder? laundryOrder;
   final VoucherOrder? voucherOrder;
   final TicketOrder? ticketOrder;
+  final CharityDonation? charityDonation;
   final DateTime date;
 
   _OrderEntry.regular(Order o)
@@ -29,6 +32,7 @@ class _OrderEntry {
         laundryOrder = null,
         voucherOrder = null,
         ticketOrder = null,
+        charityDonation = null,
         date = DateTime.tryParse(o.createdAt ?? '') ?? DateTime(0);
 
   _OrderEntry.laundry(LaundryOrder o)
@@ -36,6 +40,7 @@ class _OrderEntry {
         laundryOrder = o,
         voucherOrder = null,
         ticketOrder = null,
+        charityDonation = null,
         date = DateTime.tryParse(o.createdAt ?? '') ?? DateTime(0);
 
   _OrderEntry.voucher(VoucherOrder o)
@@ -43,6 +48,7 @@ class _OrderEntry {
         laundryOrder = null,
         voucherOrder = o,
         ticketOrder = null,
+        charityDonation = null,
         date = DateTime.tryParse(o.createdAt ?? '') ?? DateTime(0);
 
   _OrderEntry.ticket(TicketOrder o)
@@ -50,6 +56,15 @@ class _OrderEntry {
         laundryOrder = null,
         voucherOrder = null,
         ticketOrder = o,
+        charityDonation = null,
+        date = DateTime.tryParse(o.createdAt ?? '') ?? DateTime(0);
+
+  _OrderEntry.charity(CharityDonation o)
+      : regularOrder = null,
+        laundryOrder = null,
+        voucherOrder = null,
+        ticketOrder = null,
+        charityDonation = o,
         date = DateTime.tryParse(o.createdAt ?? '') ?? DateTime(0);
 }
 
@@ -58,12 +73,14 @@ List<_OrderEntry> _buildUnified(
   List<LaundryOrder> laundryOrders,
   List<VoucherOrder> voucherOrders,
   List<TicketOrder> ticketOrders,
+  List<CharityDonation> charityDonations,
 ) {
   final all = [
     ...orders.map(_OrderEntry.regular),
     ...laundryOrders.map(_OrderEntry.laundry),
     ...voucherOrders.map(_OrderEntry.voucher),
     ...ticketOrders.map(_OrderEntry.ticket),
+    ...charityDonations.map(_OrderEntry.charity),
   ];
   all.sort((a, b) => b.date.compareTo(a.date));
   return all;
@@ -88,6 +105,7 @@ class CustomerOrdersSection extends StatelessWidget {
       customerProvider.laundryOrders,
       customerProvider.voucherOrders,
       customerProvider.ticketOrders,
+      customerProvider.charityDonations,
     );
 
     return SafeArea(
@@ -135,6 +153,8 @@ class CustomerOrdersSection extends StatelessWidget {
                           card = CustomerLaundryOrderCard(order: entry.laundryOrder!);
                         } else if (entry.voucherOrder != null) {
                           card = CustomerVoucherOrderCard(order: entry.voucherOrder!);
+                        } else if (entry.charityDonation != null) {
+                          card = CustomerCharityOrderCard(donation: entry.charityDonation!);
                         } else {
                           card = CustomerTicketOrderCard(order: entry.ticketOrder!);
                         }
