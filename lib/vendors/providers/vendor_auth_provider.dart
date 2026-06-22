@@ -18,6 +18,7 @@ class VendorAuthProvider extends ChangeNotifier {
   String? passwordError;
   String? confirmPasswordError;
   bool forgotPassLoading = false;
+  bool tokenIsLoading = false;
   // Persisted selections during signup
   String? storeType;
   String? businessType;
@@ -152,17 +153,6 @@ class VendorAuthProvider extends ChangeNotifier {
     final l10 = AppLocalizations.of(context);
     try {
       setLoading(true);
-      // await supabase.from('vendor_applications').insert({
-      //   'owner_name': name,
-      //   'email': email,
-      //   'phone': phoneNumber,
-      //   'store_name': businessName,
-      //   'business_type': businessType,
-      //   'store_type': storeType,
-      //   'password': password,
-      //   'status': 'pending', 
-      // });
-
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
@@ -232,6 +222,117 @@ class VendorAuthProvider extends ChangeNotifier {
       return false;
     } finally {
       setLoading(false);
+    }
+  }
+
+  // ---------------- Forgot Password ----------------
+
+  void setTokenIsLoading(bool value) {
+    tokenIsLoading = value;
+    notifyListeners();
+  }
+
+  Future<dynamic> sendForgotPasswordPassEmail({
+    required String email,
+    required BuildContext context,
+  }) async {
+    final l10 = AppLocalizations.of(context);
+    try {
+      final emailRes = validateEmail(email, l10);
+      if (emailRes != null) {
+        emailError = emailRes;
+        notifyListeners();
+        return {'success': false, 'message': emailRes};
+      }
+
+      final response = await supabase
+          .from('vendors')
+          .select('id')
+          .eq('email', email.trim())
+          .maybeSingle();
+
+      if (response == null) {
+        emailError = l10.emailNotFound;
+        notifyListeners();
+        return {'success': false, 'message': l10.emailNotFound};
+      }
+
+      forgotPassLoading = true;
+      notifyListeners();
+
+      await supabase.auth.resetPasswordForEmail(email.trim());
+
+      return {'success': true, 'message': 'Email sent successfully'};
+    } on AuthApiException catch (e) {
+      if (e.code == 'over_email_send_rate_limit') {
+        final int? seconds = extractIntFromString(e.message);
+        final errMsg = '${l10.tryAgainIn} $seconds ${l10.seconds}.';
+        emailError = errMsg;
+        notifyListeners();
+        return {'success': false, 'message': errMsg};
+      }
+      emailError = l10.somethingWentWrong;
+      notifyListeners();
+      return {'success': false, 'message': l10.somethingWentWrong};
+    } catch (e) {
+      emailError = '${l10.somethingWentWrong} $e';
+      notifyListeners();
+      return {'success': false, 'message': l10.somethingWentWrong};
+    } finally {
+      forgotPassLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> verifyResetPassEmail({
+    required String email,
+    required String token,
+  }) async {
+    try {
+      tokenIsLoading = true;
+      notifyListeners();
+      await supabase.auth.verifyOTP(
+        type: OtpType.recovery,
+        token: token,
+        email: email,
+      );
+      return true;
+    } on AuthException {
+      return false;
+    } catch (e) {
+      return false;
+    } finally {
+      tokenIsLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<dynamic> resetPassword({
+    required String password,
+    required String confirmPassword,
+    required BuildContext context,
+  }) async {
+    final l10 = AppLocalizations.of(context);
+    try {
+      passwordError = validatePassword(password, l10);
+      confirmPasswordError = password != confirmPassword ? l10.passwordsNoMatch : null;
+
+      if (passwordError != null || confirmPasswordError != null) {
+        notifyListeners();
+        return {'success': false, 'message': 'mismatch'};
+      }
+
+      isLoading = true;
+      notifyListeners();
+      await supabase.auth.updateUser(UserAttributes(password: password));
+      return {'success': true, 'message': 'Password reset successfully.'};
+    } on AuthApiException {
+      return {'success': false, 'message': l10.somethingWentWrong};
+    } catch (e) {
+      return {'success': false, 'message': l10.somethingWentWrong};
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 

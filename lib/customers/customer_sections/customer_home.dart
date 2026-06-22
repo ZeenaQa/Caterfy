@@ -174,7 +174,6 @@ class OnGoingOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Combine and sort by createdAt descending (most recent first).
     final combined = <({bool isLaundry, int idx, String? date})>[
       for (int i = 0; i < activeOrders.length; i++)
         (isLaundry: false, idx: i, date: activeOrders[i].createdAt),

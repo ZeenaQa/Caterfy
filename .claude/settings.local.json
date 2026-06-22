@@ -6,7 +6,9 @@
       "Bash(flutter analyze *)",
       "Bash(powershell -Command \"\\(Get-Content supabase\\\\seed_ceemart.sql -Raw\\) -replace ', is_available\\\\\\)', '\\)' -replace ', true\\\\\\)', '\\)' | Set-Content supabase\\\\seed_ceemart.sql -Encoding utf8\")",
       "WebSearch",
-      "Bash(flutter gen-l10n *)"
+      "Bash(flutter gen-l10n *)",
+      "Bash(grep -rn \"^\\\\s*//\\\\s*\\\\\\(Animated check\\\\|Activation code\\\\|Redemption note\\\\|Summary\\\\|Booking ref\\\\|Copy button\\\\|View Code\\\\|Colored side band\\\\|Date chip\\\\|Description\\\\|Tier options\\\\|Event header\\\\|Event name\\\\|Booking reference\\\\|Provider header\\\\|Denomination\\\\|Provider banner\\\\|Pay with\\\\|Price summary\\\\|Provider\\\\|Image\\\\|Placeholder\\\\|Network image\\\\|Closed overlay\\\\|Add \\\\/ qty\\\\|Price row\\\\|Add button\\\\|Qty control\\\\|Provider \\\\+ denomination\\\\|Code box\\\\\\)\" lib/ --include=\"*.dart\")",
+      "Bash(grep -rn \"^\\\\s*//\" lib/ --include=\"*.dart\")"
     ]
   }
 }

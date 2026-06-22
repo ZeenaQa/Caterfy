@@ -155,7 +155,6 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
 
     // ── 2. Persist in background ──────────────────────────────────────────────
     try {
-      // Create ticket on first message
       if (_ticket == null) {
         final ticketData = await _supabase
             .from('chat_tickets')
@@ -173,7 +172,6 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         if (!mounted) return;
         setState(() {
           _ticket = ticketData;
-          // Patch temp message with the real ticket id
           final idx = _messages.indexWhere((m) => m['id'] == tempId);
           if (idx != -1) {
             _messages[idx] = {..._messages[idx], 'ticket_id': ticketData['id']};
@@ -182,7 +180,6 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         _subscribeToMessages();
       }
 
-      // Insert real message and get back the server row
       final msgData = await _supabase
           .from('chat_messages')
           .insert({
@@ -195,14 +192,12 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           .select()
           .single();
 
-      // Replace temp with confirmed server row (gives it the real UUID)
       if (!mounted) return;
       setState(() {
         final idx = _messages.indexWhere((m) => m['id'] == tempId);
         if (idx != -1) _messages[idx] = Map<String, dynamic>.from(msgData);
       });
 
-      // Update ticket preview (fire-and-forget)
       final newUnread = ((_ticket!['unread_count'] ?? 0) as int) + 1;
       _supabase.from('chat_tickets').update({
         'last_message': text,
@@ -218,7 +213,6 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       }
     } catch (e) {
       debugPrint('❌ support chat send error: $e');
-      // Roll back: remove the optimistic message and restore the input
       if (!mounted) return;
       setState(() => _messages.removeWhere((m) => m['id'] == tempId));
       _controller.text = text;

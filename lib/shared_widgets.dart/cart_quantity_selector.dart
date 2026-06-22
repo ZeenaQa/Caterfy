@@ -68,7 +68,6 @@ class _CartQuantitySelectorState extends State<CartQuantitySelector> {
 
     return Container(
       height: widget.height,
-      // padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: colors.onInverseSurface,
         border: Border.all(color: colors.outline, width: 1),

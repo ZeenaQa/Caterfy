@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/customer_widgets/product_drawer_content.dart';
+﻿import 'package:caterfy/customers/customer_widgets/product_drawer_content.dart';
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/customer_cart.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -113,7 +113,6 @@ class _CeemartScreenState extends State<CeemartScreen> {
                 p.description.toLowerCase().contains(query))
             .toList();
 
-    // keys = English name (for emoji lookup), values = localised display name
     final catLabels = <String, String>{
       'all': l10.ceemartAll,
       for (final p in searched)
@@ -223,19 +222,16 @@ class _Header extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Row: back | title/search | search toggle
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 0),
               child: Row(
                 children: [
-                  // Back
                   _HeaderBtn(
                     icon: Icons.arrow_back_ios_new_rounded,
                     onTap: () => Navigator.of(context).pop(),
                     colors: colors,
                   ),
                   const SizedBox(width: 10),
-                  // Title or search
                   Expanded(
                     child: showSearch
                         ? Container(
@@ -299,7 +295,6 @@ class _Header extends StatelessWidget {
                           ),
                   ),
                   const SizedBox(width: 8),
-                  // Search toggle
                   _HeaderBtn(
                     icon: showSearch
                         ? Icons.close_rounded
@@ -366,7 +361,6 @@ class _ChipsBar extends StatelessWidget {
   final ColorScheme colors;
   final AppLocalizations l10;
 
-  // cat is always the English key
   String _label(String cat) => catLabels[cat] ?? cat;
   String _emoji(String cat) => cat == 'all' ? '🛒' : (_catEmoji[cat] ?? '📦');
 
@@ -455,7 +449,6 @@ class _ProductCard extends StatelessWidget {
 
     final isOpen = store.isOpen;
 
-    // The cart item for this product (if any) — passed to the drawer
     final cartItem = cartItems.where((i) => i.productId == product.id).firstOrNull;
 
     return GestureDetector(
@@ -498,9 +491,7 @@ class _ProductCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                // Placeholder background
                 Container(color: placeholderColor),
-                // Network image (if available)
                 if (product.imageUrl != null && product.imageUrl!.isNotEmpty)
                   Image.network(
                     product.imageUrl!,
@@ -512,7 +503,6 @@ class _ProductCard extends StatelessWidget {
                   )
                 else
                   _Placeholder(color: placeholderColor, icon: placeholderIcon),
-                // Closed overlay
                 if (!isOpen)
                   Container(
                     color: Colors.black.withValues(alpha: 0.4),

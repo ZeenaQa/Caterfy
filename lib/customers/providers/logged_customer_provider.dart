@@ -34,7 +34,6 @@ class LoggedCustomerProvider with ChangeNotifier {
           table: 'orders',
           callback: (payload) {
             final newRecord = payload.newRecord;
-            // Filter client-side — only handle this customer's orders.
             final recordCustomerId = newRecord['customer_id'] as String?;
             if (recordCustomerId != customerId) return;
 
@@ -57,7 +56,6 @@ class LoggedCustomerProvider with ChangeNotifier {
     _ordersChannel = null;
   }
 
-  /// Lightweight single-order status poll — no loading state, silent.
   Future<void> silentFetchOrderStatus(String orderId) async {
     try {
       final data = await supabase
@@ -585,9 +583,6 @@ class LoggedCustomerProvider with ChangeNotifier {
     }
   }
 
-  /// Fetches the single Ceemart store + its products.
-  /// Adds the store to [_stores] so [addToCart] can find it by ID.
-  /// Returns the store, or null if not found.
   Future<Store?> fetchCeemartProducts(BuildContext context) async {
     final l10 = AppLocalizations.of(context);
     final isArabic = l10.localeName == 'ar';
@@ -606,7 +601,6 @@ class LoggedCustomerProvider with ChangeNotifier {
 
       final ceemartStore = Store.fromMap(storeData);
 
-      // Upsert into _stores so addToCart lookup works
       final idx = _stores.indexWhere((s) => s.id == ceemartStore.id);
       if (idx >= 0) {
         _stores[idx] = ceemartStore;
@@ -994,8 +988,6 @@ class LoggedCustomerProvider with ChangeNotifier {
           .from('cards')
           .select('*')
           .eq('customer_id', customerId);
-      // .order('created_at', ascending: false);
-
       _paymentMethods = data.map((card) => CreditCard.fromMap(card)).toList();
     } catch (e) {
       if (context.mounted) {

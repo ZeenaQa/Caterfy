@@ -1,4 +1,4 @@
-import 'package:caterfy/models/laundry_order.dart';
+﻿import 'package:caterfy/models/laundry_order.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -73,7 +73,6 @@ class CustomerLaundryOrderCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Store image
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: order.storeImageUrl.isNotEmpty

@@ -40,7 +40,6 @@ class OnBoardingSkip {
 
       final entryData = {'role': role, 'fetchedUser': fetchedUser};
 
-      // Return a new widget responsible for setting state and navigating
       return InitialLoaderScreen(entryData: entryData);
     } catch (e) {
       return const SelectionScreen();

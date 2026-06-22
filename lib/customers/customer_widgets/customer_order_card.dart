@@ -51,7 +51,6 @@ class CustomerOrderCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      // height: 100,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),

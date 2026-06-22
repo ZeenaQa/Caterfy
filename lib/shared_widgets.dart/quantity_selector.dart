@@ -55,7 +55,6 @@ class _QuantitySelectorState extends State<QuantitySelector> {
 
     return Container(
       height: widget.height,
-      // padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: colors.onInverseSurface,
         border: Border.all(color: colors.outline, width: 1),

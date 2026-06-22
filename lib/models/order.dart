@@ -45,8 +45,6 @@ class Order {
 
   bool get isService => storeType == 'service';
 
-  /// Food stores get the full 4-step flow including "Preparing".
-  /// All other regular stores skip that step.
   bool get isFood => storeCategory == 'food';
 
   double get subtotal {

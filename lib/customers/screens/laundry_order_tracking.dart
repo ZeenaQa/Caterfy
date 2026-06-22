@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -171,7 +171,6 @@ class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
                   const SizedBox(height: 4),
                   _Divider(colors),
 
-                  // Status title + description
                   _Section(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
@@ -206,13 +205,11 @@ class _LaundryOrderTrackingState extends State<LaundryOrderTracking> {
 
                   _Divider(colors),
 
-                  // Order details
                   if (order != null)
                     _Section(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Store header
                           Row(
                             spacing: 12,
                             children: [

@@ -43,16 +43,13 @@ class WavyShapeBorder extends ShapeBorder {
     return path;
   }
 
-  // Required override, usually same as getOuterPath for solid shapes
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
     return getOuterPath(rect, textDirection: textDirection);
   }
 
   @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    // no extra painting needed here
-  }
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {}
 
   @override
   ShapeBorder scale(double t) {

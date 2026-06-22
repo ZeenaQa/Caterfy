@@ -31,7 +31,6 @@ class CustomerAddress {
 
   LatLng get latLng => LatLng(latitude, longitude);
 
-  /// Human-readable title shown in lists (e.g. "Home", "Work").
   String get typeLabel {
     switch (type) {
       case 'apartment': return 'Apartment';
@@ -41,7 +40,6 @@ class CustomerAddress {
     }
   }
 
-  /// Short subtitle shown under the type label.
   String get subtitle {
     final parts = <String>[
       if (building != null && building!.isNotEmpty) building!,

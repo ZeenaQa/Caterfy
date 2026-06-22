@@ -35,13 +35,10 @@ class _VendorBuisnessInfoState extends State<VendorBuisnessInfo> {
 
     final l10 = AppLocalizations.of(context);
 
-    // Initialize businessTypes and selectedBusiness based on the selected storeType
     if (businessTypes.isEmpty) {
       final bool isServiceProvider = widget.storeType == 'service';
 
       if (isServiceProvider) {
-        // For service providers we don't show business type selection,
-        // but we still need a non-empty value for validation/backends.
         selectedBusiness = 'service';
       } else {
         businessTypes = [

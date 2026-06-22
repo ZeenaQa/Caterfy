@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/screens/evoucher_checkout_screen.dart';
+﻿import 'package:caterfy/customers/screens/evoucher_checkout_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -407,7 +407,6 @@ class _DenominationSheetState extends State<_DenominationSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Handle
           Center(
             child: Container(
               width: 38,
@@ -420,7 +419,6 @@ class _DenominationSheetState extends State<_DenominationSheet> {
             ),
           ),
 
-          // Provider header
           Row(
             spacing: 14,
             children: [
@@ -477,7 +475,6 @@ class _DenominationSheetState extends State<_DenominationSheet> {
 
           const SizedBox(height: 22),
 
-          // Denomination chips
           Wrap(
             spacing: 10,
             runSpacing: 10,

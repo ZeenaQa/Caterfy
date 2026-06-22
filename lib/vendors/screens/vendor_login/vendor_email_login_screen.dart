@@ -1,13 +1,15 @@
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_spinner.dart';
+import 'package:caterfy/shared_widgets.dart/custom_toast.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
 import 'package:caterfy/shared_widgets.dart/outlined_button.dart';
-
+import 'package:caterfy/shared_widgets.dart/textfields.dart';
 import 'package:caterfy/vendors/providers/vendor_auth_provider.dart';
+import 'package:caterfy/vendors/screens/vendor_login/vendor_pass_token_screen.dart';
 import 'package:caterfy/vendors/screens/vendor_signup/store_type_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:caterfy/shared_widgets.dart/textfields.dart';
+import 'package:toastification/toastification.dart';
 
 class VendorEmailLogin extends StatefulWidget {
   const VendorEmailLogin({super.key});
@@ -78,7 +80,31 @@ class _VendorEmailLoginState extends State<VendorEmailLogin> {
 
                           if (!vendorAuth.forgotPassLoading)
                             OutlinedBtn(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final tempEmail = email;
+                                final res = await vendorAuth
+                                    .sendForgotPasswordPassEmail(
+                                      email: email,
+                                      context: context,
+                                    );
+                                if (res['success'] && context.mounted) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          VendorPassTokenScreen(
+                                            email: tempEmail,
+                                          ),
+                                    ),
+                                  );
+                                } else if (context.mounted && !res['success']) {
+                                  showCustomToast(
+                                    context: context,
+                                    type: ToastificationType.error,
+                                    message: res['message'],
+                                  );
+                                }
+                              },
                               title: l10.forgotPassword,
                               titleSize: 13,
                               lighterBorder: true,

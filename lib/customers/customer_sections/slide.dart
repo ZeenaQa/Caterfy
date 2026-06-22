@@ -18,8 +18,6 @@ class SlidingAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    // shrinkOffset = how much we've scrolled up
-
     final double delta = maxExtent - shrinkOffset;
     final double translateY = -shrinkOffset; // move up as we scroll
 

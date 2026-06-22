@@ -99,7 +99,6 @@ class ModernDrawer extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min, // KEY: Shrink to fit children
             children: [
-              // Drag handle
               if (!isStack) ...[
                 Container(
                   margin: const EdgeInsets.only(top: 12, bottom: 3),
@@ -110,7 +109,6 @@ class ModernDrawer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                // Content - wrap only if needed
                 if (showCloseBtn)
                   Row(
                     children: [
@@ -183,7 +181,6 @@ class ModernDrawer extends StatelessWidget {
                       ],
                     ),
 
-                    // Content - wrap only if needed
                   ],
                 ),
             ],

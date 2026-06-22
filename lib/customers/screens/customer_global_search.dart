@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
@@ -232,7 +232,6 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
           Expanded(
             child: hasQuery
                 ? _isLoading && !hasResults
-                      // Full-page shimmer only on first load
                       ? _LoadingShimmer()
                       : noResults
                       ? _NoResults(query: _query, l10: l10)
@@ -288,13 +287,11 @@ class _SearchBar extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(8, 10, 16, 10),
             child: Row(
               children: [
-                // Back
                 IconButton(
                   icon: const Icon(Icons.arrow_back_rounded),
                   onPressed: onBack,
                   color: colors.onSurface,
                 ),
-                // Field
                 Expanded(
                   child: TextField(
                     controller: controller,
@@ -334,7 +331,6 @@ class _SearchBar extends StatelessWidget {
               ],
             ),
           ),
-          // Thin loading bar
           SizedBox(
             height: 2,
             child: isLoading
@@ -400,7 +396,6 @@ class _RecentView extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.zero,
       children: [
-        // Header
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 18, 16, 8),
           child: Row(
@@ -433,7 +428,6 @@ class _RecentView extends StatelessWidget {
             ],
           ),
         ),
-        // Items
         ...searches.map(
           (q) => InkWell(
             onTap: () => onTap(q),
@@ -577,7 +571,6 @@ class _StoreRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Row(
           children: [
-            // Logo
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: hasLogo
@@ -593,7 +586,6 @@ class _StoreRow extends StatelessWidget {
             ),
             const SizedBox(width: 14),
 
-            // Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -723,7 +715,6 @@ class _ProductRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Row(
           children: [
-            // Product image
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: hasImage
@@ -739,7 +730,6 @@ class _ProductRow extends StatelessWidget {
             ),
             const SizedBox(width: 14),
 
-            // Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -768,7 +758,6 @@ class _ProductRow extends StatelessWidget {
             ),
             const SizedBox(width: 10),
 
-            // Price
             Text(
               '${l10.jod} ${product.price.toStringAsFixed(2)}',
               style: TextStyle(

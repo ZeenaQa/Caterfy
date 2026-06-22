@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/screens/customer_store_screen.dart';
+﻿import 'package:caterfy/customers/screens/customer_store_screen.dart';
 import 'package:caterfy/customers/utils/localization_helpers.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/store.dart';
@@ -95,7 +95,6 @@ class _CategorySearchScreenState extends State<CategorySearchScreen> {
   }).toList();
 
   void _navigateToStore(Store store) {
-    // Save the current query as a recent search when opening a store
     if (_query.isNotEmpty) _saveRecent(_controller.text.trim());
     Navigator.push(
       context,
@@ -263,7 +262,6 @@ class _RecentView extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.zero,
       children: [
-        // Header
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 18, 16, 8),
           child: Row(
@@ -296,7 +294,6 @@ class _RecentView extends StatelessWidget {
             ],
           ),
         ),
-        // Items
         ...searches.map(
           (q) => InkWell(
             onTap: () => onTap(q),
@@ -373,7 +370,6 @@ class _StoreRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Logo
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: hasLogo
@@ -389,7 +385,6 @@ class _StoreRow extends StatelessWidget {
             ),
             const SizedBox(width: 14),
 
-            // Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

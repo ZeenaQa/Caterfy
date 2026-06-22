@@ -16,9 +16,7 @@ class AddressPickerScreen extends StatefulWidget {
   const AddressPickerScreen({super.key, this.existingAddress, this.pickOnly = false, this.initialLatLng});
 
   final CustomerAddress? existingAddress;
-  /// When true, pops with ({LatLng latLng, String? area}) instead of pushing to details.
   final bool pickOnly;
-  /// Overrides the default initial map position when set.
   final LatLng? initialLatLng;
 
   @override
@@ -35,7 +33,6 @@ class _AddressPickerScreenState extends State<AddressPickerScreen> {
     final l10 = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
 
-    // Default to: explicit override → existing address → previously picked → Amman
     final initialLocation =
         widget.initialLatLng ??
         widget.existingAddress?.latLng ??
@@ -64,7 +61,6 @@ class _AddressPickerScreenState extends State<AddressPickerScreen> {
             ),
           ),
 
-          // Bottom bar
           Container(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
             decoration: BoxDecoration(
@@ -256,7 +252,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            // Location row with change button
             InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () async {
@@ -313,7 +308,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Type selector
             Text(
               l10.addressType,
               style: TextStyle(
@@ -367,7 +361,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Building / Villa
             _Field(
               controller: _buildingCtrl,
               label: l10.buildingVilla,
@@ -376,7 +369,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             ),
             const SizedBox(height: 14),
 
-            // Floor + Apt (only for apartment)
             if (isApartment) ...[
               Row(
                 spacing: 12,
@@ -402,7 +394,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
               const SizedBox(height: 14),
             ],
 
-            // Street
             _Field(
               controller: _streetCtrl,
               label: l10.street,
@@ -410,7 +401,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
             ),
             const SizedBox(height: 14),
 
-            // Directions
             _Field(
               controller: _directionsCtrl,
               label: l10.additionalDirections,

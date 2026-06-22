@@ -24,7 +24,6 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      // Slightly faster cycle to match Talabat's snappy feel
       duration: const Duration(milliseconds: 1150),
     )..repeat();
   }
@@ -47,7 +46,6 @@ class _CustomThreeLineSpinnerState extends State<CustomThreeLineSpinner>
           return CustomPaint(
             painter: _TalabatStylePainter(
               progress: _controller.value,
-              // Talabat's signature Orange
               color: colors.primary,
               strokeWidth: widget.strokeWidth,
             ),
@@ -80,27 +78,14 @@ class _TalabatStylePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
-    // Apply a Cubic curve to the rotation to get that "Sprint & Brake" feel
     final curveValue = Curves.easeInOutCubic.transform(progress);
-
-    // Base rotation of the entire group
     final globalRotation = curveValue * 2 * math.pi;
 
     for (int i = 0; i < 3; i++) {
-      // 120 degree separation
       final baseOffset = i * (2 * math.pi / 3);
-
-      // "Chase" effect:
       final speedFactor = math.sin(progress * math.pi);
-
-      // CHANGE HERE:
-      // 1. We square the speedFactor (pow(..., 2)). This makes the value drop
-      //    drastically closer to 0 when it's not at peak speed.
-      // 2. We lowered the base length from 0.5 to 0.15 (making them dots).
       final shrinkCurve = math.pow(speedFactor, 3.5);
       final currentLength = 0.35 + (shrinkCurve * 1.2);
-
-      // We shift the start angle slightly based on speed to make the tail look like it's dragging
       final startAngle = globalRotation + baseOffset;
 
       canvas.drawArc(

@@ -169,7 +169,6 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 12),
-              // Card number
               CustomTextField(
                 hint: l10.cardNumber,
                 keyboardType: TextInputType.number,
@@ -200,7 +199,6 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Expiry
                   Expanded(
                     child: ExpiryTextField(
                       keyboardType: TextInputType.number,
@@ -219,7 +217,6 @@ class _CustomerAddCardState extends State<CustomerAddCard> {
                     ),
                   ),
                   SizedBox(width: 12),
-                  // CCV
                   Expanded(
                     child: CustomTextField(
                       keyboardType: TextInputType.number,

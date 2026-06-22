@@ -1,4 +1,4 @@
-import 'dart:math';
+﻿import 'dart:math';
 
 import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
 import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
@@ -91,7 +91,6 @@ class _EVoucherCheckoutScreenState extends State<EVoucherCheckoutScreen> {
     if (!mounted) return;
 
     if (order != null && _useWallet) {
-      // Refresh wallet balance shown elsewhere in the app
       await globalProvider.fetchUser();
     }
 
@@ -383,7 +382,6 @@ class _SuccessViewState extends State<_SuccessView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Animated check
         ScaleTransition(
           scale: _checkScale,
           child: Container(
@@ -412,7 +410,6 @@ class _SuccessViewState extends State<_SuccessView>
         ),
         const SizedBox(height: 32),
 
-        // Activation code card
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(22),
@@ -500,7 +497,6 @@ class _SuccessViewState extends State<_SuccessView>
 
         const SizedBox(height: 20),
 
-        // Redemption note
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -524,7 +520,6 @@ class _SuccessViewState extends State<_SuccessView>
 
         const SizedBox(height: 24),
 
-        // Summary
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(16),

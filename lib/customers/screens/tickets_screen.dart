@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/screens/ticket_checkout_screen.dart';
+﻿import 'package:caterfy/customers/screens/ticket_checkout_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/shared_widgets.dart/custom_appBar.dart';
 import 'package:caterfy/shared_widgets.dart/filled_button.dart';
@@ -419,7 +419,6 @@ class _EventCard extends StatelessWidget {
           child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Colored side band with icon
             Container(
               width: 80,
               decoration: BoxDecoration(
@@ -447,7 +446,6 @@ class _EventCard extends StatelessWidget {
               ),
             ),
 
-            // Content
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
@@ -602,7 +600,6 @@ class _TierSheetState extends State<_TierSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Handle
             Center(
               child: Container(
                 width: 38,
@@ -615,7 +612,6 @@ class _TierSheetState extends State<_TierSheet> {
               ),
             ),
 
-            // Event header
             Row(
               spacing: 14,
               children: [
@@ -681,7 +677,6 @@ class _TierSheetState extends State<_TierSheet> {
 
             const SizedBox(height: 8),
 
-            // Date chip
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
@@ -707,7 +702,6 @@ class _TierSheetState extends State<_TierSheet> {
 
             const SizedBox(height: 12),
 
-            // Description
             Text(
               e.description,
               style: TextStyle(
@@ -729,7 +723,6 @@ class _TierSheetState extends State<_TierSheet> {
             ),
             const SizedBox(height: 12),
 
-            // Tier options
             ...e.tiers.map((tier) {
               final isSelected = _selected == tier;
               return GestureDetector(

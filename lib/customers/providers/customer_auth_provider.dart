@@ -239,7 +239,6 @@ class CustomerAuthProvider extends ChangeNotifier {
   }) async {
     final l10 = AppLocalizations.of(context);
     try {
-      // Validate email format
       final emailRes = validateEmail(email, l10);
       if (emailRes != null) {
         emailError = emailRes;
@@ -247,7 +246,6 @@ class CustomerAuthProvider extends ChangeNotifier {
         return {'success': false, 'message': emailRes};
       }
 
-      // Check if email exists in customers table
       final response = await supabase
           .from('customers')
           .select('id')

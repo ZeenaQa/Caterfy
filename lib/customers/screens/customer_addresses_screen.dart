@@ -1,4 +1,4 @@
-import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+﻿import 'package:caterfy/customers/providers/logged_customer_provider.dart';
 import 'package:caterfy/customers/screens/address_picker_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/customer_address.dart';
@@ -148,7 +148,6 @@ class _AddressTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         child: Row(
           children: [
-            // Icon container
             Container(
               width: 46,
               height: 46,
@@ -164,7 +163,6 @@ class _AddressTile extends StatelessWidget {
             ),
             const SizedBox(width: 14),
 
-            // Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +219,6 @@ class _AddressTile extends StatelessWidget {
               ),
             ),
 
-            // Selection indicator or menu
             if (selectionMode)
               Icon(
                 isSelected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,

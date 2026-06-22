@@ -19,7 +19,6 @@ class ApplicationSubmittedScreen extends StatelessWidget {
             children: [
               const Spacer(),
 
-              // Icon
               Container(
                 width: 80,
                 height: 80,
@@ -56,7 +55,6 @@ class ApplicationSubmittedScreen extends StatelessWidget {
 
               const Spacer(),
 
-              // Back to login
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(

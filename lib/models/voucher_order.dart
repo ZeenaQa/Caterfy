@@ -23,14 +23,6 @@ class VoucherOrder {
     this.createdAt,
   });
 
-  /// Generates a random activation code matching [codeFormat].
-  /// Every 'X' in the format is replaced with a random alphanumeric char.
-  /// Example formats:
-  ///   Xbox    → "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX"
-  ///   PSN     → "XXXXX-XXXXX-XXXXX"
-  ///   Steam   → "XXXXX-XXXXX-XXXXX"
-  ///   Nintendo→ "XXXX-XXXX-XXXX-XXXX"
-  ///   Roblox  → "XXXXXXXXXXXXXXXX"
   static String generateCode(String codeFormat) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final rng = Random.secure();

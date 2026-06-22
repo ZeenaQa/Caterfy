@@ -1,4 +1,4 @@
-import 'dart:math';
+﻿import 'dart:math';
 
 import 'package:caterfy/customers/customer_widgets/customer_cart_section.dart';
 import 'package:caterfy/customers/customer_widgets/customer_payment_row.dart';
@@ -449,7 +449,6 @@ class _SuccessViewState extends State<_SuccessView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Animated check
         ScaleTransition(
           scale: _checkScale,
           child: Container(
@@ -480,7 +479,6 @@ class _SuccessViewState extends State<_SuccessView>
         ),
         const SizedBox(height: 32),
 
-        // Booking reference card
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(22),
@@ -573,7 +571,6 @@ class _SuccessViewState extends State<_SuccessView>
 
         const SizedBox(height: 20),
 
-        // Info note
         Container(
           width: double.infinity,
           padding:
@@ -600,7 +597,6 @@ class _SuccessViewState extends State<_SuccessView>
 
         const SizedBox(height: 24),
 
-        // Summary table
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(16),

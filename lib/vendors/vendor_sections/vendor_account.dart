@@ -162,7 +162,6 @@ class _VendorAccountSectionState extends State<VendorAccountSection> {
               isOpen: val,
             );
           } catch (e) {
-            // rollback
             setState(() {
               isStoreOpen = !val;
             });

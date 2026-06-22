@@ -46,7 +46,6 @@ class GlobalProvider extends ChangeNotifier {
         'rating': rating,
       }, onConflict: 'customer_id, store_id');
 
-      // refresh cache for this store so UI updates immediately
       await _refreshStoreRatingCache(storeId);
       notifyListeners();
     } catch (e) {

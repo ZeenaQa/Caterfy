@@ -1,4 +1,4 @@
-import 'package:caterfy/l10n/app_localizations.dart';
+﻿import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/ticket_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,7 +74,6 @@ class CustomerTicketOrderCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Icon box
                 Container(
                   width: 55,
                   height: 55,
@@ -240,7 +239,6 @@ class _TicketSheetState extends State<_TicketSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle
           Container(
             width: 38,
             height: 4,
@@ -251,7 +249,6 @@ class _TicketSheetState extends State<_TicketSheet> {
             ),
           ),
 
-          // Event name + ticket type
           Text(
             o.eventName,
             style: TextStyle(
@@ -285,7 +282,6 @@ class _TicketSheetState extends State<_TicketSheet> {
 
           const SizedBox(height: 24),
 
-          // Booking ref box
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(
@@ -318,7 +314,6 @@ class _TicketSheetState extends State<_TicketSheet> {
 
           const SizedBox(height: 16),
 
-          // Copy button
           GestureDetector(
             onTap: _copy,
             child: AnimatedContainer(

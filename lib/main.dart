@@ -149,7 +149,6 @@ class MyApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
 
-            // Localization configuration
             locale: localeProvider.locale,
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -162,7 +161,6 @@ class MyApp extends StatelessWidget {
               Locale('ar'), // Arabic
             ],
 
-            // Theme configuration
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: themeController.themeMode,

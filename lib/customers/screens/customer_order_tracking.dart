@@ -53,8 +53,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
   int _stepFor(String? status, {bool isFood = true}) {
     final s = status?.toLowerCase();
     if (!isFood) {
-      // 3-step flow: Received(0) → Out for Delivery(1) → Delivered(2)
-      // "preparing" has no dedicated step — treat it same as received
       switch (s) {
         case 'out_for_delivery':
         case 'out for delivery':
@@ -171,7 +169,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back button
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 4, bottom: 4),
                     child: IconButton(
@@ -191,7 +188,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                     ),
                   ),
 
-                  // Animated status icon
                   SizedBox(
                     height: 150,
                     child: Center(
@@ -221,7 +217,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Step circles — outside the colored area
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 18, 12, 4),
                     child: _TrackingSteps(
@@ -235,7 +230,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
                   const SizedBox(height: 4),
                   _Divider(colors),
 
-                  // Status title + subtitle
                   _Section(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
@@ -270,7 +264,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
 
                   _Divider(colors),
 
-                  // Store + items
                   if (order != null)
                     _Section(
                       child: Column(
@@ -363,7 +356,6 @@ class _CustomerOrderTrackingState extends State<CustomerOrderTracking> {
 
                   _Divider(colors),
 
-                  // Payment summary
                   if (order != null)
                     _Section(
                       child: Column(

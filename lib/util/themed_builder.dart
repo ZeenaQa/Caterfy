@@ -9,7 +9,6 @@ class ThemedBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This watches the ThemeController and triggers rebuilds when theme changes
     context.watch<ThemeController>();
     return builder(context);
   }

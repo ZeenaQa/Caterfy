@@ -61,7 +61,6 @@ class _MapPickerState extends State<MapPicker> {
           },
         ),
 
-        /// PIN
         const Center(
           child: Icon(Icons.location_pin, size: 48, color: Colors.red),
         ),

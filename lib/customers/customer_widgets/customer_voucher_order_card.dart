@@ -1,4 +1,4 @@
-import 'package:caterfy/l10n/app_localizations.dart';
+﻿import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/voucher_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,7 +72,6 @@ class CustomerVoucherOrderCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Icon box
                 Container(
                   width: 55,
                   height: 55,
@@ -121,7 +120,6 @@ class CustomerVoucherOrderCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Price
                 RichText(
                   text: TextSpan(
                     text: 'JOD ',
@@ -139,7 +137,6 @@ class CustomerVoucherOrderCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                // View Code button
                 GestureDetector(
                   onTap: () => _showCodeDialog(context),
                   child: Container(
@@ -215,7 +212,6 @@ class _CodeSheetState extends State<_CodeSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle
           Container(
             width: 38,
             height: 4,
@@ -226,7 +222,6 @@ class _CodeSheetState extends State<_CodeSheet> {
             ),
           ),
 
-          // Provider + denomination
           Text(
             o.provider,
             style: TextStyle(
@@ -243,7 +238,6 @@ class _CodeSheetState extends State<_CodeSheet> {
 
           const SizedBox(height: 24),
 
-          // Code box
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
@@ -265,7 +259,6 @@ class _CodeSheetState extends State<_CodeSheet> {
 
           const SizedBox(height: 16),
 
-          // Copy button
           GestureDetector(
             onTap: _copy,
             child: AnimatedContainer(

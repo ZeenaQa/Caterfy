@@ -18,7 +18,6 @@ class VendorOrdersSection extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final vendorProvider = Provider.of<LoggedVendorProvider>(context);
     final orders = vendorProvider.orders;
-    // final orders = [];
     final isLoading = vendorProvider.isOrdersLoading;
 
     return SafeArea(
@@ -57,7 +56,6 @@ class VendorOrdersSection extends StatelessWidget {
                         return Column(
                           children: [
                             VendorOrderCard(order: order),
-                            // CustomerOrderCard(order: order, dummyImage: isLoading),
                             SizedBox(height: 25),
                           ],
                         );

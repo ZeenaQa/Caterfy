@@ -55,7 +55,6 @@ class SettingsButton extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                   color: colors.onSurfaceVariant,
-                  // overflow: TextOverflow.ellipsis
                 ),
               ),
             if (rightText != null) SizedBox(width: 10),

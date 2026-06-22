@@ -145,15 +145,7 @@ class CustomerHomeCategories extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HomeAdsCarousel(
-              // onTap: (banner) {
-              //   Navigator.pushNamed(
-              //     context,
-              //     '/restaurant',
-              //     arguments: banner.restaurantId,
-              //   );
-              // },
-            ),
+            HomeAdsCarousel(),
             SizedBox(height: 30),
             Center(
               child: Wrap(

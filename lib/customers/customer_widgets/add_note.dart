@@ -47,7 +47,6 @@ class _AddNoteState extends State<AddNote> {
               floatingLabelStyle: TextStyle(color: colors.onSurfaceVariant),
               border: OutlineInputBorder(),
               filled: true,
-              // fillColor: Colors.white,
               contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               isDense: true,
             ),
