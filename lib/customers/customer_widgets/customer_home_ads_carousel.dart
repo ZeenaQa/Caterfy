@@ -20,6 +20,16 @@ final List<AdBanner> banners = [
         'https://vnnjwcertgamqqlzygwd.supabase.co/storage/v1/object/public/store-images/ebe3bc9f-3e9c-464f-bf2c-8bbf1b598b4f.__CR30301617500_PT0_SX970_V1___.png',
     restaurantId: 'b',
   ),
+  AdBanner(
+    imageUrl:
+        'https://vnnjwcertgamqqlzygwd.supabase.co/storage/v1/object/public/store-images/Screenshot%202026-06-22%20232804.png',
+    restaurantId: 'a',
+  ),
+  AdBanner(
+    imageUrl:
+        'https://vnnjwcertgamqqlzygwd.supabase.co/storage/v1/object/public/store-images/maxresdefault.jpg',
+    restaurantId: 'd',
+  ),
 ];
 
 class HomeAdsCarousel extends StatefulWidget {
