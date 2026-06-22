@@ -31,7 +31,10 @@ class _InitialLoaderScreenState extends State<InitialLoaderScreen> {
 
     if (role == "customer") {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+        MaterialPageRoute(
+          builder: (_) => AuthenticatedCustomer(),
+          settings: const RouteSettings(name: '/customer-home'),
+        ),
       );
     } else {
       Navigator.of(context).pushReplacement(

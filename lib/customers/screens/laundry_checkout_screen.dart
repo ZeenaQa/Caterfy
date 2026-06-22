@@ -77,7 +77,7 @@ class _LaundryCheckoutScreenState extends State<LaundryCheckoutScreen> {
         MaterialPageRoute(
           builder: (_) => LaundryOrderTracking(orderId: orderId),
         ),
-        (route) => route.isFirst,
+        (route) => route.settings.name == '/customer-home',
       );
     } else {
       setState(() => _isPlacing = false);

@@ -180,7 +180,7 @@ class _CustomerCheckoutState extends State<CustomerCheckout> {
                             MaterialPageRoute(
                               builder: (_) => CustomerOrderTracking(orderId: orderId),
                             ),
-                            (route) => route.isFirst,
+                            (route) => route.settings.name == '/customer-home',
                           );
                         }
                       },

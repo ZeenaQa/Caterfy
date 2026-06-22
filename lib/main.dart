@@ -79,7 +79,10 @@ void main() async {
           if (role == "customer") {
             Navigator.pushReplacement(
               navigatorKey.currentContext!,
-              MaterialPageRoute(builder: (_) => AuthenticatedCustomer()),
+              MaterialPageRoute(
+                builder: (_) => AuthenticatedCustomer(),
+                settings: const RouteSettings(name: '/customer-home'),
+              ),
             );
           } else {
             Navigator.pushReplacement(
