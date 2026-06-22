@@ -1,3 +1,6 @@
+import 'package:caterfy/customers/providers/logged_customer_provider.dart';
+import 'package:caterfy/customers/screens/address_picker_screen.dart';
+import 'package:caterfy/customers/screens/customer_addresses_screen.dart';
 import 'package:caterfy/customers/screens/laundry_checkout_screen.dart';
 import 'package:caterfy/l10n/app_localizations.dart';
 import 'package:caterfy/models/laundry_store.dart';
@@ -49,15 +52,16 @@ class _LaundryScreenState extends State<LaundryScreen> {
     super.dispose();
   }
 
-  bool _canCheckout(GlobalProvider globalProvider) =>
-      globalProvider.deliveryLocation != null &&
+  bool _canCheckout(LoggedCustomerProvider customerProvider) =>
+      customerProvider.selectedAddress != null &&
       (_phoneNum != null && _phoneNum!.trim().isNotEmpty) &&
       selectedDelivery != null;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final globalProvider = Provider.of<GlobalProvider>(context);
+    final customerProvider = context.watch<LoggedCustomerProvider>();
+    final selectedAddress = customerProvider.selectedAddress;
     final l10 = AppLocalizations.of(context);
 
     final List<Map> services = [
@@ -152,10 +156,22 @@ class _LaundryScreenState extends State<LaundryScreen> {
                 ),
               ),
               SettingsButton(
-                title: globalProvider.deliveryLocation ?? l10.pickLocation,
+                title: selectedAddress != null
+                    ? (selectedAddress.subtitle.isNotEmpty
+                        ? '${selectedAddress.typeLabel} · ${selectedAddress.subtitle}'
+                        : selectedAddress.typeLabel)
+                    : l10.selectDeliveryAddress,
                 rightText: l10.address,
                 icon: Icons.location_on_sharp,
                 iconSize: 25,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => customerProvider.addresses.isEmpty
+                        ? const AddressPickerScreen()
+                        : const CustomerAddressesScreen(selectionMode: true),
+                  ),
+                ),
               ),
               SettingsButton(
                 onTap: () {
@@ -261,10 +277,14 @@ class _LaundryScreenState extends State<LaundryScreen> {
         ),
         width: double.infinity,
         child: FilledBtn(
-          onPressed: _canCheckout(globalProvider)
+          onPressed: _canCheckout(customerProvider)
               ? () {
                   final pickupTime =
                       '${DateFormat("EEE, dd MMM").format(DateTime.now())} ~ 20 ${l10.min}';
+                  final addr = selectedAddress!;
+                  final addressStr = addr.subtitle.isNotEmpty
+                      ? '${addr.typeLabel} · ${addr.subtitle}'
+                      : addr.typeLabel;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -272,8 +292,7 @@ class _LaundryScreenState extends State<LaundryScreen> {
                         storeName: widget.store.name,
                         storeImageUrl: widget.store.imageUrl,
                         service: services[selectedServiceIndex]['type'],
-
-                        address: globalProvider.deliveryLocation!,
+                        address: addressStr,
                         phone: _phoneNum!,
                         pickupTime: pickupTime,
                         deliveryDate: '$selectedDelivery, 1 PM - 10 PM',
